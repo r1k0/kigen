@@ -24,16 +24,16 @@ def append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldc
     """
     Append baselayout to the initramfs
 
-    @arg linuxrc		string
-    @arg kernel_dir_opt 	string
-    @arg master_config 	dict
-    @arg libdir		string
-    @arg temp		dict
-    @arg oldconfig		string
-    @arg menuconfig		string
-    @arg allyesconfig	string
-    @arg mrproper		string
-    @arg verbose		dict
+    @arg linuxrc        string
+    @arg kernel_dir_opt string
+    @arg master_config  dict
+    @arg libdir         string
+    @arg temp           dict
+    @arg oldconfig      string
+    @arg menuconfig     string
+    @arg allyesconfig   string
+    @arg mrproper       string
+    @arg verbose        dict
 
     @return: bool
     """

@@ -121,8 +121,8 @@ if target == 'moo':
     sys.exit(0)
 
 try:
-    utils.sprocessor('mkdir -p %s' % temp['root'], verbose)
-    utils.sprocessor('mkdir -p %s' % temp['work'], verbose)
+    utils.sprocessor('mkdir -p %s' % temp['root'],  verbose)
+    utils.sprocessor('mkdir -p %s' % temp['work'],  verbose)
     utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
 except:
     # don't mind
@@ -144,32 +144,32 @@ if cli['nocache'] is True:
 if target == 'kernel' or target == 'k':
     import kernel
     logging.debug('kernel.build_sequence')
-    kernel.build_sequence(kerneldir,\
-                master_config,\
-                arch,\
-                KV,\
-                cli['koldconfig'],\
-                cli['kmenuconfig'],\
-                cli['allyesconfig'],\
-                cli['allnoconfig'],\
-                cli['mrproper'],\
-                cli['kconf'],\
-                verbose['std'],
-                cli['nomodinstall'],\
+    kernel.build_sequence(kerneldir,    \
+                master_config,          \
+                arch,                   \
+                KV,                     \
+                cli['koldconfig'],      \
+                cli['kmenuconfig'],     \
+                cli['allyesconfig'],    \
+                cli['allnoconfig'],     \
+                cli['mrproper'],        \
+                cli['kconf'],           \
+                verbose['std'],         \
+                cli['nomodinstall'],    \
                 cli['fakeroot'])
 
 if target == 'initramfs' or target == 'i':
     import initramfs
     logging.debug('initramfs.build_sequence')
-    initramfs.build_sequence(kerneldir,\
-                arch,\
-                KV,\
-                libdir,\
-                master_config,\
-                cli,\
-                temp, \
-                bootupdateset,\
-                bootupdateinitrd,\
+    initramfs.build_sequence(kerneldir, \
+                arch,                   \
+                KV,                     \
+                libdir,                 \
+                master_config,          \
+                cli,                    \
+                temp,                   \
+                bootupdateset,          \
+                bootupdateinitrd,       \
                 verbose)
 
 if target == 'all' or target == 'a':
@@ -177,29 +177,29 @@ if target == 'all' or target == 'a':
     import initramfs
     logging.debug('kernel.build_sequence')
     # build the kernel and modules
-    kernel.build_sequence(kerneldir,\
-                master_config,\
-                arch,\
-                KV,\
-                cli['koldconfig'],\
-                cli['kmenuconfig'],\
-                cli['allyesconfig'],\
-                cli['allnoconfig'],\
-                cli['mrproper'],\
-                cli['kconf'],\
-                verbose['std'],\
-                cli['nomodinstall'],\
+    kernel.build_sequence(kerneldir,    \
+                master_config,          \
+                arch,                   \
+                KV,                     \
+                cli['koldconfig'],      \
+                cli['kmenuconfig'],     \
+                cli['allyesconfig'],    \
+                cli['allnoconfig'],     \
+                cli['mrproper'],        \
+                cli['kconf'],           \
+                verbose['std'],         \
+                cli['nomodinstall'],    \
                 cli['fakeroot'])
     logging.debug('initramfs.build_sequence')
-    initramfs.build_sequence(kerneldir,\
-                arch,\
-                KV,\
-                libdir,\
-                master_config,\
-                cli,\
-                temp,\
-                bootupdateset,\
-                bootupdateinitrd,\
+    initramfs.build_sequence(kerneldir, \
+                arch,                   \
+                KV,                     \
+                libdir,                 \
+                master_config,          \
+                cli,                    \
+                temp,                   \
+                bootupdateset,          \
+                bootupdateinitrd,       \
                 verbose)
 
 # FIXME basic systems have no /boot partition
@@ -220,8 +220,8 @@ if cli['noboot'] is False:
     if target == 'initramfs' or target == 'all' or target == 'i':
         print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
         utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
-# leave /boot alone
-# but tell the user where to find his kernel/initramfs
+
+# leave /boot alone but tell the user where to find his kernel/initramfs
 elif cli['noboot'] is True:
     if target == 'k' or target == 'kernel' or target =='all' or target == 'a':
         logging.debug(kerneldir+'/arch/x86/boot/bzImage')
