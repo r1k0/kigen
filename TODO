@@ -1,0 +1,22 @@
+TODO: write own color class
+    don't rely on portage dep
+TODO: make genki ebuild depend on python-2.6 (for debian)
+TODO: replace error calls w/ raise errortype
+TODO: add network stack in initramfs
+    add sshd server
+TODO: add vi or nano to initramfs
+TODO: fix /dev/tty1 bug when using splash
+    this prevents silent mode
+TODO: pass $PORTDIR don't assume /usr/portage
+TODO: download and compile statically cryptsetup in luks.py
+TODO: download and compile statically evms in evms.py
+TODO: --aufs
+TODO: --evms repair
+	sprocessor * fix
+TODO: rename bb_ver variables from /etc/genki.conf 
+	to smthing less cryptic
+TODO: replace portageq envvar PORTDIR
+	by portage path and
+	pass it to *.download() to store in $PORTDIR/distfiles
+	in python please
+TODO: add logging.debug() a bit everywhere

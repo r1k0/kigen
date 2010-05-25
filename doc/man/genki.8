@@ -1,0 +1,131 @@
+.TH GENKI "8" "May 2010" "genki 9999" "Funtoo Linux"
+.SH NAME
+genki \- a Linux kernel|initramfs generator.
+.SH SYNOPSIS
+\fBgenki\fR \fI<option/target> [options]\fR
+.SH INTRODUCTION
+GenKI is designed to allow users to build their own kernel/initramfs
+provided adequate configuration and parameters.
+.PP
+GenKI so far provides the following features:
+  - kernel build
+    - bzImage
+    - modules
+  - initramfs build
+    - kernel modules
+    - busybox
+    - blkid
+    - LVM2
+    - LUKS
+.SH USAGE
+It is at least required to pass a <target> parameter to run genki.
+You can add any appropriate [options] to customize its behavior.
+The most commonly used syntax would be:
+.PP
+# genki all --lvm2 --disklabel --splash
+.PP
+This would successively prepare/compile the kernel, compile/install its modules,
+and finally populate an initramfs.
+Note that the resulting output is appended into /boot, it is up to the user
+to ensure /boot is correctly mounted.
+.SH ACTIONS
+A target tells genki what you want it to do - the following
+actions are supported:
+.PP
+.I \fBinitramfs\fR
+.RS
+Build only the initramfs.
+.RE
+.I \fBbzImage\fR
+.RS
+Build only the kernel.
+.RE
+.I \fBkernel\fR
+.RS
+Build only the kernel and the modules.
+.RE
+.I \fBmodules\fR
+.RS
+Build only modules.
+.RE
+.I \fBall\fR
+.RS
+Build all steps - kernel, modules, initramfs.
+.RE
+.SH OPTIONS
+GenKI supports the following options.
+.TP
+\fB\-d, \-\-debug
+Debug.
+.TP
+\fB\-\-kconf=\fR</foo/bar/.config>
+Provide a customized .config file for the kernel.
+.TP
+\fB\-\-mrproper
+Clean precompiled objects and configuration.
+.TP
+\fB\-\-oldconfig
+Will ask for new kernel options.
+.TP
+\fB\-\-menuconfig
+Interactive kernel/initramfs options menu.
+.TP
+\fB\-\-allyesconfig
+Say yes to all kernel/initramfs options.
+.TP
+\fB\-\-allnoconfig
+Say no to all kernel options.
+.TP
+\fB\-\-luks
+Include LUKS support. Append a static 'cryptsetup' binary to the initramfs.
+.TP
+\fB\-\-lvm2
+Include LVM2 support. Append a static 'lvm' binary to the initramfs.
+.TP
+\fB\-\-evms
+Include evms support (evms must be merged).
+.TP
+\fB\-\-dmraid
+Include dmraid support.
+.TP
+\fB\-\-iscsi
+Include iscsi support.
+.TP
+\fB\-\-mdadm
+Include mdadm support (mdadm must be merged).
+.TP
+\fB\-\-splash
+Include splash support (splashutils must be merged).
+.TP
+\fB\-\-stheme=<theme>
+Splash theme.
+.TP
+\fB\-\-sres=INTxINT,INTxINT
+Splash resolution,comma separated list of INTxINT.
+.TP
+\fB\-\-unionfs-fuse
+Include unionfs support.
+.TP
+\fB\-\-aufs
+Include aufs support.
+.TP
+\fB\-\-linuxrc=<file>
+Include custom linuxrc
+.TP
+\fB\-\-firmware=/dir
+Include custom firmware support.
+.TP
+\fB\-\-nocache
+Do not use cached data.
+.TP
+\fB\-\-noboot
+Do not copy kernel/initramfs to /boot.
+.TP
+\fB\-\-logfile=/file
+Log to file.
+.TP
+.RE
+.SH AUTHORS
+.nf
+erick 'r1k0' michau <erick@openchill.org>
+.fi

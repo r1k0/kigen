@@ -1,0 +1,238 @@
+#!/usr/bin/python2.6
+
+import sys
+import os
+#import getopt
+import logging
+import subprocess
+import signal # raise
+
+if os.getuid() != 0:
+    print "Get rool pal!"
+    sys.exit(2)
+
+# import /libs
+binpath = os.path.abspath(sys.argv[0])
+if os.path.islink(binpath):
+    binpath = os.readlink(binpath)
+# this is set up by genki ebuild
+if binpath == '/usr/sbin/genki':
+    libdir = '/usr/share/genki'
+    # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
+    pyv = os.popen('eselect python show --python2').read().strip()
+    sys.path.append("/usr/lib/"+pyv+"/site-packages/genki")
+else:
+    libdir = os.path.dirname(binpath)
+    sys.path.append(libdir+'/modules')
+# import python libs
+sys.path.append(libdir)
+
+# hat trick
+cliargs = sys.argv[1:]
+if "--nocolor" in cliargs or "-n" in cliargs:
+    from nocolor import green, turquoise, red, yellow, white
+    os.environ['GENKI_STD_COLOR'] = '1'
+else:
+    try:
+        from portage.output import green, turquoise, red, yellow, white
+        os.environ['GENKI_STD_COLOR'] = '0'
+    except:
+        from nocolor import green, turquoise, red, yellow, white
+        os.environ['GENKI_STD_COLOR'] = '1'
+
+# genki modules are ready to be called
+from config import fk_conf, master_config, temp
+import cliparser
+import utils
+
+if len(sys.argv) < 2:
+    cliparser.print_usage()
+    sys.exit(2)
+
+cli, verbose = cliparser.parse()
+
+# setup logfile
+if os.path.isfile(cli['logfile']):
+    os.remove(cli['logfile'])
+logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
+logging.debug('target ' + sys.argv[1])
+
+logging.debug(cli)
+
+# parse genki config file
+if os.path.isfile(fk_conf):
+    master_config_temp = utils.parse_config_file(fk_conf)
+    master_config.update(master_config_temp)
+else:
+    print 'missing file: '+red(fk_conf)+'.'
+    sys.exit(2)
+
+# set default kernel sources
+kerneldir = '/usr/src/linux'
+if 'kernel_src_dir' in master_config:
+    kerneldir = master_config['kernel_src_dir']
+
+# Funtoo bootupdate integration
+import bootupdate
+bootupdateinitrd = bootupdate.get_boot_initrd()
+if bootupdateinitrd:
+    bootupdateset = True
+else:
+    bootupdateset = False
+
+# what am I?
+arch = utils.identify_arch()
+# get kernel version from the Makefile source itself
+KV = utils.get_kernel_version(kerneldir)
+
+# show all raw configuration
+if cli['info'] is True:
+    import info
+    info.show(kerneldir, master_config, arch, libdir, KV, bootupdateset, bootupdateinitrd)
+    sys.exit(0)
+
+# ensure the <target> is always second argument
+if sys.argv[1] == 'kernel'      \
+or sys.argv[1] == 'k'           \
+or sys.argv[1] == 'initramfs'   \
+or sys.argv[1] == 'i'           \
+or sys.argv[1] == 'all'         \
+or sys.argv[1] == 'a'           \
+or sys.argv[1] == 'moo':
+    target = sys.argv[1]
+else:
+    print red('ERR') + ': ' + 'unknown <target>: ' + white('initramfs kernel all')
+    cliparser.print_usage()
+    sys.exit(2)
+
+if target == 'moo':
+    print """
+  Larry loves fun too (Linux)
+
+ _______________________
+< Have you mooed today? >
+ -----------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\ 
+                ||----w |
+                ||     ||
+"""
+    sys.exit(0)
+
+try:
+    utils.sprocessor('mkdir -p %s' % temp['root'], verbose)
+    utils.sprocessor('mkdir -p %s' % temp['work'], verbose)
+    utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+except:
+    # don't mind
+    pass
+
+# ensure temp['work'] is clean
+import shutil
+if os.path.isdir(temp['work']):
+    shutil.rmtree(temp['work'])
+    utils.sprocessor('mkdir -p %s' % temp['work'], verbose)
+
+# --nocache
+if cli['nocache'] is True:
+    if os.path.isdir(temp['cache']):
+        shutil.rmtree(temp['cache'])
+        utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+
+# target logic starts here
+if target == 'kernel' or target == 'k':
+    import kernel
+    logging.debug('kernel.build_sequence')
+    kernel.build_sequence(kerneldir,\
+                master_config,\
+                arch,\
+                KV,\
+                cli['koldconfig'],\
+                cli['kmenuconfig'],\
+                cli['allyesconfig'],\
+                cli['allnoconfig'],\
+                cli['mrproper'],\
+                cli['kconf'],\
+                verbose['std'],
+                cli['nomodinstall'],\
+                cli['fakeroot'])
+
+if target == 'initramfs' or target == 'i':
+    import initramfs
+    logging.debug('initramfs.build_sequence')
+    initramfs.build_sequence(kerneldir,\
+                arch,\
+                KV,\
+                libdir,\
+                master_config,\
+                cli,\
+                temp, \
+                bootupdateset,\
+                bootupdateinitrd,\
+                verbose)
+
+if target == 'all' or target == 'a':
+    import kernel
+    import initramfs
+    logging.debug('kernel.build_sequence')
+    # build the kernel and modules
+    kernel.build_sequence(kerneldir,\
+                master_config,\
+                arch,\
+                KV,\
+                cli['koldconfig'],\
+                cli['kmenuconfig'],\
+                cli['allyesconfig'],\
+                cli['allnoconfig'],\
+                cli['mrproper'],\
+                cli['kconf'],\
+                verbose['std'],\
+                cli['nomodinstall'],\
+                cli['fakeroot'])
+    logging.debug('initramfs.build_sequence')
+    initramfs.build_sequence(kerneldir,\
+                arch,\
+                KV,\
+                libdir,\
+                master_config,\
+                cli,\
+                temp,\
+                bootupdateset,\
+                bootupdateinitrd,\
+                verbose)
+
+# FIXME basic systems have no /boot partition
+#   # TODO: add sysvinit to RDEPEND ebuild
+#   ismounted = utils.sprocessor('mountpoint -q /boot', verbose)
+#   if ismounted is not int('0'):
+#       print yellow('WARN') + ': ' + '/boot is not mounted'
+#       print yellow('WARN') + ': ' + 'skipping /boot copy.'
+#       noboot = True
+print
+# copy kernel/initramfs to /boot
+if cli['noboot'] is False:
+    if target == 'k' or target == 'kernel' or target =='all':
+        print green(' * produced ') + '/boot/kernel-genki-'+arch+'-'+KV
+        utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-genki-'+arch+'-'+KV), verbose)
+        print green(' * produced ') + '/boot/System.map-genki-'+arch+'-'+KV
+        utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-genki-'+arch+'-'+KV), verbose)
+    if target == 'initramfs' or target == 'all' or target == 'i':
+        print green(' * produced ') + '/boot/initramfs-genki-'+arch+'-'+KV
+        utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-genki-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+# leave /boot alone
+# but tell the user where to find his kernel/initramfs
+elif cli['noboot'] is True:
+    if target == 'k' or target == 'kernel' or target =='all':
+        logging.debug(kerneldir+'/arch/x86/boot/bzImage')
+        print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
+        logging.debug(kerneldir+'/System.map')
+        print green(' * produced ') + kerneldir+'/System.map'
+    if target == 'initramfs' or target == 'all' or target == 'i':
+        logging.debug(temp['cache']+'/initramfs-cpio.gz')
+        print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
+
+# TODO unset os.environ['GENKI_STD_COLOR']?
+
+sys.exit(0)
+
