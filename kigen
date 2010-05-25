@@ -15,12 +15,12 @@ if os.getuid() != 0:
 binpath = os.path.abspath(sys.argv[0])
 if os.path.islink(binpath):
     binpath = os.readlink(binpath)
-# this is set up by genki ebuild
-if binpath == '/usr/sbin/genki':
-    libdir = '/usr/share/genki'
+# this is set up by kigen ebuild
+if binpath == '/usr/sbin/kigen':
+    libdir = '/usr/share/kigen'
     # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
     pyv = os.popen('eselect python show --python2').read().strip()
-    sys.path.append("/usr/lib/"+pyv+"/site-packages/genki")
+    sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen")
 else:
     libdir = os.path.dirname(binpath)
     sys.path.append(libdir+'/modules')
@@ -40,7 +40,7 @@ else:
         from nocolor import green, turquoise, red, yellow, white
         os.environ['GENKI_STD_COLOR'] = '1'
 
-# genki modules are ready to be called
+# kigen modules are ready to be called
 from config import fk_conf, master_config, temp
 import cliparser
 import utils
@@ -59,7 +59,7 @@ logging.debug('target ' + sys.argv[1])
 
 logging.debug(cli)
 
-# parse genki config file
+# parse kigen config file
 if os.path.isfile(fk_conf):
     master_config_temp = utils.parse_config_file(fk_conf)
     master_config.update(master_config_temp)
@@ -213,13 +213,13 @@ print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
     if target == 'k' or target == 'kernel' or target =='all':
-        print green(' * produced ') + '/boot/kernel-genki-'+arch+'-'+KV
-        utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-genki-'+arch+'-'+KV), verbose)
-        print green(' * produced ') + '/boot/System.map-genki-'+arch+'-'+KV
-        utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-genki-'+arch+'-'+KV), verbose)
+        print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
+        utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
+        print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
+        utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
     if target == 'initramfs' or target == 'all' or target == 'i':
-        print green(' * produced ') + '/boot/initramfs-genki-'+arch+'-'+KV
-        utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-genki-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+        print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
+        utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
 # leave /boot alone
 # but tell the user where to find his kernel/initramfs
 elif cli['noboot'] is True:
