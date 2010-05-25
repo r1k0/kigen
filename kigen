@@ -212,7 +212,7 @@ if target == 'all' or target == 'a':
 print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
-    if target == 'k' or target == 'kernel' or target =='all':
+    if target == 'k' or target == 'kernel' or target =='all' or target == 'a':
         print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
         utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
         print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
@@ -223,12 +223,12 @@ if cli['noboot'] is False:
 # leave /boot alone
 # but tell the user where to find his kernel/initramfs
 elif cli['noboot'] is True:
-    if target == 'k' or target == 'kernel' or target =='all':
+    if target == 'k' or target == 'kernel' or target =='all' or target == 'a':
         logging.debug(kerneldir+'/arch/x86/boot/bzImage')
         print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
         logging.debug(kerneldir+'/System.map')
         print green(' * produced ') + kerneldir+'/System.map'
-    if target == 'initramfs' or target == 'all' or target == 'i':
+    if target == 'initramfs' or target == 'all' or target == 'i' or target == 'a':
         logging.debug(temp['cache']+'/initramfs-cpio.gz')
         print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
 
