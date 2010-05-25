@@ -1,5 +1,5 @@
 ==================================
-GenKI kernel/initramfs generator
+KIGen kernel/initramfs generator
 ==================================
 
 .. sectnum::
@@ -9,7 +9,7 @@ GenKI kernel/initramfs generator
 Introduction
 ~~~~~~~~~~~~
 
-GenKI for Linux aims at providing first an equal set of features (in Python)
+KIGen for Linux aims at providing first an equal set of features (in Python)
 as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update.
 Genkernel being a bash script, interfacing it with boot-update is 'tricky' if not insane.
 
@@ -19,17 +19,17 @@ It ships all kernel/initramfs boot information and autogenerates /boot/grub/grub
 or /boot/grub/grub.cfg depending on your GRUB version (in Funtoo, grub-0.97 is
 known as sys-boot/grub-legacy and grub-1.97 as sys-boot/grub).
 
-GenKI is a kernel and initramfs builder designed to interface with
+KIGen is a kernel and initramfs builder designed to interface with
 sys-apps/boot-update and provides a more visible configuration file than genkernel
 in terms of kernel modules at least.
-GenKI will automagically detect if you are running boot-update (we support Gentoo and
-Sabayon too) then read your /etc/boot.conf and overwrite your /etc/GenKI.conf
+KIGen will automagically detect if you are running boot-update (we support Gentoo and
+Sabayon too) then read your /etc/boot.conf and overwrite your /etc/KIGen.conf
 configuration in terms of kernel modules only.
 
 Source code notes
 ~~~~~~~~~~~~~~~~~
 
-GenKI has to make bash calls: no python interface for the kernel Makefile or to compress
+KIGen has to make bash calls: no python interface for the kernel Makefile or to compress
 a cpio initramfs.
 
 I found no decent python cpio libraries (one is read-only). If you know one that could handle
@@ -37,19 +37,19 @@ the job, please mail me to let me know.
 Therefore, you shoud understand why I made some choices from the source code point of
 view.
 As long as we have to make bash calls, we'll have to have to control the return value
-of that call. Hence the return 0 logic you can find here and there in GenKI.
+of that call. Hence the return 0 logic you can find here and there in KIGen.
 
-GenKI is on purpose using simple syntax.
+KIGen is on purpose using simple syntax.
 
 No classes but only functions, parameters and path imports.
-GenKI (yet) does not need to be written as an API. Procedural code is OK.
-If or when we'll have to interface higher level code to GenKI then there
+KIGen (yet) does not need to be written as an API. Procedural code is OK.
+If or when we'll have to interface higher level code to KIGen then there
 I'll make class structure, but for now it's ok.
 
 Support
 ~~~~~~~
 
-GenKI requires Portage to work and provides support for the following linux based flavors:
+KIGen requires Portage to work and provides support for the following linux based flavors:
 
   - Funtoo  and its boot-update interface,
   - Gentoo  (no boot-update interface yet),
@@ -57,7 +57,7 @@ GenKI requires Portage to work and provides support for the following linux base
   - VLOS    (no boot-update interface yet).
   - ChromeOS? ;P
 
-GenKI will detect /etc/boot.conf and will append the modules configuration from /etc/GenKI.conf
+KIGen will detect /etc/boot.conf and will append the modules configuration from /etc/KIGen.conf
 with the content of the load-modules variable set in Coreboot.
 
 /etc/boot.conf sample::
@@ -66,7 +66,7 @@ with the content of the load-modules variable set in Coreboot.
     load-modules ext4
   }
 
-/etc/genki.conf sample::
+/etc/kigen.conf sample::
 
   MODULES_FS = ext3
 
