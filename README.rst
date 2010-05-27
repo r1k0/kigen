@@ -66,6 +66,8 @@ Portage support
 ~~~~~~~~~~~~~~~
 
 KIGen imports colors from Portage itself. It keeps the code simpler.
+If Portage API cannot be found color are disabled, hence non Portage systems
+don't and won't have any color support.
 
 KIGen will detect /etc/boot.conf and will append the modules configuration from /etc/KIGen.conf
 with the content of the load-modules variable set in Coreboot.
@@ -87,7 +89,8 @@ Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
 KIGen works on Debian without any color support.
-
+KIGen is not meant (for now) to be installed on non Portage systems and should work out of the box
+by locally importing its modules.
 
 Have fun too!
 
