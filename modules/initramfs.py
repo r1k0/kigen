@@ -1,14 +1,176 @@
 import os
 import sys
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-    from portage.output import green, turquoise, white, red, yellow
-else:
-    from nocolor import green, turquoise, white, red, yellow
+from stdout import white, green, turquoise
+import error
+import warning
 import utils
 import logging
 import commands
 
+class initramfs:
+    def __init__(self,              \
+                kernel_dir_opt,     \
+                arch,               \
+                KV,                 \
+                libdir,             \
+                master_config,      \
+                cli,                \
+                temp,               \
+                bootupdateset,      \
+                bootupdateinitrd,   \
+                verbose):
+        """
+        init class
+        """
+        self.kernel_dir_opt     = kernel_dir_opt
+        self.arch               = arch
+        self.KV                 = KV
+        self.libdir             = libdir
+        self.master_config      = master_config # TODO replace 
+        self.linuxrc            = cli['linuxrc']
+        self.oldconfig          = cli['bboldconfig']
+        self.menuconfig         = cli['bbmenuconfig']
+        self.allyesconfig       = cli['allyesconfig']
+        self.mrproper           = cli['mrproper']
+        self.bbconf             = cli['bbconf']
+        self.nocache            = cli['nocache']
+        self.firmware           = cli['firmware']
+        self.verbosestd         = verbose['std']
+        self.verboseset         = verbose['set']
+        self.verbose            = verbose # TODO replace 
+        self.temproot           = temp['root']
+        self.tempcache          = temp['cache']
+        self.temp               = temp # TODO replace 
+        self.bbconf             = cli['bbconf']
+        self.nocache            = cli['nocache']
+        self.firmware           = cli['firmware']
+        self.cli                = cli # TODO replace
+        self.bootupdateset      = bootupdateset
+        self.bootupdateinitrd   = bootupdateinitrd
+
+    def build(self):
+        """
+        Initramfs build sequence
+    
+        @arg kernel_dir_opt     string
+        @arg arch               string
+        @arg KV                 string
+        @arg libdir             string
+        @arg master_config      dict
+        @arg cli                dict
+        @arg temp               dict
+        @arg corebootset        bool
+        @arg corebootinitrd     string
+        @arg verbose            dict
+    
+        @return: bool
+        """
+        ret = zero = int('0')
+        import shutil
+        cpv = ''
+        if self.verboseset is True: cpv = '-v'
+    
+        # for the sake of knowing where we are
+        os.chdir(self.temproot)
+
+        # 1) create initial cpio
+        ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
+        if ret is not zero:
+            raise error.fail('initial cpio creation failed')
+        # 2) append base
+        ret = append_base(self.linuxrc, self.kernel_dir_opt, self.arch, self.master_config, self.libdir, self.temp, self.oldconfig, self.menuconfig, self.allyesconfig, self.mrproper, self.verbose)
+        if ret is not zero:
+            raise error.fail('initramfs.append_baselayout()')
+        # 3) append busybox
+        os.chdir(self.temp['work'])
+        ret = append_busybox(self.arch, self.bbconf, self.master_config, self.libdir, self.temp, self.oldconfig, self.menuconfig, self.allyesconfig, self.mrproper, self.master_config['busybox-progs'], self.nocache, self.verbose)
+        if ret is not zero:
+            raise error.fail('initramfs.append_busybox()')
+        # 4) append lvm2
+        if self.cli['lvm2'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_lvm2(self.master_config, self.temp, self.nocache, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_lvm2()')
+        # 5) append dmraid
+        if self.cli['dmraid'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_dmraid(self.master_config, self.cli['selinux'], self.temp, self.nocache, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_dmraid()')
+        # 6) append iscsi
+        if self.cli['iscsi'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_iscsi(self.master_config, self.temp, self.nocache, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_iscsi()')
+        # 7) append evms
+        if self.cli['evms'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_evms(self.temp, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_evms()')
+        # 8) append mdadm
+        if self.cli['mdadm'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_mdadm(self.temp, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_mdadm()')
+        # 9) append luks
+        if self.cli['luks'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_luks(self.temp, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_luks()')
+        # 10) append multipath
+        # TODO
+        # 11) append modules
+        # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
+        ret = append_modules(self.master_config, self.KV, self.libdir, self.temp, self.verbose, self.bootupdateset, self.bootupdateinitrd)
+        if ret is not zero: 
+            raise error.fail('initramfs.append_modules()')
+        # 12) append blkid
+        if self.cli['disklabel'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_blkid(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_blkid()')
+        # 13) append unionfs_fuse
+        if self.cli['unionfs'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_unionfs_fuse(self.master_config, self.temp, self.nocache, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_unionfs-fuse()')
+        # 14) append aufs
+        if self.cli['aufs'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_aufs(self.master_config, self.temp, self.nocache, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_aufs()')
+        # 15) append splash
+        if self.cli['splash'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_splash(self.cli['stheme'], self.cli['sres'], self.master_config, self.temp, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_splash()')
+        # 16) append firmware
+        if os.path.isdir(self.firmware):
+            os.chdir(self.temp['work'])
+            ret = append_firmware(self.cli['firmware'], self.temp, self.verbose)
+            if ret is not zero: 
+                raise error.fail('initramfs.append_firmware()')
+    
+        # 17) append overlay
+        # TODO
+    
+        # compress initramfs-cpio
+        print green(' * ') + turquoise('initramfs.compress')
+        utils.sprocessor('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
+        if ret is not zero: 
+            raise error.fail('utils.copy_initramfs() compression pre copy')
+    
+        return ret
+ 
 def append_cpio(temp):
     """
     Builds command with correct path
@@ -272,8 +434,8 @@ def append_lvm2(master_config, temp, nocache, verbose):
     @return: bool
     """
     ret = int('0')
-    lvm2_static_bin 	= '/sbin/lvm.static'
-    lvm2_bin		= '/sbin/lvm'
+    lvm2_static_bin     = '/sbin/lvm.static'
+    lvm2_bin        = '/sbin/lvm'
 
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-lvm2-temp/etc/lvm', verbose)
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-lvm2-temp/bin', verbose)
@@ -541,7 +703,7 @@ def append_dmraid(master_config, selinux, temp, nocache, verbose):
 
     # TODO ln -sf raid456.ko raid45.ko ?
     # TODO is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
-    #	or should we raise an error and make the user enabling the module manually? warning?
+    #   or should we raise an error and make the user enabling the module manually? warning?
     
     os.chdir(temp['work']+'/initramfs-dmraid-temp')
     return os.system(append_cpio(temp))
@@ -621,10 +783,10 @@ def append_unionfs_fuse(master_config, temp, nocache, verbose):
     """
     Append unionfs-fuse to initramfs
     
-    @arg master_config	dict
-    @arg temp		dict
-    @arg nocache		bool
-    @arg verbose		dict
+    @arg master_config  dict
+    @arg temp       dict
+    @arg nocache        bool
+    @arg verbose        dict
     
     @return: bool
     """
@@ -675,175 +837,3 @@ def append_aufs(master_config, temp, nocache, verbose):
     os.chdir(temp['work']+'/initramfs-aufs-temp')
     return os.system(append_cpio(temp))
 
-def build_sequence( kernel_dir_opt, \
-                arch,               \
-                KV,                 \
-                libdir,             \
-                master_config,      \
-                cli,                \
-                temp,               \
-                corebootset,        \
-                corebootinitrd,     \
-                verbose):
-    """
-    Initramfs build sequence
-
-    @arg kernel_dir_opt     string
-    @arg arch               string
-    @arg KV                 string
-    @arg libdir             string
-    @arg master_config      dict
-    @arg cli                dict
-    @arg temp               dict
-    @arg corebootset        bool
-    @arg corebootinitrd     string
-    @arg verbose            dict
-
-    @return: bool
-    """
-    import shutil
-    cpv = ''
-    if verbose['set'] is True: cpv = '-v'
-
-    ret = zero = int('0')
-
-    # create vars of cli items
-    linuxrc         = cli['linuxrc']
-    oldconfig       = cli['bboldconfig']
-    menuconfig      = cli['bbmenuconfig']
-    allyesconfig    = cli['allyesconfig']
-    mrproper        = cli['mrproper']
-    bbconf          = cli['bbconf']
-    nocache         = cli['nocache']
-    firmware        = cli['firmware']
-
-    # for the sake of knowing where we are
-    os.chdir(temp['root'])
-
-    # 1) create initial cpio
-    ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % temp['cache'], verbose)
-    if ret is not zero: 
-        print red('ERR')+ ': ' + 'initial cpio creation failed'
-        sys.exit(2)
-
-    # 2) append base
-    ret = append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, verbose)
-
-    if ret is not zero: 
-        print red('ERR')+ ': ' + "initramfs.append_baselayout() failed"
-        sys.exit(2)
-
-    # 3) append busybox
-    os.chdir(temp['work'])
-    ret = append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, master_config['busybox-progs'], nocache, verbose)
-    if ret is not zero: 
-        print red('ERR')+ ': ' + "initramfs.append_busybox() failed"
-        sys.exit(2)
-
-    # 4) append lvm2
-    if cli['lvm2'] is True:
-        os.chdir(temp['work'])
-        ret = append_lvm2(master_config, temp, nocache, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_lvm2() failed"
-            sys.exit(2)
-    # 5) append dmraid
-    if cli['dmraid'] is True:
-        os.chdir(temp['work'])
-        ret = append_dmraid(master_config, cli['selinux'], temp, nocache, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_dmraid() failed"
-            sys.exit(2)
-    # 6) append iscsi
-    if cli['iscsi'] is True:
-        os.chdir(temp['work'])
-        ret = append_iscsi(master_config, temp, nocache, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_iscsi() failed"
-            sys.exit(2)
-
-    # 7) append evms
-    if cli['evms'] is True:
-        os.chdir(temp['work'])
-        ret = append_evms(temp, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_evms() failed"
-            sys.exit(2)
-
-    # 8) append mdadm
-    if cli['mdadm'] is True:
-        os.chdir(temp['work'])
-        ret = append_mdadm(temp, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_mdadm() failed"
-            sys.exit(2)
-
-    # 9) append luks
-    if cli['luks'] is True:
-        os.chdir(temp['work'])
-        ret = append_luks(temp, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_luks() failed"
-            sys.exit(2)
-
-    # 10) append multipath
-    # TODO
-
-    # 11) append modules
-    # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
-    ret = append_modules(master_config, KV, libdir, temp, verbose, corebootset, corebootinitrd)
-    if ret is not zero: 
-        print red('ERR')+ ': ' + "initramfs.append_modules() failed"
-        sys.exit(2)
-
-    # 12) append blkid
-    if cli['disklabel'] is True:
-        os.chdir(temp['work'])
-        ret = append_blkid(master_config, libdir, temp, nocache, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_blkid() failed"
-            sys.exit(2)
-
-    # 13) append unionfs_fuse
-    if cli['unionfs'] is True:
-        os.chdir(temp['work'])
-        ret = append_unionfs_fuse(master_config, temp, nocache, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_unionfs-fuse() failed"
-            sys.exit(2)
-
-    # 14) append aufs
-    if cli['aufs'] is True:
-        os.chdir(temp['work'])
-        ret = append_aufs(master_config, temp, nocache, verbose)
-        if ret is not zero:
-            print red('ERR')+ ': ' + "initramfs.append_aufs() failed"
-            sys.exit(2)
-
-    # 14) append splash
-    if cli['splash'] is True:
-        os.chdir(temp['work'])
-        ret = append_splash(cli['stheme'], cli['sres'], master_config, temp, verbose)
-        if ret is not zero:
-            print red('ERR')+ ': ' + "initramfs.append_splash() failed"
-            sys.exit(2)
-
-    # 15) append firmware
-    if os.path.isdir(firmware):
-        os.chdir(temp['work'])
-        ret = append_firmware(cli['firmware'], temp, verbose)
-        if ret is not zero: 
-            print red('ERR')+ ': ' + "initramfs.append_firmware() failed"
-            sys.exit(2)
-
-    # 16) append overlay
-    # TODO
-
-    # compress initramfs-cpio
-    print green(' * ') + turquoise('initramfs.compress')
-    utils.sprocessor('gzip -f -9 %s/initramfs-cpio' % temp['cache'], verbose)
-    if ret is not zero: 
-        print red('ERR')+ ': ' + "utils.copy_initramfs() compression pre copy failed"
-        sys.exit(2)
-
-    return ret

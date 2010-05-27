@@ -142,34 +142,14 @@ if cli['nocache'] is True:
         shutil.rmtree(temp['cache'])
         utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
 
-# target logic starts here
 if target == 'kernel' or target == 'k':
-#####
-    # TODO: replace target functions by classes
-    from kernel2 import kernel2
-    kobject = kernel2(kerneldir, master_config, arch, KV, cli, verbose)
+    from kernel import kernel
+    kobject = kernel(kerneldir, master_config, arch, KV, cli, verbose)
     kobject.build()
-#####
-#    import kernel
-#    logging.debug('kernel.build_sequence')
-#    kernel.build_sequence(kerneldir,    \
-#                master_config,          \
-#                arch,                   \
-#                KV,                     \
-#                cli['koldconfig'],      \
-#                cli['kmenuconfig'],     \
-#                cli['allyesconfig'],    \
-#                cli['allnoconfig'],     \
-#                cli['mrproper'],        \
-#                cli['kconf'],           \
-#                verbose['std'],         \
-#                cli['nomodinstall'],    \
-#                cli['fakeroot'])
 
 if target == 'initramfs' or target == 'i':
-
-    from initramfs2 import initramfs2
-    iobject = initramfs2(kerneldir,     \
+    from initramfs import initramfs
+    iobject = initramfs(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -180,44 +160,15 @@ if target == 'initramfs' or target == 'i':
                 bootupdateinitrd,       \
                 verbose)
     iobject.build()
-#    import initramfs
-#    # import initramfs2
-#    # initrd = initramfs2.create(kerneldir, arch, KV, libdir,master_config,cli,temp,bootupdateset,bootupdateinitrd,verbose)
-#    logging.debug('initramfs.build_sequence')
-#    initramfs.build_sequence(kerneldir, \
-#                arch,                   \
-#                KV,                     \
-#                libdir,                 \
-#                master_config,          \
-#                cli,                    \
-#                temp,                   \
-#                bootupdateset,          \
-#                bootupdateinitrd,       \
-#                verbose)
 
 if target == 'all' or target == 'a':
-#    import initramfs
     logging.debug('kernel.build_sequence')
-    from kernel2 import kernel2
-    kobject = kernel2(kerneldir, master_config, arch, KV, cli, verbose)
+    from kernel import kernel
+    kobject = kernel(kerneldir, master_config, arch, KV, cli, verbose)
     kobject.build()
-    # build the kernel and modules
-#    kernel.build_sequence(kerneldir,    \
-#                master_config,          \
-#                arch,                   \
-#                KV,                     \
-#                cli['koldconfig'],      \
-#                cli['kmenuconfig'],     \
-#                cli['allyesconfig'],    \
-#                cli['allnoconfig'],     \
-#                cli['mrproper'],        \
-#                cli['kconf'],           \
-#                verbose['std'],         \
-#                cli['nomodinstall'],    \
-#                cli['fakeroot'])
     logging.debug('initramfs.build_sequence')
-    from initramfs2 import initramfs2
-    iobject = initramfs2(kerneldir,     \
+    from initramfs import initramfs
+    iobject = initramfs(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -228,17 +179,6 @@ if target == 'all' or target == 'a':
                 bootupdateinitrd,       \
                 verbose)
     iobject.build()
-
-#    initramfs.build_sequence(kerneldir, \
-#                arch,                   \
-#                KV,                     \
-#                libdir,                 \
-#                master_config,          \
-#                cli,                    \
-#                temp,                   \
-#                bootupdateset,          \
-#                bootupdateinitrd,       \
-#                verbose)
 
 # FIXME basic systems have no /boot partition
 #   # TODO: add sysvinit to RDEPEND ebuild
@@ -247,6 +187,7 @@ if target == 'all' or target == 'a':
 #       print yellow('WARN') + ': ' + '/boot is not mounted'
 #       print yellow('WARN') + ': ' + 'skipping /boot copy.'
 #       noboot = True
+
 print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
