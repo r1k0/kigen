@@ -41,16 +41,31 @@ of that call. Hence the return 0 logic you can find here and there in KIGen.
 
 KIGen is on purpose using simple syntax.
 
+========
 Support
-~~~~~~~
+========
 
-KIGen requires Portage to work and provides support for the following linux based flavors:
+Supported OS
+~~~~~~~~~~~~
+
+KIGen supports Portage to work and provides support for the following linux based flavors:
 
   - Funtoo  and its boot-update interface,
   - Gentoo  (no boot-update interface yet),
   - Sabayon (no boot-update interface yet).
   - VLOS    (no boot-update interface yet).
   - ChromeOS? ;P
+
+but KIGen works on the following flavors:
+  
+  - Debian
+  - Ubuntu
+  - ArchLinux
+
+Portage support
+~~~~~~~~~~~~~~~
+
+KIGen imports colors from Portage itself. It keeps the code simpler.
 
 KIGen will detect /etc/boot.conf and will append the modules configuration from /etc/KIGen.conf
 with the content of the load-modules variable set in Coreboot.
@@ -67,6 +82,12 @@ with the content of the load-modules variable set in Coreboot.
 
 This will result in shipping 'ext3 ext4' as modules in the initramfs if you have them built as modules.
 You can simply ignore either one or the other or both configuration files.
+
+Non Portage support
+~~~~~~~~~~~~~~~~~~~
+
+KIGen works on Debian without any color support.
+
 
 Have fun too!
 
