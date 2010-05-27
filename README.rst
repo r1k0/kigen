@@ -41,11 +41,6 @@ of that call. Hence the return 0 logic you can find here and there in KIGen.
 
 KIGen is on purpose using simple syntax.
 
-No classes but only functions, parameters and path imports.
-KIGen (yet) does not need to be written as an API. Procedural code is OK.
-If or when we'll have to interface higher level code to KIGen then there
-I'll make class structure, but for now it's ok.
-
 Support
 ~~~~~~~
 

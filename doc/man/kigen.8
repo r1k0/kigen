@@ -1,8 +1,8 @@
-.TH GENKI "8" "May 2010" "genki 9999" "Funtoo Linux"
+.TH KIGEN "8" "May 2010" "kigen 9999" "Funtoo Linux"
 .SH NAME
-genki \- a Linux kernel|initramfs generator.
+kigen \- a GNU/Linux kernel|initramfs generator.
 .SH SYNOPSIS
-\fBgenki\fR \fI<option/target> [options]\fR
+\fBkigen\fR \fI<option/target> [options]\fR
 .SH INTRODUCTION
 GenKI is designed to allow users to build their own kernel/initramfs
 provided adequate configuration and parameters.
@@ -18,18 +18,18 @@ GenKI so far provides the following features:
     - LVM2
     - LUKS
 .SH USAGE
-It is at least required to pass a <target> parameter to run genki.
+It is at least required to pass a <target> parameter to run kigen.
 You can add any appropriate [options] to customize its behavior.
 The most commonly used syntax would be:
 .PP
-# genki all --lvm2 --disklabel --splash
+# kigen all --lvm2 --disklabel --splash
 .PP
 This would successively prepare/compile the kernel, compile/install its modules,
 and finally populate an initramfs.
 Note that the resulting output is appended into /boot, it is up to the user
 to ensure /boot is correctly mounted.
 .SH ACTIONS
-A target tells genki what you want it to do - the following
+A target tells kigen what you want it to do - the following
 actions are supported:
 .PP
 .I \fBinitramfs\fR

@@ -8,6 +8,7 @@ import logging
 import commands
 
 class initramfs:
+
     def __init__(self,              \
                 kernel_dir_opt,     \
                 arch,               \

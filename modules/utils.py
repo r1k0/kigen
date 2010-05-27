@@ -215,7 +215,7 @@ def sprocessor(cmd, verbose):
     logging.debug(cmd)
 
     # TODO pass logfile
-    f = open('/var/log/genki.log')
+    f = open('/var/log/kigen.log')
     p = subprocess.Popen(cmd , stdout=f) #, shell = True) # , close_fds=True)
 
     return p.wait() # , p.stdout #, p.stderr

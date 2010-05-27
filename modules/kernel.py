@@ -19,17 +19,6 @@ class kernel:
         self.oldconfig      = cli['koldconfig']
         self.quiet          = verbose['std']
 
-#    def showvar(self):
-#        """
-#        Create the kernel
-#        """
-#        print stdout.white(self.kerneldir)
-#        print self.arch
-#        print self.KV
-#        bla = True
-#        if bla is True:
-#            raise error.fail('plop()')
-
     def build(self):
         """
         Build kernel

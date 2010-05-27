@@ -68,7 +68,7 @@ def parse():
 
     # this has to be taken care before quiet is initialized
     # hence the extra loop, catch --logfile before all
-    cli['logfile'] = '/var/log/genki.log'
+    cli['logfile'] = '/var/log/kigen.log'
     for o, a in opts:
         if o in ("--logfile"):
             cli['logfile'] = a
@@ -307,7 +307,7 @@ def print_usage_bzImage(no_extra_options=False):
 #   print "  --allnoconfig		Say no  to all kernel options and modules only."
     if no_extra_options is False:
         print "  --noboot		Do not copy kernel/initramfs to /boot."
-        print "  --logfile=/file	Log to file, default to /var/log/genki.log."
+        print "  --logfile=/file	Log to file, default to /var/log/kigen.log."
         print "  -d, --debug		Show more output."
 
 def print_usage_kernel(no_extra_options=False):
@@ -336,7 +336,7 @@ def print_usage_initramfs():
     print "  --nocache		Do not use cached data."
     print "  --noboot		Do not copy kernel/initramfs to /boot."
     print "  --nocolor		Do not colorize output."
-    print "  --logfile=/file	Log to file, default to /var/log/genki.log."
+    print "  --logfile=/file	Log to file, default to /var/log/kigen.log."
     print "  -d, --debug		Show more output."
 
 def print_usage_all():
