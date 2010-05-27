@@ -313,7 +313,7 @@ def print_usage_bzImage(no_extra_options=False):
 def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options)
     print "  --nomodinstall	Do not install modules."
-    print yellow("TEST --fakeroot=/foo	Append a directory to /lib/modules.")
+#    print yellow("TEST --fakeroot=/foo	Append a directory to /lib/modules.")
 
 def print_usage_initramfs():
     print "  --bbconf=/file	Custom busybox config file (full path)."
@@ -322,17 +322,17 @@ def print_usage_initramfs():
     print "  --disklabel		Include support for disklabel and UUID."
     print "  --luks		Include LUKS support (cryptsetup must be statically merged)."
     print "  --lvm2		Include lvm2 support."
-    print yellow("TEST --evms		Include evms support (evms must be merged).")
-    print yellow("TEST --dmraid		Include dmraid support.")
-    print yellow("TEST  --selinux		 Include selinux support in --dmraid.")
-    print yellow("TEST --iscsi		Include iscsi support.")
-    print yellow("TEST --mdadm		Include mdadm support (mdadm must be merged).")
+#    print yellow("TEST --evms		Include evms support (evms must be merged).")
+#    print yellow("TEST --dmraid		Include dmraid support.")
+#    print yellow("TEST  --selinux		 Include selinux support in --dmraid.")
+#    print yellow("TEST --iscsi		Include iscsi support.")
+#    print yellow("TEST --mdadm		Include mdadm support (mdadm must be merged).")
     print "  --splash		Include splash support (splashutils must be merged)."
     print "   --stheme=<theme>	 Splash theme, gentoo is the default."
     print "   --sres=INTxINT	 Splash resolution,comma separated list of INTxINT, all if not set."
-    print yellow("TEST --unionfs-fuse	Include unionfs-fuse support.")
-    print red("DEV --aufs		Include aufs support.")
-    print yellow("TEST --firmware=/dir	Include custom firmware support.")
+#    print yellow("TEST --unionfs-fuse	Include unionfs-fuse support.")
+#    print red("DEV --aufs		Include aufs support.")
+#    print yellow("TEST --firmware=/dir	Include custom firmware support.")
     print "  --nocache		Do not use cached data."
     print "  --noboot		Do not copy kernel/initramfs to /boot."
     print "  --nocolor		Do not colorize output."
