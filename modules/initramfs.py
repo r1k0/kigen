@@ -301,7 +301,7 @@ def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menucon
         # use cache
         print 'from ' + white('cache')
     else:
-        print ' ' + busyboxprogs
+        print busyboxprogs
         # compile
         ret = busybox.build_sequence( arch, \
                     bbconf,                 \
