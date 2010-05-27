@@ -1,14 +1,14 @@
 import sys
 import os
 import getopt
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-    from portage.output import green, turquoise, white, red, yellow
-else:
-    from nocolor import green, turquoise, white, red, yellow
-
-__author__	= [ 'erick "r1k0" michau - <erick@openchill.org>', \
-                '']
+#color = os.getenv("GENKI_STD_COLOR")
+#if color == '0':
+#    from portage.output import green, turquoise, white, red, yellow
+#else:
+#    from nocolor import green, turquoise, white, red, yellow
+from stdout import white, green, turquoise, yellow, red
+__author__	    = [ 'erick "r1k0" michau - <erick@openchill.org>', \
+                    '']
 __version__		= "0.9"
 __productname__	= os.path.basename(sys.argv[0])
 __description__	= "a kernel/initramfs generator."
@@ -16,7 +16,7 @@ __description__	= "a kernel/initramfs generator."
 # parse command line parameters
 def parse():
     cli = {}
-    verbose = {'std': '', 	\
+    verbose = { 'std': '', 	\
                 'set': False}
 
     try:
@@ -267,7 +267,7 @@ def print_credits():
 
 def print_usage(ex=False):
     print
-    print white('  a Linux kernel|initramfs generator')
+    print white('  a GNU/Linux kernel|initramfs generator')
     print
     print white('Usage')+":"
     print "  " + turquoise(os.path.basename(sys.argv[0])) + green(' <target|options>') + yellow(' [parameters]')

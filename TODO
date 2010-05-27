@@ -1,10 +1,11 @@
+TODO: replace target functions by classes
 TODO: write own color class
     don't rely on portage dep
 TODO: make genki ebuild depend on python-2.6 (for debian)
 TODO: replace error calls w/ raise errortype
-TODO: add network stack in initramfs
-    add sshd server
 TODO: add vi or nano to initramfs
+    sshd and other tools too
+    make it configurable
 TODO: fix /dev/tty1 bug when using splash
     this prevents silent mode
 TODO: pass $PORTDIR don't assume /usr/portage

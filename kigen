@@ -2,10 +2,9 @@
 
 import sys
 import os
-#import getopt
 import logging
 import subprocess
-import signal # raise
+# import signal # raise
 
 if os.getuid() != 0:
     print "Get rool pal!"
@@ -17,6 +16,7 @@ if os.path.islink(binpath):
     binpath = os.readlink(binpath)
 # this is set up by kigen ebuild
 if binpath == '/usr/sbin/kigen':
+       # kigen is installed (likely on portage only) for now
     libdir = '/usr/share/kigen'
     # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
     pyv = os.popen('eselect python show --python2').read().strip()
@@ -31,14 +31,14 @@ sys.path.append(libdir)
 cliargs = sys.argv[1:]
 if "--nocolor" in cliargs or "-n" in cliargs:
     from nocolor import green, turquoise, red, yellow, white
-    os.environ['GENKI_STD_COLOR'] = '1'
+    os.environ['KIGEN_STDOUT'] = '1'
 else:
     try:
         from portage.output import green, turquoise, red, yellow, white
-        os.environ['GENKI_STD_COLOR'] = '0'
+        os.environ['KIGEN_STDOUT'] = '0'
     except:
         from nocolor import green, turquoise, red, yellow, white
-        os.environ['GENKI_STD_COLOR'] = '1'
+        os.environ['KIGEN_STDOUT'] = '1'
 
 # kigen modules are ready to be called
 from config import fk_conf, master_config, temp
@@ -49,6 +49,7 @@ if len(sys.argv) < 2:
     cliparser.print_usage()
     sys.exit(2)
 
+# parse command line parameters
 cli, verbose = cliparser.parse()
 
 # setup logfile
@@ -56,7 +57,6 @@ if os.path.isfile(cli['logfile']):
     os.remove(cli['logfile'])
 logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
 logging.debug('target ' + sys.argv[1])
-
 logging.debug(cli)
 
 # parse kigen config file
@@ -64,12 +64,13 @@ if os.path.isfile(fk_conf):
     master_config_temp = utils.parse_config_file(fk_conf)
     master_config.update(master_config_temp)
 else:
-    print 'missing file: '+red(fk_conf)+'.'
+    print 'missing file: ' + red(fk_conf) + '.'
     sys.exit(2)
 
 # set default kernel sources
 kerneldir = '/usr/src/linux'
 if 'kernel_src_dir' in master_config:
+    # if set grab value from config file
     kerneldir = master_config['kernel_src_dir']
 
 # Funtoo bootupdate integration
@@ -101,7 +102,7 @@ or sys.argv[1] == 'a'           \
 or sys.argv[1] == 'moo':
     target = sys.argv[1]
 else:
-    print red('ERR') + ': ' + 'unknown <target>: ' + white('initramfs kernel all')
+    print red('ERR') + ': ' + 'target must be second parameter'
     cliparser.print_usage()
     sys.exit(2)
 
@@ -121,6 +122,7 @@ if target == 'moo':
     sys.exit(0)
 
 try:
+    # try creating temp dirs
     utils.sprocessor('mkdir -p %s' % temp['root'],  verbose)
     utils.sprocessor('mkdir -p %s' % temp['work'],  verbose)
     utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
@@ -142,26 +144,32 @@ if cli['nocache'] is True:
 
 # target logic starts here
 if target == 'kernel' or target == 'k':
-    import kernel
-    logging.debug('kernel.build_sequence')
-    kernel.build_sequence(kerneldir,    \
-                master_config,          \
-                arch,                   \
-                KV,                     \
-                cli['koldconfig'],      \
-                cli['kmenuconfig'],     \
-                cli['allyesconfig'],    \
-                cli['allnoconfig'],     \
-                cli['mrproper'],        \
-                cli['kconf'],           \
-                verbose['std'],         \
-                cli['nomodinstall'],    \
-                cli['fakeroot'])
+#####
+    # TODO: replace target functions by classes
+    from kernel2 import kernel2
+    kobject = kernel2(kerneldir, master_config, arch, KV, cli, verbose)
+    kobject.build()
+#####
+#    import kernel
+#    logging.debug('kernel.build_sequence')
+#    kernel.build_sequence(kerneldir,    \
+#                master_config,          \
+#                arch,                   \
+#                KV,                     \
+#                cli['koldconfig'],      \
+#                cli['kmenuconfig'],     \
+#                cli['allyesconfig'],    \
+#                cli['allnoconfig'],     \
+#                cli['mrproper'],        \
+#                cli['kconf'],           \
+#                verbose['std'],         \
+#                cli['nomodinstall'],    \
+#                cli['fakeroot'])
 
 if target == 'initramfs' or target == 'i':
-    import initramfs
-    logging.debug('initramfs.build_sequence')
-    initramfs.build_sequence(kerneldir, \
+
+    from initramfs2 import initramfs2
+    iobject = initramfs2(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -171,27 +179,45 @@ if target == 'initramfs' or target == 'i':
                 bootupdateset,          \
                 bootupdateinitrd,       \
                 verbose)
+    iobject.build()
+#    import initramfs
+#    # import initramfs2
+#    # initrd = initramfs2.create(kerneldir, arch, KV, libdir,master_config,cli,temp,bootupdateset,bootupdateinitrd,verbose)
+#    logging.debug('initramfs.build_sequence')
+#    initramfs.build_sequence(kerneldir, \
+#                arch,                   \
+#                KV,                     \
+#                libdir,                 \
+#                master_config,          \
+#                cli,                    \
+#                temp,                   \
+#                bootupdateset,          \
+#                bootupdateinitrd,       \
+#                verbose)
 
 if target == 'all' or target == 'a':
-    import kernel
-    import initramfs
+#    import initramfs
     logging.debug('kernel.build_sequence')
+    from kernel2 import kernel2
+    kobject = kernel2(kerneldir, master_config, arch, KV, cli, verbose)
+    kobject.build()
     # build the kernel and modules
-    kernel.build_sequence(kerneldir,    \
-                master_config,          \
-                arch,                   \
-                KV,                     \
-                cli['koldconfig'],      \
-                cli['kmenuconfig'],     \
-                cli['allyesconfig'],    \
-                cli['allnoconfig'],     \
-                cli['mrproper'],        \
-                cli['kconf'],           \
-                verbose['std'],         \
-                cli['nomodinstall'],    \
-                cli['fakeroot'])
+#    kernel.build_sequence(kerneldir,    \
+#                master_config,          \
+#                arch,                   \
+#                KV,                     \
+#                cli['koldconfig'],      \
+#                cli['kmenuconfig'],     \
+#                cli['allyesconfig'],    \
+#                cli['allnoconfig'],     \
+#                cli['mrproper'],        \
+#                cli['kconf'],           \
+#                verbose['std'],         \
+#                cli['nomodinstall'],    \
+#                cli['fakeroot'])
     logging.debug('initramfs.build_sequence')
-    initramfs.build_sequence(kerneldir, \
+    from initramfs2 import initramfs2
+    iobject = initramfs2(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -201,6 +227,18 @@ if target == 'all' or target == 'a':
                 bootupdateset,          \
                 bootupdateinitrd,       \
                 verbose)
+    iobject.build()
+
+#    initramfs.build_sequence(kerneldir, \
+#                arch,                   \
+#                KV,                     \
+#                libdir,                 \
+#                master_config,          \
+#                cli,                    \
+#                temp,                   \
+#                bootupdateset,          \
+#                bootupdateinitrd,       \
+#                verbose)
 
 # FIXME basic systems have no /boot partition
 #   # TODO: add sysvinit to RDEPEND ebuild
