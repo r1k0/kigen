@@ -45,6 +45,14 @@ KIGen is on purpose using simple syntax.
 Support
 ========
 
+Features
+~~~~~~~~
+
+  - LUKS by shipping the cryptsetup binary
+  - LVM2 by shipping the lvm.static binary
+  - UUID by shipping the blkid binary
+  - splash decorator
+
 Supported OS
 ~~~~~~~~~~~~
 
