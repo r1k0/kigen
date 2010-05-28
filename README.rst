@@ -56,7 +56,7 @@ Features
 Supported OS
 ~~~~~~~~~~~~
 
-KIGen supports Portage to work and provides support for the following linux based flavors:
+KIGen supports Portage and provides support for the following linux based flavors:
 
   - Funtoo  and its boot-update interface,
   - Gentoo  (no boot-update interface yet),
