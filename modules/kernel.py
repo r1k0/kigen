@@ -19,6 +19,8 @@ class kernel:
         self.menuconfig     = cli['kmenuconfig']
         self.oldconfig      = cli['koldconfig']
         self.quiet          = verbose['std']
+        self.nomodinstall   = cli['nomodinstall']
+        self.fakeroot       = cli['fakeroot']
 
     def build(self):
         """

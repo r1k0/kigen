@@ -196,7 +196,7 @@ if cli['noboot'] is False:
         utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
         print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
         utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
-    if target == 'initramfs' or target == 'all' or target == 'i':
+    if target == 'initramfs' or target == 'all' or target == 'i' or target == 'a':
         print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
         utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
 
