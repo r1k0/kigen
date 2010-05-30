@@ -19,11 +19,10 @@ It ships all kernel/initramfs boot information and autogenerates /boot/grub/grub
 or /boot/grub/grub.cfg depending on your GRUB version (in Funtoo, grub-0.97 is
 known as sys-boot/grub-legacy and grub-1.97 as sys-boot/grub).
 
-KIGen is a kernel and initramfs builder designed to interface with
-sys-apps/boot-update and provides a more visible configuration file than genkernel
+KIGen provides a more visible configuration file than genkernel
 in terms of kernel modules at least.
 KIGen will automagically detect if you are running boot-update (we support Gentoo and
-Sabayon too) then read your /etc/boot.conf and overwrite your /etc/KIGen.conf
+Sabayon too) then read your /etc/boot.conf and overwrite your /etc/kigen.conf
 configuration in terms of kernel modules only.
 
 Source code notes
@@ -48,8 +47,8 @@ Support
 Features
 ~~~~~~~~
 
-  - LUKS by shipping the cryptsetup binary
-  - LVM2 by shipping the lvm.static binary
+  - LUKS by shipping the cryptsetup binary (no compile yet but shipping host binary)
+  - LVM2 by shipping the lvm.static binary (no compile yet but shipping host binary)
   - UUID by shipping the blkid binary
   - splash decorator
 

@@ -56,6 +56,7 @@ def parse():
                                 "info",		    \
                                 "version",	    \
                                 "credits",	    \
+                                "nosaveconfig", \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -102,6 +103,7 @@ def parse():
 #	quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
     verbose['std']		= '>>' + cli['logfile'] + ' 2>&1'
     cli['color']		= True
+    cli['nosaveconfig'] = False
 
     # single options
     for o, a in topts:
@@ -243,6 +245,8 @@ def parse():
             cli['selinux'] = True
         elif o in ("-n", "--nocolor"):
             cli['color'] = False
+        elif o in ("--nosaveconfig"):
+            cli['nosaveconfig'] = True
         else:
             assert False, "uncaught option"
 
@@ -309,6 +313,7 @@ def print_usage_bzImage(no_extra_options=False):
 def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options)
     print "  --nomodinstall	Do not install modules."
+    print "  --nosaveconfig	Do not save kernel config in /etc/kernels."
 #    print yellow("TEST --fakeroot=/foo	Append a directory to /lib/modules.")
 
 def print_usage_initramfs():

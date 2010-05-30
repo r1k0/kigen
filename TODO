@@ -1,5 +1,6 @@
+TODO: make --integrated for kernel
+    it should trigger recompilation of kernel
 TODO: make --statickern option (see genkernel --static)
-TODO: make --nosaveconfig option
 TODO: make --config=/etc/kigen.conf option
 TODO: make --kernname=foo option
 TODO: remove portageq call to work on debian

@@ -21,6 +21,7 @@ class kernel:
         self.quiet          = verbose['std']
         self.nomodinstall   = cli['nomodinstall']
         self.fakeroot       = cli['fakeroot']
+        self.nosaveconfig   = cli['nosaveconfig']
 
     def build(self):
         """
@@ -81,7 +82,10 @@ class kernel:
                 ret = modules_install(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet, self.fakeroot)
                 if ret is not zero:
                     raise error.fail('kernel.modules_install()')
-    
+        # save kernel config
+        if self.nosaveconfig is False:
+           utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
+
 def copy_dotconfig(kernel_config, kerneldir, quiet):
 	"""
 	Copy kernel .config file to kerneldir 
