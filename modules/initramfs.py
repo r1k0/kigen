@@ -241,7 +241,7 @@ def append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldc
     # create nodes
     utils.sprocessor('mknod -m 660 console c 5 1', verbose)
     utils.sprocessor('mknod -m 660 null    c 1 3', verbose)
-#    utils.sprocessor('mknod -m 660 tty1    c 4 1', verbose)
+    utils.sprocessor('mknod -m 660 tty1    c 4 1', verbose)
 
     # timestamp the build
     from time import strftime

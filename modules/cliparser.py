@@ -24,6 +24,7 @@ def parse():
 
         opts, args = getopt.getopt(sys.argv[2:], "hdin", ["kconf=", 	\
                                 "bbconf=",		\
+                                "kernname=",		\
                                 "mrproper", 	\
                                 "kmenuconfig", 	\
                                 "bbmenuconfig",	\
@@ -71,6 +72,7 @@ def parse():
             cli['logfile'] = a
     # default
     cli['kconf']		= ''
+    cli['kernname']		= ''
     cli['bbconf']		= ''
     cli['info']         = False
     cli['mrproper']     = False
@@ -157,6 +159,8 @@ def parse():
         elif o in ("-k", "--kconf"):
             cli['kconf'] = a
             cli['koldconfig'] = True # make sure .config is ok
+        elif o in ("--kernname"):
+            cli['kernname'] = a
         elif o in ("-b", "--bbconf"):
             cli['bbconf'] = a
             cli['bboldconfig'] = True # make sure .config is ok
@@ -273,17 +277,17 @@ def print_usage(ex=False):
     print "  " + turquoise(os.path.basename(sys.argv[0])) + green(' <target|options>') + yellow(' [parameters]')
     print
     print green("Options") + ":"
-    print white('  -i, --info') + "		Show " + turquoise(os.path.basename(sys.argv[0])) + " configuration"
-    print "  -h, --help		This and examples"
-    print "  -n, --nocolor		Do not colorize output"
-    print "  --version		Version"
-    print "  --credits		Credits and license"
+    print white('  -i, --info') + "             Show " + turquoise(os.path.basename(sys.argv[0])) + " configuration"
+    print "  -h, --help             This and examples"
+    print "  -n, --nocolor          Do not colorize output"
+    print "  --version              Version"
+    print "  --credits              Credits and license"
     print
     print green('Targets')+":"
-    print '  k, kernel' + "		Build kernel/modules"
-    print '  i, initramfs' + "		Build initramfs"
-    print '  a, all' + "                Build kernel/modules/initramfs"
-#	print '  moo' + '			Ask Larry.'
+    print '  k, kernel' + "              Build kernel/modules"
+    print '  i, initramfs' + "           Build initramfs"
+    print '  a, all' + "                 Build kernel/modules/initramfs"
+#	print '  moo' + '			         Ask Larry.'
     print
     print yellow('Parameters') + " help menu:"
 
@@ -298,22 +302,23 @@ def print_usage(ex=False):
         print "  " + os.path.basename(sys.argv[0]) + " all --luks --lvm2 --splash --kmenuconfig --firmware=/lib/firmware"
 
 def print_usage_bzImage(no_extra_options=False):
-    print "  --kconf=/file		Custom kernel config file (full path)."
-    print "  --nooldconfig		Will not ask for new kernel/initramfs options."
-    print "  --mrproper		Clean precompiled objects."
-    print "  --oldconfig		Will ask for new kernel/initramfs options."
-    print "  --kmenuconfig		Interactive kernel options menu."
-#   print "  --allyesconfig		Say yes to all kernel/busybox options."
-#   print "  --allnoconfig		Say no  to all kernel options and modules only."
+    print "  --kconf=/file          Custom kernel config file (full path)."
+    print "  --kernname=/file       Custom kernel filename (full path)."
+    print "  --nooldconfig          Will not ask for new kernel/initramfs options."
+    print "  --mrproper             Clean precompiled objects."
+    print "  --oldconfig            Will ask for new kernel/initramfs options."
+    print "  --kmenuconfig          Interactive kernel options menu."
+#   print "  --allyesconfig         Say yes to all kernel/busybox options."
+#   print "  --allnoconfig          Say no  to all kernel options and modules only."
     if no_extra_options is False:
-        print "  --noboot		Do not copy kernel/initramfs to /boot."
-        print "  --logfile=/file	Log to file, default to /var/log/kigen.log."
-        print "  -d, --debug		Show more output."
+        print "  --noboot               Do not copy kernel/initramfs to /boot."
+        print "  --logfile=/file        Log to file, default to /var/log/kigen.log."
+        print "  -d, --debug            Show more output."
 
 def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options)
-    print "  --nomodinstall	Do not install modules."
-    print "  --nosaveconfig	Do not save kernel config in /etc/kernels."
+    print "  --nomodinstall         Do not install modules."
+    print "  --nosaveconfig         Do not save kernel config in /etc/kernels."
 #    print yellow("TEST --fakeroot=/foo	Append a directory to /lib/modules.")
 
 def print_usage_initramfs():
