@@ -192,7 +192,7 @@ print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
     if target == 'k' or target == 'kernel' or target =='all' or target == 'a':
-        if cli['kernname'] is not '':
+        if cli['kernname'] is '':
             print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
             utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
         else:
