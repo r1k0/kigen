@@ -291,9 +291,9 @@ def print_usage(ex=False):
     print
     print yellow('Parameters') + " help menu:"
 
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'kernel' + "		-h, --help"
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'initramfs' + "	-h, --help"
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'all' + "		-h, --help"
+    print "  " + os.path.basename(sys.argv[0]) + " " + 'kernel' + "           -h, --help"
+    print "  " + os.path.basename(sys.argv[0]) + " " + 'initramfs' + "        -h, --help"
+    print "  " + os.path.basename(sys.argv[0]) + " " + 'all' + "              -h, --help"
     if ex is True:
         print
         print green('Examples') + ":"
@@ -319,31 +319,31 @@ def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options)
     print "  --nomodinstall         Do not install modules."
     print "  --nosaveconfig         Do not save kernel config in /etc/kernels."
-#    print yellow("TEST --fakeroot=/foo	Append a directory to /lib/modules.")
+    print yellow("  --fakeroot=/foo        Append a directory to /lib/modules.")
 
 def print_usage_initramfs():
-    print "  --bbconf=/file	Custom busybox config file (full path)."
-    print "  --bbmenuconfig	Interactive initramfs options menu."
-    print "  --linuxrc=/file	Custom linuxrc /init for the initramfs."
-    print "  --disklabel		Include support for disklabel and UUID."
-    print "  --luks		Include LUKS support (cryptsetup must be statically merged)."
-    print "  --lvm2		Include LVM2 support."
-#    print yellow("TEST --evms		Include evms support (evms must be merged).")
-#    print yellow("TEST --dmraid		Include dmraid support.")
-#    print yellow("TEST  --selinux		 Include selinux support in --dmraid.")
-#    print yellow("TEST --iscsi		Include iscsi support.")
-#    print yellow("TEST --mdadm		Include mdadm support (mdadm must be merged).")
-    print "  --splash		Include splash support (splashutils must be merged)."
-    print "   --stheme=<theme>	 Splash theme, gentoo is the default."
-    print "   --sres=INTxINT	 Splash resolution,comma separated list of INTxINT, all if not set."
-#    print yellow("TEST --unionfs-fuse	Include unionfs-fuse support.")
-#    print red("DEV --aufs		Include aufs support.")
-#    print yellow("TEST --firmware=/dir	Include custom firmware support.")
-    print "  --nocache		Do not use cached data."
-    print "  --noboot		Do not copy kernel/initramfs to /boot."
-    print "  --nocolor		Do not colorize output."
-    print "  --logfile=/file	Log to file, default to /var/log/kigen.log."
-    print "  -d, --debug		Show more output."
+    print "  --bbconf=/file         Custom busybox config file (full path)."
+    print "  --bbmenuconfig         Interactive initramfs options menu."
+    print "  --linuxrc=/file        Custom linuxrc /init for the initramfs."
+    print "  --disklabel            Include support for disklabel and UUID."
+    print "  --luks                 Include LUKS support (cryptsetup must be statically merged)."
+    print "  --lvm2                 Include LVM2 support."
+    print yellow("  --evms                 Include evms support (evms must be merged).")
+    print yellow("  --dmraid               Include dmraid support.")
+    print yellow("   --selinux              Include selinux support in --dmraid.")
+    print yellow("  --iscsi                Include iscsi support.")
+    print yellow("  --mdadm                Include mdadm support (mdadm must be merged).")
+    print "  --splash               Include splash support (splashutils must be merged)."
+    print "   --stheme=<theme>       Splash theme, gentoo is the default."
+    print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set."
+    print yellow("  --unionfs-fuse         Include unionfs-fuse support.")
+    print red("  --aufs                 Include aufs support.")
+    print yellow("  --firmware=/dir        Include custom firmware support.")
+    print "  --nocache              Do not use cached data."
+    print "  --noboot               Do not copy kernel/initramfs to /boot."
+    print "  --nocolor              Do not colorize output."
+    print "  --logfile=/file        Log to file, default to /var/log/kigen.log."
+    print "  -d, --debug            Show more output."
 
 def print_usage_all():
 	print_usage_kernel(no_extra_options=True)
