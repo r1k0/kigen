@@ -208,7 +208,7 @@ def append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldc
     for i in ['dev', 'bin', 'etc', 'usr', 'proc', 'temp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
         os.makedirs(temp['work']+'/initramfs-base-temp/%s' % i)
 
-    os.chdir(kernel_dir_opt) # WHY?
+    os.chdir(kernel_dir_opt) # WHY? # TODO: change os.chdir by subprocess.popen(..., cwd=kernel_dir_opt
 
     # init
     if linuxrc is '':

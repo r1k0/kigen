@@ -243,40 +243,41 @@ def bzImage(kerneldir, KV, master_config, arch, quiet):
 	return os.system(command)
 
 def modules(kerneldir, KV, master_config, arch, quiet):
-	"""
-	Kernel command interface for modules
-
-	@arg: string
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + turquoise('kernel.modules ') + KV
-	utils.chgdir(kerneldir)
-	command = build_command(master_config, arch, 'modules', quiet)
-	if quiet is '':
-		print command
-	return os.system(command)
+    """
+    Kernel command interface for modules
+    
+    @arg: string
+    @arg: dict
+    @arg: string
+    @arg: string
+    @return: bool
+    """
+    print green(' * ') + turquoise('kernel.modules ') + KV
+    utils.chgdir(kerneldir)
+    command = build_command(master_config, arch, 'modules', quiet)
+    if quiet is '':
+        print command
+    return os.system(command)
 
 def modules_install(kerneldir, KV, master_config, arch, quiet, fakeroot):
-	"""
-	Kernel command interface for modules_install 
+    """
+    Kernel command interface for modules_install 
+    
+    @arg: string
+    @arg: dict
+    @arg: string
+    @arg: string
+    @return: bool
+    """
+    print green(' * ') + turquoise('kernel.modules_install ') + fakeroot + '/lib/modules/' + KV
+    utils.chgdir(kerneldir)
+    
+    # export INSTALL_MOD_PATH 
+#   os.system('export INSTALL_MOD_PATH=%s' % fakeroot)
+    os.environ['INSTALL_MOD_PATH'] = fakeroot
 
-	@arg: string
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + turquoise('kernel.modules_install ') + fakeroot + '/lib/modules/' + KV
-	utils.chgdir(kerneldir)
-
-	# export INSTALL_MOD_PATH 
-	os.system('export INSTALL_MOD_PATH=%s' % fakeroot)
-
-	command = build_command(master_config, arch, 'modules_install', quiet)
-	if quiet is '':
-		print command
-	return os.system(command)
+    command = build_command(master_config, arch, 'modules_install', quiet)
+    if quiet is '':
+        print command
+    return os.system(command)
 

@@ -319,7 +319,7 @@ def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options)
     print "  --nomodinstall         Do not install modules."
     print "  --nosaveconfig         Do not save kernel config in /etc/kernels."
-    print yellow("  --fakeroot=/foo        Append a directory to /lib/modules.")
+    print "  --fakeroot=/foo        Append a directory to /lib/modules."
 
 def print_usage_initramfs():
     print "  --bbconf=/file         Custom busybox config file (full path)."

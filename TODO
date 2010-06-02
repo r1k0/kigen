@@ -21,4 +21,4 @@ TODO: replace portageq envvar PORTDIR
 	by portage path and
 	pass it to *.download() to store in $PORTDIR/distfiles
 	in python please
-TODO: add logging.debug() a bit everywhere
+TODO: add logging.debug() everywhere
