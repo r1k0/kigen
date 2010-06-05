@@ -127,6 +127,7 @@ try:
     utils.sprocessor('mkdir -p %s' % temp['root'],  verbose)
     utils.sprocessor('mkdir -p %s' % temp['work'],  verbose)
     utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+    utils.sprocessor('mkdir -p %s' % temp['distfiles'], verbose)
 except:
     # don't mind
     pass
