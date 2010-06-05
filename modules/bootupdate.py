@@ -2,8 +2,11 @@ import os
 import sys
 from stdout import green, turquoise, white, red, yellow
 
-import funtoo.boot.config
-import funtoo.core.config
+try:
+    import funtoo.boot.config
+    import funtoo.core.config
+except:
+    pass
 
 def get_boot_initrd():
 	"""
