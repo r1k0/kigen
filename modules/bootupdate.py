@@ -1,19 +1,9 @@
 import os
 import sys
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-	from portage.output import *
-else:
-	from nocolor import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 
-try:
-	import funtoo.boot.config
-	import funtoo.core.config
-except:
-	# for some reason import never fails
-	# even if bootupdate is not installed, errrmmm gotta figure this one out
-	# hence the check for boot-update
-	pass
+import funtoo.boot.config
+import funtoo.core.config
 
 def get_boot_initrd():
 	"""
@@ -34,10 +24,10 @@ def get_boot_initrd():
 #			modules = d.item("initrd", "load-modules").split()
 			return d
 		else:
-			print yellow(' * ')+ '/etc/boot.conf is ' + yellow('missing')
+#			print yellow(' * ')+ '/etc/boot.conf is ' + yellow('missing')
 			return d
 	else:
-		print yellow(' * ')+ 'sys-apps/boot-update is ' + yellow('missing')
+#		print yellow(' * ')+ 'sys-apps/boot-update is ' + yellow('missing')
 		return d
 
 
