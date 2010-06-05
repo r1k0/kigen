@@ -1,13 +1,9 @@
 import os
 import sys
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-	from portage.output import *
-else:
-	from nocolor import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 import utils
 
-def download(e2fsprogs_ver, verbose):
+def download(e2fsprogs_ver, temp, verbose):
 	"""
 	e2fsprogs tarball download routine
 
@@ -21,7 +17,7 @@ def download(e2fsprogs_ver, verbose):
 				str(e2fsprogs_ver)  + \
 				'/e2fsprogs-' + str(e2fsprogs_ver) + '.tar.gz'
 #        return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, utils.get_portdir(), str(e2fsprogs_ver), verbose['std']))
-	ret = utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz' % (e2fsprogs_url, utils.get_portdir(), str(e2fsprogs_ver)), verbose)
+	ret = utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz' % (e2fsprogs_url, utils.get_portdir(temp), str(e2fsprogs_ver)), verbose)
 
 	return ret
 
@@ -37,7 +33,7 @@ def extract(e2fsprogs_ver, temp, verbose):
 	"""
 	print green(' * ') + '... e2fsprogs.extract'
 
-	os.system('tar xvfz %s/distfiles/e2fsprogs-%s.tar.gz -C %s %s' % (utils.get_portdir(), str(e2fsprogs_ver), temp['work'], verbose['std']))
+	os.system('tar xvfz %s/distfiles/e2fsprogs-%s.tar.gz -C %s %s' % (utils.get_portdir(temp), str(e2fsprogs_ver), temp['work'], verbose['std']))
 #	ret = utils.sprocessor('tar xvfz %s/distfiles/e2fsprogs-%s.tar.gz -C %s' % (utils.get_portdir(), str(e2fsprogs_ver), temp['work']), verbose)
 
 
@@ -136,8 +132,8 @@ def build_sequence(master_config, temp, verbose):
 	"""
 	ret = zero = int('0')
 
-	if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (utils.get_portdir(), str(master_config['e2fsprogs_ver']))) is not True:
-		ret = download(master_config['e2fsprogs_ver'], verbose)
+	if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['e2fsprogs_ver']))) is not True:
+		ret = download(master_config['e2fsprogs_ver'], temp, verbose)
 		if ret is not zero:
 			print red('ERR: ')+'initramfs.e2fsprogs.download() failed'
 			sys.exit(2)

@@ -3,7 +3,7 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 import utils
 
-def download(bb_version, quiet):
+def download(bb_version, temp, quiet):
 	"""
 	Busybox tarball download command
 
@@ -13,7 +13,7 @@ def download(bb_version, quiet):
 	"""
 	print green(' * ') + '... busybox.download'
 	bb_url = 'http://www.busybox.net/downloads/busybox-' + str(bb_version) + '.tar.bz2'
-	return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(), str(bb_version), quiet))
+	return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(temp), str(bb_version), quiet))
 
 def extract(bb_version, temp, quiet):
 	"""
@@ -25,7 +25,7 @@ def extract(bb_version, temp, quiet):
 	@return			boot
 	"""
 	print green(' * ') + '... busybox.extract'
-	return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(), str(bb_version), temp['work'], quiet))
+	return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(bb_version), temp['work'], quiet))
 
 # TO BE REMOVED: useless function
 #def apply_patches(bb_version, patch_dir, temp, quiet):
@@ -255,8 +255,8 @@ def build_sequence(arch, 			\
 	"""
 	ret = zero = int('0')
 
-	if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(), str(master_config['bb_ver']))) is not True:
-		ret = download(master_config['bb_ver'], quiet)
+	if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['bb_ver']))) is not True:
+		ret = download(master_config['bb_ver'], temp, quiet)
 		if ret is not zero: 
 			print red('ERR')+ ': ' +'initramfs.busybox.download() failed'
 			sys.exit(2)

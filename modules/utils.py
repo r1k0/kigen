@@ -1,11 +1,7 @@
 import os
 import sys
 import commands
-color = os.getenv("GENKI_STD_COLOR")
-if color == 'ok':
-	from portage.output import green, turquoise, white, red, yellow
-else:
-	from nocolor import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 import subprocess
 import logging
 
@@ -50,6 +46,13 @@ def identify_arch():
     # FIXME: x86 for 32 and 64 or x86_64?
     uname = commands.getoutput('uname -m | sed -e "s:i[3-6]86:x86:"') #-e "s:x86_64:amd64:" -e "s:parisc:hppa:"')
     return uname
+
+def identify_os():
+    """
+    """
+#    if os.path.isfile
+
+    return
 
 def chgdir(dir):
     """
@@ -106,16 +109,19 @@ def is_static(binary_path):
     """
     return os.system('LANG="C" LC_ALL="C" objdump -T $1 2>&1 | grep "not a dynamic object" >/dev/null')
 
-def get_portdir():
+def get_portdir(temp):
     """
     Get portage PORTDIR env var content
-    This should normally be done by a portage modules somewhere!
-    If only I'd know where to look
+    will create /var/tmp/kigen/distfiles on non portage systems
 
     @arg: none
     @return: string
     """
-    portdir = os.popen('portageq envvar PORTDIR').read().strip()
+    if os.path.isfile('/usr/bin/portageq'):
+        portdir = os.popen('portageq envvar PORTDIR').read().strip()
+    else:
+        # non Portage system
+        portdir = temp['root']
     return portdir
 
 def spprocessor(cmd, verbose):

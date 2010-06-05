@@ -83,6 +83,7 @@ else:
 
 # what am I?
 arch = utils.identify_arch()
+#os = utils.identify_os()
 # get kernel version from the Makefile source itself
 KV = utils.get_kernel_version(kerneldir)
 
@@ -196,8 +197,8 @@ if cli['noboot'] is False:
             print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
             utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
         else:
-            print green(' * produced ') + cli['kernname']
-            utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', cli['kernname']), verbose)
+            print green(' * produced ') + '/boot/' + cli['kernname']
+            utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['kernname']), verbose)
         print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
         utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
     if target == 'initramfs' or target == 'all' or target == 'i' or target == 'a':

@@ -311,7 +311,6 @@ def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menucon
                     menuconfig,             \
                     allyesconfig,           \
                     mrproper,               \
-#                   quiet)
                     verbose['std'])
     # append busybox to cpio
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-busybox-temp/bin', verbose)
@@ -322,7 +321,6 @@ def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menucon
     utils.sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (libdir, temp['work']), verbose)
     utils.sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % temp['work'], verbose)
 
-    # TODO prepare from config file list import
     for i in busyboxprogs.split():
         utils.sprocessor('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (temp['work'], i), verbose)
 
