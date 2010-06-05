@@ -62,6 +62,7 @@ KIGen supports Portage and provides support for the following linux based flavor
   - Sabayon (no boot-update interface yet).
   - VLOS    (no boot-update interface yet).
   - ChromeOS? ;P
+  - Debian/Ubuntu (yes it works).
 
 but KIGen works on the following flavors:
   
