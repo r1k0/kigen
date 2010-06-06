@@ -101,8 +101,8 @@ KIGen is not meant (for now) to be installed on non Portage systems and should w
 by locally importing its modules.
 If you provide a custom /linuxrc file for Debian's initramfs, KIGen should in theory work its way through.
 
-Kernel boot options
-~~~~~~~~~~~~~~~~~~~
+Portage systems kernel boot options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
 

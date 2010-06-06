@@ -5,7 +5,7 @@ from stdout import white, green, turquoise, yellow, red
 
 __author__	    = [ 'erick "r1k0" michau - <erick@openchill.org>', \
                     '']
-__version__		= "0.1"
+__version__		= "0.9"
 __productname__	= os.path.basename(sys.argv[0])
 __description__	= "a kernel/initramfs generator."
 
@@ -143,18 +143,11 @@ def parse():
         # have to declare logfile here too
         elif o in ("--logfile="):
             cli['logfile'] = a
-#		elif o in ("--credits"):
-#			print_credits()
-#			sys.exit(0)
-#		elif o in ("-q", "--quiet"):
         elif o in ("-d", "--debug"):
 #			quiet = '>>' + logfile + ' 2>&1' # logfile
 #			quiet = '2>&1 | tee -a ' + logfile # verbose
             verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
             verbose['set'] = True
-#		elif o in ("--version"):
-#			print_version()
-#			sys.exit(0)
         elif o in ("--disklabel"):
             cli['disklabel'] = True
         elif o in ("--luks"):
@@ -171,8 +164,6 @@ def parse():
         elif o in ("-b", "--bbconf"):
             cli['bbconf'] = a
             cli['bboldconfig'] = True # make sure .config is ok
-#		elif o in ("-i", "--info"):
-#			info = True
         elif o in ("--iscsi"):
             cli['iscsi'] = True
         elif o in ("--evms"):
@@ -328,7 +319,7 @@ def print_usage_kernel(no_extra_options=False):
     print_usage_bzImage(no_extra_options=True)
     print "  --nomodinstall         Do not install modules"
     print "  --nosaveconfig         Do not save kernel config in /etc/kernels"
-    print "  --fakeroot=/foo        Append a directory to /lib/modules"
+    print "  --fakeroot=/dir        Append modules to /dir/lib/modules"
     if no_extra_options is False:
         print_usage_target_common()
 
@@ -340,17 +331,17 @@ def print_usage_initramfs():
     print "  --disklabel            Include support for disklabel and UUID"
     print "  --luks                 Include LUKS support (cryptsetup must be statically merged)"
     print "  --lvm2                 Include LVM2 support"
-#    print yellow("  --evms                 Include evms support (evms must be merged)")
-#    print yellow("  --dmraid               Include dmraid support")
-#    print yellow("   --selinux              Include selinux support in --dmraid")
-#    print yellow("  --iscsi                Include iscsi support")
-#    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
+    print yellow("  --evms                 Include evms support (evms must be merged)")
+    print yellow("  --dmraid               Include dmraid support")
+    print yellow("   --selinux              Include selinux support in --dmraid")
+    print yellow("  --iscsi                Include iscsi support")
+    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
     print "  --splash               Include splash support (splashutils must be merged)"
     print "   --stheme=<theme>       Splash theme, gentoo is the default"
     print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
-#    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
-#    print red("  --aufs                 Include aufs support")
-#    print yellow("  --firmware=/dir        Include custom firmware support")
+    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
+    print red("  --aufs                 Include aufs support")
+    print yellow("  --firmware=/dir        Include custom firmware support")
     print "  --nocache              Do not use cached data"
     print_usage_target_common()
 
