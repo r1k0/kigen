@@ -52,6 +52,7 @@ def parse():
                                 "disklabel",	\
                                 "unionfs-fuse",	\
                                 "aufs",		    \
+                                "ssh",                      \
                                 "linuxrc=",	    \
                                 "nocache",	    \
                                 "noboot",	    \
@@ -103,6 +104,7 @@ def parse():
     cli['linuxrc']		= ''
     cli['nomodinstall']	= False
     cli['fakeroot']		= ''
+    cli['ssh']		    = False
     cli['nocache']		= False
     cli['noboot']		= False
     cli['selinux']		= False
@@ -251,6 +253,8 @@ def parse():
             cli['nosaveconfig'] = True
         elif o in ("--config="):
             cli['config'] = a
+        elif o in ("--ssh"):
+            cli['ssh'] = True
         else:
             assert False, "uncaught option"
 
@@ -336,6 +340,7 @@ def print_usage_initramfs():
     print yellow("   --selinux              Include selinux support in --dmraid")
     print yellow("  --iscsi                Include iscsi support")
     print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
+    print red('  --ssh                  Include openssh tools and daemon')
     print "  --splash               Include splash support (splashutils must be merged)"
     print "   --stheme=<theme>       Splash theme, gentoo is the default"
     print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"

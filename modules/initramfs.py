@@ -835,3 +835,15 @@ def append_aufs(master_config, temp, nocache, verbose):
     os.chdir(temp['work']+'/initramfs-aufs-temp')
     return os.system(append_cpio(temp))
 
+def append_ssh(master_config, temp, nocache, verbose):
+    """
+    Append ssh tools and daemon to initramfs
+    """
+    logging.debug('initramfs.append_ssh')
+    print green(' * ') + turquoise('initramfs.append_ssh ')
+
+    os.mkdir(temp['work']+'/initramfs-ssh-temp')
+
+    os.chdir(temp['work']+'/initramfs-ssh-temp')
+    return os.system(append_cpio(temp))
+
