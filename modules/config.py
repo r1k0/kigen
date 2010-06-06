@@ -3,13 +3,11 @@ import os
 
 temp_root = '/var/tmp/kigen'
 
-fk_conf = '/etc/kigen.conf'
-
 # temp directories
-temp = {'root' : temp_root ,                \
-    'work' :        temp_root + '/work',    \
-    'cache':        temp_root + '/cache',   \
-    'distfiles':    temp_root + '/distfiles'}
+temp = {'root' :        temp_root ,             \
+        'work' :        temp_root + '/work',    \
+        'cache':        temp_root + '/cache',   \
+        'distfiles':    temp_root + '/distfiles'}
 
 # default values
 master_config = {

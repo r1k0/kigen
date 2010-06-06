@@ -41,7 +41,7 @@ else:
         os.environ['KIGEN_STDOUT'] = '1'
 
 # kigen modules are ready to be called
-from config import fk_conf, master_config, temp
+from config import master_config, temp
 import cliparser
 import utils
 
@@ -60,11 +60,12 @@ logging.debug('target ' + sys.argv[1])
 logging.debug(cli)
 
 # parse kigen config file
-if os.path.isfile(fk_conf):
-    master_config_temp = utils.parse_config_file(fk_conf)
+kigen_conf = cli['config']
+if os.path.isfile(kigen_conf):
+    master_config_temp = utils.parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
 else:
-    print 'missing file: ' + red(fk_conf) + '.'
+    print 'missing file: ' + red(kigen_conf) + '.'
     sys.exit(2)
 
 # set default kernel sources

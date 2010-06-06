@@ -5,7 +5,7 @@ from stdout import white, green, turquoise, yellow, red
 
 __author__	    = [ 'erick "r1k0" michau - <erick@openchill.org>', \
                     '']
-__version__		= "0.9"
+__version__		= "0.1"
 __productname__	= os.path.basename(sys.argv[0])
 __description__	= "a kernel/initramfs generator."
 
@@ -16,27 +16,31 @@ def parse():
                 'set': False}
 
     try:
-        topts, targs = getopt.getopt(sys.argv[1:], "ihn", ["help",	\
-                                "info",		\
-                                "version",	\
-                                "nocolor",	\
+        topts, targs = getopt.getopt(sys.argv[1:], "ihn", [ \
+                                "conf=",                    \
+                                "help",                     \
+                                "info",                     \
+                                "version",                  \
+                                "nocolor",                  \
                                 "credits"])
 
-        opts, args = getopt.getopt(sys.argv[2:], "hdin", ["kconf=", 	\
-                                "bbconf=",		\
-                                "kernname=",		\
-                                "mrproper", 	\
-                                "kmenuconfig", 	\
-                                "bbmenuconfig",	\
-                                "allyesconfig", \
-                                "nomodinstall",	\
-                                "fakeroot=",	\
-                                "allnoconfig", 	\
-                                "nooldconfig",  \
-                                "oldconfig",	\
-                                "luks", 	    \
-                                "lvm2", 	    \
-                                "dmraid",	    \
+        opts, args = getopt.getopt(sys.argv[2:], "hdin", [  \
+                                "conf=",                    \
+                                "kconf=",                   \
+                                "bbconf=",                  \
+                                "kernname=",                \
+                                "mrproper",                 \
+                                "kmenuconfig",              \
+                                "bbmenuconfig",             \
+                                "allyesconfig",             \
+                                "nomodinstall",             \
+                                "fakeroot=",                \
+                                "allnoconfig",              \
+                                "nooldconfig",              \
+                                "oldconfig",                \
+                                "luks",                     \
+                                "lvm2",                     \
+                                "dmraid",                   \
                                 "iscsi",	    \
                                 "logfile=",	    \
                                 "evms",		    \
@@ -71,6 +75,7 @@ def parse():
         if o in ("--logfile"):
             cli['logfile'] = a
     # default
+    cli['config']       = '/etc/kigen.conf'
     cli['kconf']		= ''
     cli['kernname']		= ''
     cli['bbconf']		= ''
@@ -120,6 +125,8 @@ def parse():
         elif o in ("--credits"):
             print_credits()
             sys.exit(0)
+        elif o in ("--config="):
+            cli['config'] = a
 
     # target options
     for o, a in opts:
@@ -251,6 +258,8 @@ def parse():
             cli['color'] = False
         elif o in ("--nosaveconfig"):
             cli['nosaveconfig'] = True
+        elif o in ("--config="):
+            cli['config'] = a
         else:
             assert False, "uncaught option"
 
@@ -346,6 +355,7 @@ def print_usage_initramfs():
 
 def print_usage_target_common():
     print green('Common') + ' parameters'
+    print '  --config=/file         Use a custom master config file'
     print "  --noboot               Do not copy kernel/initramfs to /boot"
     print "  --logfile=/file        Log to file, default to /var/log/kigen.log"
     print "  -n, --nocolor          Do not colorize output"
