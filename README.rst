@@ -63,11 +63,12 @@ KIGen supports Portage and provides support for the following linux based flavor
   - VLOS    (no boot-update interface yet).
   - ChromeOS? ;P
 
-but KIGen works on the following flavors:
+but KIGen might also work on the following flavors:
   
   - Debian
-  - Ubuntu
-  - ArchLinux
+  - Arch
+
+provided your custom /linuxrc for the initramfs of course.
 
 Portage support
 ~~~~~~~~~~~~~~~
@@ -98,7 +99,55 @@ Non Portage support
 KIGen works on Debian without any color support.
 KIGen is not meant (for now) to be installed on non Portage systems and should work out of the box
 by locally importing its modules.
+If you provide a custom /linuxrc file for Debian's initramfs, KIGen should in theory work its way through.
 
-Have fun too!
+Kernel boot options
+~~~~~~~~~~~~~~~~~~~
 
+KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
 
+  - real_root
+  - root
+  - subdir
+  - real_init
+  - init_opts
+  - cdroot
+  - cdroot_type
+  - loop
+  - looptype
+  - domdadm
+  - dodmraid
+  - doevms
+  - debug
+  - scandelay
+  - doload
+  - nodetect
+  - noload
+  - lvmraid
+  - part
+  - ip
+  - nfsroot
+  - iscsi_initiatorname
+  - iscsi_target
+  - iscsi_tgpt
+  - iscsi_address
+  - iscsi_port
+  - iscsi_username
+  - iscsi_password
+  - iscsi_username_in
+  - iscsi_password_in
+  - iscsi_debug
+  - crypt_root
+  - crypt_swap
+  - root_key
+  - root_keydev
+  - swap_key
+  - swap_keydev
+  - real_resume
+  - noresume
+  - crypt_silent
+  - real_rootflags
+  - keymap
+  - unionfs
+  - aufs
+  - nounionfs

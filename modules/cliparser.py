@@ -287,8 +287,8 @@ def print_usage(ex=False):
     print
     print green("Options") + ":"
 #    print white('  -i, --info') + "             Show " + turquoise(os.path.basename(sys.argv[0])) + " configuration"
-    print "  -h, --help             This and examples"
     print '  --conf=/file           Custom master config file'
+    print "  -h, --help             This and examples"
     print "  -n, --nocolor          Do not colorize output"
     print "  --version              Version"
     print "  --credits              Credits and license"
