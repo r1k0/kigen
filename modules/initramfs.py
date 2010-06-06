@@ -566,10 +566,10 @@ def append_blkid(master_config, libdir, temp, nocache, verbose):
     
     @return: bool
     """
-    logging.debug('initramfs.append_blkid ' + master_config['e2fsprogs_ver'])
-    print green(' * ') + turquoise('initramfs.append_blkid ') + master_config['e2fsprogs_ver'],
+    logging.debug('initramfs.append_blkid ' + master_config['e2fsprogs-version'])
+    print green(' * ') + turquoise('initramfs.append_blkid ') + master_config['e2fsprogs-version'],
 
-    if os.path.isfile(temp['cache']+'/blkid-e2fsprogs-'+master_config['e2fsprogs_ver']+'.bz2') and nocache is False:
+    if os.path.isfile(temp['cache']+'/blkid-e2fsprogs-'+master_config['e2fsprogs-version']+'.bz2') and nocache is False:
         # use cache
         print 'from ' + white('cache')
         pass
@@ -582,7 +582,7 @@ def append_blkid(master_config, libdir, temp, nocache, verbose):
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-blkid-temp/bin', verbose)
 
     # FIXME careful with the >
-    os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']))
+    os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs-version'], temp['work']))
     #utils.srprocessor('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
     utils.sprocessor('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % temp['work'], verbose)
     
