@@ -84,7 +84,11 @@ class kernel:
                     raise error.fail('kernel.modules_install()')
         # save kernel config
         if self.nosaveconfig is False:
-           utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
+            if os.path.isdir('/etc/kernels/'):
+                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
+            else:
+                utils.sprocessor('mkdir /etc/kernels', self.verbose)
+                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
 
 def copy_dotconfig(kernel_config, kerneldir, quiet):
     """
