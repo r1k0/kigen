@@ -288,6 +288,7 @@ def print_usage(ex=False):
     print green("Options") + ":"
 #    print white('  -i, --info') + "             Show " + turquoise(os.path.basename(sys.argv[0])) + " configuration"
     print "  -h, --help             This and examples"
+    print '  --conf=/file           Custom master config file'
     print "  -n, --nocolor          Do not colorize output"
     print "  --version              Version"
     print "  --credits              Credits and license"
@@ -355,7 +356,7 @@ def print_usage_initramfs():
 
 def print_usage_target_common():
     print green('Common') + ' parameters'
-    print '  --config=/file         Use a custom master config file'
+    print '  --conf=/file           Use a custom master config file'
     print "  --noboot               Do not copy kernel/initramfs to /boot"
     print "  --logfile=/file        Log to file, default to /var/log/kigen.log"
     print "  -n, --nocolor          Do not colorize output"
