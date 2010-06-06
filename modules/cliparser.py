@@ -302,50 +302,56 @@ def print_usage(ex=False):
         print "  " + os.path.basename(sys.argv[0]) + " all --luks --lvm2 --splash --kmenuconfig --firmware=/lib/firmware"
 
 def print_usage_bzImage(no_extra_options=False):
-    print "  --kconf=/file          Custom kernel config file (full path)."
-    print "  --kernname=mykernel    Custom kernel file name."
-    print "  --nooldconfig          Will not ask for new kernel/initramfs options."
-    print "  --mrproper             Clean precompiled objects."
-    print "  --oldconfig            Will ask for new kernel/initramfs options."
-    print "  --kmenuconfig          Interactive kernel options menu."
-#   print "  --allyesconfig         Say yes to all kernel/busybox options."
-#   print "  --allnoconfig          Say no  to all kernel options and modules only."
+    print "  --kconf=/file          Custom kernel config file (full path)"
+    print "  --kernname=mykernel    Custom kernel file name"
+    print "  --nooldconfig          Will not ask for new kernel/initramfs options"
+    print "  --mrproper             Clean precompiled objects"
+    print "  --oldconfig            Will ask for new kernel/initramfs options"
+    print "  --kmenuconfig          Interactive kernel options menu"
+#   print "  --allyesconfig         Say yes to all kernel/busybox options"
+#   print "  --allnoconfig          Say no  to all kernel options and modules only"
     if no_extra_options is False:
         print_usage_target_common()
 
 def print_usage_kernel(no_extra_options=False):
-    print_usage_bzImage(no_extra_options)
-    print "  --nomodinstall         Do not install modules."
-    print "  --nosaveconfig         Do not save kernel config in /etc/kernels."
-    print "  --fakeroot=/foo        Append a directory to /lib/modules."
+    print green('Kernel') + ' parameters'
+    print_usage_bzImage(no_extra_options=True)
+    print "  --nomodinstall         Do not install modules"
+    print "  --nosaveconfig         Do not save kernel config in /etc/kernels"
+    print "  --fakeroot=/foo        Append a directory to /lib/modules"
+    if no_extra_options is False:
+        print_usage_target_common()
 
 def print_usage_initramfs():
-    print "  --bbconf=/file         Custom busybox config file (full path)."
-    print "  --bbmenuconfig         Interactive initramfs options menu."
-    print "  --linuxrc=/file        Custom linuxrc /init for the initramfs."
-    print "  --disklabel            Include support for disklabel and UUID."
-    print "  --luks                 Include LUKS support (cryptsetup must be statically merged)."
-    print "  --lvm2                 Include LVM2 support."
-#    print yellow("  --evms                 Include evms support (evms must be merged).")
-#    print yellow("  --dmraid               Include dmraid support.")
-#    print yellow("   --selinux              Include selinux support in --dmraid.")
-#    print yellow("  --iscsi                Include iscsi support.")
-#    print yellow("  --mdadm                Include mdadm support (mdadm must be merged).")
-    print "  --splash               Include splash support (splashutils must be merged)."
-    print "   --stheme=<theme>       Splash theme, gentoo is the default."
-    print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set."
-#    print yellow("  --unionfs-fuse         Include unionfs-fuse support.")
-#    print red("  --aufs                 Include aufs support.")
-#    print yellow("  --firmware=/dir        Include custom firmware support.")
-    print "  --nocache              Do not use cached data."
+    print green('Initramfs') + ' parameters'
+    print "  --bbconf=/file         Custom busybox config file (full path)"
+    print "  --bbmenuconfig         Interactive initramfs options menu"
+    print "  --linuxrc=/file        Custom linuxrc /init for the initramfs"
+    print "  --disklabel            Include support for disklabel and UUID"
+    print "  --luks                 Include LUKS support (cryptsetup must be statically merged)"
+    print "  --lvm2                 Include LVM2 support"
+#    print yellow("  --evms                 Include evms support (evms must be merged)")
+#    print yellow("  --dmraid               Include dmraid support")
+#    print yellow("   --selinux              Include selinux support in --dmraid")
+#    print yellow("  --iscsi                Include iscsi support")
+#    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
+    print "  --splash               Include splash support (splashutils must be merged)"
+    print "   --stheme=<theme>       Splash theme, gentoo is the default"
+    print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
+#    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
+#    print red("  --aufs                 Include aufs support")
+#    print yellow("  --firmware=/dir        Include custom firmware support")
+    print "  --nocache              Do not use cached data"
     print_usage_target_common()
 
-def print_usage_target_common():    
-    print "  --noboot               Do not copy kernel/initramfs to /boot."
-    print "  --logfile=/file        Log to file, default to /var/log/kigen.log."
-    print "  -n, --nocolor          Do not colorize output."
-    print "  -d, --debug            Show more output."
+def print_usage_target_common():
+    print green('Common') + ' parameters'
+    print "  --noboot               Do not copy kernel/initramfs to /boot"
+    print "  --logfile=/file        Log to file, default to /var/log/kigen.log"
+    print "  -n, --nocolor          Do not colorize output"
+    print "  -d, --debug            Show more output"
 
 def print_usage_all():
-	print_usage_kernel(no_extra_options=True)
-	print_usage_initramfs()
+    print_usage_kernel(no_extra_options=True)
+    print_usage_initramfs()
+
