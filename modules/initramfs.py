@@ -120,7 +120,7 @@ class initramfs:
         # 9) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
-            ret = append_luks(self.temp, self.verbose)
+            ret = append_luks(self.master_config, self.temp, self.nocache, self.verbose)
             if ret is not zero: 
                 raise error.fail('initramfs.append_luks()')
         # 10) append multipath
@@ -334,7 +334,7 @@ def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menucon
     if ret is zero:
         return os.system(append_cpio(temp))
 
-def append_luks(temp, verbose):
+def append_luks(master_config, temp, nocache, verbose):
     """
     Append the LUKS static binary to the initramfs
 
@@ -363,11 +363,20 @@ def append_luks(temp, verbose):
         utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, temp['work']), verbose)
         utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
     else:
-        # TODO: download extract compile cache luks
-#       import luks
-        logging.debug('initramfs.append_luks ERROR: cryptsetup does not seem emerged')
-        print red('ERR: ') + 'cryptsetup does not seem emerged.'
-        sys.exit(2)
+        print green(' * ') + turquoise('initramfs.append_luks ') + master_config['luks-version'],
+        logging.debug('initramfs.append_luks ' + master_config['luks-version'])
+        if os.path.isfile(temp['cache']+'/cryptsetup-'+master_config['luks-version']+'.bz2') and nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+        else:
+            # compile and cache
+            print
+            import luks
+            luks.build_sequence(master_config, temp, verbose)
+
+    # FIXME careful with the >
+    os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (temp['cache'], master_config['luks-version'], temp['work']))
+    utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
 
     os.chdir(temp['work']+'/initramfs-luks-temp')
     return os.system(append_cpio(temp))
@@ -578,7 +587,6 @@ def append_blkid(master_config, libdir, temp, nocache, verbose):
     if os.path.isfile(temp['cache']+'/blkid-e2fsprogs-'+master_config['e2fsprogs-version']+'.bz2') and nocache is False:
         # use cache
         print 'from ' + white('cache')
-        pass
     else:
         # compile
         print

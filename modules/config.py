@@ -14,7 +14,8 @@ master_config = {
         'bb_ver':				'', 		\
         'dm_ver':				'', 		\
         'dmraid_ver': 			'', 		\
-        'e2fsprogs_ver': 		'', 		\
+        'e2fsprogs-version':    '', 		\
+        'luks-version':         '',         \
         'fuse_ver': 			'', 		\
         'iscsi_ver': 			'', 		\
         'kernel_src_dir': 		'/usr/src/linux', \
