@@ -55,7 +55,7 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
     
     print green('Versions')
     print '  Busybox:             ' + white(master_config['bb_ver'])
-    print '  e2fsprogs:           ' + white(master_config['e2fsprogs_ver'])
+    print '  e2fsprogs:           ' + white(master_config['e2fsprogs-version'])
     print '  LVM2:                ' + white(master_config['lvm_ver'])
     print '  device-mapper:       ' + white(master_config['dm_ver'])
     print '  iSCSI:               ' + white(master_config['iscsi_ver'])
@@ -63,8 +63,7 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
     print '  Unionfs-fuse:        ' + white(master_config['unionfs_fuse_ver'])
     print '  FUSE:                ' + white(master_config['fuse_ver'])
     print '  aufs:                ' + white(master_config['aufs_ver'])
-# TODO: find fast way to get sys-fs/cryptsetup version and if it's installed
-#   print '  LUKS:                '
+    print '  LUKS:                ' + white(master_config['luks-version'])
     print
     print green('Busybox settings')
     print '  UTILS_MAKE:          ' + white(master_config['UTILS_MAKE'])
