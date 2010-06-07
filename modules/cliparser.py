@@ -333,7 +333,7 @@ def print_usage_initramfs():
     print "  --bbmenuconfig         Interactive initramfs options menu"
     print "  --linuxrc=/file        Custom linuxrc /init for the initramfs"
     print "  --disklabel            Include support for disklabel and UUID"
-    print "  --luks                 Include LUKS support (cryptsetup must be statically merged)"
+    print "  --luks                 Include LUKS support"
     print "  --lvm2                 Include LVM2 support"
 #    print yellow("  --evms                 Include evms support (evms must be merged)")
 #    print yellow("  --dmraid               Include dmraid support")

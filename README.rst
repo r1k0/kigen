@@ -47,9 +47,9 @@ Support
 Features
 ~~~~~~~~
 
-  - LUKS by shipping the cryptsetup binary (no compile yet but shipping host binary)
-  - LVM2 by shipping the lvm.static binary (no compile yet but shipping host binary)
-  - UUID by shipping the blkid binary
+  - LUKS (cryptsetup binary)
+  - LVM2 (lvm.static binary)
+  - UUID (blkid binary)
   - splash decorator
 
 Supported OS
@@ -62,11 +62,6 @@ KIGen supports Portage and provides support for the following linux based flavor
   - Sabayon (no boot-update interface yet).
   - VLOS    (no boot-update interface yet).
   - ChromeOS? ;P
-
-but KIGen might also work on the following flavors:
-  
-  - Debian
-  - Arch
 
 provided your custom /linuxrc for the initramfs of course.
 
@@ -96,9 +91,9 @@ You can simply ignore either one or the other or both configuration files.
 Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
-KIGen works on Debian without any color support.
-KIGen is not meant (for now) to be installed on non Portage systems and should work out of the box
-by locally importing its modules.
+KIGen kernel works on Debian and Arch with no support for color (but who cares?).
+KIGen initramfs could work too.
+KIGen is not meant (for now) to be installed on non Portage systems but will in the future.
 If you provide a custom /linuxrc file for Debian's initramfs, KIGen should in theory work its way through.
 
 Portage systems kernel boot options
@@ -161,15 +156,3 @@ Gentoo
 
 Funtoo
 ~~~~~~
-
-Sabayon
-~~~~~~~
-
-VLOS
-~~~~
-
-Debian
-~~~~~~
-
-Arch
-~~~~
