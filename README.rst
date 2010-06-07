@@ -51,6 +51,12 @@ Features
   - LVM2 (lvm.static binary)
   - UUID (blkid binary)
   - splash decorator
+  - customizable busybox toolbox
+    - telnet
+    - vi
+    - httpd
+    - awk
+    - a lot more
 
 Supported OS
 ~~~~~~~~~~~~
