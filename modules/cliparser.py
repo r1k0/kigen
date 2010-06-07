@@ -5,7 +5,7 @@ from stdout import white, green, turquoise, yellow, red
 
 __author__	    = [ 'erick "r1k0" michau - <erick@openchill.org>', \
                     '']
-__version__		= "0.9"
+__version__		= "0.1"
 __productname__	= os.path.basename(sys.argv[0])
 __description__	= "a kernel/initramfs generator."
 
