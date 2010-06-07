@@ -90,15 +90,19 @@ def compress(sshtmp, master_config, verbose):
     @return: bool
     """
     print green(' * ') + '... ssh.compress'
-    utils.chgdir(sshtmp)
 
+    utils.chgdir(sshtmp)
     # create temp bin and sbin
     utils.sprocessor('mkdir -p bin', verbose)
     utils.sprocessor('mkdir -p sbin', verbose)
-    utils.sprocessor('cp sftp scp bin', verbose)
+    utils.sprocessor('mkdir -p usr/local/etc', verbose)
+    utils.sprocessor('cp ssh sftp scp bin', verbose)
     utils.sprocessor('cp sshd sbin', verbose)
+    # that is where sshd expects its conf file
+    utils.sprocessor('cp sshd_config usr/local/etc', verbose)
+    # TODO create user/group ssh 
 
-    return os.system('tar cf ssh.tar bin sbin' )
+    return os.system('tar cf ssh.tar bin sbin usr')
 
 def cache(sshtmp, master_config, temp, verbose):
     """
@@ -132,7 +136,7 @@ def build_sequence(master_config, temp, verbose):
     if os.path.isfile('%s/distfiles/openssh-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['ssh-version']))) is not True:
         ret = download(master_config['ssh-version'], temp, verbose)
         if ret is not zero:
-            print red('ERR: ')+'initramfs.ssh.download() failed'
+            print red('ERR')+ ': '+'initramfs.ssh.download() failed'
             sys.exit(2)
 
     extract(master_config['ssh-version'], temp, verbose)

@@ -335,18 +335,18 @@ def print_usage_initramfs():
     print "  --disklabel            Include support for disklabel and UUID"
     print "  --luks                 Include LUKS support (cryptsetup must be statically merged)"
     print "  --lvm2                 Include LVM2 support"
-    print yellow("  --evms                 Include evms support (evms must be merged)")
-    print yellow("  --dmraid               Include dmraid support")
-    print yellow("   --selinux              Include selinux support in --dmraid")
-    print yellow("  --iscsi                Include iscsi support")
-    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
-    print '  --ssh                  Include openssh tools and daemon'
+#    print yellow("  --evms                 Include evms support (evms must be merged)")
+#    print yellow("  --dmraid               Include dmraid support")
+#    print yellow("   --selinux              Include selinux support in --dmraid")
+#    print yellow("  --iscsi                Include iscsi support")
+#    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
+#    print '  --ssh                  Include openssh tools and daemon'
     print "  --splash               Include splash support (splashutils must be merged)"
     print "   --stheme=<theme>       Splash theme, gentoo is the default"
     print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
-    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
-    print red("  --aufs                 Include aufs support")
-    print yellow("  --firmware=/dir        Include custom firmware support")
+#    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
+#    print red("  --aufs                 Include aufs support")
+#    print yellow("  --firmware=/dir        Include custom firmware support")
     print "  --nocache              Do not use cached data"
     print_usage_target_common()
 
