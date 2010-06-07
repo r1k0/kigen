@@ -1,3 +1,7 @@
+TODO: --ssh
+    fix /etc/sshd_config
+    fix /bin/ssh
+TODO: --apache
 TODO: make --integrated for kernel
     it should trigger recompilation of kernel
 TODO: make --statickern option (see genkernel --static)
