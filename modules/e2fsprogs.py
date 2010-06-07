@@ -16,7 +16,8 @@ def download(e2fsprogs_ver, temp, verbose):
     e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/' + \
                 str(e2fsprogs_ver)  + \
                 '/e2fsprogs-' + str(e2fsprogs_ver) + '.tar.gz'
-    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz' % (e2fsprogs_url, utils.get_portdir(temp), str(e2fsprogs_ver)), verbose)
+#    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz' % (e2fsprogs_url, utils.get_portdir(temp), str(e2fsprogs_ver)), verbose)
+    return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, utils.get_portdir(temp), str(e2fsprogs_ver), verbose['std']))
 
 def extract(e2fsprogs_ver, temp, verbose):
     """

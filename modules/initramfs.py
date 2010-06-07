@@ -136,6 +136,12 @@ class initramfs:
             ret = append_blkid(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
             if ret is not zero: 
                 raise error.fail('initramfs.append_blkid()')
+        # 13) append ssh
+        if self.cli['ssh'] is True:
+            os.chdir(self.temp['work'])
+            ret = append_ssh(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
+            if ret is not zero:
+                raise error.fail('initramfs.append_ssh()')
         # 13) append unionfs_fuse
         if self.cli['unionfs'] is True:
             os.chdir(self.temp['work'])
@@ -835,14 +841,30 @@ def append_aufs(master_config, temp, nocache, verbose):
     os.chdir(temp['work']+'/initramfs-aufs-temp')
     return os.system(append_cpio(temp))
 
-def append_ssh(master_config, temp, nocache, verbose):
+def append_ssh(master_config, libdir, temp, nocache, verbose):
     """
     Append ssh tools and daemon to initramfs
     """
     logging.debug('initramfs.append_ssh')
-    print green(' * ') + turquoise('initramfs.append_ssh ')
+    print green(' * ') + turquoise('initramfs.append_ssh ') + master_config['ssh-version'],
 
-    os.mkdir(temp['work']+'/initramfs-ssh-temp')
+    if os.path.isfile(temp['cache']+'/ssh-'+master_config['ssh-version']+'.tar') and nocache is False:
+        # use cache
+        print 'from ' + white('cache')
+        pass
+    else:
+        # compile
+        print
+        import ssh
+        ssh.build_sequence(master_config, temp, verbose)
+
+    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-ssh-temp/bin', verbose)
+    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-ssh-temp/sbin', verbose)
+    os.chdir(temp['cache'])
+    os.system('tar xf %s -C %s' % ('ssh-'+master_config['ssh-version']+'.tar', temp['work']+'/initramfs-ssh-temp'))
+#    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/sftp' % temp['work'], verbose)
+#    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/scp' % temp['work'], verbose)
+#    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/sbin/sshd' % temp['work'], verbose)
 
     os.chdir(temp['work']+'/initramfs-ssh-temp')
     return os.system(append_cpio(temp))

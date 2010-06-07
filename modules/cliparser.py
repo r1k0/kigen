@@ -340,7 +340,7 @@ def print_usage_initramfs():
     print yellow("   --selinux              Include selinux support in --dmraid")
     print yellow("  --iscsi                Include iscsi support")
     print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
-    print red('  --ssh                  Include openssh tools and daemon')
+    print '  --ssh                  Include openssh tools and daemon'
     print "  --splash               Include splash support (splashutils must be merged)"
     print "   --stheme=<theme>       Splash theme, gentoo is the default"
     print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
