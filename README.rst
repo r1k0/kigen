@@ -151,3 +151,19 @@ KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug usi
   - unionfs
   - aufs
   - nounionfs
+
+=====
+HOWTO
+=====
+
+Build and boot kernel/initramfs for Gentoo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Build and boot kernel/initramfs for Funtoo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Build and boot kernel/initramfs for Sabayon
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Build and boot kernel/initramfs for Debian
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
