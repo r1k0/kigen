@@ -7,7 +7,7 @@ def download(sshversion, temp, verbose):
     """
     ssh tarball download routine
 
-    @arg sshversion  string
+    @arg sshversion     string
     @arg verbose        dict
 
     @return: bool
@@ -22,7 +22,7 @@ def extract(sshversion, temp, verbose):
     """
     ssh tarball extraction routine
 
-    @arg sshversion  string
+    @arg sshversion     string
     @arg temp           dict
     @arg verbose        dict
 
@@ -37,7 +37,7 @@ def configure(sshtmp, master_config, verbose):
     """
     ssh Makefile interface to configure
 
-    @arg sshtmp          string
+    @arg sshtmp         string
     @arg master_config  dict
     @arg verbose        dict
 
@@ -52,7 +52,7 @@ def compile(sshtmp, master_config, verbose):
     """
     ssh Makefile interface to make
 
-    @arg sshtmp              string
+    @arg sshtmp             string
     @arg master_config      dict
     @arg verbose            dict
 
@@ -69,7 +69,7 @@ def strip(sshtmp, master_config):
     blkid strip binary routine
 
     @arg sshtmp          string
-    @arg master_config  dict
+    @arg master_config   dict
 
     @return: bool
     """
@@ -84,7 +84,7 @@ def compress(sshtmp, master_config, verbose):
     """
     blkid compression routine
 
-    @arg sshtmp          string
+    @arg sshtmp         string
     @arg master_config  dict
 
     @return: bool
@@ -97,13 +97,14 @@ def compress(sshtmp, master_config, verbose):
     utils.sprocessor('mkdir -p sbin', verbose)
     utils.sprocessor('cp sftp scp bin', verbose)
     utils.sprocessor('cp sshd sbin', verbose)
+
     return os.system('tar cf ssh.tar bin sbin' )
 
-def cache(sshtmp, master_config, temp, verbose): # TODO pass arch? should we add 'arch' to blkid-ssh-%s.bz2? genkernel seems to do so
+def cache(sshtmp, master_config, temp, verbose):
     """
     blkid tarball cache routine
 
-    @arg sshtmp          string
+    @arg sshtmp         string
     @arg master_config  dict
     @arg temp           dict
     @arg verbose        dict
