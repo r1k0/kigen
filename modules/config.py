@@ -19,7 +19,7 @@ master_config = {
         'fuse_ver': 			'', 		\
         'iscsi_ver': 			'', 		\
         'kernel_src_dir': 		'/usr/src/linux', \
-        'lvm_ver': 	    		'',		\
+        'lvm2-version':         '',		\
         'aufs_ver':		    	'',		\
         'unionfs_fuse_ver':	    '',		\
         'DEFAULT_KERNEL_AS': 	'as', 	\

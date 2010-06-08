@@ -1,3 +1,4 @@
+TODO: --nohost will compile it all
 TODO: --ssh use dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
 TODO: --httpd apache? naa lighttpd? dig
 TODO: --integrated for kernel initramfs

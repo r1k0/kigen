@@ -447,8 +447,8 @@ def append_lvm2(master_config, temp, nocache, verbose):
     @return: bool
     """
     ret = int('0')
-    lvm2_static_bin     = '/sbin/lvm.static'
-    lvm2_bin        = '/sbin/lvm'
+    lvm2_static_bin = '/sbin/lvm.statica'
+    lvm2_bin        = '/sbin/lvma'
 
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-lvm2-temp/etc/lvm', verbose)
     utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-lvm2-temp/bin', verbose)
@@ -464,16 +464,16 @@ def append_lvm2(master_config, temp, nocache, verbose):
         print green(' * ') + turquoise('initramfs.append_lvm2 ') + white(lvm2_bin) + ' from host'
         utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, temp['work']), verbose)
     else:
-        build_device_mapper(master_config, temp, nocache, verbose['std'])
+        build_device_mapper(master_config, temp, nocache, verbose)
 
         logging.debug('initramfs.append_lvm2 ')
         print green(' * ') + turquoise('initramfs.append_lvm2 ')
 
         import lvm2
-        lvm2.build_sequence(master_config, temp, verbose['std'])
+        lvm2.build_sequence(master_config, temp, verbose)
 
-        utils.sprocessor('bzip2 -d %s' % temp['cache']+'/lvm.static-'+master_config['lvm_ver']+'.bz2', verbose)
-        utils.sprocessor('cp %s/lvm.static-%s %s/initramfs-lvm2-temp/bin/lvm' % (temp['cache'], master_config['lvm_ver'], temp['work']), verbose)
+        utils.sprocessor('bzip2 -d %s' % temp['cache']+'/lvm.static-'+master_config['lvm2-version']+'.bz2', verbose)
+        utils.sprocessor('cp %s/lvm.static-%s %s/initramfs-lvm2-temp/bin/lvm' % (temp['cache'], master_config['lvm2-version'], temp['work']), verbose)
 
     if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
         utils.sprocessor('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % temp['work'], verbose)

@@ -1,13 +1,9 @@
 import os
 import sys
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-	from portage.output import *
-else:
-	from nocolor import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 import utils
 
-def download(dm_ver, quiet):
+def download(dm_ver, temp, quiet):
 	"""
 	Download device-mapper tarball
 
@@ -19,7 +15,7 @@ def download(dm_ver, quiet):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	device_mapper_url = 'http://ftp.snt.utwente.nl/pub/os/linux/gentoo/distfiles/device-mapper.' + str(dm_ver) + '.tgz'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/device-mapper.%s.tgz %s' % (device_mapper_url, utils.get_portdir(), str(dm_ver), quiet))
+	return os.system('/usr/bin/wget %s -O %s/distfiles/device-mapper.%s.tgz %s' % (device_mapper_url, utils.get_portdir(temp), str(dm_ver), quiet))
 
 def extract(dm_ver, temp, quiet):
 	"""
@@ -31,7 +27,7 @@ def extract(dm_ver, temp, quiet):
 	@return: bool
 	"""
 	print green(' * ') + '... device_mapper.extract'
-	os.system('tar xvfz %s/distfiles/device-mapper.%s.tgz -C %s %s' % (utils.get_portdir(), str(dm_ver), temp['work'], quiet))
+	os.system('tar xvfz %s/distfiles/device-mapper.%s.tgz -C %s %s' % (utils.get_portdir(temp), str(dm_ver), temp['work'], quiet))
 
 # device-mapper building functions
 def configure(dmtmp, master_config, temp, quiet):
@@ -145,8 +141,8 @@ def build_sequence(master_config, temp, quiet):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(), str(master_config['dm_ver']))) is not True:
-		ret = download(master_config['dm_ver'], quiet)
+	if os.path.isfile('%s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(temp), str(master_config['dm_ver']))) is not True:
+		ret = download(master_config['dm_ver'], temp, quiet)
 		if ret is not zero:
 			print red('ERR: ')+'initramfs.device_mapper.download() failed'
 			sys.exit(2)
