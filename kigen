@@ -166,7 +166,7 @@ if target == 'initramfs' or target == 'i':
 
 if target == 'all' or target == 'a':
     logging.debug('kernel.build_sequence')
-    from kernel.kernel import kernel
+    from kernel import kernel
     kobject = kernel(kerneldir, master_config, arch, KV, cli, verbose)
     kobject.build()
     logging.debug('initramfs.build_sequence')

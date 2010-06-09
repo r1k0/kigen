@@ -28,6 +28,7 @@ class append:
                 bootupdateinitrd, \
                 stheme,         \
                 sres,           \
+                firmware,       \
                 nocache):
         """
         init class variables
@@ -51,6 +52,7 @@ class append:
         self.stheme         = stheme
         self.sres           = sres
         self.nocache        = nocache
+        self.firmware       = firmware
 
     def cpio(self):
         """
@@ -372,3 +374,307 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
      
+    def lvm2(self):
+        """
+        Append lvm2 static binary first to the initramfs
+    
+        @return: bool
+        """
+        ret = int('0')
+        lvm2_static_bin = '/sbin/lvm.statica'
+        lvm2_bin        = '/sbin/lvma'
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
+    
+        if os.path.isfile(lvm2_static_bin):
+            # TODO see if we can use something else than import commands
+            #lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
+            logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
+            print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_static_bin) + ' from host'
+            utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
+        elif os.path.isfile(lvm2_bin):
+            logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' from host')
+            print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_bin) + ' from host'
+            utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
+        else:
+            self.build_device_mapper()
+    
+            logging.debug('initramfs.append_lvm2 ')
+            print green(' * ') + turquoise('initramfs.append_lvm2 ')
+    
+            import lvm2
+            lvm2.build_sequence(self.master_config, self.temp, self.verbose)
+    
+            utils.sprocessor('bzip2 -d %s' % self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.verbose)
+            utils.sprocessor('cp %s/lvm.static-%s %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache'], self.master_config['lvm2-version'], self.temp['work']), self.verbose)
+    
+        if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
+            utils.sprocessor('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
+    
+        os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
+        return os.system(self.cpio())
+
+    def build_device_mapper():
+        """
+        Build the device-mapper and cache it for later use
+        Only to be called if lvm2 or dmraid is compiled!
+    
+        @arg master_config  dict
+        @arg temp           dict
+        @arg nocache        bool
+        @arg verbose        dict
+    
+        @return: bool
+        """
+        logging.debug('initramfs.build_device_mapper '+self.master_config['dm_ver'])
+        print green(' * ') + turquoise('initramfs.build_device_mapper ') + self.master_config['dm_ver'],
+    
+        if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['dm_ver']+'.tar.bz2') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+            return
+        else:
+            # compile and cache
+            print
+            import device_mapper
+            return device_mapper.build_sequence(self.master_config, self.temp, self.verbose['std'])
+     
+    def evms():
+        """
+        Append evms libraries to the initramfs
+    
+        @arg temp   dict
+    
+        @return: bool
+        """
+        logging.debug('initramfs.append.evms')
+        print green(' * ') + turquoise('initramfs.append.evms'),
+    
+        if os.path.isfile('/sbin/evms'):
+            print 'feeding' + ' from host'
+    
+            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
+            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/etc', self.verbose)
+            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/bin', self.verbose)
+            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
+    
+        # FIXME broken due to *
+        # utils.sprocessor('cp -a /lib/ld-* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libgcc_s* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libc-* /lib/libc.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libdl-* /lib/libdl.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libpthread* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libuuid*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/libevms*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/evms %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /lib/evms/* %s/initramfs-evms-temp/lib/evms' % temp['work'], verbose)
+        # utils.sprocessor('cp -a /etc/evms.conf %s/initramfs-evms-temp/etc' % temp['work'], verbose)
+        # utils.sprocessor('cp /sbin/evms_activate %s/initramfs-evms-temp/sbin' % temp['work'], verbose)
+        # utils.sprocessor('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % temp['work'], verbose)
+        else:
+            logging.debug('ERR: evms must be emerged on the host')
+            print
+            print red('ERR: ') + "evms must be emerged on the host"
+            sys.exit(2)
+    
+        os.chdir(self.temp['work']+'/initramfs-evms-temp')
+        return os.system(self.cpio())
+    
+    def firmware(self):
+        """
+        Append firmware to the initramfs
+    
+        @return: bool
+        """
+        logging.debug('initramfs.append_firmware ' + self.firmware + ' from host')
+        print green(' * ') + turquoise('initramfs.append_firmware ') + white(self.firmware) + ' from host'
+    
+        utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-firmware-temp/lib/firmware', self.verbose)
+        utils.sprocessor('cp -a %s %s/initramfs-firmware-temp/lib/' % (self.firmware, self.temp['work']), self.verbose)
+    
+        os.chdir(temp['work']+'/initramfs-firmware-temp')
+        return os.system(self.cpio())
+    
+    def mdadm(self):
+        """
+        Append mdadm to initramfs
+    
+        @return: bool
+        """
+        ret = int('0')
+        logging.debug('initramfs.append_mdadm')
+        print green(' * ') + turquoise('initramfs.append_mdadm')
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmadm-temp/etc', self.verbose)
+        utils.sprocessor('cp -a /etc/mdadm.conf %s/initramfs-mdadm-temp/etc' % self.temp['work'], self.verbose)
+    
+        os.chdir(self.temp['work']+'/initramfs-mdadm-temp')
+        return os.system(self.cpio())
+
+    def dmraid(self):
+        """
+        Append dmraid to initramfs
+    
+        @return: bool
+        """
+        self.build_device_mapper()
+    
+        logging.debug('initramfs.append.dmraid ' + self.master_config['dmraid_ver'])
+        print green(' * ') + turquoise('initramfs.append_dmraid ') + self.master_config['dmraid_ver'],
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
+    
+        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_config['dmraid_ver']+'.bz2') and self.nocache is False:
+        # use cache
+            print 'from ' + white('cache')
+            pass
+        else:
+            # compile
+            print
+            import dmraid
+            dmraid.build_sequence(self.master_config, self.selinux, self.temp, self.verbose['std'])
+    
+        # FIXME careful with the > 
+        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.master_config['dmraid_ver'], self.temp['work']))
+        utils.sprocessor('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+    
+        # TODO ln -sf raid456.ko raid45.ko ?
+        # TODO is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
+        #   or should we raise an error and make the user enabling the module manually? warning?
+    
+        os.chdir(self.temp['work']+'/initramfs-dmraid-temp')
+        return os.system(self.cpio())
+
+    # TODO: make sure somehow the appropriate modules get loaded when using iscsi?
+    def iscsi(self):
+        """
+        Append iscsi to initramfs
+    
+        @return: bool
+        """
+        logging.debug('initramfs.append_iscsi ' + self.master_config['iscsi_ver'])
+        print green(' * ') + turquoise('initramfs.append_iscsi ') + self.master_config['iscsi_ver'],
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
+    
+        if os.path.isfile(self.temp['cache']+'/iscsistart-'+self.master_config['iscsi_ver']+'.bz2') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+        else:
+            # compile
+            print
+            import iscsi
+            iscsi.build_sequence(self.master_config, self.temp, self.verbose['std'])
+    
+        os.system('/bin/bzip2 -dc %s/iscsistart-%s.bz2 > %s/initramfs-iscsi-temp/bin/iscsistart' % (self.temp['cache'], self.master_config['iscsi_ver'], self.temp['work']))
+        utils.sprocessor('chmod +x %s/initramfs-iscsi-temp/bin/iscsistart' % self.temp['work'], self.verbose)
+    
+        os.chdir(self.temp['work']+'/initramfs-iscsi-temp')
+        return os.system(self.cpio())
+    
+    def unionfs_fuse(self):
+        """
+        Append unionfs-fuse to initramfs
+        
+        @return: bool
+        """
+        self.build_fuse(self.master_config, self.temp, self.nocache, self.verbose['std'])
+    
+        logging.debug('initramfs.append_unionfs_fuse ' + self.master_config['unionfs_fuse_ver'])
+        print green(' * ') + turquoise('initramfs.append_unionfs_fuse ') + self.master_config['unionfs_fuse_ver'],
+    
+        if os.path.isfile(self.temp['cache']+'/unionfs-fuse.static-'+self.master_config['unionfs_fuse_ver']+'.bz2') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+        else:
+            print
+            # TODO: find a better check for fuse
+            if os.path.isfile('/usr/include/fuse.h'):
+                # compile
+                import unionfs_fuse
+                unionfs_fuse.build_sequence(self.master_config, self.temp, self.verbose['std'])
+            else:
+                logging.debug('ERR: sys-fs/fuse is not emerged')
+                print red('ERR') + ': ' + "sys-fs/fuse is not emerged"
+                print red('ERR') + ': ' + "we need libfuse"
+                sys.exit(2)
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
+        # FIXME careful with the > passed to sprocessor()
+        os.system('/bin/bzip2 -dc %s/unionfs-fuse.static-%s.bz2 > %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % (self.temp['cache'], self.master_config['unionfs_fuse_ver'], self.temp['work']))
+        os.system('chmod +x %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % self.temp['work'])
+    
+        os.chdir(self.temp['work']+'/initramfs-unionfs-fuse-temp')
+        return os.system(self.cpio())
+     
+    def build_fuse():
+        """
+        Build fuse and cache it for later use
+        Only to be called for --unionfs!
+    
+        @return: bool
+        """
+        logging.debug('initramfs.build_fuse ' + self.master_config['fuse_ver'])
+        print green(' * ') + turquoise('initramfs.build_fuse ') +self.master_config['fuse_ver'],
+    
+        if os.path.isfile(self.temp['cache']+'/fuse-dircache-'+self.master_config['fuse_ver']+'.tar.bz2') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+        else:
+            # compile and cache
+            print
+            import fuse
+            fuse.build_sequence(self.master_config, self.temp, self.verbose)
+    
+        # extract
+        os.system('tar xfj %s -C %s' % (self.temp['cache']+'/fuse-dircache-'+self.master_config['fuse_ver']+'.tar.bz2', self.temp['work']))
+    
+        return
+    
+    def aufs():
+        """
+        Append aufs to initramfs
+        """
+        logging.debug('initramfs.append_aufs')
+        print green(' * ') + turquoise('initramfs.append_aufs ')
+    
+        os.mkdir(temp['work']+'/initramfs-aufs-temp')
+    
+    # TODO
+    # aufs is tricky: gotta patch the kernel sources
+    # then build aufs 
+    # then pack initrd
+    # then rebuild kernel not just bzImage
+    
+        os.chdir(self.temp['work']+'/initramfs-aufs-temp')
+        return os.system(self.cpio())
+    
+    def ssh():
+        """
+        Append ssh tools and daemon to initramfs
+        """
+        logging.debug('initramfs.append_ssh')
+        print green(' * ') + turquoise('initramfs.append_ssh ') + self.master_config['ssh-version'],
+    
+        if os.path.isfile(self.temp['cache']+'/ssh-'+self.master_config['ssh-version']+'.tar') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+            pass
+        else:
+            # compile
+            print
+            import ssh
+            ssh.build_sequence(self.master_config, self.temp, self.verbose)
+    
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-ssh-temp/bin', self.verbose)
+        utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-ssh-temp/sbin', self.verbose)
+        os.chdir(temp['cache'])
+        os.system('tar xf %s -C %s' % ('ssh-'+self.master_config['ssh-version']+'.tar', self.temp['work']+'/initramfs-ssh-temp'))
+    #    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/sftp' % temp['work'], verbose)
+    #    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/scp' % temp['work'], verbose)
+    #    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/sbin/sshd' % temp['work'], verbose)
+    
+        os.chdir(self.temp['work']+'/initramfs-ssh-temp')
+        return os.system(self.cpio())
+    
