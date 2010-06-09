@@ -113,7 +113,8 @@ def compress(master_config, temp, verbose):
 	utils.chgdir(temp['work']+'/LVM2.'+master_config['lvm2-version'])
 
 #	return os.system('tar -cj -f %s tools/lvm.static %s' % (temp['cache']+'/lvm.static-'+master_config['lvm2-version']+'.tar.bz2', verbose))
-	return os.system('bzip2 tools/lvm.static')
+#	return os.system('bzip2 tools/lvm.static')
+	return os.system('bzip2 tools/lvm')
 
 def cache(master_config, temp, verbose): # TODO pass arch? should we add 'arch' to blkid-lvm2-%s.bz2? genkernel seems to do so
 	"""
@@ -129,8 +130,7 @@ def cache(master_config, temp, verbose): # TODO pass arch? should we add 'arch' 
 	utils.chgdir(temp['work']+'/LVM2.'+master_config['lvm2-version'])
 	mvv = ''
 	if verbose is '': mvv = '-v'
-	return os.system('mv %s tools/lvm.static.bz2 %s/lvm.static-%s.bz2' % (mvv, temp['cache'], master_config['lvm2-version']))
-	# TODO: use os.file.cp or smthg like that
+	return os.system('mv %s tools/lvm.bz2 %s/lvm.static-%s.bz2' % (mvv, temp['cache'], master_config['lvm2-version']))
 
 # lvm2 sequence
 def build_sequence(master_config, temp, verbose):

@@ -1,6 +1,7 @@
 import os
 import sys
 from stdout import white, green, turquoise
+from append import append
 import error
 import warning
 import utils
@@ -21,7 +22,7 @@ class initramfs:
                 bootupdateinitrd,   \
                 verbose):
         """
-        init class
+        init class variables
         """
         self.kernel_dir_opt     = kernel_dir_opt
         self.arch               = arch
@@ -48,21 +49,12 @@ class initramfs:
         self.cli                = cli # TODO replace
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
+        self.stheme             = cli['stheme']
+        self.sres               = cli['sres']
 
     def build(self):
         """
         Initramfs build sequence
-    
-        @arg kernel_dir_opt     string
-        @arg arch               string
-        @arg KV                 string
-        @arg libdir             string
-        @arg master_config      dict
-        @arg cli                dict
-        @arg temp               dict
-        @arg corebootset        bool
-        @arg corebootinitrd     string
-        @arg verbose            dict
     
         @return: bool
         """
@@ -74,98 +66,118 @@ class initramfs:
         # for the sake of knowing where we are
         os.chdir(self.temproot)
 
-        # 1) create initial cpio
+        # 1) create initial cpio and append object
         ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero:
             raise error.fail('initial cpio creation failed')
+        aobject = append(self.temp,         \
+                        self.KV,            \
+                        self.linuxrc,       \
+                        self.kernel_dir_opt,\
+                        self.arch,          \
+                        self.master_config, \
+                        self.libdir,        \
+                        self.oldconfig,     \
+                        self.menuconfig,    \
+                        self.allyesconfig,  \
+                        self.mrproper,      \
+                        self.verbose,       \
+                        self.bbconf,        \
+                        self.master_config['busybox-progs'],  \
+                        self.bootupdateset,   \
+                        self.bootupdateinitrd,\
+                        self.stheme,        \
+                        self.sres,          \
+                        self.nocache)
         # 2) append base
-        ret = append_base(self.linuxrc, self.kernel_dir_opt, self.arch, self.master_config, self.libdir, self.temp, self.oldconfig, self.menuconfig, self.allyesconfig, self.mrproper, self.verbose)
+        aobject.base()
         if ret is not zero:
-            raise error.fail('initramfs.append_baselayout()')
+            raise error.fail('initramfs.append.baselayout()')
         # 3) append busybox
         os.chdir(self.temp['work'])
-        ret = append_busybox(self.arch, self.bbconf, self.master_config, self.libdir, self.temp, self.oldconfig, self.menuconfig, self.allyesconfig, self.mrproper, self.master_config['busybox-progs'], self.nocache, self.verbose)
+        ret = aobject.busybox()
         if ret is not zero:
-            raise error.fail('initramfs.append_busybox()')
-        # 4) append lvm2
-        if self.cli['lvm2'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_lvm2(self.master_config, self.temp, self.nocache, self.verbose)
-            if ret is not zero:
-                raise error.fail('initramfs.append_lvm2()')
-        # 5) append dmraid
-        if self.cli['dmraid'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_dmraid(self.master_config, self.cli['selinux'], self.temp, self.nocache, self.verbose)
-            if ret is not zero:
-                raise error.fail('initramfs.append_dmraid()')
-        # 6) append iscsi
-        if self.cli['iscsi'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_iscsi(self.master_config, self.temp, self.nocache, self.verbose)
-            if ret is not zero:
-                raise error.fail('initramfs.append_iscsi()')
-        # 7) append evms
-        if self.cli['evms'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_evms(self.temp, self.verbose)
-            if ret is not zero: 
-                raise error.fail('initramfs.append_evms()')
-        # 8) append mdadm
-        if self.cli['mdadm'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_mdadm(self.temp, self.verbose)
-            if ret is not zero: 
-                raise error.fail('initramfs.append_mdadm()')
+            raise error.fail('initramfs.append.busybox()')
+        # 4) append modules
+        # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
+        ret = aobject.modules()
+        if ret is not zero:
+            raise error.fail('initramfs.append_modules()')
+
+#        # 4) append lvm2
+#        if self.cli['lvm2'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_lvm2(self.master_config, self.temp, self.nocache, self.verbose)
+#            if ret is not zero:
+#                raise error.fail('initramfs.append_lvm2()')
+#        # 5) append dmraid
+#        if self.cli['dmraid'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_dmraid(self.master_config, self.cli['selinux'], self.temp, self.nocache, self.verbose)
+#            if ret is not zero:
+#                raise error.fail('initramfs.append_dmraid()')
+#        # 6) append iscsi
+#        if self.cli['iscsi'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_iscsi(self.master_config, self.temp, self.nocache, self.verbose)
+#            if ret is not zero:
+#                raise error.fail('initramfs.append_iscsi()')
+#        # 7) append evms
+#        if self.cli['evms'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_evms(self.temp, self.verbose)
+#            if ret is not zero: 
+#                raise error.fail('initramfs.append_evms()')
+#        # 8) append mdadm
+#        if self.cli['mdadm'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_mdadm(self.temp, self.verbose)
+#            if ret is not zero: 
+#                raise error.fail('initramfs.append_mdadm()')
         # 9) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
-            ret = append_luks(self.master_config, self.temp, self.nocache, self.verbose)
+            ret = aobject.luks()
             if ret is not zero: 
-                raise error.fail('initramfs.append_luks()')
-        # 10) append multipath
-        # TODO
-        # 11) append modules
-        # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
-        ret = append_modules(self.master_config, self.KV, self.libdir, self.temp, self.verbose, self.bootupdateset, self.bootupdateinitrd)
-        if ret is not zero: 
-            raise error.fail('initramfs.append_modules()')
+                raise error.fail('initramfs.append.luks()')
+#        # 10) append multipath
+#        # TODO
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
-            ret = append_blkid(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
+            ret = aobject.e2fsprogs()
             if ret is not zero: 
-                raise error.fail('initramfs.append_blkid()')
-        # 13) append ssh
-        if self.cli['ssh'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_ssh(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
-            if ret is not zero:
-                raise error.fail('initramfs.append_ssh()')
-        # 13) append unionfs_fuse
-        if self.cli['unionfs'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_unionfs_fuse(self.master_config, self.temp, self.nocache, self.verbose)
-            if ret is not zero: 
-                raise error.fail('initramfs.append_unionfs-fuse()')
-        # 14) append aufs
-        if self.cli['aufs'] is True:
-            os.chdir(self.temp['work'])
-            ret = append_aufs(self.master_config, self.temp, self.nocache, self.verbose)
-            if ret is not zero:
-                raise error.fail('initramfs.append_aufs()')
-        # 15) append splash
+                raise error.fail('initramfs.append.e2fsprogs()')
+#        # 13) append ssh
+#        if self.cli['ssh'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_ssh(self.master_config, self.libdir, self.temp, self.nocache, self.verbose)
+#            if ret is not zero:
+#                raise error.fail('initramfs.append_ssh()')
+#        # 13) append unionfs_fuse
+#        if self.cli['unionfs'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_unionfs_fuse(self.master_config, self.temp, self.nocache, self.verbose)
+#            if ret is not zero: 
+#                raise error.fail('initramfs.append_unionfs-fuse()')
+#        # 14) append aufs
+#        if self.cli['aufs'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = append_aufs(self.master_config, self.temp, self.nocache, self.verbose)
+#            if ret is not zero:
+#                raise error.fail('initramfs.append_aufs()')
+#        # 15) append splash
         if self.cli['splash'] is True:
             os.chdir(self.temp['work'])
-            ret = append_splash(self.cli['stheme'], self.cli['sres'], self.master_config, self.temp, self.verbose)
+            ret = aobject.splash()
             if ret is not zero:
-                raise error.fail('initramfs.append_splash()')
-        # 16) append firmware
-        if os.path.isdir(self.firmware):
-            os.chdir(self.temp['work'])
-            ret = append_firmware(self.cli['firmware'], self.temp, self.verbose)
-            if ret is not zero: 
-                raise error.fail('initramfs.append_firmware()')
+                raise error.fail('initramfs.append.splash()')
+#        # 16) append firmware
+#        if os.path.isdir(self.firmware):
+#            os.chdir(self.temp['work'])
+#            ret = append_firmware(self.cli['firmware'], self.temp, self.verbose)
+#            if ret is not zero: 
+#                raise error.fail('initramfs.append_firmware()')
     
         # 17) append overlay
         # TODO
@@ -174,212 +186,212 @@ class initramfs:
         print green(' * ') + turquoise('initramfs.compress')
         utils.sprocessor('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
         if ret is not zero: 
-            raise error.fail('utils.copy_initramfs() compression pre copy')
+            raise error.fail('utils.copy.initramfs() compression pre copy')
     
         return ret
  
-def append_cpio(temp):
-    """
-    Builds command with correct path
-
-    @arg temp: string
-
-    @return: string
-    """
-    cmd = 'find . -print | cpio --quiet -o -H newc --append -F %s/initramfs-cpio' % temp['cache']
-    return cmd
-
-def append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, verbose):
-    """
-    Append baselayout to the initramfs
-
-    @arg linuxrc        string
-    @arg kernel_dir_opt string
-    @arg master_config  dict
-    @arg libdir         string
-    @arg temp           dict
-    @arg oldconfig      string
-    @arg menuconfig     string
-    @arg allyesconfig   string
-    @arg mrproper       string
-    @arg verbose        dict
-
-    @return: bool
-    """
-    ret = int('0')
-    logging.debug('initramfs.append_base')
-    print green(' * ') + turquoise('initramfs.append_base'),
-
-    # create the baselayout
-    for i in ['dev', 'bin', 'etc', 'usr', 'proc', 'temp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
-        os.makedirs(temp['work']+'/initramfs-base-temp/%s' % i)
-
-    os.chdir(kernel_dir_opt) # WHY? # TODO: change os.chdir by subprocess.popen(..., cwd=kernel_dir_opt
-
-    # init
-    if linuxrc is '':
-    # TODO: copy linuxrc depending on arch
-    # if netboot is True:
-    #       cp "${GK_SHARE}/netboot/linuxrc.x" "${TEMP}/initramfs-aux-temp/init"
-    # elif arch is 'x86':
-    #       os.system('cp %s/arch/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']))
-    # elif arch is 'amd64':
-    #       blablabla
-        print
-        utils.sprocessor('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']), verbose)
-    else:
-        # cp custom linuxrc to initramfs
-        print white(linuxrc) + ' from host'
-        utils.sprocessor('cp %s %s/initramfs-base-temp/init' % (linuxrc, temp['work']), verbose)
-
-    # make init executable
-    utils.sprocessor('chmod 0755 %s/initramfs-base-temp/init' % temp['work'], verbose)
-
-    # link lib to lib64
-    utils.sprocessor('ln -s lib %s/initramfs-base-temp/lib64' % temp['work'], verbose)
-
-    # create fstab
-    utils.srprocessor('echo /dev/ram0 / ext2 defaults 0 0\n > '+temp['work']+'/initramfs-base-temp/etc/fstab', verbose)
-    utils.arprocessor('echo proc /proc proc defaults 0 0\n >> '+temp['work']+'/initramfs-base-temp/etc/fstab', verbose)
-
-    os.chdir(temp['work']+'/initramfs-base-temp/dev')
-
-    # create nodes
-    utils.sprocessor('mknod -m 660 console c 5 1', verbose)
-    utils.sprocessor('mknod -m 660 null    c 1 3', verbose)
-    utils.sprocessor('mknod -m 660 tty1    c 4 1', verbose)
-
-    # timestamp the build
-    from time import strftime
-    build_date = open(temp['work']+'/initramfs-base-temp/etc/build_date', 'w')
-    build_date.writelines(strftime("%Y-%m-%d %H:%M:%S")+ '\n')
-    build_date.close()
-
-    # aux
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-base-temp/lib/keymaps', verbose)
-    utils.sprocessor('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (libdir, temp['work']), verbose)
-
-    os.chdir(temp['work']+'/initramfs-base-temp')
-    utils.sprocessor('ln -s init linuxrc', verbose)
-    utils.sprocessor('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (libdir, temp['work']), verbose)
-    utils.sprocessor('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (libdir, temp['work']), verbose)
-    # what's the harm to have it harcoded? even if the group is commented out in the config file the variable is still empty
-    # same thinking for coreboot it's already set in etc/initrd.defaults $HWOPTS
-    utils.arprocessor("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % temp['work'], verbose)
-    utils.sprocessor('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (libdir, temp['work']), verbose)
-
-    os.chdir(temp['work']+'/initramfs-base-temp/sbin')
-    utils.sprocessor('ln -s ../init init', verbose)
-    utils.sprocessor('chmod +x %s/initramfs-base-temp/init' % temp['work'], verbose)
-    utils.sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % temp['work'], verbose)
-    utils.sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % temp['work'], verbose)
-    utils.sprocessor('chmod +x %s/initramfs-base-temp/sbin/modprobe' % temp['work'], verbose)
-
-    os.chdir(temp['work']+'/initramfs-base-temp/')
-    return os.system(append_cpio(temp))
-
-def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, busyboxprogs, nocache, verbose):
-    """
-    Append the busybox compiled objects to the initramfs
-
-    @arg arch           string
-    @arg bbconf         string
-    @arg master_config  dict
-    @arg libdir         string
-    @arg temp           dict
-    @arg oldconfig      string
-    @arg menuconfig     string
-    @arg allyesconfig   string
-    @arg mrproper       string
-    @arg busyboxprogs   list
-    @arg nocache        bool
-    @arg verbose        dict
-
-    @return: bool
-    """
-    import busybox
-    ret = zero = int('0')
-    logging.debug('initramfs.append_busybox')
-    print green(' * ') + turquoise('initramfs.append_busybox ') + master_config['bb_ver'],
-
-    if os.path.isfile(temp['cache']+'/busybox-bin-'+master_config['bb_ver']+'.tar.bz2') and nocache is False:
-        # use cache
-        print 'from ' + white('cache')
-    else:
-        print busyboxprogs
-        # compile
-        ret = busybox.build_sequence( arch, \
-                    bbconf,                 \
-                    master_config,          \
-                    libdir,                 \
-                    temp,                   \
-                    oldconfig,              \
-                    menuconfig,             \
-                    allyesconfig,           \
-                    mrproper,               \
-                    verbose['std'])
-    # append busybox to cpio
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-busybox-temp/bin', verbose)
-    os.chdir(temp['work']+'/initramfs-busybox-temp')
-    utils.sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (temp['cache'], master_config['bb_ver'], temp['work']+'/initramfs-busybox-temp/bin'), verbose)
-    utils.sprocessor('chmod +x %s/busybox' % (temp['work']+'/initramfs-busybox-temp/bin'), verbose)
-    utils.sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (temp['work']+'/initramfs-busybox-temp'), verbose)
-    utils.sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (libdir, temp['work']), verbose)
-    utils.sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % temp['work'], verbose)
-
-    for i in busyboxprogs.split():
-        utils.sprocessor('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (temp['work'], i), verbose)
-
-    os.chdir(temp['work']+'/initramfs-busybox-temp')
-    if ret is zero:
-        return os.system(append_cpio(temp))
-
-def append_luks(master_config, temp, nocache, verbose):
-    """
-    Append the LUKS static binary to the initramfs
-
-    @arg temp       dict
-    @arg verbose    dict
-
-    @return: bool
-    """
-    ret = int('0')
-    cryptsetup_bin  = '/bin/cryptsetup'
-    cryptsetup_sbin = '/sbin/cryptsetup'
-
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-luks-temp/lib/luks', verbose)
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-luks-temp/sbin', verbose)
-
-    if os.path.isfile(cryptsetup_bin):
-        luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-        logging.debug('initramfs.append_luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
-        print green(' * ') + turquoise('initramfs.append_luks ') + luks_host_version + ' '  + white(cryptsetup_bin) + ' from host'
-        utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, temp['work']), verbose)
-        utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
-    elif os.path.isfile(cryptsetup_sbin):
-        luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-        logging.debug('initramfs.append_luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
-        print green(' * ') + turquoise('initramfs.append_luks ') + luks_host_version + ' ' + white(cryptsetup_sbin) + ' from host'
-        utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, temp['work']), verbose)
-        utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
-    else:
-        print green(' * ') + turquoise('initramfs.append_luks ') + master_config['luks-version'],
-        logging.debug('initramfs.append_luks ' + master_config['luks-version'])
-        if os.path.isfile(temp['cache']+'/cryptsetup-'+master_config['luks-version']+'.bz2') and nocache is False:
-            # use cache
-            print 'from ' + white('cache')
-        else:
-            # compile and cache
-            print
-            import luks
-            luks.build_sequence(master_config, temp, verbose)
-
-    # FIXME careful with the >
-    os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (temp['cache'], master_config['luks-version'], temp['work']))
-    utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
-
-    os.chdir(temp['work']+'/initramfs-luks-temp')
-    return os.system(append_cpio(temp))
+#def append_cpio(temp):
+#    """
+#    Builds command with correct path
+#
+#    @arg temp: string
+#
+#    @return: string
+#    """
+#    cmd = 'find . -print | cpio --quiet -o -H newc --append -F %s/initramfs-cpio' % temp['cache']
+#    return cmd
+#
+#def append_base(linuxrc, kernel_dir_opt, arch, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, verbose):
+#    """
+#    Append baselayout to the initramfs
+#
+#    @arg linuxrc        string
+#    @arg kernel_dir_opt string
+#    @arg master_config  dict
+#    @arg libdir         string
+#    @arg temp           dict
+#    @arg oldconfig      string
+#    @arg menuconfig     string
+#    @arg allyesconfig   string
+#    @arg mrproper       string
+#    @arg verbose        dict
+#
+#    @return: bool
+#    """
+#    ret = int('0')
+#    logging.debug('initramfs.append_base')
+#    print green(' * ') + turquoise('initramfs.append_base'),
+#
+#    # create the baselayout
+#    for i in ['dev', 'bin', 'etc', 'usr', 'proc', 'temp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
+#        os.makedirs(temp['work']+'/initramfs-base-temp/%s' % i)
+#
+#    os.chdir(kernel_dir_opt) # WHY? # TODO: change os.chdir by subprocess.popen(..., cwd=kernel_dir_opt
+#
+#    # init
+#    if linuxrc is '':
+#    # TODO: copy linuxrc depending on arch
+#    # if netboot is True:
+#    #       cp "${GK_SHARE}/netboot/linuxrc.x" "${TEMP}/initramfs-aux-temp/init"
+#    # elif arch is 'x86':
+#    #       os.system('cp %s/arch/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']))
+#    # elif arch is 'amd64':
+#    #       blablabla
+#        print
+#        utils.sprocessor('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']), verbose)
+#    else:
+#        # cp custom linuxrc to initramfs
+#        print white(linuxrc) + ' from host'
+#        utils.sprocessor('cp %s %s/initramfs-base-temp/init' % (linuxrc, temp['work']), verbose)
+#
+#    # make init executable
+#    utils.sprocessor('chmod 0755 %s/initramfs-base-temp/init' % temp['work'], verbose)
+#
+#    # link lib to lib64
+#    utils.sprocessor('ln -s lib %s/initramfs-base-temp/lib64' % temp['work'], verbose)
+#
+#    # create fstab
+#    utils.srprocessor('echo /dev/ram0 / ext2 defaults 0 0\n > '+temp['work']+'/initramfs-base-temp/etc/fstab', verbose)
+#    utils.arprocessor('echo proc /proc proc defaults 0 0\n >> '+temp['work']+'/initramfs-base-temp/etc/fstab', verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-base-temp/dev')
+#
+#    # create nodes
+#    utils.sprocessor('mknod -m 660 console c 5 1', verbose)
+#    utils.sprocessor('mknod -m 660 null    c 1 3', verbose)
+#    utils.sprocessor('mknod -m 660 tty1    c 4 1', verbose)
+#
+#    # timestamp the build
+#    from time import strftime
+#    build_date = open(temp['work']+'/initramfs-base-temp/etc/build_date', 'w')
+#    build_date.writelines(strftime("%Y-%m-%d %H:%M:%S")+ '\n')
+#    build_date.close()
+#
+#    # aux
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-base-temp/lib/keymaps', verbose)
+#    utils.sprocessor('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (libdir, temp['work']), verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-base-temp')
+#    utils.sprocessor('ln -s init linuxrc', verbose)
+#    utils.sprocessor('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (libdir, temp['work']), verbose)
+#    utils.sprocessor('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (libdir, temp['work']), verbose)
+#    # what's the harm to have it harcoded? even if the group is commented out in the config file the variable is still empty
+#    # same thinking for coreboot it's already set in etc/initrd.defaults $HWOPTS
+#    utils.arprocessor("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % temp['work'], verbose)
+#    utils.sprocessor('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (libdir, temp['work']), verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-base-temp/sbin')
+#    utils.sprocessor('ln -s ../init init', verbose)
+#    utils.sprocessor('chmod +x %s/initramfs-base-temp/init' % temp['work'], verbose)
+#    utils.sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % temp['work'], verbose)
+#    utils.sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % temp['work'], verbose)
+#    utils.sprocessor('chmod +x %s/initramfs-base-temp/sbin/modprobe' % temp['work'], verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-base-temp/')
+#    return os.system(append_cpio(temp))
+#
+#def append_busybox(arch, bbconf, master_config, libdir, temp, oldconfig, menuconfig, allyesconfig, mrproper, busyboxprogs, nocache, verbose):
+#    """
+#    Append the busybox compiled objects to the initramfs
+#
+#    @arg arch           string
+#    @arg bbconf         string
+#    @arg master_config  dict
+#    @arg libdir         string
+#    @arg temp           dict
+#    @arg oldconfig      string
+#    @arg menuconfig     string
+#    @arg allyesconfig   string
+#    @arg mrproper       string
+#    @arg busyboxprogs   list
+#    @arg nocache        bool
+#    @arg verbose        dict
+#
+#    @return: bool
+#    """
+#    import busybox
+#    ret = zero = int('0')
+#    logging.debug('initramfs.append_busybox')
+#    print green(' * ') + turquoise('initramfs.append_busybox ') + master_config['bb_ver'],
+#
+#    if os.path.isfile(temp['cache']+'/busybox-bin-'+master_config['bb_ver']+'.tar.bz2') and nocache is False:
+#        # use cache
+#        print 'from ' + white('cache')
+#    else:
+#        print busyboxprogs
+#        # compile
+#        ret = busybox.build_sequence( arch, \
+#                    bbconf,                 \
+#                    master_config,          \
+#                    libdir,                 \
+#                    temp,                   \
+#                    oldconfig,              \
+#                    menuconfig,             \
+#                    allyesconfig,           \
+#                    mrproper,               \
+#                    verbose['std'])
+#    # append busybox to cpio
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-busybox-temp/bin', verbose)
+#    os.chdir(temp['work']+'/initramfs-busybox-temp')
+#    utils.sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (temp['cache'], master_config['bb_ver'], temp['work']+'/initramfs-busybox-temp/bin'), verbose)
+#    utils.sprocessor('chmod +x %s/busybox' % (temp['work']+'/initramfs-busybox-temp/bin'), verbose)
+#    utils.sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (temp['work']+'/initramfs-busybox-temp'), verbose)
+#    utils.sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (libdir, temp['work']), verbose)
+#    utils.sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % temp['work'], verbose)
+#
+#    for i in busyboxprogs.split():
+#        utils.sprocessor('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (temp['work'], i), verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-busybox-temp')
+#    if ret is zero:
+#        return os.system(append_cpio(temp))
+#
+#def append_luks(master_config, temp, nocache, verbose):
+#    """
+#    Append the LUKS static binary to the initramfs
+#
+#    @arg temp       dict
+#    @arg verbose    dict
+#
+#    @return: bool
+#    """
+#    ret = int('0')
+#    cryptsetup_bin  = '/bin/cryptsetup'
+#    cryptsetup_sbin = '/sbin/cryptsetup'
+#
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-luks-temp/lib/luks', verbose)
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-luks-temp/sbin', verbose)
+#
+#    if os.path.isfile(cryptsetup_bin):
+#        luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
+#        logging.debug('initramfs.append_luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
+#        print green(' * ') + turquoise('initramfs.append_luks ') + luks_host_version + ' '  + white(cryptsetup_bin) + ' from host'
+#        utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, temp['work']), verbose)
+#        utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
+#    elif os.path.isfile(cryptsetup_sbin):
+#        luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
+#        logging.debug('initramfs.append_luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
+#        print green(' * ') + turquoise('initramfs.append_luks ') + luks_host_version + ' ' + white(cryptsetup_sbin) + ' from host'
+#        utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, temp['work']), verbose)
+#        utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
+#    else:
+#        print green(' * ') + turquoise('initramfs.append_luks ') + master_config['luks-version'],
+#        logging.debug('initramfs.append_luks ' + master_config['luks-version'])
+#        if os.path.isfile(temp['cache']+'/cryptsetup-'+master_config['luks-version']+'.bz2') and nocache is False:
+#            # use cache
+#            print 'from ' + white('cache')
+#        else:
+#            # compile and cache
+#            print
+#            import luks
+#            luks.build_sequence(master_config, temp, verbose)
+#
+#    # FIXME careful with the >
+#    os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (temp['cache'], master_config['luks-version'], temp['work']))
+#    utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % temp['work'], verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-luks-temp')
+#    return os.system(append_cpio(temp))
 
 def build_device_mapper(master_config, temp, nocache, verbose):
     """
@@ -481,127 +493,127 @@ def append_lvm2(master_config, temp, nocache, verbose):
     os.chdir(temp['work']+'/initramfs-lvm2-temp')
     return os.system(append_cpio(temp))
 
-def append_modules(master_config, KV, libdir, temp, verbose, corebootset, corebootinitrd):
-    """
-    Find system modules and config modules
-    Append modules to the initramfs
+#def append_modules(master_config, KV, libdir, temp, verbose, corebootset, corebootinitrd):
+#    """
+#    Find system modules and config modules
+#    Append modules to the initramfs
+#
+#    @arg master_config  dict
+#    @arg KV             string
+#    @arg libdir         string
+#    @arg temp           dict
+#    @arg verbose        dict
+#    @arg corebootset    bool
+#    @arg corebootinitrd dict
+#
+#    @return: bool
+#    """
+#    import kmodules
+#    ret = int('0')
+#    logging.debug('initramfs.append_modules ' + KV)
+#    print green(' * ') + turquoise('initramfs.append_modules ') + KV
+#
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-modules-'+KV+'-temp/lib/modules/'+KV, verbose)
+#    
+#    # FIXME: ctrl c does not work during this function
+#    # TODO: rewrite (later)
+#    # TODO: maybe |uniq the list? in case the user sets 
+#    # multiple times the same module in different groups
+#    #
+#    # is it really a big deal? I don't think so
+#
+#    # identify and copy kernel modules
+#    modsyslist  = kmodules.get_sys_modules_list(KV)
+#    modconflist = kmodules.get_config_modules_list(master_config) #.split()
+#    # TODO: add support for the 'probe' key
+#
+#    # for each module in the list modconflist
+#    for i in modconflist.split():
+#        for j in modsyslist:
+#            k = i +'.ko'
+#            # check for a match
+#            if k == j:
+#                logging.debug('shipping ' + i)
+#                print green(' * ') + '... ' + white(i)
+#                # if the module is found copy it
+#                module = os.popen('find /lib/modules/'+KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
+#                module_dirname = os.path.dirname(module)
+#                utils.sprocessor('mkdir -p %s%s%s'% (temp['work'],'/initramfs-modules-'+KV+'-temp',  module_dirname), verbose)
+#                utils.sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, temp['work'], KV, module_dirname), verbose)
+#    # for each module in /etc/boot.conf
+#    if "load-modules" in corebootinitrd:
+#        for i in corebootinitrd['load-modules'].split():
+#            for j in modsyslist:
+#                k = i +'.ko'
+#                if k == j:
+#                    logging.debug('shipping ' + i + ' from /etc/boot.conf')
+#                    print green(' * ') + '... ' + white(i) + ' from /etc/boot.conf'
+#                    module = os.popen('find /lib/modules/'+KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
+#                    module_dirname = os.path.dirname(module)
+#                    utils.sprocessor('mkdir -p %s%s%s'% (temp['work'],'/initramfs-modules-'+KV+'-temp',  module_dirname), verbose)
+#                    utils.sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, temp['work'], KV, module_dirname), verbose)
+#
+#    # TODO: make variable of /lib/modules in case of FAKEROOT export
+#    os.system('cp /lib/modules/%s/modules.* %s' % (KV, temp['work']+'/initramfs-modules-'+KV+'-temp/lib/modules/'+KV ))
+#
+#    # create etc/modules/<group>
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules', verbose)
+#    modconfdict = kmodules.get_config_modules_dict(master_config)
+#
+#    # Genkernel official boot module design
+#    # for each key value in the module config dictionary
+#    for k, v in modconfdict.iteritems():
+#        # match the group for which the module belongs
+#        k = k.lower()
+#        group = k.split('_')[1]
+#        # and add it etc/modules/
+#        f = open(temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules/'+group, 'w')
+#        f.write(v.replace(" ", "\n"))
+#        f.close
+#
+#    # Funtoo coreboot initramfs module file config
+#    if "load-modules" in corebootinitrd:
+#        for o in corebootinitrd['load-modules'].split():
+#            # FIXME think about >> passed to sprocessor?
+#            utils.arprocessor('echo %s >> %s' % (o, temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules/bootupdate'), verbose)
+#
+#    os.chdir(temp['work']+'/initramfs-modules-'+KV+'-temp')
+#    return os.system(append_cpio(temp))
 
-    @arg master_config  dict
-    @arg KV             string
-    @arg libdir         string
-    @arg temp           dict
-    @arg verbose        dict
-    @arg corebootset    bool
-    @arg corebootinitrd dict
-
-    @return: bool
-    """
-    import kmodules
-    ret = int('0')
-    logging.debug('initramfs.append_modules ' + KV)
-    print green(' * ') + turquoise('initramfs.append_modules ') + KV
-
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-modules-'+KV+'-temp/lib/modules/'+KV, verbose)
-    
-    # FIXME: ctrl c does not work during this function
-    # TODO: rewrite (later)
-    # TODO: maybe |uniq the list? in case the user sets 
-    # multiple times the same module in different groups
-    #
-    # is it really a big deal? I don't think so
-
-    # identify and copy kernel modules
-    modsyslist  = kmodules.get_sys_modules_list(KV)
-    modconflist = kmodules.get_config_modules_list(master_config) #.split()
-    # TODO: add support for the 'probe' key
-
-    # for each module in the list modconflist
-    for i in modconflist.split():
-        for j in modsyslist:
-            k = i +'.ko'
-            # check for a match
-            if k == j:
-                logging.debug('shipping ' + i)
-                print green(' * ') + '... ' + white(i)
-                # if the module is found copy it
-                module = os.popen('find /lib/modules/'+KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
-                module_dirname = os.path.dirname(module)
-                utils.sprocessor('mkdir -p %s%s%s'% (temp['work'],'/initramfs-modules-'+KV+'-temp',  module_dirname), verbose)
-                utils.sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, temp['work'], KV, module_dirname), verbose)
-    # for each module in /etc/boot.conf
-    if "load-modules" in corebootinitrd:
-        for i in corebootinitrd['load-modules'].split():
-            for j in modsyslist:
-                k = i +'.ko'
-                if k == j:
-                    logging.debug('shipping ' + i + ' from /etc/boot.conf')
-                    print green(' * ') + '... ' + white(i) + ' from /etc/boot.conf'
-                    module = os.popen('find /lib/modules/'+KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
-                    module_dirname = os.path.dirname(module)
-                    utils.sprocessor('mkdir -p %s%s%s'% (temp['work'],'/initramfs-modules-'+KV+'-temp',  module_dirname), verbose)
-                    utils.sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, temp['work'], KV, module_dirname), verbose)
-
-    # TODO: make variable of /lib/modules in case of FAKEROOT export
-    os.system('cp /lib/modules/%s/modules.* %s' % (KV, temp['work']+'/initramfs-modules-'+KV+'-temp/lib/modules/'+KV ))
-
-    # create etc/modules/<group>
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules', verbose)
-    modconfdict = kmodules.get_config_modules_dict(master_config)
-
-    # Genkernel official boot module design
-    # for each key value in the module config dictionary
-    for k, v in modconfdict.iteritems():
-        # match the group for which the module belongs
-        k = k.lower()
-        group = k.split('_')[1]
-        # and add it etc/modules/
-        f = open(temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules/'+group, 'w')
-        f.write(v.replace(" ", "\n"))
-        f.close
-
-    # Funtoo coreboot initramfs module file config
-    if "load-modules" in corebootinitrd:
-        for o in corebootinitrd['load-modules'].split():
-            # FIXME think about >> passed to sprocessor?
-            utils.arprocessor('echo %s >> %s' % (o, temp['work']+'/initramfs-modules-'+KV+'-temp/etc/modules/bootupdate'), verbose)
-
-    os.chdir(temp['work']+'/initramfs-modules-'+KV+'-temp')
-    return os.system(append_cpio(temp))
-
-def append_blkid(master_config, libdir, temp, nocache, verbose):
-    """
-    Append blkid binary to the initramfs
-    after compiling e2fsprogs
-    
-    @arg master_config  dict
-    @arg libdir         string
-    @arg temp           dict
-    @arg nocache        bool
-    @arg verbose        dict
-    
-    @return: bool
-    """
-    logging.debug('initramfs.append_blkid ' + master_config['e2fsprogs-version'])
-    print green(' * ') + turquoise('initramfs.append_blkid ') + master_config['e2fsprogs-version'],
-
-    if os.path.isfile(temp['cache']+'/blkid-e2fsprogs-'+master_config['e2fsprogs-version']+'.bz2') and nocache is False:
-        # use cache
-        print 'from ' + white('cache')
-    else:
-        # compile
-        print
-        import e2fsprogs
-        e2fsprogs.build_sequence(master_config, temp, verbose)
-
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-blkid-temp/bin', verbose)
-
-    # FIXME careful with the >
-    os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs-version'], temp['work']))
-    #utils.srprocessor('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
-    utils.sprocessor('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % temp['work'], verbose)
-    
-    os.chdir(temp['work']+'/initramfs-blkid-temp')
-    return os.system(append_cpio(temp))
+#def append_blkid(master_config, libdir, temp, nocache, verbose):
+#    """
+#    Append blkid binary to the initramfs
+#    after compiling e2fsprogs
+#    
+#    @arg master_config  dict
+#    @arg libdir         string
+#    @arg temp           dict
+#    @arg nocache        bool
+#    @arg verbose        dict
+#    
+#    @return: bool
+#    """
+#    logging.debug('initramfs.append_blkid ' + master_config['e2fsprogs-version'])
+#    print green(' * ') + turquoise('initramfs.append_blkid ') + master_config['e2fsprogs-version'],
+#
+#    if os.path.isfile(temp['cache']+'/blkid-e2fsprogs-'+master_config['e2fsprogs-version']+'.bz2') and nocache is False:
+#        # use cache
+#        print 'from ' + white('cache')
+#    else:
+#        # compile
+#        print
+#        import e2fsprogs
+#        e2fsprogs.build_sequence(master_config, temp, verbose)
+#
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-blkid-temp/bin', verbose)
+#
+#    # FIXME careful with the >
+#    os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs-version'], temp['work']))
+#    #utils.srprocessor('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
+#    utils.sprocessor('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % temp['work'], verbose)
+#    
+#    os.chdir(temp['work']+'/initramfs-blkid-temp')
+#    return os.system(append_cpio(temp))
 
 def append_evms(temp, verbose):
     """
@@ -751,45 +763,45 @@ def append_iscsi(master_config, temp, nocache, verbose):
 
     os.chdir(temp['work']+'/initramfs-iscsi-temp')
     return os.system(append_cpio(temp))
-
-def append_splash(stheme, sres, master_config, temp, verbose):
-    """
-    Append splash framebuffer to initramfs
-
-    @arg stheme         string
-    @arg sres           string
-    @arg master_config  dict
-    @arg temp           dict
-    @arg verbose        dict
-
-    @return: bool
-    """
-    splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
-
-    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-splash-temp/', verbose)
-
-    if os.path.isfile(splash_geninitramfs_bin):
-        if stheme is '':
-            # set default theme to gentoo
-            stheme = 'gentoo'
-            if os.path.isfile('/etc/conf.d/splash'):
-                os.system('source /etc/conf.d/splash')
-        if sres is not '':
-            sres = '-r %s' % sres
-
-        logging.debug('initramfs.append_splash ' + stheme + ' ' + sres)
-        print green(' * ') + turquoise('initramfs.append_splash ') + white(stheme) + ' ' + white(sres)
-        utils.sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (temp['work'], sres, stheme), verbose)
-
-        if os.path.isfile('/usr/share/splashutils/initrd.splash'):
-            utils.sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % temp['work'], verbose)
-    else:
-        logging.debug('ERR: media-gfx/splashutils is not emerged')
-        print red('ERR')+ ': ' + "media-gfx/splashutils is not emerged"
-        sys.exit(2)
-
-    os.chdir(temp['work']+'/initramfs-splash-temp')
-    return os.system(append_cpio(temp))
+#
+#def append_splash(stheme, sres, master_config, temp, verbose):
+#    """
+#    Append splash framebuffer to initramfs
+#
+#    @arg stheme         string
+#    @arg sres           string
+#    @arg master_config  dict
+#    @arg temp           dict
+#    @arg verbose        dict
+#
+#    @return: bool
+#    """
+#    splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
+#
+#    utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-splash-temp/', verbose)
+#
+#    if os.path.isfile(splash_geninitramfs_bin):
+#        if stheme is '':
+#            # set default theme to gentoo
+#            stheme = 'gentoo'
+#            if os.path.isfile('/etc/conf.d/splash'):
+#                os.system('source /etc/conf.d/splash')
+#        if sres is not '':
+#            sres = '-r %s' % sres
+#
+#        logging.debug('initramfs.append_splash ' + stheme + ' ' + sres)
+#        print green(' * ') + turquoise('initramfs.append_splash ') + white(stheme) + ' ' + white(sres)
+#        utils.sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (temp['work'], sres, stheme), verbose)
+#
+#        if os.path.isfile('/usr/share/splashutils/initrd.splash'):
+#            utils.sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % temp['work'], verbose)
+#    else:
+#        logging.debug('ERR: media-gfx/splashutils is not emerged')
+#        print red('ERR')+ ': ' + "media-gfx/splashutils is not emerged"
+#        sys.exit(2)
+#
+#    os.chdir(temp['work']+'/initramfs-splash-temp')
+#    return os.system(append_cpio(temp))
 
 def append_unionfs_fuse(master_config, temp, nocache, verbose):
     """
