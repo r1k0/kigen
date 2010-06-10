@@ -1,13 +1,9 @@
 import os
 import sys
-color = os.getenv("GENKI_STD_COLOR")
-if color == '0':
-	from portage.output import *
-else:
-	from nocolor import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 import utils
 
-def download(dmraid_ver, quiet):
+def download(dmraid_ver, temp, quiet):
 	"""
 	Download dmraid tarball
 
@@ -19,7 +15,7 @@ def download(dmraid_ver, quiet):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(dmraid_ver) + '.tar.bz2'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/dmraid-%s.tar.bz2 %s' % (dmraid_url, utils.get_portdir(), str(dmraid_ver), quiet))
+	return os.system('/usr/bin/wget %s -O %s/distfiles/dmraid-%s.tar.bz2 %s' % (dmraid_url, utils.get_portdir(temp), str(dmraid_ver), quiet))
 
 def extract(dmraid_ver, temp, quiet):
 	"""
@@ -31,7 +27,7 @@ def extract(dmraid_ver, temp, quiet):
 	@return: bool
 	"""
 	print green(' * ') + '... dmraid.extract'
-	os.system('tar xvfj %s/distfiles/dmraid-%s.tar.bz2 -C %s %s' % (utils.get_portdir(), str(dmraid_ver), temp['work'], quiet))
+	os.system('tar xvfj %s/distfiles/dmraid-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(dmraid_ver), temp['work'], quiet))
 
 # dmraid building functions
 def configure(dmraidtmp, master_config, temp, quiet):
@@ -129,8 +125,8 @@ def build_sequence(master_config, selinux, temp, quiet):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/dmraid-%s.tar.bz2' % (utils.get_portdir(), str(master_config['dmraid_ver']))) is not True:
-		ret = download(master_config['dmraid_ver'], quiet)
+	if os.path.isfile('%s/distfiles/dmraid-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['dmraid_ver']))) is not True:
+		ret = download(master_config['dmraid_ver'], temp, quiet)
 		if ret is not zero:
 			print red('ERR: ')+'initramfs.dmraid.download() failed'
 			sys.exit(2)

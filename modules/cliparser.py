@@ -346,7 +346,7 @@ def print_usage_initramfs():
     print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
     print yellow("  --unionfs-fuse         Include unionfs-fuse support")
     print red("  --aufs                 Include aufs support")
-    print yellow("  --firmware=/dir        Include custom firmware support")
+#    print yellow("  --firmware=/dir        Include custom firmware support")
     print "  --nocache              Do not use cached data"
     print_usage_target_common()
 

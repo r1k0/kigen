@@ -3,7 +3,7 @@ import sys
 import utils
 from stdout import green, turquoise, white, red, yellow
 
-def download(fuse_ver, quiet):
+def download(fuse_ver, temp, verbose):
 	"""
 	Download fuse tarball
 
@@ -15,9 +15,9 @@ def download(fuse_ver, quiet):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	fuse_url = 'http://sourceforge.net/projects/fuse/files/fuse-2.X/'+str(fuse_ver)+'/fuse-'+str(fuse_ver)+'.tar.gz/download'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/fuse-%s.tar.gz %s' % (fuse_url, utils.get_portdir(), str(fuse_ver), quiet))
+	return os.system('/usr/bin/wget %s -O %s/distfiles/fuse-%s.tar.gz %s' % (fuse_url, utils.get_portdir(temp), str(fuse_ver), verbose['std']))
 
-def extract(fuse_ver, temp, quiet):
+def extract(fuse_ver, temp, verbose):
 	"""
 	Extract fuse tarball
 
@@ -27,10 +27,10 @@ def extract(fuse_ver, temp, quiet):
 	@return: bool
 	"""
 	print green(' * ') + '... fuse.extract'
-	os.system('tar xvfz %s/distfiles/fuse-%s.tar.gz -C %s %s' % (utils.get_portdir(), str(fuse_ver), temp['work'], quiet))
+	os.system('tar xvfz %s/distfiles/fuse-%s.tar.gz -C %s %s' % (utils.get_portdir(temp), str(fuse_ver), temp['work'], verbose['std']))
 
 # fuse building functions
-def configure(fusetmp, master_config, temp, quiet):
+def configure(fusetmp, master_config, temp, verbose):
 	"""
 	Configure fuse source code
 
@@ -43,9 +43,9 @@ def configure(fusetmp, master_config, temp, quiet):
 	print green(' * ') + '... fuse.configure'
 	utils.chgdir(fusetmp)
 
-	return os.system('./configure --disable-kernel-module --disable-example %s' % ( quiet))
+	return os.system('./configure --disable-kernel-module --disable-example %s' %  verbose['std'])
 
-def compile(fusetmp, master_config, quiet):
+def compile(fusetmp, master_config, verbose):
 	"""
 	Compile fuse source code
 
@@ -62,8 +62,8 @@ def compile(fusetmp, master_config, quiet):
 								master_config['DEFAULT_UTILS_CC'], \
 								master_config['DEFAULT_UTILS_LD'], \
 								master_config['DEFAULT_UTILS_AS'], \
-								quiet))
-#def install(fusetmp, master_config, quiet):
+								verbose['std']))
+#def install(fusetmp, master_config, verbose):
 #	"""
 #	Install fuse
 #
@@ -81,7 +81,7 @@ def compile(fusetmp, master_config, quiet):
 #						master_config['DEFAULT_UTILS_LD'], \
 #						master_config['DEFAULT_UTILS_AS'], \
 #
-#						quiet))
+#						verbose))
 #def strip(master_config, temp):
 #	"""
 #	Strip dmsetup binary
@@ -95,7 +95,7 @@ def compile(fusetmp, master_config, quiet):
 #
 #	return os.system('strip %s/fuse/sbin/dmsetup' % (temp['work']))
 #
-#def compress(master_config, temp, quiet):
+#def compress(master_config, temp, verbose):
 #	"""
 #	Compress dmsetup binary
 #
@@ -107,9 +107,9 @@ def compile(fusetmp, master_config, quiet):
 #	print ' * ' + '... fuse.compress'
 #	utils.chgdir(temp['work'])
 #
-#	return os.system('tar -jcf %s %s %s' % (temp['cache']+'/fuse-dircache-'+master_config['fuse_ver']+'.tar.bz2', temp['work']+'/fuse-'+master_config['fuse_ver'], quiet))
+#	return os.system('tar -jcf %s %s %s' % (temp['cache']+'/fuse-dircache-'+master_config['fuse_ver']+'.tar.bz2', temp['work']+'/fuse-'+master_config['fuse_ver'], verbose))
 
-def cache(fusetmp, master_config, temp, quiet): # TODO pass arch? should we add 'arch' to blkid-fuse-%s.bz2? genkernel seems to do so
+def cache(fusetmp, master_config, temp, verbose): # TODO pass arch? should we add 'arch' to blkid-fuse-%s.bz2? genkernel seems to do so
 	"""
 	Cache compressed dmsetup binary
 
@@ -122,14 +122,14 @@ def cache(fusetmp, master_config, temp, quiet): # TODO pass arch? should we add 
 	print green(' * ') + '... fuse.cache'
 	utils.chgdir(temp['work'])
 	mvv = ''
-	if quiet is '': mvv = '-v'
+	if verbose['set'] is '': mvv = '-v'
 
-	return os.system('tar -jcf %s %s %s' % (temp['cache']+'/fuse-dircache-'+master_config['fuse_ver']+'.tar.bz2', 'fuse-'+master_config['fuse_ver'], quiet))
+	return os.system('tar -jcf %s %s %s' % (temp['cache']+'/fuse-dircache-'+master_config['fuse_ver']+'.tar.bz2', 'fuse-'+master_config['fuse_ver'], verbose['std']))
 #	return os.system('mv %s %s %s/fuse-driname-%s.tar.bz2' % (mvv, temp['cache']+'/fuse-dircache-'+master_config['fuse_ver']+'.tar.bz2', temp['cache'], master_config['fuse_ver']))
 	# TODO: use os.file.cp or smthg like that
 
 # fuse sequence
-def build_sequence(master_config, temp, quiet):
+def build_sequence(master_config, temp, verbose):
 	"""
 	fuse build sequence
 
@@ -141,26 +141,26 @@ def build_sequence(master_config, temp, quiet):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/fuse-%s.tar.gz' % (utils.get_portdir(), str(master_config['fuse_ver']))) is not True:
-		ret = download(master_config['fuse_ver'], quiet)
+	if os.path.isfile('%s/distfiles/fuse-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['fuse_ver']))) is not True:
+		ret = download(master_config['fuse_ver'], temp, verbose)
 		if ret is not zero:
 			print red('ERR: ')+'initramfs.fuse.download() failed'
 			sys.exit(2)
 
-	ret = extract(master_config['fuse_ver'], temp, quiet)
+	ret = extract(master_config['fuse_ver'], temp, verbose)
 	ret = zero # grr, tar thing to not return 0 when success
 
-	ret = configure(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, quiet)
+	ret = configure(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, verbose)
 	if ret is not zero:
 		print red('ERR: ')+'initramfs.fuse.configure() failed'
 		sys.exit(2)
 
-	ret = compile(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, quiet)
+	ret = compile(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, verbose)
 	if ret is not zero:
 		print red('ERR: ')+'initramfs.fuse.compile() failed'
 		sys.exit(2)
 
-#	ret = install(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, quiet)
+#	ret = install(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, verbose)
 #	if ret is not zero:
 #		print red('ERR: ')+'initramfs.fuse.install() failed'
 #		sys.exit(2)
@@ -170,12 +170,12 @@ def build_sequence(master_config, temp, quiet):
 #		print red('ERR: ')+'initramfs.fuse.strip() failed'
 #		sys.exit(2)
 #
-#	ret = compress(master_config, temp, quiet)
+#	ret = compress(master_config, temp, verbose)
 #	if ret is not zero:
 #		print red('ERR: ')+'initramfs.fuse.compress() failed'
 #		sys.exit(2)
 
-	ret = cache(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, quiet)
+	ret = cache(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, verbose)
 	if ret is not zero:
 		print red('ERR: ')+'initramfs.fuse.compress() failed'
 		sys.exit(2)

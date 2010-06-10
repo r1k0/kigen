@@ -51,6 +51,7 @@ class initramfs:
         self.bootupdateinitrd   = bootupdateinitrd
         self.stheme             = cli['stheme']
         self.sres               = cli['sres']
+        self.selinux            = cli['selinux']
 
     def build(self):
         """
@@ -174,12 +175,12 @@ class initramfs:
             ret = aobject.splash()
             if ret is not zero:
                 raise error.fail('initramfs.append.splash()')
-        # 16) append firmware
-        if os.path.isdir(self.firmware):
-            os.chdir(self.temp['work'])
-            ret = aobject.firmware()
-            if ret is not zero: 
-                raise error.fail('initramfs.append_firmware()')
+#        # 16) append firmware
+#        if os.path.isdir(self.firmware):
+#            os.chdir(self.temp['work'])
+#            ret = aobject.firmware()
+#            if ret is not zero: 
+#                raise error.fail('initramfs.append_firmware()')
     
         # 17) append overlay
         # TODO

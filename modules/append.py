@@ -29,6 +29,7 @@ class append:
                 stheme,         \
                 sres,           \
                 firmware,       \
+                selinux,        \
                 nocache):
         """
         init class variables
@@ -53,6 +54,7 @@ class append:
         self.sres           = sres
         self.nocache        = nocache
         self.firmware       = firmware
+        self.selinux        = selinux
 
     def cpio(self):
         """
@@ -400,8 +402,8 @@ class append:
         else:
             self.build_device_mapper()
     
-            logging.debug('initramfs.append_lvm2 ')
-            print green(' * ') + turquoise('initramfs.append_lvm2 ')
+            logging.debug('initramfs.append.lvm2 ')
+            print green(' * ') + turquoise('initramfs.append.lvm2 ')
     
             import lvm2
             lvm2.build_sequence(self.master_config, self.temp, self.verbose)
@@ -415,20 +417,15 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
         return os.system(self.cpio())
 
-    def build_device_mapper():
+    def build_device_mapper(self):
         """
         Build the device-mapper and cache it for later use
         Only to be called if lvm2 or dmraid is compiled!
     
-        @arg master_config  dict
-        @arg temp           dict
-        @arg nocache        bool
-        @arg verbose        dict
-    
         @return: bool
         """
-        logging.debug('initramfs.build_device_mapper '+self.master_config['dm_ver'])
-        print green(' * ') + turquoise('initramfs.build_device_mapper ') + self.master_config['dm_ver'],
+        logging.debug('initramfs.append.build_device_mapper '+self.master_config['dm_ver'])
+        print green(' * ') + turquoise('initramfs.append.build_device_mapper ') + self.master_config['dm_ver'],
     
         if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['dm_ver']+'.tar.bz2') and self.nocache is False:
             # use cache
@@ -440,11 +437,9 @@ class append:
             import device_mapper
             return device_mapper.build_sequence(self.master_config, self.temp, self.verbose['std'])
      
-    def evms():
+    def evms(self):
         """
         Append evms libraries to the initramfs
-    
-        @arg temp   dict
     
         @return: bool
         """
@@ -454,10 +449,10 @@ class append:
         if os.path.isfile('/sbin/evms'):
             print 'feeding' + ' from host'
     
-            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
-            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/etc', self.verbose)
-            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/bin', self.verbose)
-            utils.sprocessor('mkdir -p ' + temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
+            utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
+            utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
+            utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/bin', self.verbose)
+            utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
     
         # FIXME broken due to *
         # utils.sprocessor('cp -a /lib/ld-* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
@@ -503,8 +498,8 @@ class append:
         @return: bool
         """
         ret = int('0')
-        logging.debug('initramfs.append_mdadm')
-        print green(' * ') + turquoise('initramfs.append_mdadm')
+        logging.debug('initramfs.append.mdadm')
+        print green(' * ') + turquoise('initramfs.append.mdadm')
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmadm-temp/etc', self.verbose)
         utils.sprocessor('cp -a /etc/mdadm.conf %s/initramfs-mdadm-temp/etc' % self.temp['work'], self.verbose)
@@ -521,7 +516,7 @@ class append:
         self.build_device_mapper()
     
         logging.debug('initramfs.append.dmraid ' + self.master_config['dmraid_ver'])
-        print green(' * ') + turquoise('initramfs.append_dmraid ') + self.master_config['dmraid_ver'],
+        print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_config['dmraid_ver'],
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
     
@@ -579,7 +574,7 @@ class append:
         
         @return: bool
         """
-        self.build_fuse(self.master_config, self.temp, self.nocache, self.verbose['std'])
+        self.build_fuse()
     
         logging.debug('initramfs.append_unionfs_fuse ' + self.master_config['unionfs_fuse_ver'])
         print green(' * ') + turquoise('initramfs.append_unionfs_fuse ') + self.master_config['unionfs_fuse_ver'],
@@ -593,7 +588,7 @@ class append:
             if os.path.isfile('/usr/include/fuse.h'):
                 # compile
                 import unionfs_fuse
-                unionfs_fuse.build_sequence(self.master_config, self.temp, self.verbose['std'])
+                unionfs_fuse.build_sequence(self.master_config, self.temp, self.verbose)
             else:
                 logging.debug('ERR: sys-fs/fuse is not emerged')
                 print red('ERR') + ': ' + "sys-fs/fuse is not emerged"
@@ -608,7 +603,7 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-unionfs-fuse-temp')
         return os.system(self.cpio())
      
-    def build_fuse():
+    def build_fuse(self):
         """
         Build fuse and cache it for later use
         Only to be called for --unionfs!
@@ -632,7 +627,7 @@ class append:
     
         return
     
-    def aufs():
+    def aufs(self):
         """
         Append aufs to initramfs
         """
@@ -650,7 +645,7 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-aufs-temp')
         return os.system(self.cpio())
     
-    def ssh():
+    def ssh(self):
         """
         Append ssh tools and daemon to initramfs
         """
