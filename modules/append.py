@@ -363,7 +363,7 @@ class append:
                 self.sres = '-r %s' % self.sres
     
             logging.debug('initramfs.append.splash ' + self.stheme + ' ' + self.sres)
-            print green(' * ') + turquoise('initramfs.append_splash ') + white(self.stheme) + ' ' + white(self.sres)
+            print green(' * ') + turquoise('initramfs.append.splash ') + white(self.stheme) + ' ' + white(self.sres)
             utils.sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
 
             if os.path.isfile('/usr/share/splashutils/initrd.splash'):
@@ -548,8 +548,8 @@ class append:
     
         @return: bool
         """
-        logging.debug('initramfs.append_iscsi ' + self.master_config['iscsi_ver'])
-        print green(' * ') + turquoise('initramfs.append_iscsi ') + self.master_config['iscsi_ver'],
+        logging.debug('initramfs.append.iscsi ' + self.master_config['iscsi_ver'])
+        print green(' * ') + turquoise('initramfs.append.iscsi ') + self.master_config['iscsi_ver'],
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
     
@@ -576,8 +576,8 @@ class append:
         """
         self.build_fuse()
     
-        logging.debug('initramfs.append_unionfs_fuse ' + self.master_config['unionfs_fuse_ver'])
-        print green(' * ') + turquoise('initramfs.append_unionfs_fuse ') + self.master_config['unionfs_fuse_ver'],
+        logging.debug('initramfs.append.unionfs_fuse ' + self.master_config['unionfs_fuse_ver'])
+        print green(' * ') + turquoise('initramfs.append.unionfs_fuse ') + self.master_config['unionfs_fuse_ver'],
     
         if os.path.isfile(self.temp['cache']+'/unionfs-fuse.static-'+self.master_config['unionfs_fuse_ver']+'.bz2') and self.nocache is False:
             # use cache
