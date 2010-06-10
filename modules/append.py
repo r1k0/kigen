@@ -649,8 +649,8 @@ class append:
         """
         Append ssh tools and daemon to initramfs
         """
-        logging.debug('initramfs.append_ssh')
-        print green(' * ') + turquoise('initramfs.append_ssh ') + self.master_config['ssh-version'],
+        logging.debug('initramfs.append.ssh')
+        print green(' * ') + turquoise('initramfs.append.ssh ') + self.master_config['ssh-version'],
     
         if os.path.isfile(self.temp['cache']+'/ssh-'+self.master_config['ssh-version']+'.tar') and self.nocache is False:
             # use cache
@@ -664,7 +664,7 @@ class append:
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-ssh-temp/bin', self.verbose)
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-ssh-temp/sbin', self.verbose)
-        os.chdir(temp['cache'])
+        os.chdir(self.temp['cache'])
         os.system('tar xf %s -C %s' % ('ssh-'+self.master_config['ssh-version']+'.tar', self.temp['work']+'/initramfs-ssh-temp'))
     #    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/sftp' % temp['work'], verbose)
     #    utils.sprocessor('chmod a+x %s/initramfs-ssh-temp/bin/scp' % temp['work'], verbose)
