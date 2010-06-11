@@ -2,8 +2,6 @@ import os
 import sys
 from stdout import white, green, turquoise
 from append import append
-import error
-import warning
 import utils
 import logging
 import commands
@@ -96,102 +94,93 @@ class initramfs:
                         self.nohostbin)
         # 2) append base
         aobject.base()
-        if ret is not zero:
-            raise error.fail('initramfs.append.baselayout()')
+        if ret is not zero: self.fail('baselayout')
         # 3) append busybox
         os.chdir(self.temp['work'])
         ret = aobject.busybox()
-        if ret is not zero:
-            raise error.fail('initramfs.append.busybox()')
+        if ret is not zero: self.fail('busybox')
         # 4) append modules
         # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
         ret = aobject.modules()
-        if ret is not zero:
-            raise error.fail('initramfs.append_modules()')
-
-        # 4) append lvm2
+        if ret is not zero: self.fail('modules')
+        # 5) append lvm2
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.lvm2()
-            if ret is not zero:
-                raise error.fail('initramfs.append_lvm2()')
-        # 5) append dmraid
+            if ret is not zero: self.fail('lvm2')
+        # 6) append dmraid
         if self.cli['dmraid'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.dmraid()
-            if ret is not zero:
-                raise error.fail('initramfs.append_dmraid()')
-        # 6) append iscsi
+            if ret is not zero: self.fail('dmraid')
+        # 7) append iscsi
         if self.cli['iscsi'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.iscsi()
-            if ret is not zero:
-                raise error.fail('initramfs.append_iscsi()')
-        # 7) append evms
+            if ret is not zero: self.fail('iscsi')
+        # 8) append evms
         if self.cli['evms'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.evms()
-            if ret is not zero: 
-                raise error.fail('initramfs.append_evms()')
-        # 8) append mdadm
+            if ret is not zero: self.fail('evms')
+        # 9) append mdadm
         if self.cli['mdadm'] is True:
             os.chdir(self.temp['work'])
             ret = aobjectmdadm()
-            if ret is not zero: 
-                raise error.fail('initramfs.append_mdadm()')
-        # 9) append luks
+            if ret is not zero: self.fail('mdadm')
+        # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.luks()
-            if ret is not zero: 
-                raise error.fail('initramfs.append.luks()')
-#        # 10) append multipath
-#        # TODO
+            if ret is not zero: self.fail('luks')
+#       # 11) append multipath
+#       # TODO
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.e2fsprogs()
-            if ret is not zero: 
-                raise error.fail('initramfs.append.e2fsprogs()')
+            if ret is not zero: self.fail('e2fsprogs')
         # 13) append ssh
         if self.cli['ssh'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.ssh()
-            if ret is not zero:
-                raise error.fail('initramfs.append_ssh()')
-        # 13) append unionfs_fuse
+            if ret is not zero: self.fail('ssh')
+        # 14) append unionfs_fuse
         if self.cli['unionfs'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.unionfs_fuse()
-            if ret is not zero: 
-                raise error.fail('initramfs.append_unionfs-fuse()')
-        # 14) append aufs
+            if ret is not zero: self.fail('unionfs-fuse')
+        # 15) append aufs
         if self.cli['aufs'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.aufs()
-            if ret is not zero:
-                raise error.fail('initramfs.append_aufs()')
-        # 15) append splash
+            if ret is not zero: self.fail('aufs')
+        # 16) append splash
         if self.cli['splash'] is True:
             os.chdir(self.temp['work'])
             ret = aobject.splash()
-            if ret is not zero:
-                raise error.fail('initramfs.append.splash()')
-#        # 16) append firmware
+            if ret is not zero: self.fail('splash')
+#        # 17) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            ret = aobject.firmware()
-#            if ret is not zero: 
-#                raise error.fail('initramfs.append_firmware()')
-    
-        # 17) append overlay
+#            if ret is not zero: self.fail('firmware')
+        # 18) append overlay
         # TODO
-    
+
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
         utils.sprocessor('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
-        if ret is not zero: 
-            raise error.fail('utils.copy.initramfs() compression pre copy')
+        if ret is not zero: self.fail('compress')
     
         return ret
+
+    def fail(self, step):
+        """
+        @arg step   string
+
+        @return     exit
+        """
+        print red('error')+': initramfs.append.'+step+'() failed'
+        sys.exit(2)
  

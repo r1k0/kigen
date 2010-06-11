@@ -62,7 +62,7 @@ class luks:
         """
         print green(' * ') + '... luks.download'
         luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
-    #    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2' % (luks_url, utils.get_portdir(temp), str(luks_ver)), verbose)
+
         return os.system('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2 %s' % (luks_url, utils.get_portdir(self.temp), str(self.luks_ver), self.verbose['std']))
     
     def extract(self):
