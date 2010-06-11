@@ -125,7 +125,7 @@ class e2fsprogs:
         print green(' * ') + '... e2fsprogs.compress'
         utils.chgdir(self.e2tmp)
     
-        return os.system('bzip2 %s/misc/blkid' % e2tmp)
+        return os.system('bzip2 %s/misc/blkid' % self.e2tmp)
     
     def cache(self):
         """
