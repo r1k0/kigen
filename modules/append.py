@@ -194,7 +194,6 @@ class append:
     
         @return: bool
         """
-        import kmodules
         ret = int('0')
         logging.debug('initramfs.append_modules ' + self.KV)
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
@@ -209,8 +208,8 @@ class append:
         # is it really a big deal? I don't think so
     
         # identify and copy kernel modules
-        modsyslist  = kmodules.get_sys_modules_list(self.KV)
-        modconflist = kmodules.get_config_modules_list(self.master_config) #.split()
+        modsyslist  = utils.get_sys_modules_list(self.KV)
+        modconflist = utils.get_config_modules_list(self.master_config) #.split()
         # TODO: add support for the 'probe' key
     
         # for each module in the list modconflist
@@ -245,7 +244,7 @@ class append:
     
         # create etc/modules/<group>
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
-        modconfdict = kmodules.get_config_modules_dict(self.master_config)
+        modconfdict = utils.get_config_modules_dict(self.master_config)
     
         # Genkernel official boot module design
         # for each key value in the module config dictionary
