@@ -52,6 +52,7 @@ class initramfs:
         self.stheme             = cli['stheme']
         self.sres               = cli['sres']
         self.selinux            = cli['selinux']
+        self.nohostbin          = cli['nohostbin']
 
     def build(self):
         """
@@ -91,7 +92,8 @@ class initramfs:
                         self.sres,          \
                         self.firmware,      \
                         self.selinux,       \
-                        self.nocache)
+                        self.nocache,       \
+                        self.nohostbin)
         # 2) append base
         aobject.base()
         if ret is not zero:

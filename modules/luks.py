@@ -3,154 +3,130 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 import utils
 
-def download(luks_ver, temp, verbose):
-    """
-    luks tarball download routine
+class luks:
 
-    @arg luks_ver       string
-    @arg verbose        dict
+    def __init__(self, master_config, temp, verbose):
 
-    @return: bool
-    """
-    print green(' * ') + '... luks.download'
-    luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + luks_ver + '.tar.bz2'
-#    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2' % (luks_url, utils.get_portdir(temp), str(luks_ver)), verbose)
-    return os.system('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2 %s' % (luks_url, utils.get_portdir(temp), str(luks_ver), verbose['std']))
+        self.master_config = master_config
+        self.temp = temp
+        self.verbose = verbose
+        self.luks_ver = master_config['luks-version']
+        self.lukstmp = temp['work'] + '/cryptsetup-' + master_config['luks-version']
 
-def extract(luks_ver, temp, verbose):
-    """
-    luks tarball extraction routine
+    def build(self):
+        """
+        luks build sequence
+    
+        @return: bool
+        """
+        ret = zero = int('0')
+    
+        if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (utils.get_portdir(self.temp), self.luks_ver)) is not True:
+            ret = self.download()
+            if ret is not zero: self.fail('download')
+    
+        self.extract()
+    #   grr, tar thing to not return 0 when success
+    
+        ret = self.configure()
+        if ret is not zero: self.fail('configure')
+    
+        ret = self.compile()
+        if ret is not zero: self.fail('compile')
+    
+        ret = self.strip()
+        if ret is not zero: self.fail('strip')
+    
+        ret = self.compress()
+        if ret is not zero: self.fail('compress')
+    
+        ret = self.cache()
+        if ret is not zero: self.fail('cache')
+    
+        return ret
 
-    @arg luks_ver       string
-    @arg temp           dict
-    @arg verbose        dict
+    def fail(self, step):
+        """
+        @arg step   string
 
-    @return: bool
-    """
-    print green(' * ') + '... luks.extract'
-
-    os.system('tar xvfj %s/distfiles/cryptsetup-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(luks_ver), temp['work'], verbose['std']))
-
-# e2fsprogrs building functions
-def configure(lukstmp, master_config, verbose):
-    """
-    luks Makefile interface to configure
-
-    @arg lukstmp        string
-    @arg master_config  dict
-    @arg verbose        dict
-
-    @return: bool
-    """
-    print green(' * ') + '... luks.configure'
-    utils.chgdir(lukstmp)
-
-    return os.system('./configure --enable-static %s' % verbose['std'])
-
-def compile(lukstmp, master_config, verbose):
-    """
-    luks Makefile interface to make
-
-    @arg lukstmp            string
-    @arg master_config      dict
-    @arg verbose            dict
-
-    @return: bool
-    """
-    print green(' * ') + '... luks.compile'
-    utils.chgdir(lukstmp)
-
-    return os.system('%s %s %s' % (master_config['DEFAULT_UTILS_MAKE'], master_config['DEFAULT_MAKEOPTS'], verbose['std']))
-
-def strip(lukstmp, master_config):
-    """
-    blkid strip binary routine
-
-    @arg lukstmp        string
-    @arg master_config  dict
-
-    @return: bool
-    """
-    print green(' * ') + '... luks.strip'
-    utils.chgdir(lukstmp)
-
-    return os.system('strip %s/src/cryptsetup' % lukstmp)
-
-def compress(lukstmp, master_config):
-    """
-    blkid compression routine
-
-    @arg lukstmp        string
-    @arg master_config  dict
-
-    @return: bool
-    """
-    print green(' * ') + '... luks.compress'
-    utils.chgdir(lukstmp)
-
-    return os.system('bzip2 %s/src/cryptsetup' % lukstmp)
-
-def cache(lukstmp, master_config, temp, verbose):
-    """
-    blkid tarball cache routine
-
-    @arg lukstmp        string
-    @arg master_config  dict
-    @arg temp           dict
-    @arg verbose        dict
-
-    @return: bool
-    """
-    print green(' * ') + '... luks.cache'
-    utils.chgdir(lukstmp)
-
-    return utils.sprocessor('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (lukstmp, temp['cache'], master_config['luks-version']), verbose)
-
-# luks sequence
-def build_sequence(master_config, temp, verbose):
-    """
-    luks build sequence
-
-    @arg master_config  dict
-    @arg temp           dict
-    @arg verbose        dict
-
-    @return: bool
-    """
-    ret = zero = int('0')
-
-    if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['luks-version']))) is not True:
-        ret = download(master_config['luks-version'], temp, verbose)
-        if ret is not zero:
-            print red('ERR: ')+'initramfs.luks.download() failed'
-            sys.exit(2)
-
-    extract(master_config['luks-version'], temp, verbose)
-#   grr, tar thing to not return 0 when success
-
-    ret = configure(temp['work'] + '/cryptsetup-' + master_config['luks-version'], master_config, verbose)
-    if ret is not zero:
-        print red('ERR: ')+'initramfs.luks.configure() failed'
+        @return     exit
+        """
+        print red('error')+': initramfs.luks.'+step+'() failed'
         sys.exit(2)
 
-    ret = compile(temp['work'] + '/cryptsetup-' + master_config['luks-version'], master_config, verbose)
-    if ret is not zero:
-        print red('ERR: ')+'initramfs.luks.compile() failed'
-        sys.exit(2)
+    def download(self):
+        """
+        luks tarball download routine
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.download'
+        luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
+    #    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2' % (luks_url, utils.get_portdir(temp), str(luks_ver)), verbose)
+        return os.system('/usr/bin/wget %s -O %s/distfiles/cryptsetup-%s.tar.bz2 %s' % (luks_url, utils.get_portdir(self.temp), str(self.luks_ver), self.verbose['std']))
+    
+    def extract(self):
+        """
+        luks tarball extraction routine
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.extract'
+    
+        os.system('tar xvfj %s/distfiles/cryptsetup-%s.tar.bz2 -C %s %s' % (utils.get_portdir(self.temp), str(self.luks_ver), self.temp['work'], self.verbose['std']))
+    
+    def configure(self):
+        """
+        luks Makefile interface to configure
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.configure'
+        utils.chgdir(self.lukstmp)
+    
+        return os.system('./configure --enable-static %s' % self.verbose['std'])
+    
+    def compile(self):
+        """
+        luks Makefile interface to make
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.compile'
+        utils.chgdir(self.lukstmp)
+    
+        return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
+    
+    def strip(self):
+        """
+        blkid strip binary routine
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.strip'
+        utils.chgdir(self.lukstmp)
+    
+        return os.system('strip %s/src/cryptsetup' % self.lukstmp)
+    
+    def compress(self):
+        """
+        blkid compression routine
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.compress'
+        utils.chgdir(self.lukstmp)
+    
+        return os.system('bzip2 %s/src/cryptsetup' % self.lukstmp)
+    
+    def cache(self):
+        """
+        blkid tarball cache routine
+    
+        @return: bool
+        """
+        print green(' * ') + '... luks.cache'
+        utils.chgdir(self.lukstmp)
+    
+        return utils.sprocessor('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.master_config['luks-version']), self.verbose)
 
-    ret = strip(temp['work'] + '/cryptsetup-' + master_config['luks-version'], master_config)
-    if ret is not zero:
-        print red('ERR: ')+'initramfs.luks.strip() failed'
-        sys.exit(2)
-
-    ret = compress(temp['work'] + '/cryptsetup-' + master_config['luks-version'], master_config)
-    if ret is not zero:
-        print red('ERR: ')+'initramfs.luks.compress() failed'
-        sys.exit(2)
-
-    ret = cache(temp['work'] + '/cryptsetup-' + master_config['luks-version'], master_config, temp, verbose)
-    if ret is not zero:
-        print red('ERR: ')+'initramfs.luks.compress() failed'
-        sys.exit(2)
-
-    return ret

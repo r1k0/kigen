@@ -30,7 +30,8 @@ class append:
                 sres,           \
                 firmware,       \
                 selinux,        \
-                nocache):
+                nocache,        \
+                nohostbin):
         """
         init class variables
         """
@@ -55,6 +56,7 @@ class append:
         self.nocache        = nocache
         self.firmware       = firmware
         self.selinux        = selinux
+        self.nohostbin      = nohostbin
 
     def cpio(self):
         """
@@ -273,43 +275,48 @@ class append:
         @return: bool
         """
         ret = int('0')
-        cryptsetup_bin  = '/bin/cryptsetupa'
-        cryptsetup_sbin = '/sbin/cryptsetupa'
+        cryptsetup_bin  = '/bin/cryptsetup'
+        cryptsetup_sbin = '/sbin/cryptsetup'
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
-        if os.path.isfile(cryptsetup_bin):
+        if os.path.isfile(cryptsetup_bin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + white(cryptsetup_bin) + ' from host'
             utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
             utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-        elif os.path.isfile(cryptsetup_sbin):
+        elif os.path.isfile(cryptsetup_sbin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + white(cryptsetup_sbin) + ' from host'
             utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
             utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-        else:
+        elif self.nohostbin is True:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.master_config['luks-version'],
             logging.debug('initramfs.append_luks ' + self.master_config['luks-version'])
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.master_config['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
+
+                # extract cache
                 # FIXME careful with the >
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
                 utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+
             else:
                 # compile and cache
                 print
-                import luks
-                luks.build_sequence(self.master_config, self.temp, self.verbose)
-    
-        # FIXME careful with the >
-#        os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-#        utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-    
+                from luks import luks
+                luksobj = luks(self.master_config, self.temp, self.verbose)
+                luksobj.build()
+
+                # extract cache
+                # FIXME careful with the >
+                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
+                utils.sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+
         os.chdir(self.temp['work']+'/initramfs-luks-temp')
         return os.system(self.cpio())
      

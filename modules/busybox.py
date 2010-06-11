@@ -3,6 +3,14 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 import utils
 
+class busybox:
+
+    def __init__(self):
+        pass
+
+    def build(self):
+        pass
+
 def download(bb_version, temp, quiet):
 	"""
 	Busybox tarball download command
@@ -26,29 +34,6 @@ def extract(bb_version, temp, quiet):
 	"""
 	print green(' * ') + '... busybox.extract'
 	return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(bb_version), temp['work'], quiet))
-
-# TO BE REMOVED: useless function
-#def apply_patches(bb_version, patch_dir, temp, quiet):
-#	"""
-#	Busybox apply patch routine regardless of version
-#
-#	@arg: string
-#	@arg: string
-#	@arg: dict
-#	@arg: string
-#	@return: bool
-#	"""
-#	ret = True
-#	if os.path.isdir(patch_dir):
-#		for filename in os.listdir(patch_dir):
-#			if filename.endswith('.diff') or filename.endswith('.patch'):
-#				print green(' * ') + '... busybox.apply_patch '+filename
-#				for i in  [0, 1, 2, 3, 4, 5] :
-#					# FIXME: ret just grab the last value
-#					ret = os.system('patch -p%s -f --backup-if-mismatch < "%s" %s' % (i, patch_dir +'/' +filename, quiet))
-#		# TODO patch .config too by adding CONFIG_MDSTART=n
-##		ret = os.system('echo CONFIG_MDSTART=n >> %s/busybox-%s/.config' % (temp['work'], bb_version))
-#	return ret
 
 def copy_config(arch, bbconf, bb_version, libdir, temp, quiet):
 	"""

@@ -7,7 +7,7 @@ __author__	    = [ 'erick "r1k0" michau - <erick@openchill.org>', \
                     '']
 __version__		= "0.1"
 __productname__	= os.path.basename(sys.argv[0])
-__description__	= "a kernel/initramfs generator."
+__description__	= "a kernel|initramfs generator."
 
 # parse command line parameters
 def parse():
@@ -63,6 +63,7 @@ def parse():
                                 "version",	    \
                                 "credits",	    \
                                 "nosaveconfig", \
+                                "nohostbin",    \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -113,6 +114,7 @@ def parse():
     verbose['std']		= '>>' + cli['logfile'] + ' 2>&1'
     cli['color']		= True
     cli['nosaveconfig'] = False
+    cli['nohostbin']    = False
 
     # single options
     for o, a in topts:
@@ -255,13 +257,15 @@ def parse():
             cli['config'] = a
         elif o in ("--ssh"):
             cli['ssh'] = True
+        elif o in ("--nohostbin"):
+            cli['nohostbin'] = True
         else:
             assert False, "uncaught option"
 
     return cli, verbose
 
 def print_version():
-    print "%s" % (__version__)
+    print '%s' % (__version__)
 
 def print_credits():
     print 'Copyright 2010 r1k0'
@@ -277,86 +281,87 @@ def print_usage(ex=False):
     print
     print white('  a GNU/Linux kernel|initramfs generator')
     print
-    print white('Usage')+":"
-    print "  " + turquoise(os.path.basename(sys.argv[0])) + green(' <target|options>') + yellow(' [parameters]')
+    print white('Usage')+':'
+    print '  ' + turquoise(os.path.basename(sys.argv[0])) + green(' <target|options>') + yellow(' [parameters]')
     print
-    print green("Options") + ":"
-#    print white('  -i, --info') + "             Show " + turquoise(os.path.basename(sys.argv[0])) + " configuration"
+    print green('Options') + ':'
+#    print white('  -i, --info') + '             Show ' + turquoise(os.path.basename(sys.argv[0])) + ' configuration'
     print '  --conf=/file           Custom master config file'
-    print "  -h, --help             This and examples"
-    print "  -n, --nocolor          Do not colorize output"
-    print "  --version              Version"
-    print "  --credits              Credits and license"
+    print '  -h, --help             This and examples'
+    print '  -n, --nocolor          Do not colorize output'
+    print '  --version              Version'
+    print '  --credits              Credits and license'
     print
-    print green('Targets')+":"
-    print '  k, kernel' + "              Build kernel/modules"
-    print '  i, initramfs' + "           Build initramfs"
-    print '  a, all' + "                 Build kernel/modules/initramfs"
+    print green('Targets')+':'
+    print '  k, kernel' + '              Build kernel/modules'
+    print '  i, initramfs' + '           Build initramfs'
+    print '  a, all' + '                 Build kernel/modules/initramfs'
 #	print '  moo' + '			         Ask Larry.'
     print
     print yellow('Parameters') + " help menu:"
 
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'kernel' + "           -h, --help"
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'initramfs' + "        -h, --help"
-    print "  " + os.path.basename(sys.argv[0]) + " " + 'all' + "              -h, --help"
+    print '  ' + os.path.basename(sys.argv[0]) + ' ' + 'kernel' + '           -h, --help'
+    print '  ' + os.path.basename(sys.argv[0]) + ' ' + 'initramfs' + '        -h, --help'
+    print '  ' + os.path.basename(sys.argv[0]) + ' ' + 'all' + '              -h, --help'
     if ex is True:
         print
-        print green('Examples') + ":"
-        print "  " + os.path.basename(sys.argv[0]) + " initramfs --disklabel --luks --lvm2 --splash --stheme=gentoo"
-        print "  " + os.path.basename(sys.argv[0]) + " kernel --kconf=/file --kmenuconfig --nomodinstall --noboot --nocolor"
-        print "  " + os.path.basename(sys.argv[0]) + " all --luks --lvm2 --splash --kmenuconfig --firmware=/lib/firmware"
+        print green('Examples') + ':'
+        print '  ' + os.path.basename(sys.argv[0]) + ' initramfs --disklabel --luks --lvm2 --splash --stheme=gentoo'
+        print '  ' + os.path.basename(sys.argv[0]) + ' kernel --kconf=/file --kmenuconfig --nomodinstall --noboot --nocolor'
+        print '  ' + os.path.basename(sys.argv[0]) + ' all --luks --lvm2 --splash --kmenuconfig --firmware=/lib/firmware'
 
 def print_usage_bzImage(no_extra_options=False):
-    print "  --kconf=/file          Custom kernel config file (full path)"
-    print "  --kernname=mykernel    Custom kernel file name"
-    print "  --nooldconfig          Will not ask for new kernel/initramfs options"
-    print "  --mrproper             Clean precompiled objects"
-    print "  --oldconfig            Will ask for new kernel/initramfs options"
-    print "  --kmenuconfig          Interactive kernel options menu"
-#   print "  --allyesconfig         Say yes to all kernel/busybox options"
-#   print "  --allnoconfig          Say no  to all kernel options and modules only"
+    print '  --kconf=/file          Custom kernel config file (full path)'
+    print '  --kernname=mykernel    Custom kernel file name'
+    print '  --nooldconfig          Will not ask for new kernel/initramfs options'
+    print '  --mrproper             Clean precompiled objects'
+    print '  --oldconfig            Will ask for new kernel/initramfs options'
+    print '  --kmenuconfig          Interactive kernel options menu'
+#   print '  --allyesconfig         Say yes to all kernel/busybox options'
+#   print '  --allnoconfig          Say no  to all kernel options and modules only'
     if no_extra_options is False:
         print_usage_target_common()
 
 def print_usage_kernel(no_extra_options=False):
     print green('Kernel') + ' parameters'
     print_usage_bzImage(no_extra_options=True)
-    print "  --nomodinstall         Do not install modules"
-    print "  --nosaveconfig         Do not save kernel config in /etc/kernels"
-    print "  --fakeroot=/dir        Append modules to /dir/lib/modules"
+    print '  --nomodinstall         Do not install modules'
+    print '  --nosaveconfig         Do not save kernel config in /etc/kernels'
+    print '  --fakeroot=/dir        Append modules to /dir/lib/modules'
     if no_extra_options is False:
         print_usage_target_common()
 
 def print_usage_initramfs():
     print green('Initramfs') + ' parameters'
-    print "  --bbconf=/file         Custom busybox config file (full path)"
-    print "  --bbmenuconfig         Interactive initramfs options menu"
-    print "  --linuxrc=/file        Custom linuxrc /init for the initramfs"
-    print "  --disklabel            Include support for disklabel and UUID"
-    print "  --luks                 Include LUKS support"
-    print yellow("  --lvm2                 Include LVM2 support")
-    print yellow("  --evms                 Include evms support (evms must be merged)")
-    print yellow("  --dmraid               Include dmraid support")
-    print yellow("   --selinux              Include selinux support in --dmraid")
-    print yellow("  --iscsi                Include iscsi support")
-    print yellow("  --mdadm                Include mdadm support (mdadm must be merged)")
+    print '  --bbconf=/file         Custom busybox config file (full path)'
+    print '  --bbmenuconfig         Interactive initramfs options menu'
+    print '  --linuxrc=/file        Custom linuxrc /init for the initramfs'
+    print '  --disklabel            Include support for disklabel and UUID'
+    print '  --luks                 Include LUKS support'
+    print yellow('  --lvm2                 Include LVM2 support')
+    print yellow('  --evms                 Include evms support (evms must be merged)')
+    print yellow('  --dmraid               Include dmraid support')
+    print yellow('   --selinux              Include selinux support in --dmraid')
+    print yellow('  --iscsi                Include iscsi support')
+    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
     print yellow('  --ssh                  Include openssh tools and daemon')
-    print "  --splash               Include splash support (splashutils must be merged)"
-    print "   --stheme=<theme>       Splash theme, gentoo is the default"
-    print "   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set"
-    print yellow("  --unionfs-fuse         Include unionfs-fuse support")
-    print red("  --aufs                 Include aufs support")
-    print yellow("  --firmware=/dir        Include custom firmware support")
-    print "  --nocache              Do not use cached data"
+    print '  --splash               Include splash support (splashutils must be merged)'
+    print '   --stheme=<theme>       Splash theme, gentoo is the default'
+    print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
+    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
+    print red('  --aufs                 Include aufs support')
+    print yellow('  --firmware=/dir        Include custom firmware support')
+    print '  --nocache              Do not use cached data'
+    print '  --nohostbin            Do not use host binaries but compile it all'
     print_usage_target_common()
 
 def print_usage_target_common():
     print green('Common') + ' parameters'
     print '  --conf=/file           Use a custom master config file'
-    print "  --noboot               Do not copy kernel/initramfs to /boot"
-    print "  --logfile=/file        Log to file, default to /var/log/kigen.log"
-    print "  -n, --nocolor          Do not colorize output"
-    print "  -d, --debug            Show more output"
+    print '  --noboot               Do not copy kernel/initramfs to /boot'
+    print '  --logfile=/file        Log to file, default to /var/log/kigen.log'
+    print '  -n, --nocolor          Do not colorize output'
+    print '  -d, --debug            Show more output'
 
 def print_usage_all():
     print_usage_kernel(no_extra_options=True)
