@@ -336,8 +336,9 @@ class append:
         else:
             # compile
             print
-            import e2fsprogs
-            e2fsprogs.build_sequence(self.master_config, self.temp, self.verbose)
+            from e2fsprogs import e2fsprogs
+            e2obj = e2fsprogs(self.master_config, self.temp, self.verbose)
+            e2obj.build()
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
     
