@@ -147,12 +147,12 @@ if cli['nocache'] is True:
 
 if target == 'kernel' or target == 'k':
     from kernel import kernel
-    kobject = kernel(kerneldir, master_config, arch, KV, cli, verbose)
-    kobject.build()
+    kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
+    kobj.build()
 
 if target == 'initramfs' or target == 'i':
     from initramfs import initramfs
-    iobject = initramfs(kerneldir,     \
+    iobj = initramfs(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -162,16 +162,16 @@ if target == 'initramfs' or target == 'i':
                 bootupdateset,          \
                 bootupdateinitrd,       \
                 verbose)
-    iobject.build()
+    iobj.build()
 
 if target == 'all' or target == 'a':
     logging.debug('kernel.build_sequence')
     from kernel import kernel
-    kobject = kernel(kerneldir, master_config, arch, KV, cli, verbose)
-    kobject.build()
+    kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
+    kobj.build()
     logging.debug('initramfs.build_sequence')
     from initramfs import initramfs
-    iobject = initramfs(kerneldir,     \
+    iobj = initramfs(kerneldir,     \
                 arch,                   \
                 KV,                     \
                 libdir,                 \
@@ -181,7 +181,7 @@ if target == 'all' or target == 'a':
                 bootupdateset,          \
                 bootupdateinitrd,       \
                 verbose)
-    iobject.build()
+    iobj.build()
 
 # FIXME basic systems have no /boot partition
 #   # TODO: add sysvinit to RDEPEND ebuild

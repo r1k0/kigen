@@ -3,6 +3,10 @@ import sys
 from stdout import white, green, turquoise, red, yellow
 import utils
 
+# NOTE: if we add functions as methods
+# we get TypeError: 'bool' object is not callable
+# hence no methods
+
 class kernel:
 
     def __init__(self, kerneldir, master_config, arch, KV, cli, verbose):

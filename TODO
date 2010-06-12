@@ -1,4 +1,5 @@
 TODO: --ssh use dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
+    ssh-version = x in /etc/kigen.conf
 TODO: --integrated for kernel initramfs
     it should trigger recompilation of kernel
     and not create /boot/*initramfs*
@@ -10,8 +11,15 @@ TODO: fix /dev/tty1 bug when using splash
     this prevents silent mode
 TODO: pass $PORTDIR don't assume /usr/portage
 TODO: --aufs
+    aufs-version = 0_p20100405 in /etc/kigen.conf
 TODO: --evms repair
 	sprocessor * fix
+TODO: /etc/kigen.conf
+    device-mapper-version   = 1.02.22
+    dmraid-version          = 1.0.0.rc16
+    iscsi-version           = 2.0-871
+    fuse-version            = 2.7.4
+    unionfs-fuse-version    = 0.23
 TODO: rename bb_ver variables from /etc/kigen.conf 
 	to smthing less cryptic
 TODO: replace portageq envvar PORTDIR

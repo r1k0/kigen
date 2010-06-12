@@ -70,7 +70,7 @@ class initramfs:
         ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero:
             raise error.fail('initial cpio creation failed')
-        aobject = append(self.temp,         \
+        aobj = append(self.temp,         \
                         self.KV,            \
                         self.linuxrc,       \
                         self.kernel_dir_opt,\
@@ -93,77 +93,77 @@ class initramfs:
                         self.nocache,       \
                         self.nohostbin)
         # 2) append base
-        aobject.base()
+        aobj.base()
         if ret is not zero: self.fail('baselayout')
         # 3) append busybox
         os.chdir(self.temp['work'])
-        ret = aobject.busybox()
+        ret = aobj.busybox()
         if ret is not zero: self.fail('busybox')
         # 4) append modules
         # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
-        ret = aobject.modules()
+        ret = aobj.modules()
         if ret is not zero: self.fail('modules')
         # 5) append lvm2
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.lvm2()
+            ret = aobj.lvm2()
             if ret is not zero: self.fail('lvm2')
         # 6) append dmraid
         if self.cli['dmraid'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.dmraid()
+            ret = aobj.dmraid()
             if ret is not zero: self.fail('dmraid')
         # 7) append iscsi
         if self.cli['iscsi'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.iscsi()
+            ret = aobj.iscsi()
             if ret is not zero: self.fail('iscsi')
         # 8) append evms
         if self.cli['evms'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.evms()
+            ret = aobj.evms()
             if ret is not zero: self.fail('evms')
         # 9) append mdadm
         if self.cli['mdadm'] is True:
             os.chdir(self.temp['work'])
-            ret = aobjectmdadm()
+            ret = aobjmdadm()
             if ret is not zero: self.fail('mdadm')
         # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.luks()
+            ret = aobj.luks()
             if ret is not zero: self.fail('luks')
 #       # 11) append multipath
 #       # TODO
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.e2fsprogs()
+            ret = aobj.e2fsprogs()
             if ret is not zero: self.fail('e2fsprogs')
         # 13) append ssh
         if self.cli['ssh'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.ssh()
+            ret = aobj.ssh()
             if ret is not zero: self.fail('ssh')
         # 14) append unionfs_fuse
         if self.cli['unionfs'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.unionfs_fuse()
+            ret = aobj.unionfs_fuse()
             if ret is not zero: self.fail('unionfs-fuse')
         # 15) append aufs
         if self.cli['aufs'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.aufs()
+            ret = aobj.aufs()
             if ret is not zero: self.fail('aufs')
         # 16) append splash
         if self.cli['splash'] is True:
             os.chdir(self.temp['work'])
-            ret = aobject.splash()
+            ret = aobj.splash()
             if ret is not zero: self.fail('splash')
 #        # 17) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
-#            ret = aobject.firmware()
+#            ret = aobj.firmware()
 #            if ret is not zero: self.fail('firmware')
         # 18) append overlay
         # TODO
