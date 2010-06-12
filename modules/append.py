@@ -284,13 +284,13 @@ class append:
         if os.path.isfile(cryptsetup_bin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
-            print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + white(cryptsetup_bin) + ' from host'
+            print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
             utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
             utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         elif os.path.isfile(cryptsetup_sbin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
-            print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + white(cryptsetup_sbin) + ' from host'
+            print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
             utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
             utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
@@ -390,8 +390,8 @@ class append:
         @return: bool
         """
         ret = int('0')
-        lvm2_static_bin = '/sbin/lvm.statica'
-        lvm2_bin        = '/sbin/lvma'
+        lvm2_static_bin = '/sbin/lvm.static'
+        lvm2_bin        = '/sbin/lvm'
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
@@ -400,11 +400,11 @@ class append:
             # TODO see if we can use something else than import commands
             #lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
             logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
-            print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_static_bin) + ' from host'
+            print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' from ' + white('host')
             utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
         elif os.path.isfile(lvm2_bin) and self.nohostbin is False:
             logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' from host')
-            print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_bin) + ' from host'
+            print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_bin + ' from ' + white('host')
             utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.lvm2 ' + self.master_config['lvm2-version'])
