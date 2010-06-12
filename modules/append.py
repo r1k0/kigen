@@ -431,10 +431,10 @@ class append:
     
         @return: bool
         """
-        logging.debug('initramfs.append.build_device_mapper '+self.master_config['dm_ver'])
-        print green(' * ') + turquoise('initramfs.append.build_device_mapper ') + self.master_config['dm_ver'],
+        logging.debug('initramfs.append.build_device_mapper '+self.master_config['device-mapper-version'])
+        print green(' * ') + turquoise('initramfs.append.build_device_mapper ') + self.master_config['device-mapper-version'],
     
-        if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['dm_ver']+'.tar.bz2') and self.nocache is False:
+        if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['device-mapper-version']+'.tar.bz2') and self.nocache is False:
             # use cache
             print 'from ' + white('cache')
             return
@@ -442,7 +442,7 @@ class append:
             # compile and cache
             print
             import device_mapper
-            return device_mapper.build_sequence(self.master_config, self.temp, self.verbose['std'])
+            return device_mapper.build_sequence(self.master_config, self.temp, self.verbose)
      
     def evms(self):
         """
