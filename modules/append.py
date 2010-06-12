@@ -150,7 +150,6 @@ class append:
     
         @return: bool
         """
-        import busybox
         ret = zero = int('0')
         logging.debug('initramfs.append.busybox')
         print green(' * ') + turquoise('initramfs.append.busybox ') + self.master_config['bb_ver'],
@@ -161,7 +160,8 @@ class append:
         else:
             print self.busyboxprogs
             # compile
-            ret = busybox.build_sequence( self.arch, \
+            from busybox import busybox
+            bbobj = busybox( self.arch, \
                         self.bbconf,                 \
                         self.master_config,          \
                         self.libdir,                 \
@@ -170,7 +170,9 @@ class append:
                         self.menuconfig,             \
                         self.allyesconfig,           \
                         self.mrproper,               \
-                        self.verbose['std'])
+                        self.verbose)
+            bbobj.build()
+
         # append busybox to cpio
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')

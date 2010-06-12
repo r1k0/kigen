@@ -5,301 +5,229 @@ import utils
 
 class busybox:
 
-    def __init__(self):
-        pass
+    def __init__(self,          \
+                arch,           \
+                bbconf,         \
+                master_config,  \
+                libdir,         \
+                temp,           \
+                oldconfig,      \
+                menuconfig,     \
+                allyesconfig,   \
+                mrproper,       \
+                verbose):
 
+        self.arch       = arch
+        self.bbconf     = bbconf
+        self.master_config = master_config
+        self.libdir     = libdir
+        self.temp       = temp
+        self.oldconfig  = oldconfig
+        self.menuconfig = menuconfig
+        self.allyesconfig = allyesconfig
+        self.mrproper   = mrproper
+        self.verbose    = verbose
+        self.bb_version = master_config['bb_ver']
+        self.bb_tmp     = temp['work'] + '/busybox-' + master_config['bb_ver']
+ 
     def build(self):
-        pass
+        """
+        Busybox build sequence command
+    
+        @return         bool
+        """
+        ret = zero = int('0')
+    
+        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['bb_ver']))) is not True:
+            ret = self.download()
+            if ret is not zero: self.fail('download')
+    
+        ret = self.extract()
+        if ret is not zero: self.fail('extract')
+    
+        ret = self.copy_config()
+        if ret is not zero: self.fail('copy_config')
+    
+        if self.mrproper is True:
+            ret = self.mrproper()
+            if ret is not zero: self.fail('mrproper')
+    
+        if self.allyesconfig is True:
+            ret = self.allyesconfig()
+            if ret is not zero: self.fail('allyesconfig')
+        elif self.oldconfig is True:
+            ret = self.oldconfig()
+            if ret is not zero: self.fail('oldconfig')
+        if self.menuconfig is True:
+            ret = self.menuconfig()
+            if ret is not zero: self.fail('menuconfig')
+    
+        ret = self.compile()
+        if ret is not zero: self.fail('compile')
+    
+        ret = self.strip()
+        if ret is not zero: self.fail('stip')
+    
+        ret = self.compress()
+        if ret is not zero: self.fail('compress')
+    
+        ret = self.cache()
+        if ret is not zero: self.fail('cache')
+    
+        return ret
+    
+    def download(self):
+    	"""
+    	Busybox tarball download command
+    
+    	"""
+    	print green(' * ') + '... busybox.download'
+    	bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
-def download(bb_version, temp, quiet):
-	"""
-	Busybox tarball download command
+    	return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
+    
+    def extract(self):
+    	"""
+    	Busybox tarball extract command
+    
+    	@return			boot
+    	"""
+    	print green(' * ') + '... busybox.extract'
 
-	@arg bb_version	string
-	@arg quiet 		string
-	@return			boot
-	"""
-	print green(' * ') + '... busybox.download'
-	bb_url = 'http://www.busybox.net/downloads/busybox-' + str(bb_version) + '.tar.bz2'
-	return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(temp), str(bb_version), quiet))
+    	return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
+    
+    def copy_config(self):
+    	"""
+    	Busybox copy config file routine
+    
+    	@return			bool
+    	"""
+    	print green(' * ') + '... busybox.copy_config'
+    	cpv = ''
+    	if self.verbose['set'] is '': cpv = '-v'
+    	if self.bbconf:
+    		# copy bbconf
+    		return os.system('cp %s %s %s/busybox-%s/.config' % (cpv, self.bbconf, self.temp['work'], self.bb_version))
+    	else:
+    		# copy default
+    		return os.system('cp %s %s %s/busybox-%s/.config' % (cpv, self.libdir + '/arch/' + self.arch + '/busybox.config', self.temp['work'], self.bb_version))
+    
+    def strip(self):
+    	"""
+    	Busybox binary strip routine
+    	"""
+    	print green(' * ') + '... busybox.strip'
+    	utils.chgdir(self.bb_tmp)
 
-def extract(bb_version, temp, quiet):
-	"""
-	Busybox tarball extract command
+    	return os.system('strip %s/busybox ' % (self.bb_tmp))
+    
+    def compress(self):
+    	"""
+    	Busybox binary compression routine
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.compress'
+    	utils.chgdir(self.bb_tmp)
 
-	@arg bb_version	string
-	@arg temp		dict
-	@arg quiet 		string
-	@return			boot
-	"""
-	print green(' * ') + '... busybox.extract'
-	return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(bb_version), temp['work'], quiet))
+    	return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.master_config['bb_ver']))
+    
+    def cache(self):
+    	"""
+    	Busybox cache tarball routine
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.cache'
 
-def copy_config(arch, bbconf, bb_version, libdir, temp, quiet):
-	"""
-	Busybox copy config file routine
+    	return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.master_config['bb_ver'], self.temp['cache'], self.master_config['bb_ver']))
+    
+    # busybox building functions
+    def build_command(self, target, verbose):
+    	"""
+    	Busybox Makefile bash interface
+    
+    	@arg: string
 
-	@arg arch			string
-	@arg bbconf		string
-	@arg bb_version	string
-	@arg bb_version	string
-	@arg temp 		dict
-	@arg quiet		string
-	@return			bool
-	"""
-	print green(' * ') + '... busybox.copy_config'
-	cpv = ''
-	if quiet is '': cpv = '-v'
-	if bbconf:
-		# copy bbconf
-		return os.system('cp %s %s %s/busybox-%s/.config' % (cpv, bbconf, temp['work'], bb_version))
-	else:
-		# copy default
-		return os.system('cp %s %s %s/busybox-%s/.config' % (cpv, libdir + '/arch/' + arch + '/busybox.config', temp['work'], bb_version))
+    	@return: string
+    	"""
+    	command = '%s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_config['UTILS_MAKE'],	\
+    								self.master_config['UTILS_CC'],	\
+    								self.master_config['UTILS_LD'],	\
+    								self.master_config['UTILS_AS'],	\
+    								self.arch,                      \
+    								target,                          \
+    								verbose)
+    	return command
+    
+    def mrproper(self):
+    	"""
+    	Busybox mrproper interface
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.mrproper'
+    	utils.chgdir(self.bb_tmp)
+    	command = self.build_command('mrproper', self.verbose['std'])
+    	if self.verbose['set'] is '':
+    		print command
 
-def strip(bb_tmp, master_config, temp):
-	"""
-	Busybox binary strip routine
+    	return os.system(command)
+    
+    def oldconfig(self):
+    	"""
+    	Busybox oldconfig interface
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.oldconfig'
+    	utils.chgdir(self.bb_tmp)
+#    	return os.system('make oldconfig')
+    	command = self.build_command('oldconfig', '')
+    	if self.verbose['set'] is '':
+    		print command
 
-	@arg: string
-	@arg: dict
-	@arg: string
-	"""
-	print green(' * ') + '... busybox.strip'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	return os.system('strip %s/busybox ' % (bb_tmp))
+    	return os.system(command)
+    
+    def allyesconfig(self):
+    	"""
+    	Busybox allyesconfig interface
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.allyesconfig'
+    	utils.chgdir(self.bb_tmp)
+    	command = self.build_command('allyesconfig', self.verbose['std'])
+    	if self.verbose['set'] is '':
+    		print command
 
-def compress(bb_tmp, master_config, temp): # TODO: pass arch?
-	"""
-	Busybox binary compression routine
+    	return os.system(command)
+    
+    def menuconfig(self):
+    	"""
+    	Busybox menuconfig interface
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.menuconfig'
+    	utils.chgdir(self.bb_tmp)
+    	command = self.build_command('menuconfig', '')
+    	if self.verbose['set'] is '':
+    		print command
 
-	@arg: string
-	@arg: dict
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.compress'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (bb_tmp, temp['work'], master_config['bb_ver']))
+    	return os.system(command)
+    
+    def compile(self):
+    	"""
+    	Busybox compile interface
+    
+    	@return: bool
+    	"""
+    	print green(' * ') + '... busybox.compile'
+    	utils.chgdir(self.bb_tmp)
+    	command = self.build_command('all', self.verbose['std'])
+    	if self.verbose['set'] is '':
+    		print command
 
-def cache(bb_tmp, master_config, temp): # TODO pass arch?
-	"""
-	Busybox cache tarball routine
-
-	@arg: string
-	@arg: dict
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.cache'
-	# TODO: use os.file.cp or smthg like that
-	return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (temp['work'], master_config['bb_ver'], temp['cache'], master_config['bb_ver']))
-
-# busybox building functions
-def build_command(master_config, arch, target, quiet):
-	"""
-	Busybox Makefile bash interface
-
-	@arg: dict
-	@arg: string
-	@arg: string
-	@arg: string
-	@return: string
-	"""
-	command = '%s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (master_config['UTILS_MAKE'],	\
-								master_config['UTILS_CC'],	\
-								master_config['UTILS_LD'],	\
-								master_config['UTILS_AS'],	\
-								arch,				\
-								target,				\
-								quiet)
-	return command
-
-def mrproper(master_config, temp, arch, quiet):
-	"""
-	Busybox mrproper interface
-
-	@arg: dict
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.mrproper'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	command = build_command(master_config, arch, 'mrproper', quiet)
-	if quiet is '':
-		print command
-	return os.system(command)
-
-def oldconfig(master_config, temp, arch, quiet):
-	"""
-	Busybox oldconfig interface
-
-	@arg: dict
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.oldconfig'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	return os.system('make oldconfig')
-	command = build_command(master_config, arch, 'oldconfig', '')
-	if quiet is '':
-		print command
-	return os.system(command)
-
-def allyesconfig(master_config, temp, arch, quiet):
-	"""
-	Busybox allyesconfig interface
-
-	@arg: dict
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.allyesconfig'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	command = build_command(master_config, arch, 'allyesconfig', quiet)
-	if quiet is '':
-		print command
-	return os.system(command)
-
-def menuconfig(master_config, temp, arch, quiet):
-	"""
-	Busybox menuconfig interface
-
-	@arg: dict
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.menuconfig'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	command = build_command(master_config, arch, 'menuconfig', '')
-	if quiet is '':
-		print command
-	return os.system(command)
-
-def compile(master_config, temp, arch, quiet):
-	"""
-	Busybox compile interface
-
-	@arg: dict
-	@arg: dict
-	@arg: string
-	@arg: string
-	@return: bool
-	"""
-	print green(' * ') + '... busybox.compile'
-	utils.chgdir(temp['work'] + '/busybox-' + master_config['bb_ver'])
-	command = build_command(master_config, arch, 'all', quiet)
-	if quiet is '':
-		print command
-	return os.system(command)
-
-#def busybox(master_config, quiet):
-#       """
-#        Busybox mrproper interface
-#
-#        @arg: dict
-#        @arg: string
-#        @return: bool
-#        """
-#       print ' * ' + '... busybox.busybox'
-#   	utils.chgdir('/var/tmp/funkernel/busybox-' + master_config['bb_ver'])
-#       return os.system('make busybox')
-
-# busybox sequence
-def build_sequence(arch, 			\
-				bbconf, 			\
-				master_config,		\
-				libdir,			\
-				temp,			\
-				oldConfig,			\
-				menuConfig,		\
-				allyesConfig,		\
-				mrProper,			\
-				quiet):
-	"""
-	Busybox build sequence command
-
-	@arg arch			string
-	@arg bbconf		string
-	@arg master_config	dict
-	@arg libdir		string
-	@arg temp 		dict
-	@arg oldConfig		bool
-	@arg menuConfig	bool
-	@arg allYesConfig	bool
-	@arg mrProper		bool
-	@return			bool
-	"""
-	ret = zero = int('0')
-
-	if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['bb_ver']))) is not True:
-		ret = download(master_config['bb_ver'], temp, quiet)
-		if ret is not zero: 
-			print red('ERR')+ ': ' +'initramfs.busybox.download() failed'
-			sys.exit(2)
-
-	ret = extract(master_config['bb_ver'], temp, quiet)
-	if ret is not zero: 
-		print red('ERR')+ ': ' +'initramfs.busybox.extract() failed'
-		sys.exit(2)
-
-	ret = copy_config(arch, bbconf, master_config['bb_ver'], libdir, temp, quiet)
-	if ret is not zero: 
-		print red('ERR')+ ': ' +'initramfs.busybox.copy_config() failed'
-		sys.exit(2)
-
-	# customize patches given bb version
-	# later versions don't need patches at all :)
-#	apply_patches(master_config['bb_ver'], libdir + "/patches/busybox/" + master_config['bb_ver'], temp, quiet)
-
-	if mrProper is True:
-		ret = mrproper(master_config, temp, arch, quiet)
-		if ret is not zero: 
-			print red('ERR')+ ': ' +'initramfs.busybox.mrproper() failed'
-			sys.exit(2)
-
-	if allyesConfig is True:
-		ret = allyesconfig(master_config, temp, arch, quiet)
-		if ret is not zero: 
-			print red('ERR')+ ': ' +'initramfs.busybox.allyesconfig() failed'
-			sys.exit(2)
-	elif oldConfig is True:
-		ret = oldconfig(master_config, temp, arch, quiet)
-		if ret is not zero:
-			print red('ERR')+ ': ' +'initramfs.busybox.oldconfig() failed'
-			sys.exit(2)
-	if menuConfig is True:
-		ret = menuconfig(master_config, temp, arch, quiet)
-		if ret is not zero: 
-			print red('ERR')+ ': ' +'initramfs.busybox.menuconfig() failed'
-			sys.exit(2)
-
-	ret = compile(master_config, temp, arch, quiet)
-	if ret is not zero:
-		print red('ERR')+ ': ' +'initramfs.busybox.compile() failed'
-		sys.exit(2)
-
-	ret = strip(temp['work'] + '/busybox-' + master_config['bb_ver'], master_config, temp)
-	if ret is not zero: 
-		print red('ERR')+ ': ' +'initramfs.busybox.strip() failed'
-		sys.exit(2)
-
-	ret = compress(temp['work'] + '/busybox-' + master_config['bb_ver'], master_config, temp)
-	if ret is not zero: 
-		print red('ERR')+ ': ' +'initramfs.busybox.compress() failed'
-		sys.exit(2)
-
-	ret = cache(temp['work'] + '/busybox-' + master_config['bb_ver'], master_config, temp)
-	if ret is not zero: 
-		print red('ERR')+ ': ' +'initramfs.busybox.cache() failed'
-		sys.exit(2)
-
-	return ret
+    	return os.system(command)
+    
