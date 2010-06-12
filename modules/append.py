@@ -152,9 +152,9 @@ class append:
         """
         ret = zero = int('0')
         logging.debug('initramfs.append.busybox')
-        print green(' * ') + turquoise('initramfs.append.busybox ') + self.master_config['bb_ver'],
+        print green(' * ') + turquoise('initramfs.append.busybox ') + self.master_config['busybox-version'],
     
-        if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.master_config['bb_ver']+'.tar.bz2') and self.nocache is False:
+        if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.master_config['busybox-version']+'.tar.bz2') and self.nocache is False:
             # use cache
             print 'from ' + white('cache')
         else:
@@ -176,7 +176,7 @@ class append:
         # append busybox to cpio
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
-        utils.sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['bb_ver'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
+        utils.sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         utils.sprocessor('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         utils.sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
         utils.sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)

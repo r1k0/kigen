@@ -1,4 +1,3 @@
-TODO: --nohost will compile it all and not use host binaries
 TODO: --ssh use dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
 TODO: --integrated for kernel initramfs
     it should trigger recompilation of kernel
@@ -7,13 +6,9 @@ TODO: --statickern option (see genkernel --static)
 TODO: remove portageq call to work on debian
 TODO: make kigen ebuild depend on python-2.6
 TODO: replace error calls w/ raise errortype
-TODO: add vi or nano to busybox config by default
-    then let the user set it up in /etc/kigen.conf
 TODO: fix /dev/tty1 bug when using splash
     this prevents silent mode
 TODO: pass $PORTDIR don't assume /usr/portage
-TODO: download and compile statically cryptsetup in luks.py
-TODO: download and compile statically evms in evms.py
 TODO: --aufs
 TODO: --evms repair
 	sprocessor * fix

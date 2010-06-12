@@ -27,8 +27,8 @@ class busybox:
         self.allyesconfig = allyesconfig
         self.mrproper   = mrproper
         self.verbose    = verbose
-        self.bb_version = master_config['bb_ver']
-        self.bb_tmp     = temp['work'] + '/busybox-' + master_config['bb_ver']
+        self.bb_version = master_config['busybox-version']
+        self.bb_tmp     = temp['work'] + '/busybox-' + master_config['busybox-version']
  
     def build(self):
         """
@@ -38,7 +38,7 @@ class busybox:
         """
         ret = zero = int('0')
     
-        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['bb_ver']))) is not True:
+        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
             ret = self.download()
             if ret is not zero: self.fail('download')
     
@@ -130,7 +130,7 @@ class busybox:
     	print green(' * ') + '... busybox.compress'
     	utils.chgdir(self.bb_tmp)
 
-    	return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.master_config['bb_ver']))
+    	return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.master_config['busybox-version']))
     
     def cache(self):
     	"""
@@ -140,7 +140,7 @@ class busybox:
     	"""
     	print green(' * ') + '... busybox.cache'
 
-    	return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.master_config['bb_ver'], self.temp['cache'], self.master_config['bb_ver']))
+    	return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.master_config['busybox-version'], self.temp['cache'], self.master_config['busybox-version']))
     
     # busybox building functions
     def build_command(self, target, verbose):

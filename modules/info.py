@@ -49,12 +49,12 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
 
     print green('OS flavor:             ') + white(flavor)
     print green('Architecture:          ') + white(arch)
-    print green('Kernel source:         ') + white(master_config['kernel_src_dir'])+'-'+white(KV)
+    print green('Kernel source:         ') + white(master_config['kernel-sources'])+'-'+white(KV)
     print green('Funkernel root:        ') + white(libdir)
     print
     
     print green('Versions')
-    print '  Busybox:             ' + white(master_config['bb_ver'])
+    print '  Busybox:             ' + white(master_config['busybox-version'])
     print '  e2fsprogs:           ' + white(master_config['e2fsprogs-version'])
     print '  LVM2:                ' + white(master_config['lvm_ver'])
     print '  device-mapper:       ' + white(master_config['dm_ver'])

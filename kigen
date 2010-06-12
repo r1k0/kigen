@@ -70,9 +70,9 @@ else:
 
 # set default kernel sources
 kerneldir = '/usr/src/linux'
-if 'kernel_src_dir' in master_config:
+if 'kernel-sources' in master_config:
     # if set grab value from config file
-    kerneldir = master_config['kernel_src_dir']
+    kerneldir = master_config['kernel-sources']
 
 # Funtoo bootupdate integration
 import bootupdate
