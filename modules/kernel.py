@@ -6,6 +6,7 @@ import utils
 class kernel:
 
     def __init__(self, kerneldir, master_config, arch, KV, cli, verbose):
+
         self.kerneldir      = kerneldir
         self.master_config  = master_config
         self.arch           = arch
