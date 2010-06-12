@@ -1,8 +1,6 @@
 import os
 import sys
 from stdout import white, green, turquoise
-import error
-import warning
 import utils
 import logging
 import commands

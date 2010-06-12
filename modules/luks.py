@@ -7,11 +7,11 @@ class luks:
 
     def __init__(self, master_config, temp, verbose):
 
-        self.master_config = master_config
-        self.temp = temp
-        self.verbose = verbose
-        self.luks_ver = master_config['luks-version']
-        self.lukstmp = temp['work'] + '/cryptsetup-' + master_config['luks-version']
+        self.master_config  = master_config
+        self.temp           = temp
+        self.verbose        = verbose
+        self.luks_ver       = master_config['luks-version']
+        self.lukstmp        = temp['work'] + '/cryptsetup-' + master_config['luks-version']
 
     def build(self):
         """
