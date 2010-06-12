@@ -4,10 +4,10 @@ kigen \- a GNU/Linux kernel|initramfs generator.
 .SH SYNOPSIS
 \fBkigen\fR \fI<option/target> [options]\fR
 .SH INTRODUCTION
-GenKI is designed to allow users to build their own kernel/initramfs
+KIGen is designed to allow users to build their own kernel/initramfs
 provided adequate configuration and parameters.
 .PP
-GenKI so far provides the following features:
+KIGen so far provides the following features:
   - kernel build
     - bzImage
     - modules
@@ -36,24 +36,16 @@ actions are supported:
 .RS
 Build only the initramfs.
 .RE
-.I \fBbzImage\fR
-.RS
-Build only the kernel.
-.RE
 .I \fBkernel\fR
 .RS
 Build only the kernel and the modules.
-.RE
-.I \fBmodules\fR
-.RS
-Build only modules.
 .RE
 .I \fBall\fR
 .RS
 Build all steps - kernel, modules, initramfs.
 .RE
 .SH OPTIONS
-GenKI supports the following options.
+KIGen supports the following options.
 .TP
 \fB\-d, \-\-debug
 Debug.
