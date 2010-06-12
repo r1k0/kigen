@@ -1,6 +1,5 @@
 import os
 import sys
-import error
 from stdout import white, green, turquoise
 import utils
 
