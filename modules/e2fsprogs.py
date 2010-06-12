@@ -64,7 +64,7 @@ class e2fsprogs:
         e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/' + \
                     str(self.e2fsprogs_ver)  + \
                     '/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
-        return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (self.e2fsprogs_url, utils.get_portdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, utils.get_portdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
     
     def extract(self):
         """
