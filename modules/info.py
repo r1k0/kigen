@@ -20,7 +20,7 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
     debianversion  = '/etc/debian_version'
     archrelease    = '/etc/arch-release'
 
-    # funtoo overwrites /etc/gentoo-release we catch it anyway
+    # Funtoo overwrites /etc/gentoo-release we catch it anyway
     if os.path.isfile(gentoorelease):
         f = open(gentoorelease)
         flavor = f.readline()
@@ -54,16 +54,17 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
     print
     
     print green('Versions')
-    print '  Busybox:             ' + white(master_config['busybox-version'])
+    print '  busybox:             ' + white(master_config['busybox-version'])
     print '  e2fsprogs:           ' + white(master_config['e2fsprogs-version'])
-    print '  LVM2:                ' + white(master_config['lvm_ver'])
-    print '  device-mapper:       ' + white(master_config['dm_ver'])
-    print '  iSCSI:               ' + white(master_config['iscsi_ver'])
-    print '  DMRAID:              ' + white(master_config['dmraid_ver'])
-    print '  Unionfs-fuse:        ' + white(master_config['unionfs_fuse_ver'])
-    print '  FUSE:                ' + white(master_config['fuse_ver'])
-    print '  aufs:                ' + white(master_config['aufs_ver'])
-    print '  LUKS:                ' + white(master_config['luks-version'])
+    print '  lvm2:                ' + white(master_config['lvm2-version'])
+    print '  device-mapper:       ' + white(master_config['device-mapper-version'])
+    print '  iscsi:               ' + white(master_config['iscsi-version'])
+    print '  dmraid:              ' + white(master_config['dmraid-version'])
+    print '  unionfs-fuse:        ' + white(master_config['unionfs-fuse-version'])
+    print '  fuse:                ' + white(master_config['fuse-version'])
+    print '  aufs:                ' + white(master_config['aufs-version'])
+    print '  luks:                ' + white(master_config['luks-version'])
+    print '  ssh:                 ' + white(master_config['ssh-version'])
     print
     print green('Busybox settings')
     print '  UTILS_MAKE:          ' + white(master_config['UTILS_MAKE'])
@@ -74,7 +75,6 @@ def show(kernel_dir_opt, master_config, arch, libdir, KV, corebootset, corebooti
     print green('Busybox features')
     for i in master_config['busybox-progs'].split():
         print '  /bin/' + white(i) +' -> busybox'
-#    print white('  %s' % master_config['busybox-progs'])
     print
     print green('Kernel settings')
     print '  DEFAULT_KERNEL_MAKE: ' + white(master_config['DEFAULT_KERNEL_MAKE'])
