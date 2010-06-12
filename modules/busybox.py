@@ -76,6 +76,15 @@ class busybox:
     
         return ret
     
+    def fail(self, step):
+        """
+        @arg step   string
+
+        @return     exit
+        """
+        print red('error')+': initramfs.busybox.'+step+'() failed'
+        sys.exit(2)
+
     def download(self):
     	"""
     	Busybox tarball download command
