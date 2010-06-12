@@ -338,7 +338,7 @@ def print_usage_initramfs():
     print '  --linuxrc=/file        Custom linuxrc /init for the initramfs'
     print '  --disklabel            Include support for disklabel and UUID'
     print '  --luks                 Include LUKS support'
-    print yellow('  --lvm2                 Include LVM2 support')
+    print '  --lvm2                 Include LVM2 support'
 #    print yellow('  --evms                 Include evms support (evms must be merged)')
 #    print yellow('  --dmraid               Include dmraid support')
 #    print yellow('   --selinux              Include selinux support in --dmraid')

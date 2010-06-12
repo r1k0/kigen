@@ -40,6 +40,7 @@ class device_mapper:
         if ret is not zero: self.fail('install')
 
         # TODO remove manpage rm -rf %s/device-mapper/man % temp['work']
+        os.system('rm -rf %s/man' % self.dm_tmp)
 
         ret = self.strip()
         if ret is not zero: self.fail('strip')
@@ -83,7 +84,6 @@ class device_mapper:
 
     	os.system('tar xvfz %s/distfiles/device-mapper.%s.tgz -C %s %s' % (utils.get_portdir(self.temp), self.dm_ver, self.temp['work'], self.verbose['std']))
     
-    # device-mapper building functions
     def configure(self):
     	"""
     	Configure device-mapper source code

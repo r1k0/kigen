@@ -293,9 +293,9 @@ class append:
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + white(cryptsetup_sbin) + ' from host'
             utils.sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
             utils.sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-        elif self.nohostbin is True:
+        else:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.master_config['luks-version'],
-            logging.debug('initramfs.append_luks ' + self.master_config['luks-version'])
+            logging.debug('initramfs.append.luks ' + self.master_config['luks-version'])
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.master_config['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
@@ -396,28 +396,41 @@ class append:
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
-        if os.path.isfile(lvm2_static_bin):
+        if os.path.isfile(lvm2_static_bin) and self.nohostbin is False:
             # TODO see if we can use something else than import commands
             #lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
             logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_static_bin) + ' from host'
             utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
-        elif os.path.isfile(lvm2_bin):
+        elif os.path.isfile(lvm2_bin) and self.nohostbin is False:
             logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + white(lvm2_bin) + ' from host'
             utils.sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
-            self.build_device_mapper()
-    
-            logging.debug('initramfs.append.lvm2 ')
-            print green(' * ') + turquoise('initramfs.append.lvm2 ')
-    
-            import lvm2
-            lvm2.build_sequence(self.master_config, self.temp, self.verbose)
-    
-            utils.sprocessor('bzip2 -d %s' % self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.verbose)
-            utils.sprocessor('cp %s/lvm.static-%s %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache'], self.master_config['lvm2-version'], self.temp['work']), self.verbose)
-    
+            logging.debug('initramfs.append.lvm2 ' + self.master_config['lvm2-version'])
+            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2') and self.nocache is False:
+                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version'],
+                # use cache
+                print 'from ' + white('cache')
+
+                # extract cache
+                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
+                utils.sprocessor('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+            else: 
+                # compile and cache
+
+# this used to be required before lvm2 shipped libs from dm
+#                self.build_device_mapper()
+
+                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version']
+                from lvm2 import lvm2
+                lvm2obj = lvm2(self.master_config, self.temp, self.verbose)
+                lvm2obj.build()
+
+                # extract cache
+                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
+                utils.sprocessor('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+
         if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
             utils.sprocessor('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
     
@@ -444,6 +457,8 @@ class append:
             from device_mapper import device_mapper
             dmobj = device_mapper(self.master_config, self.temp, self.verbose)
             return dmobj.build()
+
+        # TODO extract cache d'oh
      
     def evms(self):
         """
