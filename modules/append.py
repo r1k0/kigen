@@ -441,8 +441,9 @@ class append:
         else:
             # compile and cache
             print
-            import device_mapper
-            return device_mapper.build_sequence(self.master_config, self.temp, self.verbose)
+            from device_mapper import device_mapper
+            dmobj = device_mapper(self.master_config, self.temp, self.verbose)
+            return dmobj.build()
      
     def evms(self):
         """
