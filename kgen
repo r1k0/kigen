@@ -84,7 +84,6 @@ from kgen.kernel import kernel
 kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
 kobj.build()
 
-print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
      if cli['kernname'] is '':

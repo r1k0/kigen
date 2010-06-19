@@ -122,7 +122,6 @@ iobj = initramfs(kerneldir,         \
             verbose)
 iobj.build()
 
-print
 # copy kernel/initramfs to /boot
 if cli['noboot'] is False:
     print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
