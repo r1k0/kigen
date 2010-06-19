@@ -1,0 +1,109 @@
+#!/usr/bin/env python2.6
+
+import sys
+import os
+import logging
+import subprocess
+
+if os.getuid() != 0:
+    print "Get rool pal!"
+    sys.exit(2)
+
+# import /libs
+binpath = os.path.abspath(sys.argv[0])
+if os.path.islink(binpath):
+    binpath = os.readlink(binpath)
+# this is set up by kigen ebuild
+if binpath == '/usr/sbin/kgen':
+    # kigen is installed (likely on portage only) for now
+    libdir = '/usr/share/kigen'
+    # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
+    pyv = os.popen('eselect python show --python2').read().strip()
+    sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen")
+else:
+    libdir = os.path.dirname(binpath)
+    sys.path.append(libdir+'/modules')
+
+# import python libs
+sys.path.append(libdir)
+
+# hat trick
+cliargs = sys.argv[1:]
+if "--nocolor" in cliargs or "-n" in cliargs:
+    from nocolor import green, turquoise, red, yellow, white
+    os.environ['KGEN_STDOUT'] = '1'
+else:
+    try:
+        from portage.output import green, turquoise, red, yellow, white
+        os.environ['KGEN_STDOUT'] = '0'
+    except:
+        from nocolor import green, turquoise, red, yellow, white
+        os.environ['KGEN_STDOUT'] = '1'
+
+# kgen modules are ready to be called
+from config import master_config, temp
+import kgen.cliparser
+import kgen.utils
+
+if len(sys.argv) < 1:
+    kgen.cliparser.print_usage()
+    sys.exit(2)
+
+# parse command line parameters
+cli, verbose = kgen.cliparser.parse()
+
+# setup logfile
+if os.path.isfile(cli['logfile']):
+    os.remove(cli['logfile'])
+logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
+logging.debug(cli)
+
+# parse kigen config file
+kigen_conf = cli['conf']
+if os.path.isfile(kigen_conf):
+    master_config_temp = kgen.utils.parse_config_file(kigen_conf)
+    master_config.update(master_config_temp)
+else:
+    print 'missing file: ' + red(kigen_conf) + '.'
+    sys.exit(2)
+
+# set default kernel sources
+kerneldir = '/usr/src/linux'
+if 'kernel-sources' in master_config:
+    # if set grab value from config file
+    kerneldir = master_config['kernel-sources']
+
+# what am I?
+arch = kgen.utils.identify_arch()
+#os = utils.identify_os()
+
+# get kernel version from the Makefile source itself
+KV = kgen.utils.get_kernel_version(kerneldir)
+
+from kgen.kernel import kernel
+kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
+kobj.build()
+
+print
+# copy kernel/initramfs to /boot
+if cli['noboot'] is False:
+     if cli['kernname'] is '':
+         print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
+         kgen.utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
+     else:
+         print green(' * produced ') + '/boot/' + cli['kernname']
+         kgen.utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['kernname']), verbose)
+     print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
+     kgen.utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
+
+# leave /boot alone but tell the user where to find his kernel/initramfs
+elif cli['noboot'] is True:
+    logging.debug(kerneldir+'/arch/x86/boot/bzImage')
+    print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
+    logging.debug(kerneldir+'/System.map')
+    print green(' * produced ') + kerneldir+'/System.map'
+
+# TODO unset os.environ['IGEN_STDOUT']?
+
+sys.exit(0)
+

@@ -1,6 +1,6 @@
 import os
 import sys
-from stdout import white, green, turquoise
+from stdout import white, green, turquoise, red, yellow
 from append import append
 import utils
 import logging
@@ -28,11 +28,10 @@ class initramfs:
         self.libdir             = libdir
         self.master_config      = master_config # TODO replace 
         self.linuxrc            = cli['linuxrc']
-        self.oldconfig          = cli['bboldconfig']
-        self.menuconfig         = cli['bbmenuconfig']
-        self.allyesconfig       = cli['allyesconfig']
+        self.oldconfig          = cli['oldconfig']
+        self.menuconfig         = cli['menuconfig']
+#        self.allyesconfig       = cli['allyesconfig']
         self.mrproper           = cli['mrproper']
-        self.bbconf             = cli['bbconf']
         self.nocache            = cli['nocache']
         self.firmware           = cli['firmware']
         self.verbosestd         = verbose['std']
@@ -41,7 +40,7 @@ class initramfs:
         self.temproot           = temp['root']
         self.tempcache          = temp['cache']
         self.temp               = temp # TODO replace 
-        self.bbconf             = cli['bbconf']
+        self.dotconfig          = cli['dotconfig']
         self.nocache            = cli['nocache']
         self.firmware           = cli['firmware']
         self.cli                = cli # TODO replace
@@ -68,8 +67,7 @@ class initramfs:
 
         # 1) create initial cpio and append object
         ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
-        if ret is not zero:
-            raise error.fail('initial cpio creation failed')
+        if ret is not zero: self.fail('cpio')
         aobj = append(self.temp,         \
                         self.KV,            \
                         self.linuxrc,       \
@@ -79,10 +77,10 @@ class initramfs:
                         self.libdir,        \
                         self.oldconfig,     \
                         self.menuconfig,    \
-                        self.allyesconfig,  \
+#                        self.allyesconfig,  \
                         self.mrproper,      \
                         self.verbose,       \
-                        self.bbconf,        \
+                        self.dotconfig,        \
                         self.master_config['busybox-progs'],  \
                         self.bootupdateset,   \
                         self.bootupdateinitrd,\

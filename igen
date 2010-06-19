@@ -1,0 +1,139 @@
+#!/usr/bin/env python2.6
+
+import sys
+import os
+import logging
+import subprocess
+
+if os.getuid() != 0:
+    print "Get rool pal!"
+    sys.exit(2)
+
+# import /libs
+binpath = os.path.abspath(sys.argv[0])
+if os.path.islink(binpath):
+    binpath = os.readlink(binpath)
+# this is set up by kigen ebuild
+if binpath == '/usr/sbin/igen':
+       # kigen is installed (likely on portage only) for now
+    libdir = '/usr/share/kigen'
+    # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
+    pyv = os.popen('eselect python show --python2').read().strip()
+    sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen")
+else:
+    libdir = os.path.dirname(binpath)
+    sys.path.append(libdir+'/modules')
+# import python libs
+sys.path.append(libdir)
+
+# hat trick
+cliargs = sys.argv[1:]
+if "--nocolor" in cliargs or "-n" in cliargs:
+    from nocolor import green, turquoise, red, yellow, white
+    os.environ['IGEN_STDOUT'] = '1'
+else:
+    try:
+        from portage.output import green, turquoise, red, yellow, white
+        os.environ['IGEN_STDOUT'] = '0'
+    except:
+        from nocolor import green, turquoise, red, yellow, white
+        os.environ['IGEN_STDOUT'] = '1'
+
+# igen modules are ready to be called
+from config import master_config, temp
+import igen.cliparser
+import igen.utils
+
+if len(sys.argv) < 1:
+    igen.cliparser.print_usage()
+    sys.exit(2)
+
+# parse command line parameters
+cli, verbose = igen.cliparser.parse()
+
+# setup logfile
+if os.path.isfile(cli['logfile']):
+    os.remove(cli['logfile'])
+logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
+logging.debug(cli)
+
+# parse kigen config file
+kigen_conf = cli['config']
+if os.path.isfile(kigen_conf):
+    master_config_temp = igen.utils.parse_config_file(kigen_conf)
+    master_config.update(master_config_temp)
+else:
+    print 'missing file: ' + red(kigen_conf) + '.'
+    sys.exit(2)
+
+# set default kernel sources
+kerneldir = '/usr/src/linux'
+if 'kernel-sources' in master_config:
+    # if set grab value from config file
+    kerneldir = master_config['kernel-sources']
+
+# Funtoo bootupdate integration
+import igen.bootupdate
+bootupdateinitrd = igen.bootupdate.get_boot_initrd()
+if bootupdateinitrd:
+    bootupdateset = True
+else:
+    bootupdateset = False
+
+# what am I?
+arch = igen.utils.identify_arch()
+#os = utils.identify_os()
+
+# get kernel version from the Makefile source itself
+KV = igen.utils.get_kernel_version(kerneldir)
+
+try:
+    # try creating temp dirs
+    igen.utils.sprocessor('mkdir -p %s' % temp['root'],  verbose)
+    igen.utils.sprocessor('mkdir -p %s' % temp['work'],  verbose)
+    igen.utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+    igen.utils.sprocessor('mkdir -p %s' % temp['distfiles'], verbose)
+except:
+    # don't mind
+    pass
+
+# ensure temp['work'] is clean
+import shutil
+if os.path.isdir(temp['work']):
+    shutil.rmtree(temp['work'])
+    igen.utils.sprocessor('mkdir -p %s' % temp['work'], verbose)
+
+# --nocache
+if cli['nocache'] is True:
+    if os.path.isdir(temp['cache']):
+        shutil.rmtree(temp['cache'])
+        igen.utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+
+from igen.initramfs import initramfs
+iobj = initramfs(kerneldir,         \
+            arch,                   \
+            KV,                     \
+            libdir,                 \
+            master_config,          \
+            cli,                    \
+            temp,                   \
+            bootupdateset,          \
+            bootupdateinitrd,       \
+            verbose)
+iobj.build()
+
+print
+# copy kernel/initramfs to /boot
+if cli['noboot'] is False:
+    print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
+    igen.utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+
+# leave /boot alone but tell the user where to find his kernel/initramfs
+elif cli['noboot'] is True:
+    logging.debug(temp['cache']+'/initramfs-cpio.gz')
+    print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
+
+# TODO unset os.environ['IGEN_STDOUT']?
+
+sys.exit(0)
+

@@ -1,0 +1,122 @@
+.TH IGEN "8" "June 2010" "kigen-0.1.1" "Funtoo Linux"
+.SH NAME
+igen \- a GNU/Linux initramfs generator.
+.SH SYNOPSIS
+\fBigen\fR \fI [options]\fR
+.SH INTRODUCTION
+IGen is designed to allow users to build their own initramfs
+provided adequate configuration and parameters.
+.PP
+KIGen so far provides the following features:
+  - kernel build using kgen
+    - bzImage
+    - modules
+  - initramfs build using igen
+    - kernel modules
+    - busybox
+    - blkid
+    - LVM2
+    - LUKS
+.SH USAGE
+It is at least required to pass a <target> parameter to run kigen.
+You can add any appropriate [options] to customize its behavior.
+The most commonly used syntax would be:
+.PP
+# igen --lvm2 --disklabel --splash
+.PP
+This would successively populate an initramfs.
+Note that the resulting output is appended into /boot, it is up to the user
+to ensure /boot is correctly mounted.
+.SH ACTIONS
+A target tells kigen what you want it to do - the following
+actions are supported:
+.PP
+.I \fBinitramfs\fR
+.RS
+Build only the initramfs.
+.RE
+.I \fBkernel\fR
+.RS
+Build only the kernel and the modules.
+.RE
+.I \fBall\fR
+.RS
+Build all steps - kernel, modules, initramfs.
+.RE
+.SH OPTIONS
+KIGen supports the following options.
+.TP
+\fB\-d, \-\-debug
+Debug.
+.TP
+\fB\-\-kconf=\fR</foo/bar/.config>
+Provide a customized .config file for the kernel.
+.TP
+\fB\-\-mrproper
+Clean precompiled objects and configuration.
+.TP
+\fB\-\-oldconfig
+Will ask for new kernel options.
+.TP
+\fB\-\-menuconfig
+Interactive kernel/initramfs options menu.
+.TP
+\fB\-\-allyesconfig
+Say yes to all kernel/initramfs options.
+.TP
+\fB\-\-allnoconfig
+Say no to all kernel options.
+.TP
+\fB\-\-luks
+Include LUKS support. Append a static 'cryptsetup' binary to the initramfs.
+.TP
+\fB\-\-lvm2
+Include LVM2 support. Append a static 'lvm' binary to the initramfs.
+.TP
+\fB\-\-evms
+Include evms support (evms must be merged).
+.TP
+\fB\-\-dmraid
+Include dmraid support.
+.TP
+\fB\-\-iscsi
+Include iscsi support.
+.TP
+\fB\-\-mdadm
+Include mdadm support (mdadm must be merged).
+.TP
+\fB\-\-splash
+Include splash support (splashutils must be merged).
+.TP
+\fB\-\-stheme=<theme>
+Splash theme.
+.TP
+\fB\-\-sres=INTxINT,INTxINT
+Splash resolution,comma separated list of INTxINT.
+.TP
+\fB\-\-unionfs-fuse
+Include unionfs support.
+.TP
+\fB\-\-aufs
+Include aufs support.
+.TP
+\fB\-\-linuxrc=<file>
+Include custom linuxrc
+.TP
+\fB\-\-firmware=/dir
+Include custom firmware support.
+.TP
+\fB\-\-nocache
+Do not use cached data.
+.TP
+\fB\-\-noboot
+Do not copy kernel/initramfs to /boot.
+.TP
+\fB\-\-logfile=/file
+Log to file.
+.TP
+.RE
+.SH AUTHORS
+.nf
+erick 'r1k0' michau <erick@openchill.org>
+.fi

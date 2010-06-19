@@ -16,40 +16,44 @@ class kernel:
         self.arch           = arch
         self.KV             = KV
         self.verbose        = verbose
-        self.kconf          = cli['kconf']
+        self.dotconfig      = cli['dotconfig']
         self.mrproper       = cli['mrproper']
         self.allyesconfig   = cli['allyesconfig']
         self.allnoconfig    = cli['allnoconfig']
-        self.menuconfig     = cli['kmenuconfig']
-        self.oldconfig      = cli['koldconfig']
+        self.menuconfig     = cli['menuconfig']
+        self.oldconfig      = cli['oldconfig']
         self.quiet          = verbose['std']
         self.nomodinstall   = cli['nomodinstall']
         self.fakeroot       = cli['fakeroot']
         self.nosaveconfig   = cli['nosaveconfig']
+        self.clean          = cli['clean']
 
     def build(self):
         """
         Build kernel
         """
         ret = zero = int('0')
-        if self.kconf:
+        if self.dotconfig:
             # backup the previous .config found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import time
                 copy_dotconfig(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(time()), self.quiet)
             # copy the custom .config
-            copy_dotconfig(self.kconf, self.kerneldir + '/.config', self.quiet)
+            copy_dotconfig(self.dotconfig, self.kerneldir + '/.config', self.quiet)
     
         if self.mrproper is True:
             ret = mrproper(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('mrproper')
+        if self.clean is True:
+            ret = clean(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            if ret is not zero: self.fail('clean')
         if self.allyesconfig is True:
             ret = allyesconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('allyesconfig')
         elif self.allnoconfig is True:
             ret = allnoconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('allnoconfig')
-        if self.menuconfig is True or self.kconf is not '':
+        if self.menuconfig is True or self.dotconfig is not '':
             ret = menuconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('menuconfig')
         if self.oldconfig is True:
@@ -146,6 +150,23 @@ def mrproper(kerneldir, KV, master_config, arch, quiet):
     print green(' * ') + turquoise('kernel.mrproper ') + KV
     utils.chgdir(kerneldir)
     command = build_command(master_config, arch, 'mrproper', quiet)
+    if quiet is '':
+        print command
+    return os.system(command)
+
+def clean(kerneldir, KV, master_config, arch, quiet):
+    """
+    Kernel command interface for clean
+    
+    @arg: string
+    @arg: dict
+    @arg: string
+    @arg: string
+    @return: bool
+    """
+    print green(' * ') + turquoise('kernel.clean ') + KV
+    utils.chgdir(kerneldir)
+    command = build_command(master_config, arch, 'clean', quiet)
     if quiet is '':
         print command
     return os.system(command)

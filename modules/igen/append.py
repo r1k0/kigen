@@ -17,7 +17,7 @@ class append:
                 libdir,         \
                 oldconfig,      \
                 menuconfig,     \
-                allyesconfig,   \
+#                allyesconfig,   \
                 mrproper,       \
                 verbose,        \
                 bbconf,         \
@@ -42,7 +42,7 @@ class append:
         self.libdir         = libdir
         self.oldconfig      = oldconfig
         self.menuconfig     = menuconfig
-        self.allyesconfig   = allyesconfig
+#        self.allyesconfig   = allyesconfig
         self.mrproper       = mrproper
         self.verbose        = verbose
         self.bbconf         = bbconf
@@ -168,7 +168,7 @@ class append:
                         self.temp,                   \
                         self.oldconfig,              \
                         self.menuconfig,             \
-                        self.allyesconfig,           \
+#                        self.allyesconfig,           \
                         self.mrproper,               \
                         self.verbose)
             bbobj.build()

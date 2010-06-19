@@ -1,8 +1,6 @@
+TODO: split kigen into kgen/igen and make them use same API
 TODO: --ssh use dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
     ssh-version = x in /etc/kigen.conf
-TODO: --integrated for kernel initramfs
-    it should trigger recompilation of kernel
-    and not create /boot/*initramfs*
 TODO: --statickern option (see genkernel --static)
 TODO: remove portageq call to work on debian
 TODO: make kigen ebuild depend on python-2.6
@@ -14,16 +12,4 @@ TODO: --aufs
     aufs-version = 0_p20100405 in /etc/kigen.conf
 TODO: --evms repair
 	sprocessor * fix
-TODO: /etc/kigen.conf
-    device-mapper-version   = 1.02.22
-    dmraid-version          = 1.0.0.rc16
-    iscsi-version           = 2.0-871
-    fuse-version            = 2.7.4
-    unionfs-fuse-version    = 0.23
-TODO: rename bb_ver variables from /etc/kigen.conf 
-	to smthing less cryptic
-TODO: replace portageq envvar PORTDIR
-	by portage path and
-	pass it to *.download() to store in $PORTDIR/distfiles
-	in python please
 TODO: add logging.debug() everywhere
