@@ -84,11 +84,11 @@ class kernel:
         # save kernel config
         if self.nosaveconfig is False:
             if os.path.isdir('/etc/kernels/'):
-                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
+                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
             else:
                 utils.sprocessor('mkdir /etc/kernels', self.verbose)
-                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
-            print green(' * saved ') + '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV
+                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
+            print green(' * saved ') + '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV
 
     def fail(self, step):
         """
