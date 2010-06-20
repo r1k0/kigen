@@ -24,7 +24,7 @@ class lvm2:
     
         if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (utils.get_portdir(self.temp), self.lvm2_ver)) is not True:
             ret = self.download()
-            if ret is not True: self.fail('download')
+            if ret is not zero: self.fail('download')
     
         self.extract()
         # grr, tar thing to not return 0 when success
