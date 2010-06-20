@@ -88,7 +88,7 @@ class kernel:
             else:
                 utils.sprocessor('mkdir /etc/kernels', self.verbose)
                 utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV), self.verbose)
-            print green(' * ') + turquoise('saved ') + '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV)
+            print green(' * ') + turquoise('saved ') + '/etc/kernels/kernel-config-kigen-'+self.arch+'-'+self.KV
 
     def fail(self, step):
         """
