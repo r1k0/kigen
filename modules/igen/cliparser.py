@@ -225,6 +225,8 @@ def print_usage(ex=False):
     print '  --conf=/file           Custom master config file'
     print '  -h, --help             This'
     print '  -n, --nocolor          Do not colorize output'
+    print '  -d, --debug            Show more output'
+    print '  --logfile=/file        Log to file, default to /var/log/igen.log'
     print '  --version              Version'
     print '  --credits              Credits and license'
     print
@@ -250,7 +252,3 @@ def print_usage(ex=False):
     print '  --nohostbin            Do not use host binaries but compile it all'
     print '  --conf=/file           Use a custom master config file'
     print '  --noboot               Do not copy kernel/initramfs to /boot'
-    print '  --logfile=/file        Log to file, default to /var/log/kigen.log'
-    print '  -n, --nocolor          Do not colorize output'
-    print '  -d, --debug            Show more output'
-
