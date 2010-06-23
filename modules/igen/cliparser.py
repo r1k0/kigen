@@ -251,4 +251,4 @@ def print_usage(ex=False):
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile it all'
     print '  --conf=/file           Use a custom master config file'
-    print '  --noboot               Do not copy kernel/initramfs to /boot'
+    print '  --noboot               Do not copy initramfs to /boot'

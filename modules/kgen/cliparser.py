@@ -102,39 +102,8 @@ def parse():
         elif o in ("--mrproper"):
             cli['mrproper'] = True
         elif o in ("--menuconfig"):
-#			if allyesconfig is True 	\
-#			or koldconfig is True 		\
-#			or bboldconfig is True		\
-#			or allnoconfig is True:
-#				print "--menuconfig --allyesconfig --allnoconfig --oldconfig are exclusive."
-#				print "Choose only one."
-#				sys.exit(2)
             cli['menuconfig'] = True
-#		elif o in ("--allyesconfig"):
-#			if menuconfig is True 		\
-#			or koldconfig is True 		\
-#			or bboldconfig is True		\
-#			or allnoconfig is True:
-#				print "--allyesconfig --allnoconfig --menuconfig --oldconfig are exclusive."
-#				print "Choose only one."
-#				sys.exit(2)
-#			allyesconfig = True
-#		elif o in ("--allnoconfig"):
-#			if menuconfig is True 		\
-#			or koldconfig is True 		\
-#			or bboldconfig is True		\
-#			or allyesconfig is True:
-#				print "--allyesconfig --allnoconfig --menuconfig --oldconfig are exclusive."
-#				print "Choose only one."
-#				sys.exit(2)
-#			allnoconfig = 'yes'
         elif o in ("--nooldconfig"):
-#			if allyesconfig is True 	\
-#			or menuconfig is True		\
-#			or allnoconfig is True:
-#				print "--oldconfig --menuconfig --allyesconfig --allnoconfig are exclusive."
-#				print "Choose only one."
-#				sys.exit(2)
             cli['oldconfig'] = False
         elif o in ("--oldconfig"):
             cli['oldconfig'] = True
@@ -200,4 +169,4 @@ def print_usage(ex=False):
     print '  --nomodinstall         Do not install modules'
     print '  --nosaveconfig         Do not save kernel config in /etc/kernels'
     print '  --fakeroot=/dir        Append modules to /dir/lib/modules'
-    print '  --noboot               Do not copy kernel/initramfs to /boot'
+    print '  --noboot               Do not copy kernel to /boot'
