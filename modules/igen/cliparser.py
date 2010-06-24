@@ -255,5 +255,4 @@ def print_usage(ex=False):
 #    print yellow('  --firmware=/dir        Include custom firmware support')
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
-    print '  --conf=/file           Use a custom master config file'
     print '  --noboot               Do not copy initramfs to /boot'
