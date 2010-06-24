@@ -234,7 +234,6 @@ If you're not familiar with creating your own overlay, refer to www.gentoo.org/p
   ebuild kigen-9999.ebuild digest
 
 - Merge KIGen
-
 ::
   emerge kigen -av
 
@@ -242,7 +241,6 @@ If you're not familiar with creating your own overlay, refer to www.gentoo.org/p
 
 Customize what you feel necessary or just leave the default.
 You might want to tweak the modules to fit your needs.
-
 ::
   # kernel sources path
   kernel-sources          = /usr/src/linux
