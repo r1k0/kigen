@@ -303,7 +303,7 @@ You might want to tweak the modules to fit your needs.
 
 - Use of kgen to generate a kernel/system.map
 
-Default behavior
+Default behavior.
 ::
   pong ~ # kgen -h
   
@@ -351,7 +351,8 @@ You can customize its behavior using the options.
 
 - Use of igen to generate an initramfs
 
-Default behavior::
+Default behavior.
+::
   pong ~ # igen -h
   
     a GNU/Linux initramfs generator
