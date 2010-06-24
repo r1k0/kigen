@@ -160,5 +160,34 @@ HOWTO build and boot kernel/initramfs
 Gentoo
 ~~~~~~
 
+- Add to local overlay
+
+- Merge KIGen
+
+- Care for /etc/kigen.conf
+
+- Use of kgen to generate a kernel/system.map
+
+- Use of igen to generate an initramfs
+
 Funtoo
 ~~~~~~
+
+- Add to local overlay
+
+- Merge KIGen
+
+- Care for /etc/kigen.conf
+
+- Use of kgen to generate a kernel/system.map
+
+- Use of igen to generate an initramfs
+
+- Use of igen to generate an initramfs with support for sys-boot/boot-update
+
+:Authors: 
+    erick 'r1k0' michau,
+    Portage community,
+    (and sundry other good-natured folks)
+
+:Version: 0.1.2 
