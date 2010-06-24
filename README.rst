@@ -118,7 +118,10 @@ cdroot_type
 loop
 looptype
 domdadm
+
 dodmraid
+  activates support for dmraid
+
 doevms
 debug
 scandelay
@@ -142,6 +145,7 @@ iscsi_debug
 crypt_root
   points to the real root device (ie. /dev/sda3)
 crypt_swap
+  points to the swap device encrypted by LUKS
 root_key
 root_keydev
 swap_key
