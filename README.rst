@@ -303,7 +303,8 @@ You might want to tweak the modules to fit your needs.
 
 - Use of kgen to generate a kernel/system.map
 
-Default behavior::
+Default behavior
+::
   pong ~ # kgen -h
   
     a GNU/Linux kernel generator
