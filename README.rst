@@ -224,8 +224,8 @@ nounionfs
 HOWTO build and boot kernel/initramfs
 =====================================
 
-Gentoo
-~~~~~~
+Gentoo Portage based (Gentoo, Sabayon, VLOS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Add to local overlay
 
