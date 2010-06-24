@@ -186,9 +186,8 @@ Funtoo
 - Use of igen to generate an initramfs with support for sys-boot/boot-update
 
 :Authors: 
-    erick 'r1k0' michau,
+    erick 'r1k0' michau (python engine),
 
-    Portage community,
-    (and sundry other good-natured folks)
+    Portage community (linuxrc scripts),
 
 :Version: 0.1.2 
