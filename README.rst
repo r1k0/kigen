@@ -226,7 +226,7 @@ Gentoo
 - Add to local overlay
 
 Download an ebuild of your choice at http://www.github.com/r1k0/kigen/downloads.
-If you're not familiar with creating your own overlay, refer to http://www.gentoo.org/proj/en/overlays/userguide.xml_.
+If you're not familiar with creating your own overlay, refer to http://www.gentoo.org/proj/en/overlays/userguide.xml.
 ::
   pong ~ # mkdir -p /usr/local/portage/sys-kernel/kigen/
   pong ~ # cd /usr/local/portage/sys-kernel/kigen/
