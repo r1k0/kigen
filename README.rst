@@ -226,13 +226,80 @@ Gentoo
 - Add to local overlay
 
 Download an ebuild of your choice at www.github.com/r1k0/kigen/downloads.
-If you're not familiar with creating your own overlay, refer to www.gentoo.org/proj/en/overlays/userguide.xml
+If you're not familiar with creating your own overlay, refer to www.gentoo.org/proj/en/overlays/userguide.xml.
 ::
   mkdir -p /usr/local/portage/sys-kernel/kigen/
+  cd /usr/local/portage/sys-kernel/kigen/
+  wget http://github.com/downloads/r1k0/kigen/kigen-9999.ebuild
+  ebuild kigen-9999.ebuild digest
 
 - Merge KIGen
 
+::
+  emerge kigen -av
+
 - Care for /etc/kigen.conf
+
+Customize what you feel necessary or just leave the default.
+You might want to tweak the modules to fit your needs.
+
+::
+  # kernel sources path
+  kernel-sources          = /usr/src/linux
+  
+  # initramfs programs' versions
+  busybox-version         = 1.16.0
+  luks-version            = 1.1.2
+  e2fsprogs-version       = 1.40.9
+  lvm2-version            = 2.02.65
+  
+  # busybox shipping programs
+  # remember you have a busybox
+  # config file that supports it
+  busybox-progs           = [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
+  
+  # compilation options
+  UTILS_MAKE              = make
+  UTILS_CC                = gcc
+  UTILS_AS                = as
+  UTILS_LD                = ld
+  DEFAULT_MAKEOPTS        = -j2
+  DEFAULT_KERNEL_MAKE     = make
+  DEFAULT_UTILS_MAKE      = make
+  DEFAULT_KERNEL_CC       = gcc
+  DEFAULT_KERNEL_AS       = as
+  DEFAULT_KERNEL_LD       = ld
+  DEFAULT_UTILS_CC        = gcc
+  DEFAULT_UTILS_AS        = as
+  DEFAULT_UTILS_LD        = ld
+  
+  # initramfs modules configuration
+  # put your module in the appropriate group variable
+  MODULES_ATARAID         = ataraid pdcraid hptraid
+  MODULES_DMRAID          = dm-mod dm-mirror dm-crypt
+  MODULES_EVMS            = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
+  MODULES_LVM             = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr
+  MODULES_MDADM           = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
+  MODULES_PATA            = pata_mpiix pata_pdc2027x pata_radisys pata_sil680 pata_rz1000 pata_efar pata_cmd64x pata_hpt366 pata_hpt37x pata_hpt3x3 pata_hpt3x2n pata_optidma pata_it821x pata_artop pata_oldpiix pata_cypress pata_platform pata_serverworks pata_legacy pata_ns87410 pata_ns87415 pata_pcmcia pata_isapnp pata_it8213 pata_ali pata_amd pata_opti pata_atiixp pata_triflex pata_pdc202xx_old pata_sc1200 pata_qdi pata_netcell pata_sis pata_hpt3x2n pata_marvell pata_jmicron pata_via pata_cs5520 pata_cs5530 pata_cs5535 pata_sl82c105 libata
+  MODULES_SATA            = sata_promise sata_sil sata_sil24 sata_svw sata_via sata_nv sata_sx4 sata_sis sata_uli sata_vsc sata_qstor ahci libata ata_piix sata_mv sata_inic162x pdc_adma
+  MODULES_SCSI            = sd_mod sg sr_mod aic79xx aic7xxx aic7xxx_old arcmsr BusLogic ncr53c8xx NCR53c406a initio advansys aha1740 aha1542 aha152x dtc fdomain gdth pas16 pci2220i pci2000 psi240i qlogicfas qlogicfc qlogicisp qlogicpti seagate t128 u14-34f ultrastor wd7000 NCR53c406a sym53c8xx dmx3191d imm in2000 ips qla1280 sim710 sym53c416 dc395x atp870u mptbase mptscsih mptspi mptfc mptsas 3w-xxxx 3w-9xxx cpqarray cciss DAC960 sx8 aacraid megaraid megaraid_mbox megaraid_mm megaraid_sas qla2xxx lpfc scsi_transport_fc aic94xx
+  MODULES_WAITSCAN        = scsi_wait_scan
+  MODULES_NET             = e1000 tg3 atl1c
+  MODULES_ISCSI           = scsi_transport_iscsi libiscsi iscsi_tcp
+  MODULES_FIREWIRE        = ieee1394 ohci1394 sbp2
+  MODULES_PCMCIA          = pcmcia pcmcia_core yenta_socket pd6729 i82092 i82365 tcic ds ide-cs firmware_class
+  MODULES_USB             = ehci-hcd uhci usb-ohci hid usb-storage uhci-hcd ohci-hcd usbhid sl811-hcd
+  MODULES_FS              = ext2 ext3 reiserfs jfs nfs xfs fuse
+  
+  #========================
+  # BELOW NOT YET SUPPORTED
+  #KERNEL_MAKE_DIRECTIVE  = bzImage
+  #KERNEL_MAKE_DIRECTIVE_2=
+  #KERNEL_BINARY          = arch/x86_64/boot/bzImage
+  #COMPRESS_INITRD        = yes
+  #========================
+
+ 
 
 - Use of kgen to generate a kernel/system.map
 
