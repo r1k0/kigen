@@ -107,7 +107,8 @@ Portage systems kernel boot options
 
 KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
 
-  - real_root
+real_root
+  points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS)
   - root
   - subdir
   - real_init
@@ -138,7 +139,8 @@ KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug usi
   - iscsi_username_in
   - iscsi_password_in
   - iscsi_debug
-  - crypt_root
+crypt_root
+  points to the real root device (ie. /dev/sda3)
   - crypt_swap
   - root_key
   - root_keydev
@@ -184,6 +186,8 @@ Funtoo
 - Use of igen to generate an initramfs
 
 - Use of igen to generate an initramfs with support for sys-boot/boot-update
+
+
 
 :Authors: 
     erick 'r1k0' michau (python engine),
