@@ -84,7 +84,7 @@ from kgen.kernel import kernel
 kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
 kobj.build()
 
-# copy kernel/initramfs to /boot
+# copy kernel/system.map to /boot
 if cli['noboot'] is False:
      if cli['kernname'] is '':
          print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
@@ -95,14 +95,14 @@ if cli['noboot'] is False:
      print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
      kgen.utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
 
-# leave /boot alone but tell the user where to find his kernel/initramfs
+# leave /boot alone but tell the user where to find his kernel/system.map
 elif cli['noboot'] is True:
     logging.debug(kerneldir+'/arch/x86/boot/bzImage')
     print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
     logging.debug(kerneldir+'/System.map')
     print green(' * produced ') + kerneldir+'/System.map'
 
-# TODO unset os.environ['IGEN_STDOUT']?
+# TODO unset os.environ['KGEN_STDOUT']?
 
 sys.exit(0)
 

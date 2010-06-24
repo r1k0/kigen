@@ -122,12 +122,12 @@ iobj = initramfs(kerneldir,         \
             verbose)
 iobj.build()
 
-# copy kernel/initramfs to /boot
+# copy initramfs to /boot
 if cli['noboot'] is False:
     print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
     igen.utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
 
-# leave /boot alone but tell the user where to find his kernel/initramfs
+# leave /boot alone but tell the user where to find his initramfs
 elif cli['noboot'] is True:
     logging.debug(temp['cache']+'/initramfs-cpio.gz')
     print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
