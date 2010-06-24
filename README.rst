@@ -243,9 +243,9 @@ emerge it.
   >>> Verifying ebuild manifests
   
   >>> Emerging (1 of 1) sys-kernel/kigen-9999 from r1k0
-   * checking ebuild checksums ;-) ...                                                                                                                                                     [ ok ]
-   * checking auxfile checksums ;-) ...                                                                                                                                                    [ ok ]
-   * checking miscfile checksums ;-) ...                                                                                                                                                   [ ok ]
+   * checking ebuild checksums ;-) ...                                                                                  [ ok ]
+   * checking auxfile checksums ;-) ...                                                                                 [ ok ]
+   * checking miscfile checksums ;-) ...                                                                                [ ok ]
    * CPV:  sys-kernel/kigen-9999
    * REPO: r1k0
    * USE:  amd64 doc elibc_glibc kernel_linux multilib userland_GNU
