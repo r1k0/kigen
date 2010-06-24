@@ -404,8 +404,6 @@ Default behavior.
    * produced /boot/System.map-kigen-x86_64-2.6.34-gentoo-r1
   pong ~ # 
 
-You can customize its behavior using the options.
-
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
 - Use of **igen** to generate an initramfs
@@ -511,8 +509,87 @@ In this case, busybox cache is used.
    * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
   pong ~ # 
 
-Now let's make a 3rd run without any host binaries.
+Now let's make a 3rd run without any host binaries and remove previous cached data.
 ::
+  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo --nohostbin --nocache
+   * initramfs.append.base
+   * initramfs.append.busybox 1.16.0 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
+   * ... busybox.download
+   * ... busybox.extract
+   * ... busybox.copy_config
+   * ... busybox.compile
+   * ... busybox.strip
+   * ... busybox.compress
+   * ... busybox.cache
+   * initramfs.append.modules 2.6.34-gentoo-r1
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... atl1c
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.lvm2 2.02.67
+   * ... lvm2.download
+   * ... lvm2.extract
+   * ... lvm2.configure
+   * ... lvm2.compile
+   * ... lvm2.install
+   * ... lvm2.strip
+   * ... lvm2.compress
+   * ... lvm2.cache
+   * initramfs.append.luks 1.1.2
+   * ... luks.download
+   * ... luks.extract
+   * ... luks.configure
+   * ... luks.compile
+   * ... luks.strip
+   * ... luks.compress
+   * ... luks.cache
+   * initramfs.append.splash gentoo 
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+  pong ~ # 
+
+Now let's use the cache.
+::
+  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo --nohostbin
+   * initramfs.append.base
+   * initramfs.append.busybox 1.16.0 from cache
+   * initramfs.append.modules 2.6.34-gentoo-r1
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... atl1c
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.lvm2 2.02.67 from cache
+   * initramfs.append.luks 1.1.2 from cache
+   * initramfs.append.splash gentoo 
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+  pong ~ # 
 
 
 Typically this adds support for splash luks and lvm2 to the initramfs.
