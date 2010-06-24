@@ -9,6 +9,10 @@ KIGen kernel/initramfs generator
 Introduction
 ~~~~~~~~~~~~
 
+KIGen is a set of 2 commands: kgen and igen.
+
+**igen uses Genkernel linuxrc and provides the same boot interface as Genkernel does.**
+
 KIGen for Linux aims at providing first an equal set of features (in Python)
 as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update.
 Genkernel being a bash script, interfacing it with boot-update is 'tricky' if not insane.
@@ -476,8 +480,8 @@ Default behavior.
    * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
   pong ~ # 
 
-A second run use what has been cached.
-In this case, busybox cache has been used.
+A second run would use what has been cached.
+In this case, busybox cache is used.
 ::
   pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
    * initramfs.append.base
