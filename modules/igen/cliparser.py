@@ -234,8 +234,8 @@ def print_usage(ex=False):
     print '  --menuconfig           Interactive initramfs options menu'
     print '  --linuxrc=/file        Custom linuxrc /init for the initramfs'
     print '  --disklabel            Include support for disklabel and UUID'
-    print '  --luks                 Include LUKS support'
-    print '  --lvm2                 Include LVM2 support'
+    print '  --luks                 Include LUKS support (host binary by default)'
+    print '  --lvm2                 Include LVM2 support (host binary by default)'
 #    print yellow('  --evms                 Include evms support (evms must be merged)')
 #    print yellow('  --dmraid               Include dmraid support')
 #    print yellow('   --selinux              Include selinux support in --dmraid')
@@ -249,6 +249,6 @@ def print_usage(ex=False):
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
     print '  --nocache              Do not use cached data'
-    print '  --nohostbin            Do not use host binaries but compile it all'
+    print '  --nohostbin            Do not use host binaries but compile from sources'
     print '  --conf=/file           Use a custom master config file'
     print '  --noboot               Do not copy initramfs to /boot'
