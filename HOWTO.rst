@@ -2,6 +2,10 @@
 HOWTO build and boot kernel/initramfs
 =====================================
 
+.. sectnum::
+
+.. contents:: Table of contents
+
 Gentoo Portage based (Gentoo, Sabayon, VLOS)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
