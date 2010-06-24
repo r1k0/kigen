@@ -237,7 +237,56 @@ If you're not familiar with creating your own overlay, refer to http://www.gento
 
 emerge it.
 ::
-  pong ~ # emerge kigen -av
+  pong ~ # emerge kigen
+  Calculating dependencies        ... done!      
+  
+  >>> Verifying ebuild manifests
+  
+  >>> Emerging (1 of 1) sys-kernel/kigen-9999 from r1k0
+   * checking ebuild checksums ;-) ...                                                                                                                                                     [ ok ]
+   * checking auxfile checksums ;-) ...                                                                                                                                                    [ ok ]
+   * checking miscfile checksums ;-) ...                                                                                                                                                   [ ok ]
+   * CPV:  sys-kernel/kigen-9999
+   * REPO: r1k0
+   * USE:  amd64 doc elibc_glibc kernel_linux multilib userland_GNU
+  >>> Unpacking source...
+   * GIT NEW clone -->
+   *    repository:       git://github.com/r1k0/kigen.git
+  Initialized empty Git repository in /usr/portage/distfiles/git-src/kigen/
+  remote: Counting objects: 731, done.
+  remote: Compressing objects: 100% (725/725), done.
+  remote: Total 731 (delta 478), reused 0 (delta 0)
+  Receiving objects: 100% (731/731), 232.00 KiB | 293 KiB/s, done.
+  Resolving deltas: 100% (478/478), done.
+   *    at the commit:        75ef987008c5dcbfe1d916a8aa6c258db2052f85
+   *    branch:           master
+   *    storage directory:    "/usr/portage/distfiles/git-src/kigen"
+  Initialized empty Git repository in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999/.git/
+  >>> Unpacked to /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999
+  >>> Source unpacked in /var/tmp/portage/sys-kernel/kigen-9999/work
+  >>> Preparing source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
+  >>> Source prepared.
+  >>> Configuring source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
+  >>> Source configured.
+  >>> Compiling source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
+  >>> Source compiled.
+  >>> Test phase [not enabled]: sys-kernel/kigen-9999
+  
+  >>> Install kigen-9999 into /var/tmp/portage/sys-kernel/kigen-9999/image/ category sys-kernel
+  >>> Completed installing kigen-9999 into /var/tmp/portage/sys-kernel/kigen-9999/image/
+  
+  ecompressdir: bzip2 -9 /usr/share/man
+  
+  >>> Installing (1 of 1) sys-kernel/kigen-9999
+   * 
+   * This is still experimental software, be cautious.
+   * 
+  >>> Auto-cleaning packages...
+  
+  >>> No outdated packages were found on your system.
+  
+   * GNU info directory index is up-to-date.
+  pong ~ # 
 
 - Care for **/etc/kigen.conf**
 
