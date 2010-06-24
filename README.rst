@@ -111,8 +111,10 @@ real_root
   points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS)
 
 root
+  
 
 subdir
+  
 
 real_init
 
@@ -127,11 +129,16 @@ loop
 looptype
 
 domdadm
+  activates support for mdadm
 
 dodmraid
   activates support for dmraid
 
 doevms
+  activates support for evms
+
+dolvm
+  activates support for LVM2
 
 debug
 
