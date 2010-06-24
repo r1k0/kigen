@@ -228,16 +228,16 @@ Gentoo
 Download an ebuild of your choice at www.github.com/r1k0/kigen/downloads.
 If you're not familiar with creating your own overlay, refer to www.gentoo.org/proj/en/overlays/userguide.xml.
 ::
-  mkdir -p /usr/local/portage/sys-kernel/kigen/
-  cd /usr/local/portage/sys-kernel/kigen/
-  wget http://github.com/downloads/r1k0/kigen/kigen-9999.ebuild
-  ebuild kigen-9999.ebuild digest
+  pong ~ # mkdir -p /usr/local/portage/sys-kernel/kigen/
+  pong ~ # cd /usr/local/portage/sys-kernel/kigen/
+  pong ~ # wget http://github.com/downloads/r1k0/kigen/kigen-9999.ebuild
+  pong ~ # ebuild kigen-9999.ebuild digest
 
 - Merge KIGen
 
 emerge it.
 ::
-  emerge kigen -av
+  pong ~ # emerge kigen -av
 
 - Care for /etc/kigen.conf
 
@@ -303,7 +303,122 @@ You might want to tweak the modules to fit your needs.
 
 - Use of kgen to generate a kernel/system.map
 
+Default behavior::
+  pong ~ # kgen -h
+  
+    a GNU/Linux kernel generator
+  
+  Usage:
+        kgen <options>
+  
+  Options:
+    --conf=/file           Custom master config file
+    -h, --help             This
+    -n, --nocolor          Do not colorize output
+    -d, --debug            Show more output
+    --logfile=/file        Log to file, default to /var/log/kgen.log
+    --version              Version
+    --credits              Credits and license
+  
+    --dotconfig=/file      Custom kernel config file (full path)
+    --kernname=mykernel    Custom kernel file name
+    --nooldconfig          Will not ask for new kernel/initramfs options
+    --mrproper             Clean precompiled objects and remove config file
+    --clean                Clean precompiled objects only
+    --oldconfig            Will ask for new kernel/initramfs options
+    --menuconfig           Interactive kernel options menu
+    --nomodinstall         Do not install modules
+    --nosaveconfig         Do not save kernel config in /etc/kernels
+    --fakeroot=/dir        Append modules to /dir/lib/modules
+    --noboot               Do not copy kernel to /boot
+  pong ~ # kgen
+   * kernel.oldconfig 2.6.34-gentoo-r1
+  scripts/kconfig/conf -o arch/x86/Kconfig
+  #
+  # configuration written to .config
+  #
+   * kernel.prepare 2.6.34-gentoo-r1
+   * kernel.bzImage 2.6.34-gentoo-r1
+   * kernel.modules 2.6.34-gentoo-r1
+   * kernel.modules_install /lib/modules/2.6.34-gentoo-r1
+   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/kernel-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/System.map-kigen-x86_64-2.6.34-gentoo-r1
+  pong ~ # 
+
+You can customize its behavior using the options.
+
 - Use of igen to generate an initramfs
+
+Default behavior::
+  pong ~ # igen -h
+  
+    a GNU/Linux initramfs generator
+  
+  Usage:
+        igen <options>
+  
+  Options:
+    --conf=/file           Custom master config file
+    -h, --help             This
+    -n, --nocolor          Do not colorize output
+    -d, --debug            Show more output
+    --logfile=/file        Log to file, default to /var/log/igen.log
+    --version              Version
+    --credits              Credits and license
+  
+    --dotconfig=/file      Custom busybox config file (full path)
+    --menuconfig           Interactive initramfs options menu
+    --linuxrc=/file        Custom linuxrc /init for the initramfs
+    --disklabel            Include support for disklabel and UUID
+    --luks                 Include LUKS support (host binary if found)
+    --lvm2                 Include LVM2 support (host binary if found)
+    --splash               Include splash support (media-gfx/splashutils if found)
+     --stheme=<theme>       Splash theme, gentoo by default
+     --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set
+     --sinitrd=/file        Splash custom initrd.splash (host if found)
+    --nocache              Do not use cached data
+    --nohostbin            Do not use host binaries but compile from sources
+    --noboot               Do not copy initramfs to /boot
+  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
+   * initramfs.append.base
+   * initramfs.append.busybox 1.16.0 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
+   * ... busybox.extract
+   * ... busybox.copy_config
+   * ... busybox.compile
+   * ... busybox.strip
+   * ... busybox.compress
+   * ... busybox.cache
+   * initramfs.append.modules 2.6.34-gentoo-r1
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... atl1c
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.lvm2 /sbin/lvm.static from host
+   * initramfs.append.luks 1.1.2 /sbin/cryptsetup from host
+   * initramfs.append.splash gentoo 
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+  pong ~ # 
+
+Typically this adds support for splash luks and lvm2 to the initramfs.
+Note that by default igen will pick up and ship host binaries.
+Passing --nohostbin will fetch sources and compile statically.
+
+
 
 Funtoo
 ~~~~~~
