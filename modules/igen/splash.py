@@ -5,11 +5,23 @@ import utils
 
 class splash:
 
-    def __init__(self):
+    def __init__(self,  \
+                master_config,  \
+                theme,          \
+                sres,           \
+                sinitrd,        \
+                temp,           \
+                verbose):
         """
         init class variable
         """
-        pass
+
+        self.master_config  = master_config
+        self.theme          = theme
+        self.sres           = sres
+        self.sinitrd        = sinitrd
+        self.temp           = temp
+        self.verbose        = verbose
 
     def build(self):
         """
@@ -25,6 +37,6 @@ class splash:
 
         @return     exit
         """
-        print red('error')+': initramfs.luks.'+step+'() failed'
+        print red('error')+': initramfs.splash.'+step+'() failed'
         sys.exit(2)
 
