@@ -225,6 +225,11 @@ Gentoo
 
 - Add to local overlay
 
+Download an ebuild of your choice at www.github.com/r1k0/kigen/downloads.
+If you're not familiar with creating your own overlay, refer to www.gentoo.org/proj/en/overlays/userguide.xml
+::
+  mkdir -p /usr/local/portage/sys-kernel/kigen/
+
 - Merge KIGen
 
 - Care for /etc/kigen.conf
