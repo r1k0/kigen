@@ -48,6 +48,7 @@ class initramfs:
         self.bootupdateinitrd   = bootupdateinitrd
         self.stheme             = cli['stheme']
         self.sres               = cli['sres']
+        self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
 
@@ -86,6 +87,7 @@ class initramfs:
                         self.bootupdateinitrd,\
                         self.stheme,        \
                         self.sres,          \
+                        self.sinitrd,       \
                         self.firmware,      \
                         self.selinux,       \
                         self.nocache,       \

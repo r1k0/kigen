@@ -12,16 +12,16 @@ def parse():
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hdin", [  \
-                                "config=",                    \
-                                "dotconfig=",                   \
-                                "mrproper",                 \
-                                "menuconfig",              \
-                                "allyesconfig",             \
-                                "nooldconfig",              \
-                                "oldconfig",                \
-                                "luks",                     \
-                                "lvm2",                     \
-                                "dmraid",                   \
+                                "config=",      \
+                                "dotconfig=",   \
+                                "mrproper",     \
+                                "menuconfig",   \
+                                "allyesconfig", \
+                                "nooldconfig",  \
+                                "oldconfig",    \
+                                "luks",         \
+                                "lvm2",         \
+                                "dmraid",       \
                                 "iscsi",        \
                                 "logfile=",     \
                                 "evms",         \
@@ -29,11 +29,12 @@ def parse():
                                 "splash",       \
                                 "stheme=",      \
                                 "sres=",        \
+                                "sinitrd=",     \
                                 "firmware=",    \
                                 "disklabel",    \
                                 "unionfs-fuse", \
                                 "aufs",         \
-                                "ssh",                      \
+                                "ssh",          \
                                 "linuxrc=",     \
                                 "nocache",      \
                                 "noboot",       \
@@ -73,6 +74,7 @@ def parse():
     cli['splash']       = False
     cli['stheme']       = ''
     cli['sres']         = '' # 1024x768
+    cli['sinitrd']      = '' # a custom initrd.splash file
     cli['firmware']     = ''
     cli['disklabel']    = False
     cli['unionfs']      = False
@@ -182,6 +184,8 @@ def parse():
             cli['stheme'] = a
         elif o in ("--sres"):
             cli['sres'] = a
+        elif o in ("--sinitrd"):
+            cli['sinitrd'] = a
         elif o in ("--nocache"):
             cli['nocache'] = True
         elif o in ("--noboot"):
@@ -242,9 +246,10 @@ def print_usage(ex=False):
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
 #    print yellow('  --ssh                  Include openssh tools and daemon')
-    print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
+    print '  --splash               Include splash support (media-gfx/splashutils if found)'
     print '   --stheme=<theme>       Splash theme, gentoo by default'
     print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
+    print '   --sinitrd=/file        Splash custom initrd.splash (host if found)'
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')

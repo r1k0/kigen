@@ -26,6 +26,7 @@ class append:
                 bootupdateinitrd, \
                 stheme,         \
                 sres,           \
+                sinitrd,        \
                 firmware,       \
                 selinux,        \
                 nocache,        \
@@ -51,6 +52,7 @@ class append:
         self.bootupdateinitrd = bootupdateinitrd
         self.stheme         = stheme
         self.sres           = sres
+        self.sinitrd        = sinitrd
         self.nocache        = nocache
         self.firmware       = firmware
         self.selinux        = selinux
@@ -371,6 +373,7 @@ class append:
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
     
         if os.path.isfile(splash_geninitramfs_bin):
+            # if splashutils is merged
             if self.stheme is '':
                 # set default theme to gentoo
                 self.stheme = 'gentoo'
@@ -388,7 +391,12 @@ class append:
             else:
                 self.fail('/usr/share/splashutils/initrd.splash missing')
         else:
+            # if splashutils is not merged
             self.fail('media-gfx/splashutils must be merged')
+            
+            from splash import splash
+            splashobj = splash(self.master_config, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
+            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
