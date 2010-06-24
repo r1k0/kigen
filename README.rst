@@ -109,51 +109,51 @@ KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug usi
 
 real_root
   points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS)
-  - root
-  - subdir
-  - real_init
-  - init_opts
-  - cdroot
-  - cdroot_type
-  - loop
-  - looptype
-  - domdadm
-  - dodmraid
-  - doevms
-  - debug
-  - scandelay
-  - doload
-  - nodetect
-  - noload
-  - lvmraid
-  - part
-  - ip
-  - nfsroot
-  - iscsi_initiatorname
-  - iscsi_target
-  - iscsi_tgpt
-  - iscsi_address
-  - iscsi_port
-  - iscsi_username
-  - iscsi_password
-  - iscsi_username_in
-  - iscsi_password_in
-  - iscsi_debug
+root
+subdir
+real_init
+init_opts
+cdroot
+cdroot_type
+loop
+looptype
+domdadm
+dodmraid
+doevms
+debug
+scandelay
+doload
+nodetect
+noload
+lvmraid
+part
+ip
+nfsroot
+iscsi_initiatorname
+iscsi_target
+iscsi_tgpt
+iscsi_address
+iscsi_port
+iscsi_username
+iscsi_password
+iscsi_username_in
+iscsi_password_in
+iscsi_debug
 crypt_root
   points to the real root device (ie. /dev/sda3)
-  - crypt_swap
-  - root_key
-  - root_keydev
-  - swap_key
-  - swap_keydev
-  - real_resume
-  - noresume
-  - crypt_silent
-  - real_rootflags
-  - keymap
-  - unionfs
-  - aufs
-  - nounionfs
+crypt_swap
+root_key
+root_keydev
+swap_key
+swap_keydev
+real_resume
+noresume
+crypt_silent
+real_rootflags
+keymap
+unionfs
+aufs
+nounionfs
 
 =====================================
 HOWTO build and boot kernel/initramfs
