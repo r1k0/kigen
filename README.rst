@@ -223,7 +223,7 @@ HOWTO build and boot kernel/initramfs
 Gentoo
 ~~~~~~
 
-1. Add to local overlay
+- Add to local overlay
 
 Download an ebuild of your choice at http://www.github.com/r1k0/kigen/downloads.
 If you're not familiar with creating your own overlay, refer to http://www.gentoo.org/proj/en/overlays/userguide.xml.
@@ -239,7 +239,7 @@ emerge it.
 ::
   pong ~ # emerge kigen -av
 
-2. Care for **/etc/kigen.conf**
+- Care for **/etc/kigen.conf**
 
 Customize what you feel necessary or just leave the default.
 You might want to tweak the modules to fit your needs.
@@ -353,9 +353,11 @@ Default behavior.
 
 You can customize its behavior using the options.
 
+It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
+
 - Use of **igen** to generate an initramfs
 
-Default behavior.
+Help menu.
 ::
   pong ~ # igen -h
   
@@ -386,9 +388,14 @@ Default behavior.
     --nocache              Do not use cached data
     --nohostbin            Do not use host binaries but compile from sources
     --noboot               Do not copy initramfs to /boot
+  pong ~ #
+
+Default behavior.
+::
   pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
    * initramfs.append.base
    * initramfs.append.busybox 1.16.0 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
+   * ... busybox.download
    * ... busybox.extract
    * ... busybox.copy_config
    * ... busybox.compile
@@ -420,11 +427,46 @@ Default behavior.
    * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
   pong ~ # 
 
+A second run use what has been cached.
+In this case, busybox cache has been used.
+::
+  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
+   * initramfs.append.base
+   * initramfs.append.busybox 1.16.0 from cache
+   * initramfs.append.modules 2.6.34-gentoo-r1
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... atl1c
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.lvm2 /sbin/lvm.static from host
+   * initramfs.append.luks 1.1.2 /sbin/cryptsetup from host
+   * initramfs.append.splash gentoo 
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+  pong ~ # 
+
+Now let's make a 3rd run without any host binaries.
+::
+
+
 Typically this adds support for splash luks and lvm2 to the initramfs.
 Note that by default igen will pick up and ship host binaries.
 Passing --nohostbin will fetch sources and compile statically.
 
-
+It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
 Funtoo
 ~~~~~~

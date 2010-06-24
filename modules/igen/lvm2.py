@@ -65,7 +65,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.download'
-    	lvm2_url = 'ftp://sources.redhat.com/pub/lvm2/' + '/LVM2.' + self.lvm2_ver + '.tgz'
+    	lvm2_url = 'ftp://sources.redhat.com/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
     	
     	return os.system('/usr/bin/wget %s -O %s/distfiles/LVM2.%s.tgz %s' % (lvm2_url, utils.get_portdir(self.temp), self.lvm2_ver, self.verbose['std']))
     
