@@ -598,8 +598,8 @@ Passing --nohostbin will fetch sources and compile statically.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
-Funtoo
-~~~~~~
+Funtoo Portage based
+~~~~~~~~~~~~~~~~~~~~
 
 - Add to local overlay
 
