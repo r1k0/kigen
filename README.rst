@@ -239,7 +239,7 @@ emerge it.
 ::
   pong ~ # emerge kigen -av
 
-- Care for /etc/kigen.conf
+- Care for **/etc/kigen.conf**
 
 Customize what you feel necessary or just leave the default.
 You might want to tweak the modules to fit your needs.
@@ -301,9 +301,9 @@ You might want to tweak the modules to fit your needs.
 
  
 
-- Use of kgen to generate a kernel/system.map
+- Use of **kgen** to generate a kernel/system.map
 
-Default behavior.
+Help menu.
 ::
   pong ~ # kgen -h
   
@@ -332,6 +332,10 @@ Default behavior.
     --nosaveconfig         Do not save kernel config in /etc/kernels
     --fakeroot=/dir        Append modules to /dir/lib/modules
     --noboot               Do not copy kernel to /boot
+  pong ~ #
+
+Default behavior.
+::
   pong ~ # kgen
    * kernel.oldconfig 2.6.34-gentoo-r1
   scripts/kconfig/conf -o arch/x86/Kconfig
@@ -349,7 +353,7 @@ Default behavior.
 
 You can customize its behavior using the options.
 
-- Use of igen to generate an initramfs
+- Use of **igen** to generate an initramfs
 
 Default behavior.
 ::
