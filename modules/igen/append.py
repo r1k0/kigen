@@ -66,6 +66,16 @@ class append:
 
         return cmd
 
+    def fail(self, msg):
+        """
+        @arg step   string
+
+        @return     exit
+        """
+        logging.debug('error'+msg)
+        print red('error')+': '+msg
+        sys.exit(2)
+
     def base(self):
         """
         Append baselayout to the initramfs
@@ -375,10 +385,10 @@ class append:
 
             if os.path.isfile('/usr/share/splashutils/initrd.splash'):
                 utils.sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % self.temp['work'], self.verbose)
+            else:
+                self.fail('/usr/share/splashutils/initrd.splash missing')
         else:
-            logging.debug('ERR: media-gfx/splashutils is not emerged')
-            print red('ERR')+ ': ' + "media-gfx/splashutils is not emerged"
-            sys.exit(2)
+            self.fail('media-gfx/splashutils must be merged')
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
@@ -491,10 +501,8 @@ class append:
         # utils.sprocessor('cp /sbin/evms_activate %s/initramfs-evms-temp/sbin' % temp['work'], verbose)
         # utils.sprocessor('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % temp['work'], verbose)
         else:
-            logging.debug('ERR: evms must be emerged on the host')
             print
-            print red('ERR: ') + "evms must be emerged on the host"
-            sys.exit(2)
+            self.fail('sys-fs/evms must be merged')
     
         os.chdir(self.temp['work']+'/initramfs-evms-temp')
         return os.system(self.cpio())
@@ -613,10 +621,7 @@ class append:
                 import unionfs_fuse
                 unionfs_fuse.build_sequence(self.master_config, self.temp, self.verbose)
             else:
-                logging.debug('ERR: sys-fs/fuse is not emerged')
-                print red('ERR') + ': ' + "sys-fs/fuse is not emerged"
-                print red('ERR') + ': ' + "we need libfuse"
-                sys.exit(2)
+                self.fail('we need libfuse: sys-fs/fuse must be merged')
     
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
         # FIXME careful with the > passed to sprocessor()

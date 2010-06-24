@@ -242,7 +242,7 @@ def print_usage(ex=False):
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
 #    print yellow('  --ssh                  Include openssh tools and daemon')
-    print '  --splash               Include splash support (splashutils if found)'
+    print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
     print '   --stheme=<theme>       Splash theme, gentoo by default'
     print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
