@@ -234,6 +234,8 @@ If you're not familiar with creating your own overlay, refer to www.gentoo.org/p
   ebuild kigen-9999.ebuild digest
 
 - Merge KIGen
+
+emerge it.
 ::
   emerge kigen -av
 
