@@ -223,7 +223,7 @@ HOWTO build and boot kernel/initramfs
 Gentoo
 ~~~~~~
 
-- Add to local overlay
+1. Add to local overlay
 
 Download an ebuild of your choice at http://www.github.com/r1k0/kigen/downloads.
 If you're not familiar with creating your own overlay, refer to http://www.gentoo.org/proj/en/overlays/userguide.xml.
@@ -239,7 +239,7 @@ emerge it.
 ::
   pong ~ # emerge kigen -av
 
-- Care for **/etc/kigen.conf**
+2. Care for **/etc/kigen.conf**
 
 Customize what you feel necessary or just leave the default.
 You might want to tweak the modules to fit your needs.
