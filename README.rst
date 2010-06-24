@@ -71,14 +71,14 @@ KIGen supports Portage and provides support for the following linux based flavor
 
 provided your custom /linuxrc for the initramfs of course.
 
-Portage support
-~~~~~~~~~~~~~~~
+Portage and Funtoo boot-update support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 KIGen imports colors from Portage itself. It keeps the code simpler.
 If Portage API cannot be found color are disabled, hence non Portage systems
 don't and won't have any color support.
 
-KIGen will detect /etc/boot.conf and will append the modules configuration from /etc/KIGen.conf
+KIGen will detect /etc/boot.conf and will append the modules configuration from /etc/kigen.conf
 with the content of the load-modules variable set in Coreboot.
 
 /etc/boot.conf sample::
@@ -97,9 +97,11 @@ You can simply ignore either one or the other or both configuration files.
 Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
-KIGen kernel works on Debian and Arch with no support for color (but who cares?).
-KIGen initramfs could work too.
+kgen works on Debian and Arch with no support for color (but who cares?).
+igen could fully work too except for --splash that currently uses splashutils from Portage.
+It is planned to support --splash on Debian and Arch too.
 KIGen is not meant (for now) to be installed on non Portage systems but will in the future.
+
 If you provide a custom /linuxrc file for Debian's initramfs, KIGen should in theory work its way through.
 
 Portage systems kernel boot options
@@ -111,12 +113,11 @@ real_root
   points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS)
 
 root
-  
 
 subdir
-  
 
 real_init
+  passes argument to the init on boot.
 
 init_opts
 
@@ -129,16 +130,19 @@ loop
 looptype
 
 domdadm
-  activates support for mdadm
+  activates support for mdadm.
 
 dodmraid
-  activates support for dmraid
+  activates support for dmraid.
 
 doevms
-  activates support for evms
+  activates support for evms.
 
 dolvm
-  activates support for LVM2
+  activates support for LVM2.
+
+doscsi
+  activates support for iscsi.
 
 debug
 
@@ -179,18 +183,22 @@ iscsi_password_in
 iscsi_debug
 
 crypt_root
-  points to the real root device (ie. /dev/sda3)
+  points to the real root device (ie. /dev/sda3).
 
 crypt_swap
-  points to the swap device encrypted by LUKS
+  points to the swap device encrypted by LUKS.
 
-root_key
+root_key=/keyfile
+  in case your root is encrypted with a key, you can use a device like a usb pen to store the key.
 
-root_keydev
+root_keydev=/dev
+  points to the device that carries the root_key, if not set will automatically look for the device in every boot.
 
 swap_key
+  same as root_key for the swap.
 
 swap_keydev
+  same as root_keydev for swap.
 
 real_resume
 
