@@ -51,27 +51,27 @@ Support
 Features
 ~~~~~~~~
 
-  - LUKS (cryptsetup binary)
-  - LVM2 (lvm.static binary)
-  - UUID (blkid binary)
-  - splash decorator
-  - customizable busybox toolbox
-    - telnet
-    - vi
-    - httpd
-    - awk
-    - a lot more
+- LUKS (cryptsetup binary)
+- LVM2 (lvm.static binary)
+- UUID (blkid binary)
+- splash decorator
+- customizable busybox toolbox
+  - telnet
+  - vi
+  - httpd
+  - awk
+  - a lot more
 
 Supported OS
 ~~~~~~~~~~~~
 
 KIGen supports Portage and provides support for the following linux based flavors:
 
-  - Funtoo  and its boot-update interface,
-  - Gentoo  (no boot-update interface yet),
-  - Sabayon (no boot-update interface yet).
-  - VLOS    (no boot-update interface yet).
-  - ChromeOS? ;P
+- Funtoo  and its boot-update interface,
+- Gentoo  (no boot-update interface yet),
+- Sabayon (no boot-update interface yet).
+- VLOS    (no boot-update interface yet).
+- ChromeOS? ;P
 
 provided your custom /linuxrc for the initramfs of course.
 
