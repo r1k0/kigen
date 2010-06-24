@@ -187,8 +187,8 @@ Funtoo
 
 :Authors: 
     erick 'r1k0' michau,
-    Portage community,
 
+    Portage community,
     (and sundry other good-natured folks)
 
 :Version: 0.1.2 
