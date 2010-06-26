@@ -218,7 +218,7 @@ def print_credits():
     for i in author:
         print i
 
-def print_usage(ex=False):
+def print_usage():
     print
     print white('  a GNU/Linux initramfs generator')
     print
