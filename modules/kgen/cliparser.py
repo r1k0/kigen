@@ -2,7 +2,7 @@ import sys
 import os
 import getopt
 from stdout import white, green, turquoise, yellow, red
-from credits import author, productname, version, description
+from credits import author, productname, version, description, contributor
 
 # parse command line parameters
 def parse():
