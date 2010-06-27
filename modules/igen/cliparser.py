@@ -217,6 +217,10 @@ def print_credits():
     print
     for i in author:
         print i
+    print 'Alphabetical list of contributors:'
+    print
+    for i in contributor:
+        print i
 
 def print_usage():
     print
