@@ -560,7 +560,7 @@ class append:
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
     
         if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_config['dmraid_ver']+'.bz2') and self.nocache is False:
-        # use cache
+            # use cache
             print 'from ' + white('cache')
             pass
         else:
