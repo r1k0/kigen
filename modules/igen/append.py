@@ -370,10 +370,6 @@ class append:
         """
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
    
-        cpv = ''
-        if self.verbose is True:
-            cpv = '-v'
-
         utils.sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
     
         if os.path.isfile(splash_geninitramfs_bin):
@@ -388,7 +384,7 @@ class append:
     
             logging.debug('initramfs.append.splash ' + self.stheme + ' ' + self.sres)
             print green(' * ') + turquoise('initramfs.append.splash ') + white(self.stheme) + ' ' + white(self.sres)
-            utils.sprocessor('splash_geninitramfs %s -c %s/initramfs-splash-temp %s %s' % (cpv, self.temp['work'], self.sres, self.stheme), self.verbose)
+            utils.sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
 
             if os.path.isfile('/usr/share/splashutils/initrd.splash'):
                 utils.sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % self.temp['work'], self.verbose)
