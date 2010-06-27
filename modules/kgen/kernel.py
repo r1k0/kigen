@@ -47,18 +47,18 @@ class kernel:
         if self.clean is True:
             ret = clean(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('clean')
-        if self.allyesconfig is True:
-            ret = allyesconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
-            if ret is not zero: self.fail('allyesconfig')
-        elif self.allnoconfig is True:
-            ret = allnoconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
-            if ret is not zero: self.fail('allnoconfig')
-        if self.menuconfig is True or self.dotconfig is not '':
-            ret = menuconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
-            if ret is not zero: self.fail('menuconfig')
+#        if self.allyesconfig is True:
+#            ret = allyesconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+#            if ret is not zero: self.fail('allyesconfig')
+#        elif self.allnoconfig is True:
+#            ret = allnoconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+#            if ret is not zero: self.fail('allnoconfig')
         if self.oldconfig is True:
             ret = oldconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
             if ret is not zero: self.fail('oldconfig')
+        if self.menuconfig is True or self.dotconfig is not '':
+            ret = menuconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            if ret is not zero: self.fail('menuconfig')
     
         # check for kernel .config
         if os.path.isfile(self.kerneldir+'/.config') is not True:
