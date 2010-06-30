@@ -1,6 +1,6 @@
 import os
 import sys
-from stdout import white, green, turquoise
+from stdout import white, green, turquoise, red, yellow
 import utils
 import logging
 import commands
