@@ -128,7 +128,7 @@ class kernel:
             sys.exit(2)
 
     # kernel building functions
-    def build_command(self, target): #master_config, arch, target, quiet):
+    def build_command(self, target, verbose): #master_config, arch, target, quiet):
         """
         Kernel Makefile bash build command
         
@@ -145,7 +145,7 @@ class kernel:
                     self.master_config['DEFAULT_KERNEL_AS'],    \
                     self.arch,                                  \
                     target,                                     \
-                    self.quiet)
+                    verbose)
 
         return command
 
@@ -157,7 +157,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.mrproper ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('mrproper')
+        command = self.build_command('mrproper', self.quiet)
         if self.quiet is '':
             print command
 
@@ -171,7 +171,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.clean ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('clean')
+        command = self.build_command('clean', self.quiet)
         if self.quiet is '':
             print command
 
@@ -186,7 +186,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.oldconfig ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('oldconfig')
+        command = self.build_command('oldconfig', '')
         if self.quiet is '':
             print command
 
@@ -228,7 +228,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.menuconfig ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('menuconfig')
+        command = self.build_command('menuconfig', '')
 
         return os.system(command)
     
@@ -240,7 +240,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.prepare ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('prepare')
+        command = self.build_command('prepare', self.quiet)
         if self.quiet is '':
             print command
 
@@ -254,7 +254,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.bzImage ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('bzImage')
+        command = self.build_command('bzImage', self.quiet)
         if self.quiet is '':
             print command
 
@@ -268,7 +268,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.modules ') + self.KV
         self.chgdir(self.kerneldir)
-        command = self.build_command('modules')
+        command = self.build_command('modules', self.quiet)
         if self.quiet is '':
             print command
 
@@ -287,7 +287,7 @@ class kernel:
             # export INSTALL_MOD_PATH 
             os.environ['INSTALL_MOD_PATH'] = self.fakeroot
     
-        command = self.build_command('modules_install')
+        command = self.build_command('modules_install', self.quiet)
         if self.quiet is '':
             print command
 
