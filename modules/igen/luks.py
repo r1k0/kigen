@@ -47,12 +47,26 @@ class luks:
 
     def fail(self, step):
         """
-        @arg step   string
+        Exit
 
+        @arg step   string
         @return     exit
         """
         print red('error')+': initramfs.luks.'+step+'() failed'
         sys.exit(2)
+
+    def chgdir(self, dir):
+        """
+        Change to directory
+    
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
 
     def download(self):
         """
@@ -82,7 +96,7 @@ class luks:
         @return: bool
         """
         print green(' * ') + '... luks.configure'
-        utils.chgdir(self.lukstmp)
+        self.chgdir(self.lukstmp)
     
         return os.system('./configure --enable-static %s' % self.verbose['std'])
     
@@ -93,7 +107,7 @@ class luks:
         @return: bool
         """
         print green(' * ') + '... luks.compile'
-        utils.chgdir(self.lukstmp)
+        self.chgdir(self.lukstmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
     
@@ -104,7 +118,7 @@ class luks:
         @return: bool
         """
         print green(' * ') + '... luks.strip'
-        utils.chgdir(self.lukstmp)
+        self.chgdir(self.lukstmp)
     
         return os.system('strip %s/src/cryptsetup' % self.lukstmp)
     
@@ -115,7 +129,7 @@ class luks:
         @return: bool
         """
         print green(' * ') + '... luks.compress'
-        utils.chgdir(self.lukstmp)
+        self.chgdir(self.lukstmp)
     
         return os.system('bzip2 %s/src/cryptsetup' % self.lukstmp)
     
@@ -126,7 +140,7 @@ class luks:
         @return: bool
         """
         print green(' * ') + '... luks.cache'
-        utils.chgdir(self.lukstmp)
+        self.chgdir(self.lukstmp)
     
         return utils.sprocessor('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.master_config['luks-version']), self.verbose)
 
