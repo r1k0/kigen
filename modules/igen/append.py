@@ -234,7 +234,7 @@ class append:
                 # check for a match
                 if k == j:
                     logging.debug('shipping ' + i)
-                    print green(' * ') + '... ' + white(i)
+                    print green(' * ') + '... ' + i
                     # if the module is found copy it
                     module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                     module_dirname = os.path.dirname(module)
