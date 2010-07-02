@@ -144,7 +144,7 @@ def build_sequence(master_config, temp, verbose):
 	if os.path.isfile('%s/distfiles/fuse-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['fuse_ver']))) is not True:
 		ret = download(master_config['fuse_ver'], temp, verbose)
 		if ret is not zero:
-			print red('ERR: ')+'initramfs.fuse.download() failed'
+			print red('error: ')+'initramfs.fuse.download() failed'
 			sys.exit(2)
 
 	ret = extract(master_config['fuse_ver'], temp, verbose)
@@ -152,32 +152,32 @@ def build_sequence(master_config, temp, verbose):
 
 	ret = configure(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.fuse.configure() failed'
+		print red('error: ')+'initramfs.fuse.configure() failed'
 		sys.exit(2)
 
 	ret = compile(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.fuse.compile() failed'
+		print red('error: ')+'initramfs.fuse.compile() failed'
 		sys.exit(2)
 
 #	ret = install(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, verbose)
 #	if ret is not zero:
-#		print red('ERR: ')+'initramfs.fuse.install() failed'
+#		print red('error: ')+'initramfs.fuse.install() failed'
 #		sys.exit(2)
 #
 #	ret = strip(master_config, temp)
 #	if ret is not zero:
-#		print red('ERR: ')+'initramfs.fuse.strip() failed'
+#		print red('error: ')+'initramfs.fuse.strip() failed'
 #		sys.exit(2)
 #
 #	ret = compress(master_config, temp, verbose)
 #	if ret is not zero:
-#		print red('ERR: ')+'initramfs.fuse.compress() failed'
+#		print red('error: ')+'initramfs.fuse.compress() failed'
 #		sys.exit(2)
 
 	ret = cache(temp['work'] + '/fuse-' + master_config['fuse_ver'], master_config, temp, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.fuse.compress() failed'
+		print red('error: ')+'initramfs.fuse.compress() failed'
 		sys.exit(2)
 
 	return ret

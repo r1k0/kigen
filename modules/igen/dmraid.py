@@ -140,7 +140,7 @@ def build_sequence(master_config, selinux, temp, quiet):
 	if os.path.isfile('%s/distfiles/dmraid-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['dmraid_ver']))) is not True:
 		ret = download(master_config['dmraid_ver'], temp, quiet)
 		if ret is not zero:
-			print red('ERR: ')+'initramfs.dmraid.download() failed'
+			print red('error: ')+'initramfs.dmraid.download() failed'
 			sys.exit(2)
 
 	ret = extract(master_config['dmraid_ver'], temp, quiet)
@@ -148,7 +148,7 @@ def build_sequence(master_config, selinux, temp, quiet):
 
 	ret = configure(temp['work'] + '/dmraid/' + master_config['dmraid_ver'], master_config, temp, quiet)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.dmraid.configure() failed'
+		print red('error: ')+'initramfs.dmraid.configure() failed'
 		sys.exit(2)
 
 	# we don't have selinux by default
@@ -164,23 +164,23 @@ def build_sequence(master_config, selinux, temp, quiet):
 
 	ret = compile(temp['work'] + '/dmraid/' + master_config['dmraid_ver'], master_config, quiet)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.dmraid.compile() failed'
+		print red('error: ')+'initramfs.dmraid.compile() failed'
 		sys.exit(2)
 
 # TODO remove manpage rm -rf %s/dmraid/man % temp['work']
 
 	ret = strip(master_config, temp)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.dmraid.strip() failed'
+		print red('error: ')+'initramfs.dmraid.strip() failed'
 		sys.exit(2)
 
 	ret = compress(master_config, temp, quiet)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.dmraid.compress() failed'
+		print red('error: ')+'initramfs.dmraid.compress() failed'
 		sys.exit(2)
 
 	ret = cache(temp['work'] + '/dmraid/' + master_config['dmraid_ver'], master_config, temp, quiet)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.dmraid.compress() failed'
+		print red('error: ')+'initramfs.dmraid.compress() failed'
 
 	return ret

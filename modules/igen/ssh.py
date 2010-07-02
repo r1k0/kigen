@@ -136,7 +136,7 @@ def build_sequence(master_config, temp, verbose):
     if os.path.isfile('%s/distfiles/openssh-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['ssh-version']))) is not True:
         ret = download(master_config['ssh-version'], temp, verbose)
         if ret is not zero:
-            print red('ERR')+ ': '+'initramfs.ssh.download() failed'
+            print red('error')+ ': '+'initramfs.ssh.download() failed'
             sys.exit(2)
 
     extract(master_config['ssh-version'], temp, verbose)
@@ -144,27 +144,27 @@ def build_sequence(master_config, temp, verbose):
 
     ret = configure(temp['work'] + '/openssh-' + master_config['ssh-version'], master_config, verbose)
     if ret is not zero:
-        print red('ERR: ')+'initramfs.ssh.configure() failed'
+        print red('error: ')+'initramfs.ssh.configure() failed'
         sys.exit(2)
 
     ret = compile(temp['work'] + '/openssh-' + master_config['ssh-version'], master_config, verbose)
     if ret is not zero:
-        print red('ERR: ')+'initramfs.ssh.compile() failed'
+        print red('error: ')+'initramfs.ssh.compile() failed'
         sys.exit(2)
 
     ret = strip(temp['work'] + '/openssh-' + master_config['ssh-version'], master_config)
     if ret is not zero:
-        print red('ERR: ')+'initramfs.ssh.strip() failed'
+        print red('error: ')+'initramfs.ssh.strip() failed'
         sys.exit(2)
 
     ret = compress(temp['work'] + '/openssh-' + master_config['ssh-version'], master_config, verbose)
     if ret is not zero:
-        print red('ERR: ')+'initramfs.ssh.compress() failed'
+        print red('error: ')+'initramfs.ssh.compress() failed'
         sys.exit(2)
 
     ret = cache(temp['work'] + '/openssh-' + master_config['ssh-version'], master_config, temp, verbose)
     if ret is not zero:
-        print red('ERR: ')+'initramfs.ssh.compress() failed'
+        print red('error: ')+'initramfs.ssh.compress() failed'
         sys.exit(2)
 
     return ret

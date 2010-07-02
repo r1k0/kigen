@@ -106,7 +106,7 @@ def build_sequence(master_config, temp, quiet):
 	if os.path.isfile('%s/distfiles/open-iscsi-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['iscsi_ver']))) is not True:
 		ret = download(master_config['iscsi_ver'], temp, quiet)
 		if ret is not zero:
-			print red('ERR: ')+'initramfs.iscsi.download() failed'
+			print red('error: ')+'initramfs.iscsi.download() failed'
 			sys.exit(2)
 
 	ret = extract(master_config['iscsi_ver'], temp, quiet)
@@ -114,24 +114,24 @@ def build_sequence(master_config, temp, quiet):
 
 	ret = compile(temp['work'] + '/open-iscsi-' + master_config['iscsi_ver'], master_config, quiet)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.iscsi.compile() failed'
+		print red('error: ')+'initramfs.iscsi.compile() failed'
 		sys.exit(2)
 
 # TODO remove manpage rm -rf %s/iscsi/man % temp['work']
 
 	ret = strip(master_config, temp)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.iscsi.strip() failed'
+		print red('error: ')+'initramfs.iscsi.strip() failed'
 		sys.exit(2)
 
 	ret = compress(master_config, temp, quiet)
 	if ret is not zero: 
-		print red('ERR: ')+'initramfs.iscsi.compress() failed'
+		print red('error: ')+'initramfs.iscsi.compress() failed'
 		sys.exit(2)
 
 	ret = cache(temp['work'] + '/open-iscsi-' + master_config['iscsi_ver'], master_config, temp, quiet)
 	if ret is not zero: 
-		print red('ERR: ')+'initramfs.iscsi.compress() failed'
+		print red('error: ')+'initramfs.iscsi.compress() failed'
 		sys.exit(2)
 
 	return ret

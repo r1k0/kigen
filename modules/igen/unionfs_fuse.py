@@ -134,7 +134,7 @@ def build_sequence(master_config, temp, verbose):
 	if os.path.isfile('%s/distfiles/unionfs-fuse-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['unionfs_fuse_ver']))) is not True:
 		ret = download(master_config['unionfs_fuse_ver'], temp, verbose)
 		if ret is not zero:
-			print red('ERR: ')+'initramfs.unionfs_fuse.download() failed'
+			print red('error: ')+'initramfs.unionfs_fuse.download() failed'
 			sys.exit(2)
 
 	ret = extract(master_config['unionfs_fuse_ver'], temp, verbose)
@@ -142,7 +142,7 @@ def build_sequence(master_config, temp, verbose):
 
 #	ret = configure(temp['work'] + '/unionfs_fuse/' + master_config['unionfs_fuse_ver'], master_config, temp, verbose)
 #	if ret is not zero:
-#		print red('ERR: ')+'initramfs.unionfs_fuse.configure() failed'
+#		print red('error: ')+'initramfs.unionfs_fuse.configure() failed'
 #		sys.exit(2)
 
 	# add fuse lib path
@@ -153,23 +153,23 @@ def build_sequence(master_config, temp, verbose):
 
 	ret = compile(temp['work'] + '/unionfs-fuse-' + master_config['unionfs_fuse_ver'], master_config, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.unionfs_fuse.compile() failed'
+		print red('error: ')+'initramfs.unionfs_fuse.compile() failed'
 		sys.exit(2)
 
 # TODO remove manpage rm -rf %s/unionfs_fuse/man % temp['work']
 
 	ret = strip(master_config, temp)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.unionfs_fuse.strip() failed'
+		print red('error: ')+'initramfs.unionfs_fuse.strip() failed'
 		sys.exit(2)
 
 	ret = compress(master_config, temp, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.unionfs_fuse.compress() failed'
+		print red('error: ')+'initramfs.unionfs_fuse.compress() failed'
 		sys.exit(2)
 
 	ret = cache(temp['work'] + '/unionfs-fuse-' + master_config['unionfs_fuse_ver'], master_config, temp, verbose)
 	if ret is not zero:
-		print red('ERR: ')+'initramfs.unionfs_fuse.compress() failed'
+		print red('error: ')+'initramfs.unionfs_fuse.compress() failed'
 
 	return ret
