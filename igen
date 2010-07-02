@@ -73,8 +73,8 @@ if 'kernel-sources' in master_config:
     kerneldir = master_config['kernel-sources']
 
 # Funtoo bootupdate integration
-import igen.bootupdate
-bootupdateinitrd = igen.bootupdate.get_boot_initrd()
+from igen.bootupdate import get_boot_initrd
+bootupdateinitrd = get_boot_initrd()
 if bootupdateinitrd:
     bootupdateset = True
 else:

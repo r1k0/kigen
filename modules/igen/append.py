@@ -240,7 +240,7 @@ class append:
                     module_dirname = os.path.dirname(module)
                     sprocessor('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
                     sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
-    
+   
         # for each module in /etc/boot.conf
         if "load-modules" in self.bootupdateinitrd:
             for i in self.bootupdateinitrd['load-modules'].split():
