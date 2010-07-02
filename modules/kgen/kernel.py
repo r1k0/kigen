@@ -3,10 +3,6 @@ import sys
 from stdout import white, green, turquoise, red, yellow
 import utils
 
-# NOTE: if we add functions as methods
-# we get TypeError: 'bool' object is not callable
-# hence no methods
-
 class kernel:
 
     def __init__(self, kerneldir, master_config, arch, KV, cli, verbose):
@@ -34,30 +30,31 @@ class kernel:
         """
         ret = zero = int('0')
         if self.dotconfig:
-            # backup the previous .config found
+            # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import time
-                copy_dotconfig(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(time()), self.quiet)
+                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(time()))
+
             # copy the custom .config
-            copy_dotconfig(self.dotconfig, self.kerneldir + '/.config', self.quiet)
+            self.copy_config(self.dotconfig, self.kerneldir + '/.config')
     
         if self.mrproper is True:
-            ret = mrproper(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            ret = make_mrproper()
             if ret is not zero: self.fail('mrproper')
         if self.clean is True:
-            ret = clean(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            ret = make_clean()
             if ret is not zero: self.fail('clean')
 #        if self.allyesconfig is True:
-#            ret = allyesconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+#            ret = make_allyesconfig()
 #            if ret is not zero: self.fail('allyesconfig')
 #        elif self.allnoconfig is True:
-#            ret = allnoconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+#            ret = make_allnoconfig()
 #            if ret is not zero: self.fail('allnoconfig')
         if self.oldconfig is True:
-            ret = oldconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            ret = self.make_oldconfig()
             if ret is not zero: self.fail('oldconfig')
-        if self.menuconfig is True or self.dotconfig is not '':
-            ret = menuconfig(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+        if self.menuconfig is True:
+            ret = self.make_menuconfig()
             if ret is not zero: self.fail('menuconfig')
     
         # check for kernel .config
@@ -65,21 +62,21 @@ class kernel:
             raise error.fail(self.kerneldir+'/.config'+' does not exist.')
     
         # prepare
-        ret = prepare(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+        ret = self.make_prepare()
         if ret is not zero: self.fail('prepare')
     
         # bzImage
-        ret = bzImage(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+        ret = self.make_bzImage()
         if ret is not zero: self.fail('bzImage')
     
         # modules
         # if --allnoconfig is passed, then modules are disabled
         if self.allnoconfig is not True:
-            ret = modules(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet)
+            ret = self.make_modules()
             if ret is not zero: self.fail('modules')
             if self.nomodinstall is False:
                 # modules_install
-                ret = modules_install(self.kerneldir, self.KV, self.master_config, self.arch, self.quiet, self.fakeroot)
+                ret = self.make_modules_install()
                 if ret is not zero: self.fail('modules_install')
         # save kernel config
         if self.nosaveconfig is False:
@@ -99,216 +96,199 @@ class kernel:
         print red('error')+': kernel.'+step+'() failed'
         sys.exit(2)
 
-def copy_dotconfig(kernel_config, kerneldir, quiet):
-    """
-    Copy kernel .config file to kerneldir 
-    (/usr/src/linux by default)
-
-    @arg: string
-    @arg: string
-    @return: none
-    """
-    cpv = ''
-    if quiet is '': cpv = '-v'
-    print green(' * ') + turquoise('kernel.copy_config')
-    if os.path.isfile(kernel_config):
-        return os.system('cp %s %s %s' % (cpv, kernel_config, kerneldir))
-    else:
-        print red('ERR: ') + kernel_config + " doesn't exist."
-        sys.exit(2)
-
-# kernel building functions
-def build_command(master_config, arch, target, quiet):
-    """
-    Kernel Makefile bash build command
+    def chgdir(self, dir):
+        """
+        Change to directory
     
-    @arg: dict
-    @arg: string
-    @arg: string
-    @arg: string
-    @return: string
-    """
-    command = '%s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (master_config['DEFAULT_KERNEL_MAKE'], \
-                master_config['DEFAULT_MAKEOPTS'],      \
-                master_config['DEFAULT_KERNEL_CC'],     \
-                master_config['DEFAULT_KERNEL_LD'],     \
-                master_config['DEFAULT_KERNEL_AS'],     \
-                arch,                                   \
-                target,                                 \
-                quiet)
-    return command
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
 
-def mrproper(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for mrproper
+    def copy_config(self, source, dest): #, self.dotconfig, self.kerneldir + '/.config', self.quiet):
+        """
+        Copy kernel .config file to kerneldir 
+        (/usr/src/linux by default)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.mrproper ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'mrproper', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
+        @arg: string
+        @arg: string
+        @return: none
+        """
+        cpv = ''
+        if self.quiet is '': cpv = '-v'
+        print green(' * ') + turquoise('kernel.copy_config') + ' ' + source + ' -> ' + dest
+        if os.path.isfile(source):
+            return os.system('cp %s %s %s' % (cpv, source, dest))
+        else:
+            print red('error: ') + source + " doesn't exist."
+            sys.exit(2)
 
-def clean(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for clean
+    # kernel building functions
+    def build_command(self, target): #master_config, arch, target, quiet):
+        """
+        Kernel Makefile bash build command
+        
+        @arg: dict
+        @arg: string
+        @arg: string
+        @arg: string
+        @return: string
+        """
+        command = '%s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_config['DEFAULT_KERNEL_MAKE'], \
+                    self.master_config['DEFAULT_MAKEOPTS'],     \
+                    self.master_config['DEFAULT_KERNEL_CC'],    \
+                    self.master_config['DEFAULT_KERNEL_LD'],    \
+                    self.master_config['DEFAULT_KERNEL_AS'],    \
+                    self.arch,                                  \
+                    target,                                     \
+                    self.quiet)
+
+        return command
+
+    def make_mrproper(self): #kerneldir, KV, master_config, arch, quiet):
+        """
+        Kernel command interface for mrproper
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.mrproper ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('mrproper')
+        if self.quiet is '':
+            print command
+
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.clean ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'clean', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
+    def make_clean(self): #kerneldir, KV, master_config, arch, quiet):
+        """
+        Kernel command interface for clean
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.clean ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('clean')
+        if self.quiet is '':
+            print command
 
-# TODO: should we add a sort of yes '' | make oldconfig?
-def oldconfig(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for oldconfig
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.oldconfig ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'oldconfig', '')
-    if quiet is '':
-        print command
-    return os.system(command)
+    # TODO: should we add a sort of yes '' | make oldconfig?
+    def make_oldconfig(self): #kerneldir, KV, master_config, arch, quiet):
+        """
+        Kernel command interface for oldconfig
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.oldconfig ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('oldconfig')
+        if self.quiet is '':
+            print command
 
-def allyesconfig(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for allyesconfig
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.allyesconfig ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'allyesconfig', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
-
-def allnoconfig(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for allnoconfig
+#    def make_allyesconfig(self):
+#        """
+#        Kernel command interface for allyesconfig
+#        
+#        @return: bool
+#        """
+#        print green(' * ') + turquoise('kernel.allyesconfig ') + self.KV
+#        self.chgdir(self.kerneldir)
+#        command = self.build_command('allyesconfig')
+#        if self.quiet is '':
+#            print command
+#
+#        return os.system(command)
+#    
+#    def make_allnoconfig(self):
+#        """
+#        Kernel command interface for allnoconfig
+#        
+#        @return: bool
+#        """
+#        print green(' * ') + turquoise('kernel.allnoconfig ') + self.KV
+#        self.chgdir(self.kerneldir)
+#        command = self.build_command('allnoconfig')
+#        if self.quiet is '':
+#            print command
+#
+#        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.allnoconfig ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'allnoconfig', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
+    def make_menuconfig(self):
+        """
+        Kernel command interface for menuconfig
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.menuconfig ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('menuconfig')
 
-def menuconfig(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for menuconfig
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.menuconfig ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'menuconfig', '')
-    return os.system(command)
+    def make_prepare(self):
+        """
+        Kernel command interface for prepare
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.prepare ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('prepare')
+        if self.quiet is '':
+            print command
 
-def prepare(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for prepare
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.prepare ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'prepare', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
+    def make_bzImage(self):
+        """
+        Kernel command interface for bzImage
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.bzImage ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('bzImage')
+        if self.quiet is '':
+            print command
 
-def bzImage(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for bzImage
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.bzImage ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'bzImage', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
+    def make_modules(self):
+        """
+        Kernel command interface for modules
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.modules ') + self.KV
+        self.chgdir(self.kerneldir)
+        command = self.build_command('modules')
+        if self.quiet is '':
+            print command
 
-def modules(kerneldir, KV, master_config, arch, quiet):
-    """
-    Kernel command interface for modules
+        return os.system(command)
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.modules ') + KV
-    utils.chgdir(kerneldir)
-    command = build_command(master_config, arch, 'modules', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
-
-def modules_install(kerneldir, KV, master_config, arch, quiet, fakeroot):
-    """
-    Kernel command interface for modules_install 
+    def make_modules_install(self):
+        """
+        Kernel command interface for modules_install 
+        
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/' + self.KV
+        self.chgdir(self.kerneldir)
+        
+        if self.fakeroot is not '':
+            # export INSTALL_MOD_PATH 
+            os.environ['INSTALL_MOD_PATH'] = self.fakeroot
     
-    @arg: string
-    @arg: dict
-    @arg: string
-    @arg: string
-    @return: bool
-    """
-    print green(' * ') + turquoise('kernel.modules_install ') + fakeroot + '/lib/modules/' + KV
-    utils.chgdir(kerneldir)
-    
-    if fakeroot is not '':
-        # export INSTALL_MOD_PATH 
-        os.environ['INSTALL_MOD_PATH'] = fakeroot
+        command = self.build_command('modules_install')
+        if self.quiet is '':
+            print command
 
-    command = build_command(master_config, arch, 'modules_install', quiet)
-    if quiet is '':
-        print command
-    return os.system(command)
-
+        return os.system(command)
