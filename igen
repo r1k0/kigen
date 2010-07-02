@@ -82,7 +82,10 @@ else:
 
 # what am I?
 arch = igen.utils.identify_arch()
-#os = utils.identify_os()
+logging.debug('Building on ' + arch)
+
+# os = utils.identify_os()
+# logging.debug(os)
 
 # get kernel version from the Makefile source itself
 KV = igen.utils.get_kernel_version(kerneldir)

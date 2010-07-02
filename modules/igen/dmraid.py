@@ -3,6 +3,18 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 import utils
 
+class dmraid:
+
+    def __init__(self, master_config, selinux, temp, verbose):
+        pass
+
+    def build(self):
+        """
+        dmraid build sequence
+
+        @return:        bool
+        """
+
 def download(dmraid_ver, temp, quiet):
 	"""
 	Download dmraid tarball

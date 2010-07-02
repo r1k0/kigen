@@ -75,7 +75,10 @@ if 'kernel-sources' in master_config:
 
 # what am I?
 arch = kgen.utils.identify_arch()
-#os = utils.identify_os()
+logging.debug('Building on ' + arch)
+
+# os = utils.identify_os()
+# logging.debug(os)
 
 # get kernel version from the Makefile source itself
 KV = kgen.utils.get_kernel_version(kerneldir)
