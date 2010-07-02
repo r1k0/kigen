@@ -134,6 +134,8 @@ def get_portdir(temp):
     """
     if os.path.isfile('/usr/bin/portageq'):
         portdir = os.popen('portageq envvar PORTDIR').read().strip()
+        if not os.path.isdir(portdir+'/distfiles'):
+            os.mkdir(portdir+'/distfiles')
     else:
         # non Portage system
         portdir = temp['root']
