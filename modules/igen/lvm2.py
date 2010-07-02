@@ -58,6 +58,19 @@ class lvm2:
         print red('error')+': initramfs.lvm2.'+step+'() failed'
         sys.exit(2)
 
+    def chgdir(self, dir):
+        """
+        Change to directory
+    
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
+
     def download(self):
     	"""
     	lvm2 tarball download routine
@@ -86,7 +99,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.configure'
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
     	return os.system('LDFLAGS=-L%s/device-mapper/lib \
     			CFLAGS=-I%s/device-mapper/include \
     			CPPFLAGS=-I%s/device-mapper/include \
@@ -99,7 +112,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.compile'
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     								self.master_config['DEFAULT_MAKEOPTS'], \
     								self.master_config['DEFAULT_UTILS_CC'], \
@@ -113,7 +126,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.install'
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     									self.master_config['DEFAULT_MAKEOPTS'], \
@@ -130,7 +143,7 @@ class lvm2:
     	"""
     	print green(' * ') + '... lvm2.strip'
     
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
 
     	return os.system('strip tools/lvm.static ')
     
@@ -141,7 +154,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.compress'
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
     
     #	return os.system('tar -cj -f %s tools/lvm.static %s' % (temp['cache']+'/lvm.static-'+master_config['lvm2-version']+'.tar.bz2', verbose))
         return os.system('bzip2 tools/lvm.static')
@@ -154,7 +167,7 @@ class lvm2:
     	@return: bool
     	"""
     	print green(' * ') + '... lvm2.cache'
-    	utils.chgdir(self.lvm2_tmp)
+    	self.chgdir(self.lvm2_tmp)
     	mvv = ''
     	if self.verbose['set'] is '': mvv = '-v'
 
