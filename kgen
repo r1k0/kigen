@@ -43,7 +43,7 @@ else:
 # kgen modules are ready to be called
 from config import master_config, temp
 import kgen.cliparser
-import kgen.utils
+import utils
 
 if len(sys.argv) < 1:
     kgen.cliparser.print_usage()
@@ -61,7 +61,7 @@ logging.debug(cli)
 # parse kigen config file
 kigen_conf = cli['conf']
 if os.path.isfile(kigen_conf):
-    master_config_temp = kgen.utils.parse_config_file(kigen_conf)
+    master_config_temp = utils.parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
 else:
     print 'missing file: ' + red(kigen_conf) + '.'
@@ -74,14 +74,21 @@ if 'kernel-sources' in master_config:
     kerneldir = master_config['kernel-sources']
 
 # what am I?
-arch = kgen.utils.identify_arch()
+arch = utils.identify_arch()
 logging.debug('Building on ' + arch)
 
-# os = utils.identify_os()
-# logging.debug(os)
+# which Portage flavor?
+flavor = utils.identify_flavor()
+logging.debug(flavor)
+
+# show flavor on arch info
+print green(' * ') + white(flavor) + ' on ' + white(arch)
 
 # get kernel version from the Makefile source itself
-KV = kgen.utils.get_kernel_version(kerneldir)
+if not os.path.isdir(kerneldir):
+    print red('error') + ': ' + kerneldir + ' does not exist.'
+    sys.exit(2)
+KV = utils.get_kernel_version(kerneldir)
 
 from kgen.kernel import kernel
 kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
@@ -91,12 +98,12 @@ kobj.build()
 if cli['noboot'] is False:
      if cli['kernname'] is '':
          print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
-         kgen.utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
+         utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
      else:
          print green(' * produced ') + '/boot/' + cli['kernname']
-         kgen.utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['kernname']), verbose)
+         utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['kernname']), verbose)
      print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
-     kgen.utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
+     utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
 
 # leave /boot alone but tell the user where to find his kernel/system.map
 elif cli['noboot'] is True:
