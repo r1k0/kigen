@@ -24,6 +24,7 @@ def get_boot_initrd():
             bootconf = funtoo.core.config.ConfigFile('/etc/boot.conf')
             try:
                 d = bootconf.sectionData['initrd']
+                return d
             except:
                 d = {}
                 return d
