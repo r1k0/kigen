@@ -2,7 +2,6 @@ TODO: --udev for udevadm
 TODO: --ssh use dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
     ssh-version = x in /etc/kigen.conf
 TODO: --statickern option (see genkernel --static)
-TODO: remove portageq call to work on debian
 TODO: make kigen ebuild depend on python-2.6
 TODO: fix /dev/tty1 bug when using splash
 TODO: pass $PORTDIR don't assume /usr/portage
