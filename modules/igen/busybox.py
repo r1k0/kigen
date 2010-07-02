@@ -86,6 +86,19 @@ class busybox:
         print red('error')+': initramfs.busybox.'+step+'() failed'
         sys.exit(2)
 
+    def chgdir(self, dir):
+        """
+        Change to directory
+    
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
+
     def download(self):
         """
         Busybox tarball download command
@@ -127,7 +140,7 @@ class busybox:
         Busybox binary strip routine
         """
         print green(' * ') + '... busybox.strip'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
 
         return os.system('strip %s/busybox ' % (self.bb_tmp))
     
@@ -138,7 +151,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.compress'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
 
         return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.master_config['busybox-version']))
     
@@ -177,7 +190,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.mrproper'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
         command = self.build_command('mrproper', self.verbose['std'])
         if self.verbose['set'] is True:
             print command
@@ -191,7 +204,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.oldconfig'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
 #        return os.system('make oldconfig')
         command = self.build_command('oldconfig', '')
         if self.verbose['set'] is True:
@@ -206,7 +219,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.allyesconfig'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
         command = self.build_command('allyesconfig', self.verbose['std'])
         if self.verbose['set'] is True:
             print command
@@ -220,7 +233,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.menuconfig'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
         command = self.build_command('menuconfig', '')
         if self.verbose['set'] is True:
             print command
@@ -234,7 +247,7 @@ class busybox:
         @return: bool
         """
         print green(' * ') + '... busybox.compile'
-        utils.chgdir(self.bb_tmp)
+        self.chgdir(self.bb_tmp)
         command = self.build_command('all', self.verbose['std'])
         if self.verbose['set'] is True:
             print command
