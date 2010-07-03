@@ -155,8 +155,8 @@ def print_usage(ex=False):
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>')
     print
     print green('Options') + ':'
-    print '  --config=/file         Custom master config file'
     print '  -h, --help             This'
+    print '  --config=/file         Custom master config file'
     print '  -n, --nocolor          Do not colorize output'
     print '  -d, --debug            Show more output'
     print '  --logfile=/file        Log to file, default to /var/log/kgen.log'
