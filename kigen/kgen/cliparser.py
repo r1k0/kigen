@@ -12,7 +12,7 @@ def parse():
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "idhn", [ \
-                                "conf=",                    \
+                                "config=",                  \
                                 "help",                     \
                                 "info",                     \
                                 "version",                  \
@@ -48,7 +48,7 @@ def parse():
         if o in ("--logfile"):
             cli['logfile'] = a
     # default
-    cli['conf']         = '/etc/kigen.conf'
+    cli['config']       = '/etc/kigen.conf'
     cli['dotconfig']    = ''
     cli['kernname']		= ''
     cli['info']         = False
@@ -155,7 +155,7 @@ def print_usage(ex=False):
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>')
     print
     print green('Options') + ':'
-    print '  --conf=/file           Custom master config file'
+    print '  --config=/file         Custom master config file'
     print '  -h, --help             This'
     print '  -n, --nocolor          Do not colorize output'
     print '  -d, --debug            Show more output'
