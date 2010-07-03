@@ -230,7 +230,7 @@ def print_usage():
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>') 
     print
     print green('Options') + ':'
-    print '  --conf=/file           Custom master config file'
+    print '  --config=/file         Custom master config file'
     print '  -h, --help             This'
     print '  -n, --nocolor          Do not colorize output'
     print '  -d, --debug            Show more output'
