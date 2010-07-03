@@ -59,7 +59,7 @@ logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
 logging.debug(cli)
 
 # parse kigen config file
-kigen_conf = cli['conf']
+kigen_conf = cli['config']
 if os.path.isfile(kigen_conf):
     master_config_temp = utils.parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
