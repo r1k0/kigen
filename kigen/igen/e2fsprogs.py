@@ -54,6 +54,19 @@ class e2fsprogs:
         print red('error')+': initramfs.e2fsprogs.'+step+'() failed'
         sys.exit(2)
 
+    def chgdir(self, dir):
+        """
+        Change to directory
+    
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
+
     def download(self):
         """
         e2fsprogs tarball download routine
@@ -84,7 +97,7 @@ class e2fsprogs:
         @return: bool
         """
         print green(' * ') + '... e2fsprogs.configure'
-        utils.chgdir(self.e2tmp)
+        self.chgdir(self.e2tmp)
     
         return os.system('./configure --with-ldopts=-static %s' % self.verbose['std'])
     
@@ -95,7 +108,7 @@ class e2fsprogs:
         @return: bool
         """
         print green(' * ') + '... e2fsprogs.compile'
-        utils.chgdir(self.e2tmp)
+        self.chgdir(self.e2tmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
     
@@ -109,7 +122,7 @@ class e2fsprogs:
         @return: bool
         """
         print green(' * ') + '... e2fsprogs.strip'
-        utils.chgdir(self.e2tmp)
+        self.chgdir(self.e2tmp)
     
         return os.system('strip %s/misc/blkid ' % self.e2tmp)
     
@@ -123,7 +136,7 @@ class e2fsprogs:
         @return: bool
         """
         print green(' * ') + '... e2fsprogs.compress'
-        utils.chgdir(self.e2tmp)
+        self.chgdir(self.e2tmp)
     
         return os.system('bzip2 %s/misc/blkid' % self.e2tmp)
     
@@ -134,7 +147,7 @@ class e2fsprogs:
         @return: bool
         """
         print green(' * ') + '... e2fsprogs.cache'
-        utils.chgdir(self.e2tmp)
+        self.chgdir(self.e2tmp)
     
         return utils.sprocessor('mv %s/misc/blkid.bz2 %s/blkid-e2fsprogs-%s.bz2' % (self.e2tmp, self.temp['cache'], self.master_config['e2fsprogs-version']), self.verbose)
 
