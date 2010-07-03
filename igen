@@ -22,7 +22,7 @@ if binpath == '/usr/sbin/igen':
     sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen")
 else:
     libdir = os.path.dirname(binpath)
-    sys.path.append(libdir+'/modules')
+    sys.path.append(libdir+'/kigen')
 # import python libs
 sys.path.append(libdir)
 
