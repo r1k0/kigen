@@ -34,7 +34,7 @@ def parse():
                                 "disklabel",    \
                                 "unionfs-fuse", \
                                 "aufs",         \
-                                "ssh",          \
+                                "dropbear",          \
                                 "linuxrc=",     \
                                 "nocache",      \
                                 "noboot",       \
@@ -80,7 +80,7 @@ def parse():
     cli['unionfs']      = False
     cli['aufs']         = False
     cli['linuxrc']      = ''
-    cli['ssh']          = False
+    cli['dropbear']          = False
     cli['nocache']      = False
     cli['noboot']       = False
     cli['selinux']      = False
@@ -196,8 +196,8 @@ def parse():
             cli['color'] = False
         elif o in ("--config="):
             cli['config'] = a
-        elif o in ("--ssh"):
-            cli['ssh'] = True
+        elif o in ("--dropbear"):
+            cli['dropbear'] = True
         elif o in ("--nohostbin"):
             cli['nohostbin'] = True
         else:
@@ -249,7 +249,7 @@ def print_usage():
 #    print yellow('   --selinux              Include selinux support in --dmraid')
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
-#    print yellow('  --ssh                  Include openssh tools and daemon')
+#    print yellow('  --dropbear             Include dropbear tools and daemon')
     print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
     print '   --stheme=<theme>       Splash theme, gentoo by default'
     print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
