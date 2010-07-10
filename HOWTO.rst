@@ -6,8 +6,8 @@ HOWTO build and boot kernel/initramfs
 
 .. contents:: Table of contents
 
-Gentoo Portage based (Gentoo, Sabayon, VLOS)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Gentoo Portage
+~~~~~~~~~~~~~~
 
 - Add to local overlay
 
@@ -380,8 +380,23 @@ Passing --nohostbin will fetch sources and compile statically.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
-Funtoo Portage based
-~~~~~~~~~~~~~~~~~~~~
+Funtoo Portage
+~~~~~~~~~~~~~~
+
+- Add to local overlay
+
+- Merge KIGen
+
+- Care for /etc/kigen.conf
+
+- Use of kgen to generate a kernel/system.map
+
+- Use of igen to generate an initramfs
+
+- Use of igen to generate an initramfs with support for sys-boot/boot-update
+
+Sabayon Portage
+~~~~~~~~~~~~~~~
 
 - Add to local overlay
 
