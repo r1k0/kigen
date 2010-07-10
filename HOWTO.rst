@@ -411,7 +411,6 @@ Sabayon Portage
 - Use of igen to generate an initramfs with support for sys-boot/boot-update
 
 
-
 :Authors: 
     erick 'r1k0' michau (python engine),
 
