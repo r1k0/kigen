@@ -141,7 +141,7 @@ class initramfs:
             ret = aobj.e2fsprogs()
             if ret is not zero: self.fail('e2fsprogs')
         # 13) append ssh
-        if self.cli['ssh'] is True:
+        if self.cli['dropbear'] is True:
             os.chdir(self.temp['work'])
             ret = aobj.ssh()
             if ret is not zero: self.fail('ssh')
