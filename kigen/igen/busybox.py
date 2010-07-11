@@ -107,7 +107,7 @@ class busybox:
         print green(' * ') + '... busybox.download'
         bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
-        return os.system('/usr/bin/wget -c %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
     
     def extract(self):
         """
