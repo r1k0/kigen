@@ -340,32 +340,32 @@ class append:
         @return: bool
         """
         ret = int('0')
-        dbscp_bin           = '/usr/bin/dbscp' # this needs dropbear-0.46-dbscp.patch
-        dbclient_bin        = '/usr/bin/dbclient'
-        dropbearkey_bin     = '/usr/bin/dropbearkey'
-        dropbearconvert_bin = '/usr/bin/dropbearconvert'
-        dropbear_sbin       = '/usr/sbin/dropbear'
+        dbscp_bin           = 'dbscp' # this needs dropbear-0.46-dbscp.patch
+        dbclient_bin        = 'dbclient'
+        dropbearkey_bin     = 'dropbearkey'
+        dropbearconvert_bin = 'dropbearconvert'
+        dropbear_sbin       = 'dropbear'
 
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
 
-        if os.path.isfile(dropbear_sbin) and self.nohostbin is False:
+        if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
 #            luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
 #            logging.debug('initramfs.append.dropbear ' + cryptsetup_bin + ' from host')
-            print green(' * ') + turquoise('initramfs.append.dropbear ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
+            print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
 # FIXME: check if dropbear is merged with USE=static if not fail
-            sprocessor('cp %s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-            sprocessor('cp %s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-            sprocessor('cp %s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-            sprocessor('cp %s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-            sprocessor('cp %s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-            for i in ['dbscp_bin', 'dbclient_bin', 'dropbearkey_bin', 'dropbearconvert_bin']:
-                sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % self.temp['work'], self.verbose, i)
+            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            sprocessor('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+            for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
+                sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
             sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
-            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_config['dropbear-version']+'.bz2') and self.nocache is False:
+            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_config['dropbear-version']+'.tar.gz') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
 
@@ -387,7 +387,7 @@ class append:
 
                 # extract cache
                 # FIXME careful with the >
-                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
+                os.system('tar BLABLABLA ' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
                 sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
