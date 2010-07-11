@@ -13,7 +13,7 @@ class dropbear:
         self.dropbear_ver   = master_config['dropbear-version']
         self.dropbeartmp    = temp['work'] + '/dropbear-' + master_config['dropbear-version']
 
-    def build():
+    def build(self):
         """
         dropbear build sequence
 
@@ -27,7 +27,10 @@ class dropbear:
     
         self.extract()
     #   grr, tar thing to not return 0 when success
-    
+   
+        ret = self.patch()
+        if ret is not zero: self.fail('patch')
+
         ret = self.configure()
         if ret is not zero: self.fail('configure')
     
@@ -88,10 +91,29 @@ class dropbear:
         print green(' * ') + '... dropbear.extract'
     
         os.system('tar xvfz %s/distfiles/dropbear-%s.tar.gz -C %s %s' % (utils.get_portdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
-    
+   
+    def patch(self, file):
+        """
+        patch dropbear-0.46-dbscp.patch
+
+        @return:    bool
+        """
+# cd $D
+# patch -p0 < dropbear-0.46-dbscp.patch
+        print green(' * ') + '... dropbear.patch'
+        utils.chgdir(self.dropbeartmp)
+# get dropbear-0.46-dbscp.patch
+        return os.system('patch -p0 < dropbear-0.46-dbscp.patch %s' % self.verbose['std'])
+
+    def get_config(self):
+        """
+        """
+# get /etc/portage/savedconfig/net-misc/dropbear-0.52
+        pass
+
     def configure(self):
         """
-        dropbear Makefile interface to configure
+        dropbear interface to configure
     
         @return: bool
         """
@@ -102,14 +124,14 @@ class dropbear:
     
     def compile(self):
         """
-        dropbear Makefile interface to make
+        dropbear interface to Makefile
     
         @return: bool
         """
         print green(' * ') + '... dropbear.compile'
         utils.chgdir(self.dropbeartmp)
     
-        return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
+        return os.system('STATIC=1 PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" %s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
     
     def strip(self):
         """
@@ -138,10 +160,10 @@ class dropbear:
         utils.sprocessor('mkdir -p bin', self.verbose)
         utils.sprocessor('mkdir -p sbin', self.verbose)
         utils.sprocessor('mkdir -p usr/local/etc', self.verbose)
-        utils.sprocessor('cp dropbear sftp scp bin', self.verbose)
-        utils.sprocessor('cp dropbeard sbin', self.verbose)
+        utils.sprocessor('cp dbclient dropbearconvert dropbearkey bin', self.verbose)
+        utils.sprocessor('cp dropbear sbin', self.verbose)
         # that is where dropbeard expects its conf file
-        utils.sprocessor('cp dropbeard_config usr/local/etc', self.verbose)
+#        utils.sprocessor('cp dropbeard_config usr/local/etc', self.verbose)
         # TODO create user/group dropbear 
     
         return os.system('tar cf dropbear.tar bin sbin usr')
