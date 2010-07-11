@@ -43,7 +43,6 @@ class busybox:
             if ret is not zero: 
                 os.system('rm %s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['busybox-version'])))
                 self.fail('download')
-            # delete %s/distfiles/busybox-%s.tar.bz2 too so that it re downloads it next run
     
         ret = self.extract()
         if ret is not zero: self.fail('extract')

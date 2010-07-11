@@ -23,7 +23,9 @@ class luks:
     
         if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (utils.get_portdir(self.temp), self.luks_ver)) is not True:
             ret = self.download()
-            if ret is not zero: self.fail('download')
+            if ret is not zero: 
+                os.system('rm %s/distfiles/cryptsetup-%s.tar.bz2' % (utils.get_portdir(self.temp), self.luks_ver))
+                self.fail('download')
     
         self.extract()
     #   grr, tar thing to not return 0 when success
