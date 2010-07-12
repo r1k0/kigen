@@ -249,7 +249,7 @@ def print_usage():
 #    print yellow('   --selinux              Include selinux support in --dmraid')
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
-#    print yellow('  --dropbear             Include dropbear tools and daemon')
+    print '  --dropbear             Include dropbear tools and daemon (host binaries if found)'
     print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
     print '   --stheme=<theme>       Splash theme, gentoo by default'
     print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
