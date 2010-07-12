@@ -25,7 +25,9 @@ class device_mapper:
     
         if os.path.isfile('%s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(self.temp), self.dm_ver)) is not True:
             ret = self.download()
-            if ret is not zero: self.fail('download')
+            if ret is not zero:
+                os.system('rm %s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(self.temp), self.dm_ver))
+                self.fail('download')
     
         self.extract()
         # grr, tar thing to not return 0 when success
@@ -62,6 +64,19 @@ class device_mapper:
         print red('error')+': initramfs.device_mapper.'+step+'() failed'
         sys.exit(2)
 
+    def chgdir(self, dir):
+        """
+        Change to directory
+    
+        @arg: string
+        @return: none
+        """
+        if not os.path.isdir(dir):
+            print red('error') + ': ' + 'cannot change dir to ' + dir
+            sys.exit(2)
+        if not os.getcwd() == dir:
+            os.chdir(dir)
+
     def download(self):
     	"""
     	Download device-mapper tarball
@@ -91,7 +106,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.configure'
-    	utils.chgdir(self.dm_tmp)
+    	self.chgdir(self.dm_tmp)
     
     	return os.system('./configure --prefix=%s/device-mapper --enable-static_link --disable-selinux %s' % (self.temp['work'], self.verbose['std']))
     
@@ -102,7 +117,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.compile'
-    	utils.chgdir(self.dm_tmp)
+    	self.chgdir(self.dm_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     								self.master_config['DEFAULT_MAKEOPTS'], \
@@ -118,7 +133,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.install'
-    	utils.chgdir(self.dm_tmp)
+    	self.chgdir(self.dm_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     						self.master_config['DEFAULT_MAKEOPTS'], \
@@ -134,7 +149,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.strip'
-    	utils.chgdir(self.temp['work'])
+    	self.chgdir(self.temp['work'])
     
     	return os.system('strip %s/device-mapper/sbin/dmsetup' % (self.temp['work']))
     
@@ -145,7 +160,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.compress'
-    	utils.chgdir(self.temp['work'])
+    	self.chgdir(self.temp['work'])
     
     	return os.system('tar -jcf %s device-mapper %s' % (self.temp['cache']+'/dmsetup-device-mapper-'+self.dm_ver+'.tar.bz2', self.verbose['std']))
     
@@ -156,7 +171,7 @@ class device_mapper:
     	@return: bool
     	"""
     	print green(' * ') + '... device_mapper.cache'
-    	utils.chgdir(self.dm_tmp)
+    	self.chgdir(self.dm_tmp)
     	mvv = ''
     	if self.verbose['set'] is '': mvv = '-v'
     
