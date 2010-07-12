@@ -1,4 +1,4 @@
-TODO: add option to wget to resume download 
+TODO:--lvm2 --nohostbin omits its own devicemapper
 TODO: --disklabel ./configure breaks when using 1.41.12 instead of 1.40.9
     configure: error: --with-ldopts no longer supported; use LDFLAGS= instead
 TODO: --udev for udevadm
