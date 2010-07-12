@@ -65,8 +65,8 @@ class busybox:
             ret = self.make_menuconfig()
             if ret is not zero: self.fail('menuconfig')
     
-        ret = self.make_compile()
-        if ret is not zero: self.fail('compile')
+        ret = self.make()
+        if ret is not zero: self.fail('make')
     
         ret = self.strip()
         if ret is not zero: self.fail('stip')
@@ -242,13 +242,13 @@ class busybox:
 
         return os.system(command)
     
-    def make_compile(self):
+    def make(self):
         """
-        Busybox compile interface
+        Busybox Makefile interface
         
         @return: bool
         """
-        print green(' * ') + '... busybox.compile'
+        print green(' * ') + '... busybox.make'
         self.chgdir(self.bb_tmp)
         command = self.build_command('all', self.verbose['std'])
         if self.verbose['set'] is True:
