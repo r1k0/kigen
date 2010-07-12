@@ -34,8 +34,8 @@ class lvm2:
         ret = self.configure()
         if ret is not zero: self.fail('configure')
     
-        ret = self.compile()
-        if ret is not zero: self.fail('compile')
+        ret = self.make()
+        if ret is not zero: self.fail('make')
     
         ret = self.install()
         if ret is not zero: self.fail('install')
@@ -102,18 +102,19 @@ class lvm2:
     	"""
     	print green(' * ') + '... lvm2.configure'
     	self.chgdir(self.lvm2_tmp)
-    	return os.system('LDFLAGS=-L%s/device-mapper/lib \
-    			CFLAGS=-I%s/device-mapper/include \
-    			CPPFLAGS=-I%s/device-mapper/include \
-    			./configure --enable-static_link --prefix=%s/lvm %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
-    
-    def compile(self):
+#    	return os.system('LDFLAGS=-L%s/device-mapper/lib \
+#    			CFLAGS=-I%s/device-mapper/include \
+#    			CPPFLAGS=-I%s/device-mapper/include \
+#    			./configure --enable-static_link --prefix=%s/lvm %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
+        return os.system('./configure --enable-static_link %s' % self.verbose['std'])
+
+    def make(self):
     	"""
     	lvm2 Makefile interface to make
     
     	@return: bool
     	"""
-    	print green(' * ') + '... lvm2.compile'
+    	print green(' * ') + '... lvm2.make'
     	self.chgdir(self.lvm2_tmp)
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     								self.master_config['DEFAULT_MAKEOPTS'], \
@@ -121,6 +122,37 @@ class lvm2:
     								self.master_config['DEFAULT_UTILS_LD'], \
     								self.master_config['DEFAULT_UTILS_AS'], \
     								self.verbose['std']))
+
+    def make_device_mapper(self):
+        """
+        lvm2 Makefile interface to make device-mapper
+
+        @return: bool
+        """
+        print green(' * ') + '... lvm2.make_device_mapper'
+        self.chgdir(self.lvm2_tmp)
+        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
+                                    self.master_config['DEFAULT_MAKEOPTS'], \
+                                    self.master_config['DEFAULT_UTILS_CC'], \
+                                    self.master_config['DEFAULT_UTILS_LD'], \
+                                    self.master_config['DEFAULT_UTILS_AS'], \
+                                    self.verbose['std']))
+
+    def make_device_mapper_install(self):
+        """
+        lvm2 Makefile interface to make device-mapper_install
+
+        @return: bool
+        """
+        print green(' * ') + '... lvm2.make_device_mapper_install'
+        self.chgdir(self.lvm2_tmp)
+        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper_install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
+                                    self.master_config['DEFAULT_MAKEOPTS'], \
+                                    self.master_config['DEFAULT_UTILS_CC'], \
+                                    self.master_config['DEFAULT_UTILS_LD'], \
+                                    self.master_config['DEFAULT_UTILS_AS'], \
+                                    self.verbose['std']))
+
     def install(self):
     	"""
     	Install lvm2

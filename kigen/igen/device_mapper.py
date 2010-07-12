@@ -3,6 +3,8 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 import utils
 
+# OBSOLETE source now inside lvm2
+
 class device_mapper:
 
     def __init__(self, master_config, temp, verbose):
@@ -35,8 +37,8 @@ class device_mapper:
         ret = self.configure()
         if ret is not zero: self.fail('configure')
     
-        ret = self.compile()
-        if ret is not zero: self.fail('compile')
+        ret = self.make()
+        if ret is not zero: self.fail('make')
     
         ret = self.install()
         if ret is not zero: self.fail('install')
@@ -110,13 +112,13 @@ class device_mapper:
     
     	return os.system('./configure --prefix=%s/device-mapper --enable-static_link --disable-selinux %s' % (self.temp['work'], self.verbose['std']))
     
-    def compile(self):
+    def make(self):
     	"""
     	Compile device-mapper source code
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.compile'
+    	print green(' * ') + '... device_mapper.make'
     	self.chgdir(self.dm_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \

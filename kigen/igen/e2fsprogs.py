@@ -33,8 +33,8 @@ class e2fsprogs:
         ret = self.configure()
         if ret is not zero: self.fail('configure')
     
-        ret = self.compile()
-        if ret is not zero: self.fail('compile')
+        ret = self.make()
+        if ret is not zero: self.fail('make')
     
         ret = self.strip()
         if ret is not zero: self.fail('strip')
@@ -103,13 +103,13 @@ class e2fsprogs:
     
         return os.system('./configure --with-ldopts=-static %s' % self.verbose['std'])
     
-    def compile(self):
+    def make(self):
         """
         e2fsprogs Makefile interface to make
     
         @return: bool
         """
-        print green(' * ') + '... e2fsprogs.compile'
+        print green(' * ') + '... e2fsprogs.make'
         self.chgdir(self.e2tmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))

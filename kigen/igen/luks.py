@@ -33,8 +33,8 @@ class luks:
         ret = self.configure()
         if ret is not zero: self.fail('configure')
     
-        ret = self.compile()
-        if ret is not zero: self.fail('compile')
+        ret = self.make()
+        if ret is not zero: self.fail('make')
     
         ret = self.strip()
         if ret is not zero: self.fail('strip')
@@ -102,13 +102,13 @@ class luks:
     
         return os.system('./configure --enable-static %s' % self.verbose['std'])
     
-    def compile(self):
+    def make(self):
         """
         luks Makefile interface to make
     
         @return: bool
         """
-        print green(' * ') + '... luks.compile'
+        print green(' * ') + '... luks.make'
         self.chgdir(self.lukstmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))

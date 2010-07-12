@@ -520,8 +520,8 @@ class append:
             else: 
                 # compile and cache
 
-                # this is required for lvm2 to configure against kigen own sources rather than host
-                self.build_device_mapper()
+# devmapper source inside lvm2 now
+#                self.build_device_mapper()
 
                 print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version']
                 from lvm2 import lvm2
@@ -538,28 +538,28 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
         return os.system(self.cpio())
 
-    def build_device_mapper(self):
-        """
-        Build the device-mapper and cache it for later use
-        Only to be called if lvm2 or dmraid is compiled!
-    
-        @return: bool
-        """
-        logging.debug('initramfs.append.build_device_mapper '+self.master_config['device-mapper-version'])
-        print green(' * ') + turquoise('initramfs.append.build_device_mapper ') + self.master_config['device-mapper-version'],
-    
-        if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['device-mapper-version']+'.tar.bz2') and self.nocache is False:
-            # use cache
-            print 'from ' + white('cache')
-            return
-        else:
-            # compile and cache
-            print
-            from device_mapper import device_mapper
-            dmobj = device_mapper(self.master_config, self.temp, self.verbose)
-            return dmobj.build()
-
-        # TODO extract cache d'oh
+#    def build_device_mapper(self):
+#        """
+#        Build the device-mapper and cache it for later use
+#        Only to be called if lvm2 or dmraid is compiled!
+#    
+#        @return: bool
+#        """
+#        logging.debug('initramfs.append.build_device_mapper '+self.master_config['device-mapper-version'])
+#        print green(' * ') + turquoise('initramfs.append.build_device_mapper ') + self.master_config['device-mapper-version'],
+#    
+#        if os.path.isfile(self.temp['cache']+'/device-mapper-'+self.master_config['device-mapper-version']+'.tar.bz2') and self.nocache is False:
+#            # use cache
+#            print 'from ' + white('cache')
+#            return
+#        else:
+#            # compile and cache
+#            print
+#            from device_mapper import device_mapper
+#            dmobj = device_mapper(self.master_config, self.temp, self.verbose)
+#            return dmobj.build()
+#
+#        # TODO extract cache d'oh
      
     def evms(self):
         """
@@ -635,7 +635,7 @@ class append:
     
         @return: bool
         """
-        self.build_device_mapper()
+#        self.build_device_mapper() USE LVM2 instead
     
         logging.debug('initramfs.append.dmraid ' + self.master_config['dmraid_ver'])
         print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_config['dmraid_ver'],
