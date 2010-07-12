@@ -21,9 +21,11 @@ class e2fsprogs:
         """
         ret = zero = int('0')
     
-        if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (utils.get_portdir(self.temp), self.master_config['e2fsprogs-version'])) is not True:
+        if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (utils.get_portdir(self.temp), self.e2fsprogs_ver)) is not True:
             ret = self.download()
-            if ret is not zero: self.fail('download')
+            if ret is not zero:
+                os.system('rm %s/distfiles/e2fsprogs-%s.tar.gz' % (utils.get_portdir(self.temp), self.e2fsprogs_ver))
+                self.fail('download')
     
         self.extract()
     #   grr, tar thing to not return 0 when success

@@ -5,7 +5,7 @@ temp_root = '/var/tmp/kigen'
 
 # temp directories
 temp = {'root' :        temp_root ,             \
-        'work' :        temp_root + '/work',    \
+        'work' :        temp_root + '/initramfs',    \
         'cache':        temp_root + '/cache',   \
         'distfiles':    temp_root + '/distfiles'}
 
