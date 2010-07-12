@@ -344,8 +344,9 @@ class append:
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
+        print green(' * ') + turquoise('initramfs.append.glibc')
         # this allows dns to work for ip
-        sprocessor('cp /lib/libnss_{dns,files}.so.2 /lib/{libresolv,ld-linux}.so.2 /lib/libc.so.6 %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/libnss_files.so.2 /lib/libnss_dns.so.2 /lib/libresolv.so.2 /lib/ld-linux.so.2 /lib/libc.so.6 %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-glibc-temp')
         return os.system(self.cpio())
