@@ -34,7 +34,7 @@ def parse():
                                 "disklabel",    \
                                 "unionfs-fuse", \
                                 "aufs",         \
-                                "dropbear",          \
+                                "dropbear",     \
                                 "linuxrc=",     \
                                 "nocache",      \
                                 "noboot",       \
@@ -46,6 +46,7 @@ def parse():
                                 "credits",      \
                                 "nosaveconfig", \
                                 "nohostbin",    \
+                                "glibc",        \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -90,6 +91,7 @@ def parse():
     cli['color']        = True
     cli['nosaveconfig'] = False
     cli['nohostbin']    = False
+    cli['glibc']        = False
 
     # target options
     for o, a in opts:
@@ -200,6 +202,8 @@ def parse():
             cli['dropbear'] = True
         elif o in ("--nohostbin"):
             cli['nohostbin'] = True
+        elif o in ("--glibc"):
+            cli['glibc'] = True
         else:
             assert False, "uncaught option"
 
@@ -250,7 +254,7 @@ def print_usage():
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
 #    print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
-    print yellow('  --glibc                Include host GNU C libraries (required for network)')
+    print yellow('  --glibc                Include host GNU C libraries (required for dns)')
     print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
     print '   --stheme=<theme>       Splash theme, gentoo by default'
     print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'

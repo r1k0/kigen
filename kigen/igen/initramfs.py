@@ -51,6 +51,7 @@ class initramfs:
         self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
+        self.glibc              = cli['glibc']
 
     def build(self):
         """
@@ -167,6 +168,12 @@ class initramfs:
 #            if ret is not zero: self.fail('firmware')
         # 18) append overlay
         # TODO
+
+        # 19) append glibc
+        if self.cli['glibc'] is True:
+            os.chdir(self.temp['work'])
+            ret = aobj.glibc()
+            if ret is not zero: self.fail('glibc')
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
