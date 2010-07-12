@@ -51,21 +51,21 @@ class busybox:
         if ret is not zero: self.fail('copy_config')
     
         if self.mrproper is True:
-            ret = self.mrproper()
+            ret = self.make_mrproper()
             if ret is not zero: self.fail('mrproper')
     
 #        if self.allyesconfig is True:
-#            ret = self.allyesconfig()
+#            ret = self.make_allyesconfig()
 #            if ret is not zero: self.fail('allyesconfig')
 #        elif self.oldconfig is True:
         if self.oldconfig is True:
-            ret = self.oldconfig()
+            ret = self.make_oldconfig()
             if ret is not zero: self.fail('oldconfig')
         if self.menuconfig is True:
-            ret = self.menuconfig()
+            ret = self.make_menuconfig()
             if ret is not zero: self.fail('menuconfig')
     
-        ret = self.compile()
+        ret = self.make_compile()
         if ret is not zero: self.fail('compile')
     
         ret = self.strip()
@@ -185,7 +185,7 @@ class busybox:
                     verbose)
         return command
     
-    def mrproper(self):
+    def make_mrproper(self):
         """
         Busybox mrproper interface
         
@@ -199,7 +199,7 @@ class busybox:
 
         return os.system(command)
     
-    def oldconfig(self):
+    def make_oldconfig(self):
         """
         Busybox oldconfig interface
         
@@ -214,7 +214,7 @@ class busybox:
 
         return os.system(command)
     
-    def allyesconfig(self):
+    def make_allyesconfig(self):
         """
         Busybox allyesconfig interface
         
@@ -228,7 +228,7 @@ class busybox:
 
         return os.system(command)
     
-    def menuconfig(self):
+    def make_menuconfig(self):
         """
         Busybox menuconfig interface
         
@@ -242,7 +242,7 @@ class busybox:
 
         return os.system(command)
     
-    def compile(self):
+    def make_compile(self):
         """
         Busybox compile interface
         
