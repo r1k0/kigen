@@ -332,7 +332,24 @@ class append:
 
         os.chdir(self.temp['work']+'/initramfs-luks-temp')
         return os.system(self.cpio())
-     
+
+    def glibc(self):
+        """
+        Append GNU C libraries from host to the initramfs
+
+        @return: bool
+        """
+        ret = int('0')
+
+        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
+        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+
+        # this allows dns to work for ip
+        sprocessor('cp /lib/libnss_{dns,files}.so.2 /lib/{libresolv,ld-linux}.so.2 /lib/libc.so.6 %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-glibc-temp')
+        return os.system(self.cpio())
+
     def dropbear(self):
         """
         Append dropbear support to the initramfs
