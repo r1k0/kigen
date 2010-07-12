@@ -346,7 +346,11 @@ class append:
 
         print green(' * ') + turquoise('initramfs.append.glibc')
         # this allows dns to work for ip
-        sprocessor('cp /lib/libnss_files.so.2 /lib/libnss_dns.so.2 /lib/libresolv.so.2 /lib/ld-linux.so.2 /lib/libc.so.6 %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        sprocessor('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-glibc-temp')
         return os.system(self.cpio())
@@ -516,8 +520,8 @@ class append:
             else: 
                 # compile and cache
 
-# this used to be required before lvm2 shipped libs from dm
-#                self.build_device_mapper()
+                # this is required for lvm2 to configure against kigen own sources rather than host
+                self.build_device_mapper()
 
                 print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version']
                 from lvm2 import lvm2
