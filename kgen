@@ -102,6 +102,7 @@ if cli['noboot'] is False:
      else:
          print green(' * produced ') + '/boot/' + cli['rename']
          utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['rename']), verbose)
+
      print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
      utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
 

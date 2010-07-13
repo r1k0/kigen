@@ -7,13 +7,12 @@ class busybox:
 
     def __init__(self,          \
                 arch,           \
-                dotconfig,         \
+                dotconfig,      \
                 master_config,  \
                 libdir,         \
                 temp,           \
                 oldconfig,      \
                 menuconfig,     \
-#                allyesconfig,   \
                 mrproper,       \
                 verbose):
 
@@ -24,7 +23,6 @@ class busybox:
         self.temp       = temp
         self.oldconfig  = oldconfig
         self.menuconfig = menuconfig
-#        self.allyesconfig = allyesconfig
         self.mrproper   = mrproper
         self.verbose    = verbose
         self.bb_version = master_config['busybox-version']
@@ -54,13 +52,10 @@ class busybox:
             ret = self.make_mrproper()
             if ret is not zero: self.fail('mrproper')
     
-#        if self.allyesconfig is True:
-#            ret = self.make_allyesconfig()
-#            if ret is not zero: self.fail('allyesconfig')
-#        elif self.oldconfig is True:
         if self.oldconfig is True:
             ret = self.make_oldconfig()
             if ret is not zero: self.fail('oldconfig')
+
         if self.menuconfig is True:
             ret = self.make_menuconfig()
             if ret is not zero: self.fail('menuconfig')
@@ -211,20 +206,6 @@ class busybox:
         command = self.build_command('oldconfig', '')
         if self.verbose['set'] is True:
         	print command
-
-        return os.system(command)
-    
-    def make_allyesconfig(self):
-        """
-        Busybox allyesconfig interface
-        
-        @return: bool
-        """
-        print green(' * ') + '... busybox.allyesconfig'
-        self.chgdir(self.bb_tmp)
-        command = self.build_command('allyesconfig', self.verbose['std'])
-        if self.verbose['set'] is True:
-            print command
 
         return os.system(command)
     

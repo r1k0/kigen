@@ -47,6 +47,7 @@ def parse():
                                 "nosaveconfig", \
                                 "nohostbin",    \
                                 "glibc",        \
+                                "rename=",      \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -92,6 +93,7 @@ def parse():
     cli['nosaveconfig'] = False
     cli['nohostbin']    = False
     cli['glibc']        = False
+    cli['rename']       = ''
 
     # target options
     for o, a in opts:
@@ -204,6 +206,8 @@ def parse():
             cli['nohostbin'] = True
         elif o in ("--glibc"):
             cli['glibc'] = True
+        elif o in ("--rename"):
+            cli['rename'] = a
         else:
             assert False, "uncaught option"
 

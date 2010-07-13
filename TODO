@@ -29,3 +29,5 @@ TODO: kgen --initramfs=/file
     ./igen --noboot && ./kgen --shipnitramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
 TODO: igen --keymap
 TODO: igen --rename=/file
+TODO: igen --plugin=/pluginroot
+    let the user add his own stuf

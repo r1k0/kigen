@@ -134,8 +134,12 @@ iobj.build()
 
 # copy initramfs to /boot
 if cli['noboot'] is False:
-    print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
-    utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+    if cli['rename'] is '':
+        print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
+        utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+    else:
+        print green(' * produced ') + '/boot/' + cli['rename']
+        utils.sprocessor('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename'], arch, KV), verbose)
 
 # leave /boot alone but tell the user where to find his initramfs
 elif cli['noboot'] is True:
