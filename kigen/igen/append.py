@@ -188,10 +188,11 @@ class append:
 
         # append busybox to cpio
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
+        sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
+
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
         sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         sprocessor('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
-        sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
         sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
     
