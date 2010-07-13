@@ -195,7 +195,13 @@ class append:
         sprocessor('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
-    
+
+# FIXME: should be removed but wait!
+# we don't need it due to busybox --install -s from the /linuxrc
+# testcase: i see them auto symlinked on boot because /linuxrc is called
+# and then I ctrl+C luks auth to gain a shell
+# but so far, /linuxrc has run and busybox --install -s is called
+# problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
         for i in self.busyboxprogs.split():
             sprocessor('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
@@ -346,7 +352,7 @@ class append:
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         print green(' * ') + turquoise('initramfs.append.glibc')
-        # this allows dns to work for ip
+        # this allows dns resolution inside the initramfs
         sprocessor('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         sprocessor('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         sprocessor('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
@@ -371,6 +377,7 @@ class append:
 
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
+        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
 
         if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
 #            luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
@@ -385,6 +392,8 @@ class append:
             for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
                 sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
             sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
+            # copy libncurses.so.5
+            sprocessor('cp /lib/libncurses.so.5 %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
