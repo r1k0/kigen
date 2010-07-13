@@ -29,7 +29,7 @@ class append:
                 sinitrd,            \
                 firmware,           \
                 selinux,            \
-                pluginroot,         \
+#                pluginroot,         \
                 nocache,            \
                 nohostbin):
         """
@@ -57,7 +57,7 @@ class append:
         self.firmware           = firmware
         self.selinux            = selinux
         self.nohostbin          = nohostbin
-        self.pluginroot         = pluginroot
+#        self.pluginroot         = pluginroot
 
 
     def cpio(self):
@@ -784,7 +784,7 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-aufs-temp')
         return os.system(self.cpio())
 
-    def plugin(self):
+    def plugin(self, dir):
         """
         Append user generated file structure
 
@@ -793,11 +793,11 @@ class append:
         ret = int('0')
         
         logging.debug('initramfs.append.plugin')
-        print green(' * ') + turquoise('initramfs.append.plugin')
+        print green(' * ') + turquoise('initramfs.append.plugin ') + dir
 
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
-        os.system('cp -a %s/* %s' % (self.pluginroot, self.temp['work']+'/initramfs-plugin-temp/'))
+        os.system('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'))
 
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())

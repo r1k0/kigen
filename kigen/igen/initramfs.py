@@ -52,7 +52,7 @@ class initramfs:
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
 #        self.glibc              = cli['glibc']
-        self.pluginroot         = cli['plugin']
+        self.pluginroot         = cli['plugin'] # string
 
     def build(self):
         """
@@ -89,7 +89,6 @@ class initramfs:
                         self.sinitrd,           \
                         self.firmware,          \
                         self.selinux,           \
-                        self.pluginroot,        \
                         self.nocache,           \
                         self.nohostbin)
 
@@ -179,9 +178,12 @@ class initramfs:
 
         # 20) append user plugin
         if self.pluginroot is not '':
-            os.chdir(self.temp['work'])
-            ret = aobj.plugin()
-            if ret is not zero: self.fail('plugin')
+            pluginlist = self.pluginroot.split(',')
+            for j in pluginlist:
+                if j is not '': # this check else it copies from / :(
+                    os.chdir(self.temp['work'])
+                    ret = aobj.plugin(j)
+                    if ret is not zero: self.fail('plugin')
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')

@@ -203,7 +203,7 @@ def parse():
         elif o in ("--rename"):
             cli['rename'] = a
         elif o in ("--plugin"):
-            cli['plugin'] = a
+            cli['plugin'] = a # a is a list
         else:
             assert False, "uncaught option"
 
@@ -263,7 +263,7 @@ def print_usage():
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
-    print yellow('  --plugin=/dir          Include custom user generated support')
+    print yellow('  --plugin=/dir[,/dir]   Include list of user generated custom roots')
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
     print '  --noboot               Do not copy initramfs to /boot'

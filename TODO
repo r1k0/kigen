@@ -30,3 +30,4 @@ TODO: kgen --initramfs=/file
 TODO: igen --keymap
 TODO: igen --plugin=/pluginroot
     let the user add his own stuf
+    make it callable multiple times
