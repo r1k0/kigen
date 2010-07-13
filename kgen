@@ -96,6 +96,10 @@ kobj.build()
 
 # copy kernel/system.map to /boot
 if cli['noboot'] is False:
+
+     print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
+     utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
+
      if cli['rename'] is '':
          print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
          utils.sprocessor('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
@@ -103,15 +107,13 @@ if cli['noboot'] is False:
          print green(' * produced ') + '/boot/' + cli['rename']
          utils.sprocessor('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['rename']), verbose)
 
-     print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
-     utils.sprocessor('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
-
 # leave /boot alone but tell the user where to find his kernel/system.map
 elif cli['noboot'] is True:
-    logging.debug(kerneldir+'/arch/x86/boot/bzImage')
-    print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
     logging.debug(kerneldir+'/System.map')
     print green(' * produced ') + kerneldir+'/System.map'
+
+    logging.debug(kerneldir+'/arch/x86/boot/bzImage')
+    print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
 
 # TODO unset os.environ['KGEN_STDOUT']?
 
