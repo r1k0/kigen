@@ -11,7 +11,7 @@ def parse():
                 'set': False}
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "idhn", [ \
+        opts, args = getopt.getopt(sys.argv[1:], "idhn", [  \
                                 "config=",                  \
                                 "help",                     \
                                 "info",                     \
@@ -21,7 +21,8 @@ def parse():
                                 "conf=",                    \
                                 "dotconfig=",               \
                                 "bbconf=",                  \
-                                "rename=",                \
+                                "rename=",                  \
+                                "initramfs=",               \
                                 "mrproper",                 \
                                 "clean",                    \
                                 "menuconfig",               \
@@ -51,6 +52,7 @@ def parse():
     cli['config']       = '/etc/kigen.conf'
     cli['dotconfig']    = ''
     cli['rename']		= ''
+    cli['initramfs']    = ''
     cli['info']         = False
     cli['mrproper']     = False
     cli['menuconfig']   = False
@@ -99,6 +101,8 @@ def parse():
             cli['oldconfig'] = True # make sure .config is ok
         elif o in ("--rename"):
             cli['rename'] = a
+        elif o in ("--initramfs"):
+            cli['initramfs'] = a
         elif o in ("--mrproper"):
             cli['mrproper'] = True
         elif o in ("--menuconfig"):
@@ -163,8 +167,9 @@ def print_usage(ex=False):
     print '  --version              Version'
     print '  --credits              Credits and license'
     print
-    print '  --dotconfig=/file      Custom kernel config file (full path)'
+    print '  --dotconfig=/file      Custom kernel config file'
     print '  --rename=mykernel      Custom kernel file name'
+    print yellow('  --initramfs=/file      Embed initramfs into the kernel')
     print '  --nooldconfig          Will not ask for new kernel/initramfs options'
     print '  --mrproper             Clean precompiled objects and remove config file'
     print '  --clean                Clean precompiled objects only'
