@@ -471,23 +471,34 @@ class append:
     
         @return: bool
         """
+        ret = zero = int('0')
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
    
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
     
         if os.path.isfile(splash_geninitramfs_bin):
             # if splashutils is merged
-            if self.stheme is '':
+            if self.stheme is not '':
                 # set default theme to gentoo
-                self.stheme = 'gentoo'
+#                self.stheme = 'gentoo'
                 if os.path.isfile('/etc/conf.d/splash'):
                     os.system('source /etc/conf.d/splash')
             if self.sres is not '':
                 self.sres = '-r %s' % self.sres
     
             logging.debug('initramfs.append.splash ' + self.stheme + ' ' + self.sres)
-            print green(' * ') + turquoise('initramfs.append.splash ') + white(self.stheme) + ' ' + white(self.sres)
-            sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
+            print green(' * ') + turquoise('initramfs.append.splash ') + self.stheme + ' ' + self.sres
+
+            # because splash_geninitramfs fails and exits with success when you provide a broken theme path
+            # we need to check if the dir exists first, can't hurt
+            if os.path.isdir('/etc/splash/'+self.stheme):
+                sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
+            else:
+                self.fail('/etc/splash/'+self.stheme+' does not exist')
+                # FIXME
+                # 2 ways
+                # we either fail and die
+                # or remove splash support and still continue
 
             if os.path.isfile('/usr/share/splashutils/initrd.splash'):
                 sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % self.temp['work'], self.verbose)

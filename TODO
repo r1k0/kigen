@@ -1,5 +1,5 @@
 TODO: igen --gnupg
-    gpg-version = 2.0.15
+    gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
 TODO: igen --disklabel 
     ./configure breaks when using 1.41.12 instead of 1.40.9
@@ -9,25 +9,15 @@ TODO: igen --udev for udevadm
 TODO: igen --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
     dropbear-version = 0.52
 TODO: kgen --static option (see genkernel --static)
-TODO: make kigen ebuild depend on python-2.6
 TODO: fix /dev/tty1 bug when using splash -> shaye
 TODO: pass $PORTDIR don't assume /usr/portage
 TODO: igen --aufs
     aufs-version = 0_p20100405
 TODO: igen --evms repair
 	sprocessor * fix
-TODO: add logging.debug() everywhere
-TODO: remove --stheme and use --splash=sabayon
-TODO: for igen
-    --initramfsname=myinitramfsname
 TODO: kgen --initramfs=/file
-    in kgen, add check for
     General setup  --->
         (/usr/src/initramfs) Initramfs source file(s)
-    ./igen && ./kgen --shipinitramfs=/boot/myinitramfsname 
-    or
-    ./igen --noboot && ./kgen --shipnitramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
+    ./igen --noboot && ./kgen --initramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
 TODO: igen --keymap
-TODO: igen --plugin=/pluginroot
-    let the user add his own stuf
-    make it callable multiple times
+    we already some stuf in base()

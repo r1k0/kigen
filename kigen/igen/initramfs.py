@@ -30,7 +30,6 @@ class initramfs:
         self.linuxrc            = cli['linuxrc']
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
-#        self.allyesconfig       = cli['allyesconfig']
         self.mrproper           = cli['mrproper']
         self.nocache            = cli['nocache']
         self.firmware           = cli['firmware']
@@ -46,7 +45,7 @@ class initramfs:
         self.cli                = cli # TODO replace
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
-        self.stheme             = cli['stheme']
+        self.splash             = cli['splash']
         self.sres               = cli['sres']
         self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
@@ -84,7 +83,7 @@ class initramfs:
                         self.master_config['busybox-progs'],  \
                         self.bootupdateset,     \
                         self.bootupdateinitrd,  \
-                        self.stheme,            \
+                        self.splash,            \
                         self.sres,              \
                         self.sinitrd,           \
                         self.firmware,          \
@@ -159,7 +158,7 @@ class initramfs:
             ret = aobj.aufs()
             if ret is not zero: self.fail('aufs')
         # 16) append splash
-        if self.cli['splash'] is True:
+        if self.cli['splash'] is not '':
             os.chdir(self.temp['work'])
             ret = aobj.splash()
             if ret is not zero: self.fail('splash')

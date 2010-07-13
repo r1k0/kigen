@@ -26,8 +26,8 @@ def parse():
                                 "logfile=",     \
                                 "evms",         \
                                 "mdadm",        \
-                                "splash",       \
-                                "stheme=",      \
+                                "splash=",       \
+#                                "stheme=",      \
                                 "sres=",        \
                                 "sinitrd=",     \
                                 "firmware=",    \
@@ -74,8 +74,9 @@ def parse():
     cli['iscsi']        = False
     cli['evms']         = False
     cli['mdadm']        = False
-    cli['splash']       = False
-    cli['stheme']       = ''
+    cli['splash']       = 'gentoo'
+#    cli['splash']       = False
+#    cli['stheme']       = ''
     cli['sres']         = '' # 1024x768
     cli['sinitrd']      = '' # a custom initrd.splash file
     cli['firmware']     = ''
@@ -95,6 +96,7 @@ def parse():
     cli['nohostbin']    = False
     cli['glibc']        = False
     cli['rename']       = ''
+    cli['plugin']       = ''
 
     # target options
     for o, a in opts:
@@ -165,7 +167,8 @@ def parse():
         elif o in ("--oldconfig"):
             cli['oldconfig'] = True
         elif o in ("--splash"):
-            cli['splash'] = True
+#            cli['splash'] = True
+            cli['splash'] = a
         elif o in ("--firmware"):
             if os.path.isdir(a):
                 cli['firmware'] = a
@@ -178,8 +181,8 @@ def parse():
             cli['aufs'] = True
         elif o in ("--linuxrc"):
             cli['linuxrc'] = a
-        elif o in ("--stheme"):
-            cli['stheme'] = a
+#        elif o in ("--stheme"):
+#            cli['stheme'] = a
         elif o in ("--sres"):
             cli['sres'] = a
         elif o in ("--sinitrd"):
@@ -256,14 +259,13 @@ def print_usage():
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
     print yellow('  --glibc                Include host GNU C libraries (required for dns)')
     print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
-    print '  --splash               Include splash support (media-gfx/splashutils must be merged)'
-    print '   --stheme=<theme>       Splash theme, gentoo by default'
-    print '   --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set'
+    print '  --splash=<theme>       Include splash support (media-gfx/splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]       Splash resolution, all if not set'
 #    print yellow('   --sinitrd=/file        Splash custom initrd.splash (host if found)')
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
-    print yellow('  --plugin=/dir[,/dir]   Include list of user generated custom roots')
+    print '  --plugin=/dir[,/dir]   Include list of user generated custom roots'
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
     print '  --noboot               Do not copy initramfs to /boot'
