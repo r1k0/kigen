@@ -74,7 +74,7 @@ def parse():
     cli['iscsi']        = False
     cli['evms']         = False
     cli['mdadm']        = False
-    cli['splash']       = 'gentoo'
+    cli['splash']       = ''
 #    cli['splash']       = False
 #    cli['stheme']       = ''
     cli['sres']         = '' # 1024x768
