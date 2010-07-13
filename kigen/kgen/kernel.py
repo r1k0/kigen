@@ -22,6 +22,7 @@ class kernel:
         self.fakeroot       = cli['fakeroot']
         self.nosaveconfig   = cli['nosaveconfig']
         self.clean          = cli['clean']
+        self.initramfs      = cli['initramfs']
 
     def build(self):
         """
@@ -43,6 +44,13 @@ class kernel:
         if self.clean is True:
             ret = make_clean()
             if ret is not zero: self.fail('clean')
+
+# TODO
+# check for --initramfs cli here
+        if self.initramfs is not '':
+            # check for CONFIG_INITRAMFS_SOURCE="cli['initramfs']" in .config
+            pass
+
         if self.oldconfig is True:
             ret = self.make_oldconfig()
             if ret is not zero: self.fail('oldconfig')
@@ -50,10 +58,9 @@ class kernel:
             ret = self.make_menuconfig()
             if ret is not zero: self.fail('menuconfig')
     
-        # check for kernel .config
-        if os.path.isfile(self.kerneldir+'/.config') is not True:
-            raise error.fail(self.kerneldir+'/.config'+' does not exist.')
-    
+        # check for kernel .config (gotta be sure)
+        if os.path.isfile(self.kerneldir+'/.config') is not True: self.fail(self.kerneldir+'/.config'+' does not exist.')
+
         # prepare
         ret = self.make_prepare()
         if ret is not zero: self.fail('prepare')

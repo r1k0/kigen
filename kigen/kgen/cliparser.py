@@ -73,14 +73,7 @@ def parse():
     # target options
     for o, a in opts:
         if o in ("-h", "--help"):
-            if sys.argv[1] == 'kernel' or sys.argv[1] == 'k':
-                print_usage_kernel()
-            elif sys.argv[1] == 'all' or sys.argv[1] == 'a':
-                print_usage_all()
-            elif sys.argv[1] == 'initramfs' or sys.argv[1] == 'i':
-                print_usage_initramfs()
-            else:
-                print_usage()
+            print_usage()
             sys.exit(0)
         elif o in ("--credits"):
             print_credits()
