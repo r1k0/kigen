@@ -21,3 +21,5 @@ TODO: kgen --initramfs=/file
     ./igen --noboot && ./kgen --initramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
 TODO: igen --keymap
     we already some stuf in base()
+TODO: igen --linuxrc=/file
+    make initrd.default and initrd.script part of the replacement

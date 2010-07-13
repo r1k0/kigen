@@ -248,7 +248,7 @@ def print_usage():
     print '  --dotconfig=/file      Custom busybox config file'
     print '  --rename=myinitramfs   Custom initramfs file name'
     print '  --menuconfig           Interactive initramfs options menu'
-    print '  --linuxrc=/file        Custom linuxrc /init for the initramfs'
+    print '  --linuxrc=/file        Custom linuxrc /init'
     print '  --disklabel            Include support for disklabel and UUID'
     print '  --luks                 Include LUKS support (host binary if found)'
     print '  --lvm2                 Include LVM2 support (host binary if found)'
@@ -257,7 +257,7 @@ def print_usage():
 #    print yellow('   --selinux              Include selinux support in --dmraid')
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
-    print yellow('  --glibc                Include host GNU C libraries (required for dns)')
+    print '  --glibc                Include host GNU C libraries (required for dns)'
     print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
     print '  --splash=<theme>       Include splash support (media-gfx/splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]       Splash resolution, all if not set'
