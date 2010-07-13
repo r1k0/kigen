@@ -49,7 +49,20 @@ class kernel:
 # check for --initramfs cli here
         if self.initramfs is not '':
             # check for CONFIG_INITRAMFS_SOURCE="cli['initramfs']" in .config
-            pass
+#            print green(' * ') + turquoise('kernel.append_config ') + 'CONFIG_INITRAMFS_SOURCE="'+self.initramfs+'"'
+#            file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="%s"\n' % self.initramfs)
+            file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
+            # TODO
+            # copy self.initramfs to kerneldir+'/usr/initramfs_data.cpio' and gzip -d the file
+            utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
+            # gzip -d
+            utils.sprocessor('gzip -d %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
+            # then extract cpio
+# create /usr/src/initramfs/
+            os.system('mkdir -p /usr/src/initramfs')
+            os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
+            self.chgdir('/usr/src/initramfs/')
+            os.system('cpio -id < initramfs_data.cpio')
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
