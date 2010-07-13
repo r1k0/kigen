@@ -1,18 +1,32 @@
-TODO: --gnupg
+TODO: igen --gnupg
     gpg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: busybox.config -> netstat
-TODO: --disklabel ./configure breaks when using 1.41.12 instead of 1.40.9
+TODO: igen --disklabel 
+    ./configure breaks when using 1.41.12 instead of 1.40.9
     configure: error: --with-ldopts no longer supported; use LDFLAGS= instead
-TODO: --udev for udevadm
-TODO: --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
+TODO: igen --udev for udevadm
+    or --devtmpfs or --mdev
+TODO: igen --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
     dropbear-version = 0.52
-TODO: --statickern option (see genkernel --static)
+TODO: kgen --static option (see genkernel --static)
 TODO: make kigen ebuild depend on python-2.6
 TODO: fix /dev/tty1 bug when using splash -> shaye
 TODO: pass $PORTDIR don't assume /usr/portage
-TODO: --aufs
+TODO: igen --aufs
     aufs-version = 0_p20100405
-TODO: --evms repair
+TODO: igen --evms repair
 	sprocessor * fix
 TODO: add logging.debug() everywhere
+TODO: remove --stheme and use --splash=sabayon
+TODO: for igen
+    --initramfsname=myinitramfsname
+TODO: kgen --initramfs=/file
+    in kgen, add check for
+    General setup  --->
+        (/usr/src/initramfs) Initramfs source file(s)
+    ./igen && ./kgen --shipinitramfs=/boot/myinitramfsname 
+    or
+    ./igen --noboot && ./kgen --shipnitramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
+TODO: igen --keymap
+TODO: kgen --rename instead of --kernname
+TODO: igen --rename=/file
