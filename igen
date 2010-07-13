@@ -139,7 +139,7 @@ if cli['noboot'] is False:
         utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
     else:
         print green(' * produced ') + '/boot/' + cli['rename']
-        utils.sprocessor('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename'], arch, KV), verbose)
+        utils.sprocessor('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
 # leave /boot alone but tell the user where to find his initramfs
 elif cli['noboot'] is True:
