@@ -21,7 +21,7 @@ def parse():
                                 "conf=",                    \
                                 "dotconfig=",               \
                                 "bbconf=",                  \
-                                "kernname=",                \
+                                "rename=",                \
                                 "mrproper",                 \
                                 "clean",                    \
                                 "menuconfig",               \
@@ -50,7 +50,7 @@ def parse():
     # default
     cli['config']       = '/etc/kigen.conf'
     cli['dotconfig']    = ''
-    cli['kernname']		= ''
+    cli['rename']		= ''
     cli['info']         = False
     cli['mrproper']     = False
     cli['menuconfig']   = False
@@ -97,8 +97,8 @@ def parse():
         elif o in ("-k", "--dotconfig"):
             cli['dotconfig'] = a
             cli['oldconfig'] = True # make sure .config is ok
-        elif o in ("--kernname"):
-            cli['kernname'] = a
+        elif o in ("--rename"):
+            cli['rename'] = a
         elif o in ("--mrproper"):
             cli['mrproper'] = True
         elif o in ("--menuconfig"):
@@ -164,7 +164,7 @@ def print_usage(ex=False):
     print '  --credits              Credits and license'
     print
     print '  --dotconfig=/file      Custom kernel config file (full path)'
-    print '  --kernname=mykernel    Custom kernel file name'
+    print '  --rename=mykernel      Custom kernel file name'
     print '  --nooldconfig          Will not ask for new kernel/initramfs options'
     print '  --mrproper             Clean precompiled objects and remove config file'
     print '  --clean                Clean precompiled objects only'
