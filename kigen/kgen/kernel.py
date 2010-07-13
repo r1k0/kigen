@@ -51,6 +51,7 @@ class kernel:
             # check for CONFIG_INITRAMFS_SOURCE="cli['initramfs']" in .config
 #            print green(' * ') + turquoise('kernel.append_config ') + 'CONFIG_INITRAMFS_SOURCE="'+self.initramfs+'"'
 #            file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="%s"\n' % self.initramfs)
+            print green(' * ') + turquoise('kernel.append_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
             file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
             # TODO
             # copy self.initramfs to kerneldir+'/usr/initramfs_data.cpio' and gzip -d the file
@@ -63,7 +64,7 @@ class kernel:
             os.system('mkdir -p /usr/src/initramfs')
             os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
             self.chgdir('/usr/src/initramfs/')
-            os.system('cpio -id < initramfs_data.cpio')
+            os.system('cpio -id < initramfs_data.cpio &>/dev/null')
             os.system('rm initramfs_data.cpio')
 
         if self.oldconfig is True:
