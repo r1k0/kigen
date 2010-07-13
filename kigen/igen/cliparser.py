@@ -242,7 +242,7 @@ def print_usage():
     print '  --version              Version'
     print '  --credits              Credits and license'
     print
-    print '  --dotconfig=/file      Custom busybox config file (full path)'
+    print '  --dotconfig=/file      Custom busybox config file'
     print yellow('  --rename=myinitramfs   Custom initramfs file name')
     print '  --menuconfig           Interactive initramfs options menu'
     print '  --linuxrc=/file        Custom linuxrc /init for the initramfs'
