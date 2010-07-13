@@ -8,56 +8,56 @@ from kigen.utils import get_sys_modules_list, get_config_modules_list, get_confi
 
 class append:
 
-    def __init__(self,          \
-                temp,           \
-                KV,             \
-                linuxrc,        \
-                kernel_dir_opt, \
-                arch,           \
-                master_config,  \
-                libdir,         \
-                oldconfig,      \
-                menuconfig,     \
-#                allyesconfig,   \
-                mrproper,       \
-                verbose,        \
-                bbconf,         \
-                busyboxprogs,   \
-                bootupdateset,    \
-                bootupdateinitrd, \
-                stheme,         \
-                sres,           \
-                sinitrd,        \
-                firmware,       \
-                selinux,        \
-                nocache,        \
+    def __init__(self,              \
+                temp,               \
+                KV,                 \
+                linuxrc,            \
+                kernel_dir_opt,     \
+                arch,               \
+                master_config,      \
+                libdir,             \
+                oldconfig,          \
+                menuconfig,         \
+                mrproper,           \
+                verbose,            \
+                bbconf,             \
+                busyboxprogs,       \
+                bootupdateset,      \
+                bootupdateinitrd,   \
+                stheme,             \
+                sres,               \
+                sinitrd,            \
+                firmware,           \
+                selinux,            \
+                plugin,             \
+                nocache,            \
                 nohostbin):
         """
         init class variables
         """
-        self.temp           = temp
-        self.KV             = KV
-        self.linuxrc        = linuxrc
-        self.kernel_dir_opt = kernel_dir_opt
-        self.arch           = arch
-        self.master_config  = master_config
-        self.libdir         = libdir
-        self.oldconfig      = oldconfig
-        self.menuconfig     = menuconfig
-#        self.allyesconfig   = allyesconfig
-        self.mrproper       = mrproper
-        self.verbose        = verbose
-        self.bbconf         = bbconf
-        self.busyboxprogs   = busyboxprogs
-        self.bootupdateset    = bootupdateset
-        self.bootupdateinitrd = bootupdateinitrd
-        self.stheme         = stheme
-        self.sres           = sres
-        self.sinitrd        = sinitrd
-        self.nocache        = nocache
-        self.firmware       = firmware
-        self.selinux        = selinux
-        self.nohostbin      = nohostbin
+        self.temp               = temp
+        self.KV                 = KV
+        self.linuxrc            = linuxrc
+        self.kernel_dir_opt     = kernel_dir_opt
+        self.arch               = arch
+        self.master_config      = master_config
+        self.libdir             = libdir
+        self.oldconfig          = oldconfig
+        self.menuconfig         = menuconfig
+        self.mrproper           = mrproper
+        self.verbose            = verbose
+        self.bbconf             = bbconf
+        self.busyboxprogs       = busyboxprogs
+        self.bootupdateset      = bootupdateset
+        self.bootupdateinitrd   = bootupdateinitrd
+        self.stheme             = stheme
+        self.sres               = sres
+        self.sinitrd            = sinitrd
+        self.nocache            = nocache
+        self.firmware           = firmware
+        self.selinux            = selinux
+        self.nohostbin          = nohostbin
+        self.plugin             = plugin
 
     def cpio(self):
         """
@@ -181,7 +181,6 @@ class append:
                         self.temp,                   \
                         self.oldconfig,              \
                         self.menuconfig,             \
-#                        self.allyesconfig,           \
                         self.mrproper,               \
                         self.verbose)
             bbobj.build()
@@ -782,4 +781,21 @@ class append:
     # then rebuild kernel not just bzImage
     
         os.chdir(self.temp['work']+'/initramfs-aufs-temp')
+        return os.system(self.cpio())
+
+    def plugin(self):
+        """
+        Append user generated file structure
+
+        @return: bool
+        """
+        ret = int('0')
+        
+        logging.debug('initramfs.append.plugin')
+        print green(' * ') + turquoise('initramfs.append.plugin')
+
+        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
+        sprocessor('cp -a %s/* %s' % (self.plugin, self.temp['work']+'/initramfs-plugin-temp/'), self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())

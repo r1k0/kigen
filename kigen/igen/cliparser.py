@@ -48,6 +48,7 @@ def parse():
                                 "nohostbin",    \
                                 "glibc",        \
                                 "rename=",      \
+                                "plugin=",      \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -208,6 +209,8 @@ def parse():
             cli['glibc'] = True
         elif o in ("--rename"):
             cli['rename'] = a
+        elif o in ("--plugin"):
+            cli['plugin'] = a
         else:
             assert False, "uncaught option"
 
@@ -267,6 +270,7 @@ def print_usage():
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
+    print yellow('  --plugin=/dir          Include custom user generated support')
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
     print '  --noboot               Do not copy initramfs to /boot'

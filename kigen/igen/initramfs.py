@@ -51,7 +51,8 @@ class initramfs:
         self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
-        self.glibc              = cli['glibc']
+#        self.glibc              = cli['glibc']
+        self.plugin             = cli['plugin']
 
     def build(self):
         """
@@ -67,32 +68,34 @@ class initramfs:
         # for the sake of knowing where we are
         os.chdir(self.temproot)
 
+        # create object
+        aobj = append(self.temp,                \
+                        self.KV,                \
+                        self.linuxrc,           \
+                        self.kernel_dir_opt,    \
+                        self.arch,              \
+                        self.master_config,     \
+                        self.libdir,            \
+                        self.oldconfig,         \
+                        self.menuconfig,        \
+                        self.mrproper,          \
+                        self.verbose,           \
+                        self.dotconfig,         \
+                        self.master_config['busybox-progs'],  \
+                        self.bootupdateset,     \
+                        self.bootupdateinitrd,  \
+                        self.stheme,            \
+                        self.sres,              \
+                        self.sinitrd,           \
+                        self.firmware,          \
+                        self.selinux,           \
+                        self.plugin,            \
+                        self.nocache,           \
+                        self.nohostbin)
+
         # 1) create initial cpio and append object
         ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero: self.fail('cpio')
-        aobj = append(self.temp,         \
-                        self.KV,            \
-                        self.linuxrc,       \
-                        self.kernel_dir_opt,\
-                        self.arch,          \
-                        self.master_config, \
-                        self.libdir,        \
-                        self.oldconfig,     \
-                        self.menuconfig,    \
-#                        self.allyesconfig,  \
-                        self.mrproper,      \
-                        self.verbose,       \
-                        self.dotconfig,        \
-                        self.master_config['busybox-progs'],  \
-                        self.bootupdateset,   \
-                        self.bootupdateinitrd,\
-                        self.stheme,        \
-                        self.sres,          \
-                        self.sinitrd,       \
-                        self.firmware,      \
-                        self.selinux,       \
-                        self.nocache,       \
-                        self.nohostbin)
         # 2) append base
         aobj.base()
         if ret is not zero: self.fail('baselayout')
@@ -134,8 +137,8 @@ class initramfs:
             os.chdir(self.temp['work'])
             ret = aobj.luks()
             if ret is not zero: self.fail('luks')
-#       # 11) append multipath
-#       # TODO
+        # 11) append multipath
+        # TODO
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
@@ -161,19 +164,24 @@ class initramfs:
             os.chdir(self.temp['work'])
             ret = aobj.splash()
             if ret is not zero: self.fail('splash')
-#        # 17) append firmware
+        # 17) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            ret = aobj.firmware()
 #            if ret is not zero: self.fail('firmware')
         # 18) append overlay
         # TODO
-
         # 19) append glibc
         if self.cli['glibc'] is True:
             os.chdir(self.temp['work'])
             ret = aobj.glibc()
             if ret is not zero: self.fail('glibc')
+
+        # 20) append user plugin
+        if self.cli['plugin'] is not '':
+            os.chdir(self.temp['work'])
+            ret = aobj.plugin()
+            if ret is not zero: self.fail('plugin')
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
