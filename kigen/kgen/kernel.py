@@ -56,13 +56,15 @@ class kernel:
             # copy self.initramfs to kerneldir+'/usr/initramfs_data.cpio' and gzip -d the file
             utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
             # gzip -d
-            utils.sprocessor('gzip -d %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
+            utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
             # then extract cpio
 # create /usr/src/initramfs/
+            os.system('rm -rf /usr/src/initramfs')
             os.system('mkdir -p /usr/src/initramfs')
             os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
             self.chgdir('/usr/src/initramfs/')
             os.system('cpio -id < initramfs_data.cpio')
+            os.system('rm initramfs_data.cpio')
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
