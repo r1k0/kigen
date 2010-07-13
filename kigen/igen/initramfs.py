@@ -52,7 +52,7 @@ class initramfs:
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
 #        self.glibc              = cli['glibc']
-        self.plugin             = cli['plugin']
+#        self.plugin             = cli['plugin']
 
     def build(self):
         """
@@ -89,7 +89,7 @@ class initramfs:
                         self.sinitrd,           \
                         self.firmware,          \
                         self.selinux,           \
-                        self.plugin,            \
+                        self.cli['plugin'],     \
                         self.nocache,           \
                         self.nohostbin)
 
