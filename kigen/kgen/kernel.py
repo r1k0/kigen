@@ -14,7 +14,6 @@ class kernel:
         self.verbose        = verbose
         self.dotconfig      = cli['dotconfig']
         self.mrproper       = cli['mrproper']
-        self.allyesconfig   = cli['allyesconfig']
         self.allnoconfig    = cli['allnoconfig']
         self.menuconfig     = cli['menuconfig']
         self.oldconfig      = cli['oldconfig']
@@ -44,12 +43,6 @@ class kernel:
         if self.clean is True:
             ret = make_clean()
             if ret is not zero: self.fail('clean')
-#        if self.allyesconfig is True:
-#            ret = make_allyesconfig()
-#            if ret is not zero: self.fail('allyesconfig')
-#        elif self.allnoconfig is True:
-#            ret = make_allnoconfig()
-#            if ret is not zero: self.fail('allnoconfig')
         if self.oldconfig is True:
             ret = self.make_oldconfig()
             if ret is not zero: self.fail('oldconfig')
@@ -191,34 +184,6 @@ class kernel:
             print command
 
         return os.system(command)
-    
-#    def make_allyesconfig(self):
-#        """
-#        Kernel command interface for allyesconfig
-#        
-#        @return: bool
-#        """
-#        print green(' * ') + turquoise('kernel.allyesconfig ') + self.KV
-#        self.chgdir(self.kerneldir)
-#        command = self.build_command('allyesconfig')
-#        if self.quiet is '':
-#            print command
-#
-#        return os.system(command)
-#    
-#    def make_allnoconfig(self):
-#        """
-#        Kernel command interface for allnoconfig
-#        
-#        @return: bool
-#        """
-#        print green(' * ') + turquoise('kernel.allnoconfig ') + self.KV
-#        self.chgdir(self.kerneldir)
-#        command = self.build_command('allnoconfig')
-#        if self.quiet is '':
-#            print command
-#
-#        return os.system(command)
     
     def make_menuconfig(self):
         """
