@@ -28,5 +28,4 @@ TODO: kgen --initramfs=/file
     or
     ./igen --noboot && ./kgen --shipnitramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
 TODO: igen --keymap
-TODO: kgen --rename instead of --kernname
 TODO: igen --rename=/file
