@@ -378,10 +378,9 @@ class append:
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
         sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
 
         if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
-#            luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-#            logging.debug('initramfs.append.dropbear ' + cryptsetup_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
 # FIXME: check if dropbear is merged with USE=static if not fail
             sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
@@ -392,8 +391,6 @@ class append:
             for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
                 sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
             sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
-            # copy libncurses.so.5
-            sprocessor('cp /lib/libncurses.so.5 %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
@@ -421,6 +418,19 @@ class append:
                 # FIXME careful with the >
                 os.system('tar BLABLABLA ' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
                 sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+
+        # copy required libs
+        sprocessor('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        sprocessor('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        sprocessor('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+
+        #cp -pr /etc/dropbear "${DESTDIR}/etc/"
+        #cp -pr /etc/passwd "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
+        #cp -pr /etc/shadow "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
+        #cp -pr /etc/group "${DESTDIR}/etc/"
+        #[ -d /root/.ssh ] && cp -pr /root/.ssh "${DESTDIR}/root/"
+        #cp -pr /etc/nsswitch.conf "${DESTDIR}/etc/"
+        #cp -pr /etc/localtime "${DESTDIR}/etc/"
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
         return os.system(self.cpio())
