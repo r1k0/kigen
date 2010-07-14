@@ -41,7 +41,8 @@ else:
         os.environ['KGEN_STDOUT'] = '1'
 
 # kgen modules are ready to be called
-from config import master_config, temp
+from config import master_config
+from kgen.config import temp
 import kgen.cliparser
 import utils
 

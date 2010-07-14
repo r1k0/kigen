@@ -45,31 +45,11 @@ class kernel:
             ret = make_clean()
             if ret is not zero: self.fail('clean')
 
-# TODO
-# check for --initramfs cli here
         if self.initramfs is not '':
-            # check for CONFIG_INITRAMFS_SOURCE="cli['initramfs']" in .config
-#            print green(' * ') + turquoise('kernel.append_config ') + 'CONFIG_INITRAMFS_SOURCE="'+self.initramfs+'"'
-#            file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="%s"\n' % self.initramfs)
-            print green(' * ') + turquoise('kernel.append_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
-            file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
-            # TODO
-            # copy self.initramfs to kerneldir+'/usr/initramfs_data.cpio' and gzip -d the file
-            utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
-            # gzip -d
-            utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
-            # then extract cpio
-# create /usr/src/initramfs/
-
-# INSERT initramfs.cpio.extract
-#        initramfs.gzip.extract
-
-            os.system('rm -rf /usr/src/initramfs')
-            os.system('mkdir -p /usr/src/initramfs')
-            os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
-            self.chgdir('/usr/src/initramfs/')
-            os.system('cpio -id < initramfs_data.cpio &>/dev/null')
-            os.system('rm initramfs_data.cpio')
+            # user provides an initramfs!
+            # FIXME
+            # do error handling: gzip screws it all like tar
+            self.import_user_initramfs()
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
@@ -146,6 +126,37 @@ class kernel:
         else:
             print red('error: ') + source + " doesn't exist."
             sys.exit(2)
+
+    # emmbedded initramfs functions
+    def import_user_initramfs(self):
+        """
+        Import user initramfs into the kernel
+
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.set_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
+# FIXME
+# check if option is set rather than blindly append it
+# if it's set twice no biggy though oldconfig will clean it up
+# still...
+        file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
+
+        # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
+        utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
+        # extract gzip archive
+        utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
+
+# FIXME
+# backup previous root
+        # clean previous root
+        os.system('rm -rf /usr/src/initramfs')
+        os.system('mkdir -p /usr/src/initramfs')
+        # 
+        os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
+        # extract cpio archive
+        self.chgdir('/usr/src/initramfs/')
+        os.system('cpio -id < initramfs_data.cpio &>/dev/null')
+        os.system('rm initramfs_data.cpio')
 
     # kernel building functions
     def build_command(self, target, verbose): #master_config, arch, target, quiet):

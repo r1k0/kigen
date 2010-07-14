@@ -40,7 +40,8 @@ else:
         os.environ['IGEN_STDOUT'] = '1'
 
 # igen modules are ready to be called
-from config import master_config, temp
+from config import master_config
+from igen.config import temp
 import igen.cliparser
 import utils
 
