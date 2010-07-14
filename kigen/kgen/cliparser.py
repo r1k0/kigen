@@ -146,7 +146,7 @@ def print_credits():
 
 def print_usage(ex=False):
     print
-    print white('  a GNU/Linux kernel generator')
+    print white('  a Portage kernel generator')
     print
     print white('Usage')+':'
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>')

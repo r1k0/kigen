@@ -231,7 +231,7 @@ def print_credits():
 
 def print_usage():
     print
-    print white('  a GNU/Linux initramfs generator')
+    print white('  a Portage initramfs generator')
     print
     print white('Usage')+':'
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>') 
