@@ -37,7 +37,7 @@ class kernel:
 
             # copy the custom .config
             self.copy_config(self.dotconfig, self.kerneldir + '/.config')
-        # do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
+        # WARN do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
 
         if self.mrproper is True:
             ret = make_mrproper()
@@ -48,8 +48,7 @@ class kernel:
 
         if self.initramfs is not '':
             # user provides an initramfs!
-            # FIXME
-            # do error handling: gzip screws it all like tar
+            # FIXME do error handling: gzip screws it all like tar
             self.import_user_initramfs()
 
         if self.oldconfig is True:
@@ -128,16 +127,17 @@ class kernel:
             print red('error: ') + source + " doesn't exist."
             sys.exit(2)
 
-    # emmbedded initramfs functions
+    # emmbedded initramfs function
     def import_user_initramfs(self):
         """
         Import user initramfs into the kernel
 
         @return: bool
         """
+        # FIXME should we change /usr/src/initramfs to /var/tmp/kigen/kgen/initramfs?
         print green(' * ') + turquoise('initramfs.set_kernel_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
-        # FIXME or not?
-        # actually let make oldconfig deal with it
+        # FIXME or not? actually let make oldconfig deal with it
+        # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
@@ -146,20 +146,21 @@ class kernel:
         # extract gzip archive
         utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 
-        # FIXME should we change /usr/src/initramfs to /var/tmp/kigen/kgen/initramfs?
-        # backup previous root
         # clean previous root
-        os.system('rm -rf /usr/src/initramfs')
+        from time import time
+        os.system('mv /usr/src/initramfs /usr/src/initramfs.'+str(time()))
         os.system('mkdir -p /usr/src/initramfs')
-        # 
+
+        # copy initramfs to /usr/src/initramfs/
         os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
+
         # extract cpio archive
         self.chgdir('/usr/src/initramfs/')
         os.system('cpio -id < initramfs_data.cpio &>/dev/null')
         os.system('rm initramfs_data.cpio')
 
     # kernel building functions
-    def build_command(self, target, verbose): #master_config, arch, target, quiet):
+    def build_command(self, target, verbose):
         """
         Kernel Makefile bash build command
         
@@ -180,7 +181,7 @@ class kernel:
 
         return command
 
-    def make_mrproper(self): #kerneldir, KV, master_config, arch, quiet):
+    def make_mrproper(self):
         """
         Kernel command interface for mrproper
         
@@ -194,7 +195,7 @@ class kernel:
 
         return os.system(command)
     
-    def make_clean(self): #kerneldir, KV, master_config, arch, quiet):
+    def make_clean(self):
         """
         Kernel command interface for clean
         
@@ -209,7 +210,7 @@ class kernel:
         return os.system(command)
     
     # TODO: should we add a sort of yes '' | make oldconfig?
-    def make_oldconfig(self): #kerneldir, KV, master_config, arch, quiet):
+    def make_oldconfig(self):
         """
         Kernel command interface for oldconfig
         
