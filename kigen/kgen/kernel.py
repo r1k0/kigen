@@ -60,6 +60,10 @@ class kernel:
             utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
             # then extract cpio
 # create /usr/src/initramfs/
+
+# INSERT initramfs.cpio.extract
+#        initramfs.gzip.extract
+
             os.system('rm -rf /usr/src/initramfs')
             os.system('mkdir -p /usr/src/initramfs')
             os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
