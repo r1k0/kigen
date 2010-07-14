@@ -37,7 +37,8 @@ class kernel:
 
             # copy the custom .config
             self.copy_config(self.dotconfig, self.kerneldir + '/.config')
-    
+        # do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
+
         if self.mrproper is True:
             ret = make_mrproper()
             if ret is not zero: self.fail('mrproper')
@@ -134,20 +135,19 @@ class kernel:
 
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.set_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
-# FIXME
-# check if option is set rather than blindly append it
-# if it's set twice no biggy though oldconfig will clean it up
-# still...
+        print green(' * ') + turquoise('initramfs.set_kernel_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
+        # FIXME or not?
+        # actually let make oldconfig deal with it
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
         utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
+        print green(' * ') + turquoise('initramfs.extract ') + 'to /usr/src/initramfs'
         # extract gzip archive
         utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 
-# FIXME
-# backup previous root
+        # FIXME should we change /usr/src/initramfs to /var/tmp/kigen/kgen/initramfs?
+        # backup previous root
         # clean previous root
         os.system('rm -rf /usr/src/initramfs')
         os.system('mkdir -p /usr/src/initramfs')

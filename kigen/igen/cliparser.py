@@ -258,7 +258,7 @@ def print_usage():
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
     print '  --glibc                Include host GNU C libraries (required for dns)'
-    print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
+#    print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
     print '  --splash=<theme>       Include splash support (media-gfx/splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]       Splash resolution, all if not set'
 #    print yellow('   --sinitrd=/file        Splash custom initrd.splash (host if found)')

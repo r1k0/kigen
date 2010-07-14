@@ -162,7 +162,7 @@ def print_usage(ex=False):
     print
     print '  --dotconfig=/file      Custom kernel config file'
     print '  --rename=mykernel      Custom kernel file name'
-    print yellow('  --initramfs=/file      Embed initramfs into the kernel')
+    print '  --initramfs=/file      Embed initramfs into the kernel'
     print '  --nooldconfig          Will not ask for new kernel/initramfs options'
     print '  --mrproper             Clean precompiled objects and remove config file'
     print '  --clean                Clean precompiled objects only'
