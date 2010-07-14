@@ -156,9 +156,6 @@ def print_usage(ex=False):
     print '  --config=/file         Custom master config file'
     print '  -n, --nocolor          Do not colorize output'
     print '  -d, --debug            Show more output'
-    print '  --logfile=/file        Log to file, default to /var/log/kgen.log'
-    print '  --version              Version'
-    print '  --credits              Credits and license'
     print
     print '  --dotconfig=/file      Custom kernel config file'
     print '  --rename=mykernel      Custom kernel file name'
@@ -168,7 +165,12 @@ def print_usage(ex=False):
     print '  --clean                Clean precompiled objects only'
     print '  --oldconfig            Will ask for new kernel/initramfs options'
     print '  --menuconfig           Interactive kernel options menu'
+    print '  --fakeroot=/dir        Append modules to /dir/lib/modules'
     print '  --nomodinstall         Do not install modules'
     print '  --nosaveconfig         Do not save kernel config in /etc/kernels'
-    print '  --fakeroot=/dir        Append modules to /dir/lib/modules'
+    print
     print '  --noboot               Do not copy kernel to /boot'
+    print '  --logfile=/file        Log to file, default to /var/log/kgen.log'
+    print '  --version              Version'
+    print '  --credits              Credits and license'
+

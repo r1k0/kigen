@@ -241,15 +241,12 @@ def print_usage():
     print '  --config=/file         Custom master config file'
     print '  -n, --nocolor          Do not colorize output'
     print '  -d, --debug            Show more output'
-    print '  --logfile=/file        Log to file, default to /var/log/igen.log'
-    print '  --version              Version'
-    print '  --credits              Credits and license'
     print
     print '  --dotconfig=/file      Custom busybox config file'
     print '  --rename=myinitramfs   Custom initramfs file name'
     print '  --menuconfig           Interactive initramfs options menu'
     print '  --linuxrc=/file        Custom linuxrc /init'
-    print '  --disklabel            Include support for disklabel and UUID'
+    print '  --disklabel            Include support for UUID'
     print '  --luks                 Include LUKS support (host binary if found)'
     print '  --lvm2                 Include LVM2 support (host binary if found)'
 #    print yellow('  --evms                 Include evms support (evms must be merged)')
@@ -266,6 +263,11 @@ def print_usage():
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
     print '  --plugin=/dir[,/dir]   Include list of user generated custom roots'
+    print
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
     print '  --noboot               Do not copy initramfs to /boot'
+    print '  --logfile=/file        Log to file, default to /var/log/igen.log'
+    print '  --version              Version'
+    print '  --credits              Credits and license'
+
