@@ -429,7 +429,7 @@ class append:
 #        #cp -pr /etc/localtime "${DESTDIR}/etc/"
 #
 #        os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
-        return os.system(self.cpio())
+#        return os.system(self.cpio())
 
     def e2fsprogs(self):
         """
