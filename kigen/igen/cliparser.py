@@ -263,9 +263,9 @@ def print_usage():
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
     print '  --plugin=/dir[,/dir]   Include list of user generated custom roots'
-    print
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
+    print
     print '  --noboot               Do not copy initramfs to /boot'
     print '  --logfile=/file        Log to file, default to /var/log/igen.log'
     print '  --version              Version'
