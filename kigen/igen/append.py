@@ -1,8 +1,8 @@
 import os
 import sys
-from stdout import white, green, turquoise, red, yellow
 import logging
 import commands
+from kigen.igen.stdout import *
 from kigen.utils.shell import *
 from kigen.utils.misc import *
 
@@ -29,7 +29,6 @@ class append:
                 sinitrd,            \
                 firmware,           \
                 selinux,            \
-#                pluginroot,         \
                 nocache,            \
                 nohostbin):
         """
@@ -37,7 +36,7 @@ class append:
         """
         self.temp               = temp
         self.KV                 = KV
-        self.linuxrc            = linuxrc
+        self.linuxrc            = linuxrc # list
         self.kernel_dir_opt     = kernel_dir_opt
         self.arch               = arch
         self.master_config      = master_config
@@ -57,7 +56,6 @@ class append:
         self.firmware           = firmware
         self.selinux            = selinux
         self.nohostbin          = nohostbin
-#        self.pluginroot         = pluginroot
 
     def cpio(self):
         """
@@ -105,11 +103,21 @@ class append:
         # elif arch is 'amd64':
         #       blablabla
             print
+            # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (self.libdir, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
-            # cp custom linuxrc to initramfs
-            print white(self.linuxrc) + ' from host'
-            process('cp %s %s/initramfs-base-temp/init' % (self.linuxrc, self.temp['work']), self.verbose)
+            linuxrclist = self.linuxrc.split(',')
+            print str(linuxrclist) + ' from host'
+            # copy first the linuxrc to /init
+            process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
+            # then all possible files
+            for i in linuxrclist[1:]:
+                process('cp %s %s/initramfs-base-temp/etc' % (i, self.temp['work']), self.verbose)
+                process('chmod +x %s/initramfs-base-temp/etc/%s' % (self.temp['work'], os.path.basename(i)), self.verbose)
     
         # make init executable
         process('chmod 0755 %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
@@ -139,21 +147,21 @@ class append:
         process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp')
+
+        # link linuxrc to /init
         process('ln -s init linuxrc', self.verbose)
-        process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
-        process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (self.libdir, self.temp['work']), self.verbose)
+
         # what's the harm to have it harcoded? even if the group is commented out in the config file the variable is still empty
         # same thinking for bootupdate it's already set in etc/initrd.defaults $HWOPTS
         process_append("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % self.temp['work'], self.verbose)
+
         process('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (self.libdir, self.temp['work']), self.verbose)
-    
+        process('chmod +x %s/initramfs-base-temp/sbin/modprobe' % self.temp['work'], self.verbose)
+
         os.chdir(self.temp['work']+'/initramfs-base-temp/sbin')
         process('ln -s ../init init', self.verbose)
         process('chmod +x %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
-        process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
-        process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
-        process('chmod +x %s/initramfs-base-temp/sbin/modprobe' % self.temp['work'], self.verbose)
-    
+
         os.chdir(self.temp['work']+'/initramfs-base-temp/')
         return os.system(self.cpio())
    

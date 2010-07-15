@@ -15,11 +15,7 @@ TODO: igen --aufs
     aufs-version = 0_p20100405
 TODO: igen --evms repair
 	sprocessor * fix
-TODO: kgen --initramfs=/file
-    General setup  --->
-        (/usr/src/initramfs) Initramfs source file(s)
-    ./igen --noboot && ./kgen --initramfs=/var/tmp/kigen/cache/initramfs-cpio.gz
 TODO: igen --keymap
-    we already some stuf in base()
+    we already have some stuf in base()
 TODO: igen --linuxrc=/file
-    make initrd.default and initrd.script part of the replacement
+    inject genkernel arch linuxrc into kigen

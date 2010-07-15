@@ -1,11 +1,11 @@
 import os
 import sys
-from stdout import white, green, turquoise, red, yellow
-from append import append
-from utils.shell import *
-from utils.misc import *
 import logging
 import commands
+from kigen.igen.stdout import *
+from kigen.utils.shell import *
+from kigen.utils.misc import *
+from append import append
 
 class initramfs:
 
@@ -28,7 +28,7 @@ class initramfs:
         self.KV                 = KV
         self.libdir             = libdir
         self.master_config      = master_config # TODO replace 
-        self.linuxrc            = cli['linuxrc']
+        self.linuxrc            = cli['linuxrc'] # list
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
         self.mrproper           = cli['mrproper']
@@ -111,26 +111,26 @@ class initramfs:
             os.chdir(self.temp['work'])
             ret = aobj.lvm2()
             if ret is not zero: self.fail('lvm2')
-        # 6) append dmraid
-        if self.cli['dmraid'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.dmraid()
-            if ret is not zero: self.fail('dmraid')
-        # 7) append iscsi
-        if self.cli['iscsi'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.iscsi()
-            if ret is not zero: self.fail('iscsi')
-        # 8) append evms
-        if self.cli['evms'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.evms()
-            if ret is not zero: self.fail('evms')
-        # 9) append mdadm
-        if self.cli['mdadm'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobjmdadm()
-            if ret is not zero: self.fail('mdadm')
+#        # 6) append dmraid
+#        if self.cli['dmraid'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.dmraid()
+#            if ret is not zero: self.fail('dmraid')
+#        # 7) append iscsi
+#        if self.cli['iscsi'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.iscsi()
+#            if ret is not zero: self.fail('iscsi')
+#        # 8) append evms
+#        if self.cli['evms'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.evms()
+#            if ret is not zero: self.fail('evms')
+#        # 9) append mdadm
+#        if self.cli['mdadm'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobjmdadm()
+#            if ret is not zero: self.fail('mdadm')
         # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
@@ -143,33 +143,33 @@ class initramfs:
             os.chdir(self.temp['work'])
             ret = aobj.e2fsprogs()
             if ret is not zero: self.fail('e2fsprogs')
-        # 13) append dropbear
-        if self.cli['dropbear'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.dropbear()
-            if ret is not zero: self.fail('dropbear')
-        # 14) append unionfs_fuse
-        if self.cli['unionfs'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.unionfs_fuse()
-            if ret is not zero: self.fail('unionfs-fuse')
-        # 15) append aufs
-        if self.cli['aufs'] is True:
-            os.chdir(self.temp['work'])
-            ret = aobj.aufs()
-            if ret is not zero: self.fail('aufs')
+#        # 13) append dropbear
+#        if self.cli['dropbear'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.dropbear()
+#            if ret is not zero: self.fail('dropbear')
+#        # 14) append unionfs_fuse
+#        if self.cli['unionfs'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.unionfs_fuse()
+#            if ret is not zero: self.fail('unionfs-fuse')
+#        # 15) append aufs
+#        if self.cli['aufs'] is True:
+#            os.chdir(self.temp['work'])
+#            ret = aobj.aufs()
+#            if ret is not zero: self.fail('aufs')
         # 16) append splash
         if self.cli['splash'] is not '':
             os.chdir(self.temp['work'])
             ret = aobj.splash()
             if ret is not zero: self.fail('splash')
-        # 17) append firmware
+#        # 17) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            ret = aobj.firmware()
 #            if ret is not zero: self.fail('firmware')
-        # 18) append overlay
         # TODO
+        # 18) append overlay
         # 19) append glibc
         if self.cli['glibc'] is True:
             os.chdir(self.temp['work'])

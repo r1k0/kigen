@@ -237,37 +237,37 @@ def print_usage():
     print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' <options>') 
     print
     print green('Options') + ':'
-    print '  -h, --help             This'
-    print '  --config=/file         Custom master config file'
-    print '  -n, --nocolor          Do not colorize output'
-    print '  -d, --debug            Show more output'
+    print '  -h, --help                 This'
+    print '  --config=/file             Custom master config file'
+    print '  -n, --nocolor              Do not colorize output'
+    print '  -d, --debug                Show more output'
     print
-    print '  --dotconfig=/file      Custom busybox config file'
-    print '  --rename=myinitramfs   Custom initramfs file name'
-    print '  --menuconfig           Interactive initramfs options menu'
-    print '  --linuxrc=/file        Custom linuxrc /init'
-    print '  --disklabel            Include support for UUID/LABEL'
-    print '  --luks                 Include LUKS support (host binary if found)'
-    print '  --lvm2                 Include LVM2 support (host binary if found)'
+    print '  --dotconfig=/file          Custom busybox config file'
+    print '  --rename=myinitramfs       Custom initramfs file name'
+    print '  --menuconfig               Interactive initramfs options menu'
+    print '  --linuxrc=/file[,/file]    Include custom linuxrc (/linuxrc must be first argument)'
+    print '  --disklabel                Include support for UUID/LABEL'
+    print '  --luks                     Include LUKS support (host binary if found)'
+    print '  --lvm2                     Include LVM2 support (host binary if found)'
 #    print yellow('  --evms                 Include evms support (evms must be merged)')
 #    print yellow('  --dmraid               Include dmraid support')
 #    print yellow('   --selinux              Include selinux support in --dmraid')
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
-    print '  --glibc                Include host GNU C libraries (required for dns)'
+    print '  --glibc                    Include host GNU C libraries (required for dns)'
 #    print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
-    print '  --splash=<theme>       Include splash support (media-gfx/splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]       Splash resolution, all if not set'
+    print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
 #    print yellow('   --sinitrd=/file        Splash custom initrd.splash (host if found)')
 #    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
 #    print red('  --aufs                 Include aufs support')
 #    print yellow('  --firmware=/dir        Include custom firmware support')
-    print '  --plugin=/dir[,/dir]   Include list of user generated custom roots'
-    print '  --nocache              Do not use cached data'
-    print '  --nohostbin            Do not use host binaries but compile from sources'
-    print '  --noboot               Do not copy initramfs to /boot'
+    print '  --plugin=/dir[,/dir]       Include list of user generated custom roots'
+    print '  --nocache                  Do not use cached data'
+    print '  --nohostbin                Do not use host binaries but compile from sources'
+    print '  --noboot                   Do not copy initramfs to /boot'
     print
-    print '  --logfile=/file        Log to file, default to /var/log/igen.log'
-    print '  --version              Version'
-    print '  --credits              Credits and license'
+    print '  --logfile=/file            Log to file, default to /var/log/igen.log'
+    print '  --version                  Version'
+    print '  --credits                  Credits and license'
 
