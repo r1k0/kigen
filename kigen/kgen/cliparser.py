@@ -168,8 +168,8 @@ def print_usage(ex=False):
     print '  --fakeroot=/dir        Append modules to /dir/lib/modules'
     print '  --nomodinstall         Do not install modules'
     print '  --nosaveconfig         Do not save kernel config in /etc/kernels'
-    print
     print '  --noboot               Do not copy kernel to /boot'
+    print
     print '  --logfile=/file        Log to file, default to /var/log/kgen.log'
     print '  --version              Version'
     print '  --credits              Credits and license'

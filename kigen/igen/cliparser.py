@@ -265,8 +265,8 @@ def print_usage():
     print '  --plugin=/dir[,/dir]   Include list of user generated custom roots'
     print '  --nocache              Do not use cached data'
     print '  --nohostbin            Do not use host binaries but compile from sources'
-    print
     print '  --noboot               Do not copy initramfs to /boot'
+    print
     print '  --logfile=/file        Log to file, default to /var/log/igen.log'
     print '  --version              Version'
     print '  --credits              Credits and license'
