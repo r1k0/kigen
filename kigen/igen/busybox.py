@@ -40,7 +40,7 @@ class busybox:
         if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
             ret = self.download()
             if ret is not zero: 
-                os.system('rm %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version'])))
+                process('rm -v %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version'])), self.verbose)
                 self.fail('download')
     
         ret = self.extract()
@@ -105,6 +105,7 @@ class busybox:
         print green(' * ') + '... busybox.download'
         bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
+        # FIXME utils.shell.process does not remove the output!!!!
         return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
     
     def extract(self):

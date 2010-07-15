@@ -1,5 +1,4 @@
 import os
-import sys
 
 version     = "0.1.5"
 productname = os.path.basename(sys.argv[0])

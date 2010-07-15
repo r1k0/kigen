@@ -1,7 +1,8 @@
 import os
 import sys
 from stdout import white, green, turquoise, red, yellow
-import utils
+from utils.shell import *
+from utils.misc import *
 
 class kernel:
 
@@ -81,10 +82,10 @@ class kernel:
         # save kernel config
         if self.nosaveconfig is False:
             if os.path.isdir('/etc/kernels/'):
-                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
+                process('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
             else:
-                utils.sprocessor('mkdir /etc/kernels', self.verbose)
-                utils.sprocessor('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
+                process('mkdir /etc/kernels', self.verbose)
+                process('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
             print green(' * saved ') + '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV
 
     def fail(self, step):
@@ -141,10 +142,10 @@ class kernel:
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-        utils.sprocessor('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
+        process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
         print green(' * ') + turquoise('initramfs.extract ') + 'to /usr/src/initramfs'
         # extract gzip archive
-        utils.sprocessor('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
+        process('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 
         # clean previous root
         from time import time

@@ -1,7 +1,6 @@
 import os
 import sys
 import re
-import commands
 import subprocess
 import logging
 
@@ -105,6 +104,6 @@ def process(cmd, verbose):
 
     # TODO pass logfile
     f = open('/var/log/kgen.log')
-    p = subprocess.Popen(cmd , stdout=f) #, shell = True) # , close_fds=True)
+    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
 
     return p.wait() # , p.stdout #, p.stderr

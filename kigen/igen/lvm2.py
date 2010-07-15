@@ -1,8 +1,8 @@
 import os
 import sys
 from stdout import green, turquoise, white, red, yellow
-from shell import *
-from misc import *
+from utils.shell import *
+from utils.misc import *
 
 class lvm2:
 
@@ -26,7 +26,7 @@ class lvm2:
         if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver)) is not True:
             ret = self.download()
             if ret is not zero:
-                os.system('rm %s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver))
+                process('rm -v %s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -83,6 +83,7 @@ class lvm2:
     	print green(' * ') + '... lvm2.download'
     	lvm2_url = 'ftp://sources.redhat.com/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
     	
+        # FIXME utils.shell.process does not remove the output!!!!
     	return os.system('/usr/bin/wget %s -O %s/distfiles/LVM2.%s.tgz %s' % (lvm2_url, get_portdir(self.temp), self.lvm2_ver, self.verbose['std']))
     
     def extract(self):

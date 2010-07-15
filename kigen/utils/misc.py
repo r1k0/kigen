@@ -2,10 +2,8 @@ import os
 import sys
 import re
 import commands
-import subprocess
-import logging
 
-# don't use colors here
+# WARN don't use colors here
 
 def failed(string):
     print string
@@ -46,7 +44,7 @@ def identify_arch():
     @return: string
     """
     # TODO test and improve identify_arch()
-    # FIXME: x86 for 32 and 64 or x86_64?
+    # FIXME x86 for 32 and 64 or x86_64?
     uname = commands.getoutput('uname -m | sed -e "s:i[3-6]86:x86:"') #-e "s:x86_64:amd64:" -e "s:parisc:hppa:"')
 
     return uname
@@ -72,7 +70,7 @@ def identify_flavor():
         f = open(sabayonrelease)
         flavor = f.readline()
         f.close()
-    # FIXME: wait for Funtoo update in baselayout to have /etc/funtoo-release
+    # FIXME wait for Funtoo update in baselayout to have /etc/funtoo-release
     # currently Funtoo overwrites /etc/gentoo-release
     elif os.path.isfile(funtoorelease):
         f = open(funtoorelease)
