@@ -246,7 +246,7 @@ def print_usage():
     print '  --rename=myinitramfs   Custom initramfs file name'
     print '  --menuconfig           Interactive initramfs options menu'
     print '  --linuxrc=/file        Custom linuxrc /init'
-    print '  --disklabel            Include support for UUID'
+    print '  --disklabel            Include support for UUID/LABEL'
     print '  --luks                 Include LUKS support (host binary if found)'
     print '  --lvm2                 Include LVM2 support (host binary if found)'
 #    print yellow('  --evms                 Include evms support (evms must be merged)')
