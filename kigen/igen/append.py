@@ -102,7 +102,7 @@ class append:
         #       os.system('cp %s/arch/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']))
         # elif arch is 'amd64':
         #       blablabla
-            print
+            print 'Gentoo linuxrc 3.4.10.907-r2'
             # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
             process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
