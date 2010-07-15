@@ -2,7 +2,8 @@ import os
 import sys
 from stdout import white, green, turquoise, red, yellow
 from append import append
-import utils
+from utils.shell import *
+from utils.misc import *
 import logging
 import commands
 
@@ -92,7 +93,7 @@ class initramfs:
                         self.nohostbin)
 
         # 1) create initial cpio and append object
-        ret, output = utils.spprocessor('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
+        ret, output = process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero: self.fail('cpio')
         # 2) append base
         aobj.base()
@@ -186,7 +187,7 @@ class initramfs:
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
-        utils.sprocessor('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
+        process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
         if ret is not zero: self.fail('compress')
     
         return ret

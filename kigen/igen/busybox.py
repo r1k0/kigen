@@ -1,7 +1,8 @@
 import os
 import sys
 from stdout import green, turquoise, white, red, yellow
-import utils
+from utils.shell import *
+from utils.misc import *
 
 class busybox:
 
@@ -36,10 +37,10 @@ class busybox:
         """
         ret = zero = int('0')
     
-        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
+        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
             ret = self.download()
             if ret is not zero: 
-                os.system('rm %s/distfiles/busybox-%s.tar.bz2' % (utils.get_portdir(self.temp), str(self.master_config['busybox-version'])))
+                os.system('rm %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version'])))
                 self.fail('download')
     
         ret = self.extract()
@@ -104,7 +105,7 @@ class busybox:
         print green(' * ') + '... busybox.download'
         bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
-        return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, utils.get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
     
     def extract(self):
         """
@@ -114,7 +115,7 @@ class busybox:
         """
         print green(' * ') + '... busybox.extract'
 
-        return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (utils.get_portdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
+        return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
     
     def copy_config(self):
         """

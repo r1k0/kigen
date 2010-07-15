@@ -1,5 +1,5 @@
-import sys
-import os
+#import sys
+#import os
 
 # temp directory
 temp_root = '/var/tmp/kigen'

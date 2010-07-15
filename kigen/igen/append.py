@@ -3,8 +3,8 @@ import sys
 from stdout import white, green, turquoise, red, yellow
 import logging
 import commands
-from kigen.utils import sprocessor, srprocessor, arprocessor
-from kigen.utils import get_sys_modules_list, get_config_modules_list, get_config_modules_dict
+from kigen.utils.shell import *
+from kigen.utils.misc import get_sys_modules_list, get_config_modules_list, get_config_modules_dict
 
 class append:
 
@@ -106,28 +106,28 @@ class append:
         # elif arch is 'amd64':
         #       blablabla
             print
-            sprocessor('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
         else:
             # cp custom linuxrc to initramfs
             print white(self.linuxrc) + ' from host'
-            sprocessor('cp %s %s/initramfs-base-temp/init' % (self.linuxrc, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-base-temp/init' % (self.linuxrc, self.temp['work']), self.verbose)
     
         # make init executable
-        sprocessor('chmod 0755 %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
+        process('chmod 0755 %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
     
         # link lib to lib64
-        sprocessor('ln -s lib %s/initramfs-base-temp/lib64' % self.temp['work'], self.verbose)
+        process('ln -s lib %s/initramfs-base-temp/lib64' % self.temp['work'], self.verbose)
     
         # create fstab
-        srprocessor('echo /dev/ram0 / ext2 defaults 0 0\n > ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
-        arprocessor('echo proc /proc proc defaults 0 0\n >> ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
+        process_redir('echo /dev/ram0 / ext2 defaults 0 0\n > ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
+        process_append('echo proc /proc proc defaults 0 0\n >> ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp/dev')
     
         # create nodes
-        sprocessor('mknod -m 660 console c 5 1', self.verbose)
-        sprocessor('mknod -m 660 null    c 1 3', self.verbose)
-        sprocessor('mknod -m 600 tty1    c 4 1', self.verbose)
+        process('mknod -m 660 console c 5 1', self.verbose)
+        process('mknod -m 660 null    c 1 3', self.verbose)
+        process('mknod -m 600 tty1    c 4 1', self.verbose)
     
         # timestamp the build
         from time import strftime
@@ -136,24 +136,24 @@ class append:
         build_date.close()
     
         # aux
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-base-temp/lib/keymaps', self.verbose)
-        sprocessor('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-base-temp/lib/keymaps', self.verbose)
+        process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp')
-        sprocessor('ln -s init linuxrc', self.verbose)
-        sprocessor('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
-        sprocessor('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (self.libdir, self.temp['work']), self.verbose)
+        process('ln -s init linuxrc', self.verbose)
+        process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
+        process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (self.libdir, self.temp['work']), self.verbose)
         # what's the harm to have it harcoded? even if the group is commented out in the config file the variable is still empty
         # same thinking for bootupdate it's already set in etc/initrd.defaults $HWOPTS
-        arprocessor("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % self.temp['work'], self.verbose)
-        sprocessor('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (self.libdir, self.temp['work']), self.verbose)
+        process_append("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % self.temp['work'], self.verbose)
+        process('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (self.libdir, self.temp['work']), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp/sbin')
-        sprocessor('ln -s ../init init', self.verbose)
-        sprocessor('chmod +x %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
-        sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
-        sprocessor('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
-        sprocessor('chmod +x %s/initramfs-base-temp/sbin/modprobe' % self.temp['work'], self.verbose)
+        process('ln -s ../init init', self.verbose)
+        process('chmod +x %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
+        process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
+        process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
+        process('chmod +x %s/initramfs-base-temp/sbin/modprobe' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp/')
         return os.system(self.cpio())
@@ -187,14 +187,14 @@ class append:
             bbobj.build()
 
         # append busybox to cpio
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
-        sprocessor('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
+        process('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
-        sprocessor('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
-        sprocessor('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
-        sprocessor('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
-        sprocessor('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
+        process('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
+        process('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
+        process('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
+        process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
 
 # FIXME: should be removed but wait!
 # we don't need it due to busybox --install -s from the /linuxrc
@@ -203,7 +203,7 @@ class append:
 # but so far, /linuxrc has run and busybox --install -s is called
 # problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
         for i in self.busyboxprogs.split():
-            sprocessor('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
+            process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
         if ret is zero:
@@ -220,7 +220,7 @@ class append:
         logging.debug('initramfs.append_modules ' + self.KV)
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
     
         # FIXME: ctrl c does not work during this function
         # TODO: rewrite (later)
@@ -245,8 +245,8 @@ class append:
                     # if the module is found copy it
                     module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                     module_dirname = os.path.dirname(module)
-                    sprocessor('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
-                    sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
+                    process('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
+                    process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
    
         # for each module in /etc/boot.conf
         if "load-modules" in self.bootupdateinitrd:
@@ -258,14 +258,14 @@ class append:
                         print green(' * ') + '... ' + white(i) + ' from /etc/boot.conf'
                         module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                         module_dirname = os.path.dirname(module)
-                        sprocessor('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
-                        sprocessor('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
+                        process('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
+                        process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
     
         # TODO: make variable of /lib/modules in case of FAKEROOT export
         os.system('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ))
     
         # create etc/modules/<group>
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
         modconfdict = get_config_modules_dict(self.master_config)
     
         # Genkernel official boot module design
@@ -282,8 +282,8 @@ class append:
         # Funtoo bootupdate initramfs module file config
         if "load-modules" in self.bootupdateinitrd:
             for o in self.bootupdateinitrd['load-modules'].split():
-                # FIXME think about >> passed to sprocessor?
-                arprocessor('echo %s >> %s' % (o, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules/bootupdate'), self.verbose)
+                # FIXME think about >> passed to process?
+                process_append('echo %s >> %s' % (o, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules/bootupdate'), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp')
         return os.system(self.cpio())
@@ -298,21 +298,21 @@ class append:
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
         if os.path.isfile(cryptsetup_bin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
-            sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
-            sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+            process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         elif os.path.isfile(cryptsetup_sbin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
-            sprocessor('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
-            sprocessor('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+            process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.master_config['luks-version'],
             logging.debug('initramfs.append.luks ' + self.master_config['luks-version'])
@@ -323,7 +323,7 @@ class append:
                 # extract cache
                 # FIXME careful with the >
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
             else:
                 # compile and cache
@@ -335,7 +335,7 @@ class append:
                 # extract cache
                 # FIXME careful with the >
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-luks-temp')
         return os.system(self.cpio())
@@ -348,16 +348,16 @@ class append:
         """
         ret = int('0')
 
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         print green(' * ') + turquoise('initramfs.append.glibc')
         # this allows dns resolution inside the initramfs
-        sprocessor('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
-        sprocessor('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
-        sprocessor('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
-        sprocessor('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
-        sprocessor('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-glibc-temp')
         return os.system(self.cpio())
@@ -375,22 +375,22 @@ class append:
         dropbearconvert_bin = 'dropbearconvert'
         dropbear_sbin       = 'dropbear'
 
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
 
         if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
             print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
 # FIXME: check if dropbear is merged with USE=static if not fail
-            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-            sprocessor('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-            sprocessor('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            process('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
             for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
-                sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
-            sprocessor('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
+                process('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
@@ -401,11 +401,11 @@ class append:
                 # extract cache
                 # FIXME careful with the >
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-dropbear-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
-                sprocessor('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearkey' % self.temp['work'], self.verbose)
-                sprocessor('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearconvert' % self.temp['work'], self.verbose)
-                sprocessor('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbclient' % self.temp['work'], self.verbose)
-                sprocessor('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbscp' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearkey' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearconvert' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbclient' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbscp' % self.temp['work'], self.verbose)
 
             else:
                 # compile and cache
@@ -417,12 +417,12 @@ class append:
                 # extract cache
                 # FIXME careful with the >
                 os.system('tar BLABLABLA ' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         # copy required libs
-        sprocessor('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-        sprocessor('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-        sprocessor('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
 
         #cp -pr /etc/dropbear "${DESTDIR}/etc/"
         #cp -pr /etc/passwd "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
@@ -455,12 +455,12 @@ class append:
             e2obj = e2fsprogs(self.master_config, self.temp, self.verbose)
             e2obj.build()
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
     
         # FIXME careful with the >
         os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.master_config['e2fsprogs-version'], self.temp['work']))
-        #utils.srprocessor('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
-        sprocessor('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+        #utils.process_redir('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
+        process('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-blkid-temp')
         return os.system(self.cpio())
@@ -474,7 +474,7 @@ class append:
         ret = zero = int('0')
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
    
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
     
         if os.path.isfile(splash_geninitramfs_bin):
             # if splashutils is merged
@@ -492,7 +492,7 @@ class append:
             # because splash_geninitramfs fails and exits with success when you provide a broken theme path
             # we need to check if the dir exists first, can't hurt
             if os.path.isdir('/etc/splash/'+self.stheme):
-                sprocessor('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
+                process('splash_geninitramfs -c %s/initramfs-splash-temp %s %s' % (self.temp['work'], self.sres, self.stheme), self.verbose)
             else:
                 self.fail('/etc/splash/'+self.stheme+' does not exist')
                 # FIXME
@@ -501,7 +501,7 @@ class append:
                 # or remove splash support and still continue
 
             if os.path.isfile('/usr/share/splashutils/initrd.splash'):
-                sprocessor('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % self.temp['work'], self.verbose)
+                process('cp -f /usr/share/splashutils/initrd.splash %s/initramfs-splash-temp/etc' % self.temp['work'], self.verbose)
             else:
                 self.fail('/usr/share/splashutils/initrd.splash missing')
         else:
@@ -525,19 +525,19 @@ class append:
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
         if os.path.isfile(lvm2_static_bin) and self.nohostbin is False:
             # TODO see if we can use something else than import commands
             #lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
             logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' from ' + white('host')
-            sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
         elif os.path.isfile(lvm2_bin) and self.nohostbin is False:
             logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_bin + ' from ' + white('host')
-            sprocessor('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.lvm2 ' + self.master_config['lvm2-version'])
             if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2') and self.nocache is False:
@@ -547,7 +547,7 @@ class append:
 
                 # extract cache
                 os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
             else: 
                 # compile and cache
 
@@ -561,10 +561,10 @@ class append:
 
                 # extract cache
                 os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
-                sprocessor('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
 
         if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
-            sprocessor('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
+            process('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
         return os.system(self.cpio())
@@ -604,24 +604,24 @@ class append:
         if os.path.isfile('/sbin/evms'):
             print 'feeding' + ' from host'
     
-            sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
-            sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
-            sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/bin', self.verbose)
-            sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/bin', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
     
         # FIXME broken due to *
-        # sprocessor('cp -a /lib/ld-* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libgcc_s* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libc-* /lib/libc.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libdl-* /lib/libdl.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libpthread* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libuuid*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/libevms*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/evms %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-        # sprocessor('cp -a /lib/evms/* %s/initramfs-evms-temp/lib/evms' % temp['work'], verbose)
-        # sprocessor('cp -a /etc/evms.conf %s/initramfs-evms-temp/etc' % temp['work'], verbose)
-        # sprocessor('cp /sbin/evms_activate %s/initramfs-evms-temp/sbin' % temp['work'], verbose)
-        # sprocessor('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % temp['work'], verbose)
+        # process('cp -a /lib/ld-* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libgcc_s* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libc-* /lib/libc.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libdl-* /lib/libdl.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libpthread* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libuuid*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/libevms*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/evms %s/initramfs-evms-temp/lib' % temp['work'], verbose)
+        # process('cp -a /lib/evms/* %s/initramfs-evms-temp/lib/evms' % temp['work'], verbose)
+        # process('cp -a /etc/evms.conf %s/initramfs-evms-temp/etc' % temp['work'], verbose)
+        # process('cp /sbin/evms_activate %s/initramfs-evms-temp/sbin' % temp['work'], verbose)
+        # process('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % temp['work'], verbose)
         else:
             print
             self.fail('sys-fs/evms must be merged')
@@ -638,8 +638,8 @@ class append:
         logging.debug('initramfs.append_firmware ' + self.firmware + ' from host')
         print green(' * ') + turquoise('initramfs.append_firmware ') + white(self.firmware) + ' from host'
     
-        sprocessor('mkdir -p ' + temp['work']+'/initramfs-firmware-temp/lib/firmware', self.verbose)
-        sprocessor('cp -a %s %s/initramfs-firmware-temp/lib/' % (self.firmware, self.temp['work']), self.verbose)
+        process('mkdir -p ' + temp['work']+'/initramfs-firmware-temp/lib/firmware', self.verbose)
+        process('cp -a %s %s/initramfs-firmware-temp/lib/' % (self.firmware, self.temp['work']), self.verbose)
     
         os.chdir(temp['work']+'/initramfs-firmware-temp')
         return os.system(self.cpio())
@@ -654,8 +654,8 @@ class append:
         logging.debug('initramfs.append.mdadm')
         print green(' * ') + turquoise('initramfs.append.mdadm')
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmadm-temp/etc', self.verbose)
-        sprocessor('cp -a /etc/mdadm.conf %s/initramfs-mdadm-temp/etc' % self.temp['work'], self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dmadm-temp/etc', self.verbose)
+        process('cp -a /etc/mdadm.conf %s/initramfs-mdadm-temp/etc' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-mdadm-temp')
         return os.system(self.cpio())
@@ -671,7 +671,7 @@ class append:
         logging.debug('initramfs.append.dmraid ' + self.master_config['dmraid_ver'])
         print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_config['dmraid_ver'],
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
     
         if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_config['dmraid_ver']+'.bz2') and self.nocache is False:
             # use cache
@@ -685,7 +685,7 @@ class append:
     
         # FIXME careful with the > 
         os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.master_config['dmraid_ver'], self.temp['work']))
-        sprocessor('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+        process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
     
         # TODO ln -sf raid456.ko raid45.ko ?
         # TODO is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
@@ -704,7 +704,7 @@ class append:
         logging.debug('initramfs.append.iscsi ' + self.master_config['iscsi_ver'])
         print green(' * ') + turquoise('initramfs.append.iscsi ') + self.master_config['iscsi_ver'],
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
     
         if os.path.isfile(self.temp['cache']+'/iscsistart-'+self.master_config['iscsi_ver']+'.bz2') and self.nocache is False:
             # use cache
@@ -716,7 +716,7 @@ class append:
             iscsi.build_sequence(self.master_config, self.temp, self.verbose['std'])
     
         os.system('/bin/bzip2 -dc %s/iscsistart-%s.bz2 > %s/initramfs-iscsi-temp/bin/iscsistart' % (self.temp['cache'], self.master_config['iscsi_ver'], self.temp['work']))
-        sprocessor('chmod +x %s/initramfs-iscsi-temp/bin/iscsistart' % self.temp['work'], self.verbose)
+        process('chmod +x %s/initramfs-iscsi-temp/bin/iscsistart' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-iscsi-temp')
         return os.system(self.cpio())
@@ -745,8 +745,8 @@ class append:
             else:
                 self.fail('we need libfuse: sys-fs/fuse must be merged')
     
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
-        # FIXME careful with the > passed to sprocessor()
+        process('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
+        # FIXME careful with the > passed to process()
         os.system('/bin/bzip2 -dc %s/unionfs-fuse.static-%s.bz2 > %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % (self.temp['cache'], self.master_config['unionfs_fuse_ver'], self.temp['work']))
         os.system('chmod +x %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % self.temp['work'])
     
@@ -806,7 +806,7 @@ class append:
         logging.debug('initramfs.append.plugin')
         print green(' * ') + turquoise('initramfs.append.plugin ') + dir
 
-        sprocessor('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
         os.system('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'))
 

@@ -43,7 +43,8 @@ else:
 from config import master_config
 from igen.config import temp
 import igen.cliparser
-import utils
+from utils.misc import *
+from utils.shell import *
 
 if len(sys.argv) < 1:
     igen.cliparser.print_usage()
@@ -61,7 +62,7 @@ logging.debug(cli)
 # parse kigen config file
 kigen_conf = cli['config']
 if os.path.isfile(kigen_conf):
-    master_config_temp = utils.parse_config_file(kigen_conf)
+    master_config_temp = parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
 else:
     print 'missing file: ' + red(kigen_conf) + '.'
@@ -82,11 +83,11 @@ else:
     bootupdateset = False
 
 # what am I?
-arch = utils.identify_arch()
+arch = identify_arch()
 logging.debug('Building on ' + arch)
 
 # which Portage flavor?
-flavor = utils.identify_flavor()
+flavor = identify_flavor()
 logging.debug(flavor)
 
 # show flavor on arch info
@@ -96,14 +97,14 @@ print green(' * ') + white(flavor) + ' on ' + white(arch)
 if not os.path.isdir(kerneldir):
     print red('error') + ': ' + kerneldir + ' does not exist.'
     sys.exit(2)
-KV = utils.get_kernel_version(kerneldir)
+KV = get_kernel_version(kerneldir)
 
 try:
     # try creating temp dirs
-    utils.sprocessor('mkdir -p %s' % temp['root'],  verbose)
-    utils.sprocessor('mkdir -p %s' % temp['work'],  verbose)
-    utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
-    utils.sprocessor('mkdir -p %s' % temp['distfiles'], verbose)
+    process('mkdir -p %s' % temp['root'],  verbose)
+    process('mkdir -p %s' % temp['work'],  verbose)
+    process('mkdir -p %s' % temp['cache'], verbose)
+    process('mkdir -p %s' % temp['distfiles'], verbose)
 except:
     # don't mind
     pass
@@ -112,13 +113,13 @@ except:
 import shutil
 if os.path.isdir(temp['work']):
     shutil.rmtree(temp['work'])
-    utils.sprocessor('mkdir -p %s' % temp['work'], verbose)
+    process('mkdir -p %s' % temp['work'], verbose)
 
 # --nocache
 if cli['nocache'] is True:
     if os.path.isdir(temp['cache']):
         shutil.rmtree(temp['cache'])
-        utils.sprocessor('mkdir -p %s' % temp['cache'], verbose)
+        process('mkdir -p %s' % temp['cache'], verbose)
 
 from igen.initramfs import initramfs
 iobj = initramfs(kerneldir,         \
@@ -137,10 +138,10 @@ iobj.build()
 if cli['noboot'] is False:
     if cli['rename'] is '':
         print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
-        utils.sprocessor('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+        process('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
     else:
         print green(' * produced ') + '/boot/' + cli['rename']
-        utils.sprocessor('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+        process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
 # leave /boot alone but tell the user where to find his initramfs
 elif cli['noboot'] is True:

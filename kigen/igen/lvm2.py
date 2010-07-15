@@ -1,7 +1,8 @@
 import os
 import sys
 from stdout import green, turquoise, white, red, yellow
-import utils
+from shell import *
+from misc import *
 
 class lvm2:
 
@@ -22,10 +23,10 @@ class lvm2:
         zero = int('0')
         ret = True
     
-        if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (utils.get_portdir(self.temp), self.lvm2_ver)) is not True:
+        if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver)) is not True:
             ret = self.download()
             if ret is not zero:
-                os.system('rm %s/distfiles/LVM2.%s.tgz' % (utils.get_portdir(self.temp), self.lvm2_ver))
+                os.system('rm %s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver))
                 self.fail('download')
     
         self.extract()
@@ -82,7 +83,7 @@ class lvm2:
     	print green(' * ') + '... lvm2.download'
     	lvm2_url = 'ftp://sources.redhat.com/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
     	
-    	return os.system('/usr/bin/wget %s -O %s/distfiles/LVM2.%s.tgz %s' % (lvm2_url, utils.get_portdir(self.temp), self.lvm2_ver, self.verbose['std']))
+    	return os.system('/usr/bin/wget %s -O %s/distfiles/LVM2.%s.tgz %s' % (lvm2_url, get_portdir(self.temp), self.lvm2_ver, self.verbose['std']))
     
     def extract(self):
     	"""
@@ -92,7 +93,7 @@ class lvm2:
     	"""
     	print green(' * ') + '... lvm2.extract'
 
-    	os.system('tar xvfz %s/distfiles/LVM2.%s.tgz -C %s %s' % (utils.get_portdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
+    	os.system('tar xvfz %s/distfiles/LVM2.%s.tgz -C %s %s' % (get_portdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
     
     def configure(self):
     	"""
