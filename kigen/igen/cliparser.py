@@ -245,7 +245,7 @@ def print_usage():
     print '  --dotconfig=/file          Custom busybox config file'
     print '  --rename=myinitramfs       Custom initramfs file name'
     print '  --menuconfig               Interactive initramfs options menu'
-    print '  --linuxrc=/file[,/file]    Include custom linuxrc (/linuxrc must be first argument)'
+    print '  --linuxrc=/linuxrc[,/file] Include custom linuxrc (files copied over to etc)'
     print '  --disklabel                Include support for UUID/LABEL'
     print '  --luks                     Include LUKS support (host binary if found)'
     print '  --lvm2                     Include LVM2 support (host binary if found)'
