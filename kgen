@@ -91,6 +91,9 @@ if not os.path.isdir(kerneldir):
     print red('error') + ': ' + kerneldir + ' does not exist.'
     sys.exit(2)
 KV = get_kernel_version(kerneldir)
+if KV is 'none':
+    print red('error') + ': ' + kerneldir+'/Makefile not found'
+    sys.exit(2)
 
 from kgen.kernel import kernel
 kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)

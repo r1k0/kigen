@@ -103,6 +103,8 @@ def get_kernel_version(kerneldir):
     @return: string
     """
     # best way *here* is to get KV from the sources, not the running KV
+    if not os.path.isfile(kerneldir+'/Makefile'):
+        return 'none'
     with open(kerneldir+'/Makefile') as file:
         # get first 4lines
         head = [file.next().replace(" ","") for x in range(4)]
