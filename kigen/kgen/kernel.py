@@ -24,6 +24,7 @@ class kernel:
         self.nosaveconfig   = cli['nosaveconfig']
         self.clean          = cli['clean']
         self.initramfs      = cli['initramfs']
+        self.fixdotconfig   = cli['fixdotconfig']
         self.temp           = temp
 
     def build(self):
@@ -48,14 +49,18 @@ class kernel:
             ret = make_clean()
             if ret is not zero: self.fail('clean')
 
+        # by default don't touch dotconfig
+        # only if --fixdotconfig is passed
         if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
-            self.enable_dotconfig_initramfs()
+            if self.fixdotconfig is True:
+                self.enable_dotconfig_initramfs()
             self.import_user_initramfs()
         else:
-            # ensure previous run with --initramfs have not left INITRAMFS configs
-            self.remove_dotconfig_initramfs()
+            # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
+            if self.fixdotconfig is True:
+                self.remove_dotconfig_initramfs()
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()

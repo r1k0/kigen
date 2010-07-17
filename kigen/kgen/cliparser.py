@@ -36,6 +36,7 @@ def parse():
                                 "noboot",	                \
                                 "nosaveconfig",             \
                                 "nohostbin",                \
+                                "fixdotconfig",             \
                                 "debug"])
     except getopt.GetoptError, err:
         print str(err) # "option -a not recognized"
@@ -69,6 +70,7 @@ def parse():
     verbose['std']		= '>>' + cli['logfile'] + ' 2>&1'
     cli['color']		= True
     cli['nosaveconfig'] = False
+    cli['fixdotconfig'] = False
 
     # target options
     for o, a in opts:
@@ -122,6 +124,8 @@ def parse():
             cli['config'] = a
         elif o in ("--clean"):
             cli['clean'] = True
+        elif o in ("--fixdotconfig"):
+            cli['fixdotconfig'] = True
         else:
             assert False, "uncaught option"
 
@@ -158,6 +162,7 @@ def print_usage(ex=False):
     print '  -d, --debug                Show more output'
     print
     print '  --dotconfig=/file          Custom kernel config file'
+    print '  --fixdotconfig             Check and fix the kernel config file'
     print '  --rename=mykernel          Custom kernel file name'
     print '  --initramfs=/file          Embed initramfs into the kernel'
     print '  --clean                    Clean precompiled objects only'
