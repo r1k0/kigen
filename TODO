@@ -19,3 +19,7 @@ TODO: igen --keymap
     we already have some stuf in base()
 TODO: igen --linuxrc=/file
     inject genkernel arch linuxrc into kigen
+TODO: kgen --fixdotconfig
+    checks dotconfig if required options are correctly set
+    don't touch the dotconfig by default otherwise
+    auto add/remove config if passed --fixdotconfig
