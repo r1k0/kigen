@@ -51,6 +51,7 @@ class kernel:
         if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
+            enable_dotconfig_initramfs()
             self.import_user_initramfs()
 
         if self.oldconfig is True:
@@ -130,6 +131,17 @@ class kernel:
             sys.exit(2)
 
     # emmbedded initramfs function
+    def remove_dotconfig_initramfs(self):
+        print green(' * ') + turquoise('initramfs.remove_dotconfig')
+        process('gr', self.verbose)
+
+    def enable_dotconfig_initramfs(self):
+        kinitramfsdir = self.temp['initramfs']
+        print green(' * ') + turquoise('initramfs.enable_dotconfig ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
+        # FIXME or not? actually let make oldconfig deal with it
+        # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
+        file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
+
     def import_user_initramfs(self):
         """
         Import user initramfs into the kernel
@@ -137,14 +149,10 @@ class kernel:
         @return: bool
         """
         kinitramfsdir = self.temp['initramfs']
-        print green(' * ') + turquoise('initramfs.set_kernel_config ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
-        # FIXME or not? actually let make oldconfig deal with it
-        # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
-        file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-        process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
         print green(' * ') + turquoise('initramfs.extract ') + 'to ' + kinitramfsdir
+        process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
         # extract gzip archive
         process('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 
