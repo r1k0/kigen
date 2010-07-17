@@ -51,8 +51,11 @@ class kernel:
         if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
-            enable_dotconfig_initramfs()
+            self.enable_dotconfig_initramfs()
             self.import_user_initramfs()
+        else:
+            # ensure previous run with --initramfs have not left INITRAMFS configs
+            self.remove_dotconfig_initramfs()
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
@@ -132,8 +135,11 @@ class kernel:
 
     # emmbedded initramfs function
     def remove_dotconfig_initramfs(self):
-        print green(' * ') + turquoise('initramfs.remove_dotconfig')
-        process('gr', self.verbose)
+        print green(' * ') + turquoise('initramfs.remove_dotconfig ') + 'INITRAMFS'
+        # FIXME this one bugs
+#        process_redir('grep -v INITRAMFS %s > %s'% (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'), self.verbose)
+        os.system('grep -v INITRAMFS %s > %s' % (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'))
+        process('mv %s %s' % (self.kerneldir + '/.config.kigen.temp',  self.kerneldir + '/.config'), self.verbose)
 
     def enable_dotconfig_initramfs(self):
         kinitramfsdir = self.temp['initramfs']
