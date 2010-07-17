@@ -31,7 +31,7 @@ def process_pipe(cmd, verbose):
 def process_redir(cmd, verbose):
     """
     SINGLE Redir Piped process launcher
-    Automagically detects | and concatene into multiple lists
+    Automagically detects > and concatene into multiple lists
 
     @arg cmd		string
 
@@ -59,7 +59,7 @@ def process_redir(cmd, verbose):
 def process_append(cmd, verbose):
     """
     SINGLE Append Piped process launcher
-    Automagically detects | and concatene into multiple lists
+    Automagically detects >> and concatene into multiple lists
 
     @arg cmd		string
 
