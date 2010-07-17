@@ -118,11 +118,15 @@ if cli['noboot'] is False:
      process('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
 
      if cli['rename'] is '':
-         print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV
+         print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV,
          process('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
      else:
-         print green(' * produced ') + '/boot/' + cli['rename']
+         print green(' * produced ') + '/boot/' + cli['rename'],
          process('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['rename']), verbose)
+     if cli['initramfs'] is not '':
+         print ' with an ' + white('embedded') + ' initramfs'
+     else:
+         print
 
 # leave /boot alone but tell the user where to find his kernel/system.map
 elif cli['noboot'] is True:
@@ -130,7 +134,11 @@ elif cli['noboot'] is True:
     print green(' * produced ') + kerneldir+'/System.map'
 
     logging.debug(kerneldir+'/arch/x86/boot/bzImage')
-    print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage'
+    print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage',
+    if cli['initramfs'] is not '':
+        print ' with an ' + white('embedded') + ' initramfs'
+    else:
+        print
 
 # TODO unset os.environ['KGEN_STDOUT']?
 
