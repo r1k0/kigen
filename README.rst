@@ -114,9 +114,13 @@ Portage systems kernel boot options
 KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
 
 real_root
-  points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS)
+  points to the root device (ie. /dev/sda3 or /dev/mapper/root in case of LUKS).
 
 root
+  needs to point to the ramdisk.
+
+vga
+  should be the resolution of the screen.
 
 subdir
 
@@ -130,8 +134,10 @@ cdroot
 cdroot_type
 
 loop
+  starts livecd loop.
 
 looptype
+  loop options.
 
 domdadm
   activates support for mdadm.
@@ -149,6 +155,7 @@ doscsi
   activates support for iscsi.
 
 debug
+  runs debug shell if requested
 
 scandelay
 
@@ -213,6 +220,7 @@ crypt_silent
 real_rootflags
 
 keymap
+  setup keymap in linuxrc
 
 unionfs
 
@@ -223,6 +231,6 @@ nounionfs
 :Authors: 
     erick 'r1k0' michau (python engine),
 
-    Portage community (linuxrc scripts),
+    Gentoo community (linuxrc scripts),
 
 :Version: 0.1.5

@@ -6,7 +6,7 @@ from utils.misc import *
 
 class kernel:
 
-    def __init__(self, kerneldir, master_config, arch, KV, cli, verbose):
+    def __init__(self, kerneldir, master_config, arch, KV, cli, temp, verbose):
 
         self.kerneldir      = kerneldir
         self.master_config  = master_config
@@ -24,6 +24,7 @@ class kernel:
         self.nosaveconfig   = cli['nosaveconfig']
         self.clean          = cli['clean']
         self.initramfs      = cli['initramfs']
+        self.temp           = temp
 
     def build(self):
         """
@@ -135,28 +136,29 @@ class kernel:
 
         @return: bool
         """
-        # FIXME should we change /usr/src/initramfs to /var/tmp/kigen/kgen/initramfs?
-        print green(' * ') + turquoise('initramfs.set_kernel_config ') + 'CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"'
+        kinitramfsdir = self.temp['initramfs']
+        print green(' * ') + turquoise('initramfs.set_kernel_config ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
         # FIXME or not? actually let make oldconfig deal with it
         # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
-        file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="/usr/src/initramfs"\n')
+        file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
         process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
-        print green(' * ') + turquoise('initramfs.extract ') + 'to /usr/src/initramfs'
+        print green(' * ') + turquoise('initramfs.extract ') + 'to ' + kinitramfsdir
         # extract gzip archive
         process('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 
         # clean previous root
-        from time import time
-        os.system('mv /usr/src/initramfs /usr/src/initramfs.'+str(time()))
-        os.system('mkdir -p /usr/src/initramfs')
+        if os.path.isdir(kinitramfsdir):
+            from time import time
+            os.system('mv %s %s.%s ' % (kinitramfsdir, kinitramfsdir, str(time())))
+        os.system('mkdir -p %s' % kinitramfsdir)
 
         # copy initramfs to /usr/src/initramfs/
-        os.system('cp %s/usr/initramfs_data.cpio /usr/src/initramfs/ ' % self.kerneldir)
+        os.system('cp %s/usr/initramfs_data.cpio %s ' % (self.kerneldir, kinitramfsdir))
 
         # extract cpio archive
-        self.chgdir('/usr/src/initramfs/')
+        self.chgdir(kinitramfsdir)
         os.system('cpio -id < initramfs_data.cpio &>/dev/null')
         os.system('rm initramfs_data.cpio')
 

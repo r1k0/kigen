@@ -95,8 +95,20 @@ if KV is 'none':
     print red('error') + ': ' + kerneldir+'/Makefile not found'
     sys.exit(2)
 
+try:
+    process('mkdir -p %s' % temp['root'],  verbose)
+except:
+    # don't mind
+    pass
+
 from kgen.kernel import kernel
-kobj = kernel(kerneldir, master_config, arch, KV, cli, verbose)
+kobj = kernel(  kerneldir,      \
+                master_config,  \
+                arch,           \
+                KV,             \
+                cli,            \
+                temp,           \
+                verbose)
 kobj.build()
 
 # copy kernel/system.map to /boot
