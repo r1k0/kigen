@@ -3,7 +3,6 @@ import sys
 from stdout import white, green, turquoise, red, yellow
 from utils.shell import *
 from utils.misc import *
-from utils.dotconfig import *
 
 class kernel:
 
