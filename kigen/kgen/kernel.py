@@ -56,14 +56,12 @@ class kernel:
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
             if self.fixdotconfig is True:
-                print green(' * ') + turquoise('kernel.dotconfig.add_option')
-                add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'], self.kerneldir)
+                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
             self.import_user_initramfs()
         else:
             # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
             if self.fixdotconfig is True:
-                print green(' * ') + turquoise('kernel.dotconfig.remove_option')
-                remove_option('CONFIG_INITRAMFS_SOURCE', self.kerneldir)
+                self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
@@ -184,10 +182,16 @@ class kernel:
         os.system('cpio -id < initramfs_data.cpio &>/dev/null')
         os.system('rm initramfs_data.cpio')
 
-    def add_option(self, option, kerneldir):
+    def add_option(self, option):
+        """
+        Add kernel config option to dotconfig
+
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
         option = option.split('=') # list
         found = ['', '']
-        for line in open(kerneldir+'/.config'):
+        for line in open(self.kerneldir+'/.config'):
             if line.startswith(option[0]):
                 # found option=value
                 if option[1] is 'y':
@@ -207,14 +211,20 @@ class kernel:
                     found[1] = line.split('=')[1].replace('"', '').replace('\n', '')
     
         if found[1] is '':
-            if file(kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
+            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
                 return True
     
         return False
 
-    def remove_option(option, kerneldir):
-        os.system('grep -v %s %s > %s' % (option, kerneldir+'/.config', kerneldir+'/.config.kigen.temp'))
-        return os.system('mv %s %s' % (kerneldir+'/.config.kigen.temp', kerneldir+'/.config'))
+    def remove_option(self, option):
+        """
+        Remove kernel config option from dotconfig
+
+        @return: bool
+        """
+        print green(' * ') + turquoise('kernel.remove_option ') + option + ' from ' + self.kerneldir + '/.config'
+        os.system('grep -v %s %s > %s' % (option, self.kerneldir+'/.config', self.kerneldir+'/.config.kigen.temp'))
+        return os.system('mv %s %s' % (self.kerneldir+'/.config.kigen.temp', self.kerneldir+'/.config'))
 
     # kernel building functions
     def build_command(self, target, verbose):
@@ -223,8 +233,7 @@ class kernel:
         
         @arg: dict
         @arg: string
-        @arg: string
-        @arg: string
+
         @return: string
         """
         command = '%s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_config['DEFAULT_KERNEL_MAKE'], \
