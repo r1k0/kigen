@@ -136,7 +136,7 @@ elif cli['noboot'] is True:
     logging.debug(kerneldir+'/arch/x86/boot/bzImage')
     print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage',
     if cli['initramfs'] is not '':
-        print ' with an ' + white('embedded') + ' initramfs'
+        print 'with an ' + white('embedded') + ' initramfs'
     else:
         print
 

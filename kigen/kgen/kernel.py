@@ -3,6 +3,7 @@ import sys
 from stdout import white, green, turquoise, red, yellow
 from utils.shell import *
 from utils.misc import *
+from utils.dotconfig import *
 
 class kernel:
 
@@ -55,12 +56,14 @@ class kernel:
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
             if self.fixdotconfig is True:
-                self.enable_dotconfig_initramfs()
+                print green(' * ') + turquoise('kernel.dotconfig.add_option')
+                add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'], self.kerneldir)
             self.import_user_initramfs()
         else:
             # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
             if self.fixdotconfig is True:
-                self.remove_dotconfig_initramfs()
+                print green(' * ') + turquoise('kernel.dotconfig.remove_option')
+                remove_option('CONFIG_INITRAMFS_SOURCE', self.kerneldir)
 
         if self.oldconfig is True:
             ret = self.make_oldconfig()
@@ -140,15 +143,15 @@ class kernel:
 
     # emmbedded initramfs function
     def remove_dotconfig_initramfs(self):
-        print green(' * ') + turquoise('initramfs.remove_dotconfig ') + 'INITRAMFS'
+        print green(' * ') + turquoise('kernel.remove_dotconfig_initramfs ') + 'INITRAMFS'
         # FIXME this one bugs
 #        process_redir('grep -v INITRAMFS %s > %s'% (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'), self.verbose)
-        os.system('grep -v INITRAMFS %s > %s' % (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'))
+        os.system('grep -v CONFIG_INITRAMFS_SOURCE %s > %s' % (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'))
         process('mv %s %s' % (self.kerneldir + '/.config.kigen.temp',  self.kerneldir + '/.config'), self.verbose)
 
     def enable_dotconfig_initramfs(self):
         kinitramfsdir = self.temp['initramfs']
-        print green(' * ') + turquoise('initramfs.enable_dotconfig ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
+        print green(' * ') + turquoise('kernel.enable_dotconfig_initramfs ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
         # FIXME or not? actually let make oldconfig deal with it
         # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
@@ -162,7 +165,7 @@ class kernel:
         kinitramfsdir = self.temp['initramfs']
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-        print green(' * ') + turquoise('initramfs.extract ') + 'to ' + kinitramfsdir
+        print green(' * ') + turquoise('kernel.import_user_initramfs ') + 'to ' + kinitramfsdir
         process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
         # extract gzip archive
         process('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
@@ -180,6 +183,38 @@ class kernel:
         self.chgdir(kinitramfsdir)
         os.system('cpio -id < initramfs_data.cpio &>/dev/null')
         os.system('rm initramfs_data.cpio')
+
+    def add_option(self, option, kerneldir):
+        option = option.split('=') # list
+        found = ['', '']
+        for line in open(kerneldir+'/.config'):
+            if line.startswith(option[0]):
+                # found option=value
+                if option[1] is 'y':
+                    # option is in-kernel
+                    found[0] = option[0]
+                    found[1] = 'y'
+                if option[1] is 'm':
+                    # option is a module
+                    found[0] = option[0]
+                    found[1] = 'm'
+                if isinstance(option[1], str) and option[1] is not '':
+                    # option is string in-kernel
+                    option[1] = option[1].replace('"', '')
+                    option[1] = option[1].replace('\n', '')
+    
+                    found[0] = option[0]
+                    found[1] = line.split('=')[1].replace('"', '').replace('\n', '')
+    
+        if found[1] is '':
+            if file(kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
+                return True
+    
+        return False
+
+    def remove_option(option, kerneldir):
+        os.system('grep -v %s %s > %s' % (option, kerneldir+'/.config', kerneldir+'/.config.kigen.temp'))
+        return os.system('mv %s %s' % (kerneldir+'/.config.kigen.temp', kerneldir+'/.config'))
 
     # kernel building functions
     def build_command(self, target, verbose):
