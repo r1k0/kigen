@@ -48,6 +48,10 @@ Customize kernel name
 Will add an initramfs compiled into the kernel itself.
 You can use igen to create an initramfs and then feed it back to kgen.
 .TP
+\fB\-\-fixdotconfig
+Will attempt to fix kernel .config options. Supported:
+ - CONFIG_INITRAMFS_SOURCE for --initramfs=/file --fixdotconfig
+.TP
 \fB\-\-mrproper
 Clean precompiled objects and configuration.
 .TP
