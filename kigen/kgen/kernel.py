@@ -187,7 +187,6 @@ class kernel:
 
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
         option = option.split('=') # list
         found = ['', '']
         for line in open(self.kerneldir+'/.config'):
@@ -211,8 +210,10 @@ class kernel:
     
         if found[1] is '':
             if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
+                print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
                 return True
-    
+   
+        print green(' * ') + turquoise('kernel.add_option ') + option[0] + ' already set'
         return False
 
     def remove_option(self, option):
