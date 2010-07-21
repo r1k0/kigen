@@ -181,11 +181,11 @@ class kernel:
         os.system('cpio -id < initramfs_data.cpio &>/dev/null')
         os.system('rm initramfs_data.cpio')
 
-    def add_option(self, option):
+    def search_option(self, option):
         """
-        Add kernel config option to dotconfig
+        Search kernel config option to dotconfig
 
-        @return: bool
+        @return: list, list
         """
         option = option.split('=') # list
         found = ['', '']
@@ -207,13 +207,24 @@ class kernel:
     
                     found[0] = option[0]
                     found[1] = line.split('=')[1].replace('"', '').replace('\n', '')
+
+        return found, option # list, list
     
+    def add_option(self, option):
+        """
+        Add kernel config option to dotconfig
+
+        @return: bool
+        """
+        found, option = self.search_option(option)
         if found[1] is '':
             if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
                 print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
+
                 return True
    
         print green(' * ') + turquoise('kernel.add_option ') + option[0] + ' already set'
+
         return False
 
     def remove_option(self, option):
@@ -224,6 +235,7 @@ class kernel:
         """
         print green(' * ') + turquoise('kernel.remove_option ') + option + ' from ' + self.kerneldir + '/.config'
         os.system('grep -v %s %s > %s' % (option, self.kerneldir+'/.config', self.kerneldir+'/.config.kigen.temp'))
+
         return os.system('mv %s %s' % (self.kerneldir+'/.config.kigen.temp', self.kerneldir+'/.config'))
 
     # kernel building functions
