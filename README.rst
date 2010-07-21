@@ -225,7 +225,7 @@ aufs
 nounionfs
 
 =====================================
-HOWTO build and boot kernel/initramfs
+Howto build and boot kernel/initramfs
 =====================================
 
 Gentoo Portage
