@@ -162,7 +162,7 @@ def print_usage(ex=False):
     print '  -d, --debug                Show more output'
     print
     print '  --dotconfig=/file          Custom kernel config file'
-    print '  --fixdotconfig             Check and fix the kernel config file'
+#    print '  --fixdotconfig             Check and auto fix the kernel config file'
     print '  --rename=mykernel          Custom kernel file name'
     print '  --initramfs=/file          Embed initramfs into the kernel'
     print '  --clean                    Clean precompiled objects only'
