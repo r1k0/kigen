@@ -26,14 +26,27 @@ to ensure /boot is correctly mounted.
 .SH OPTIONS
 kgen supports the following options.
 .TP
+\fB\-h, \-\-help
+Help menu.
+.TP
+\fB\-\-config=\fR/file
+Provide a custom master config file in case none exists as /etc/kigen.conf.
+.TP
+\fB\-n, \-\-nocolor
+Remove color ouput feature.
+.TP
 \fB\-d, \-\-debug
 Debug.
 .TP
-\fB\-\-dotconfig=\fR</foo/bar/.config>
+\fB\-\-dotconfig=\fR/foo/bar/.config
 Provide a customized .config file for the kernel.
 .TP
-\fB\-\-kernname=\fR<kernelname>
+\fB\-\-rename=\fR<kernelname>
 Customize kernel name
+.TP
+\fB\-\-initramfs=\fR/file
+Will add an initramfs compiled into the kernel itself.
+You can use igen to create an initramfs and then feed it back to kgen.
 .TP
 \fB\-\-mrproper
 Clean precompiled objects and configuration.
@@ -64,6 +77,9 @@ Do not copy kernel/initramfs to /boot.
 .TP
 \fB\-\-logfile=/file
 Log to file.
+./TP
+\fB\-\-version
+Display program version.
 .TP
 .RE
 .SH AUTHORS

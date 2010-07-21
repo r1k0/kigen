@@ -19,18 +19,33 @@ igen so far provides the following features:
     - LUKS
 .SH USAGE
 You can add any appropriate <options> to customize its behavior.
-The most commonly used syntax would be:
+A commonly used syntax would be:
 .PP
-# igen --lvm2 --disklabel --splash --stheme=emergence
+# igen --lvm2 --luks --disklabel --splash=emergence --glibc
 .PP
-This would successively populate an initramfs.
+This would successively populate an initramfs enabling LVM2, LUKS, UUID, splash and DNS networking (glibc) features.
 Note that the resulting output is appended into /boot, it is up to the user
 to ensure /boot is correctly mounted.
 .SH OPTIONS
 KIGen supports the following options.
 .TP
+\fB\-h, \-\-help
+Help menu.
+.TP
+\fB\-\-config=\fR/file
+Provide a custom master config file in case none exists as /etc/kigen.conf.
+.TP
+\fB\-n, \-\-nocolor
+Remove color ouput feature.
+.TP
 \fB\-d, \-\-debug
 Debug.
+.TP
+\fB\-\-dotconfig=\fR/foo/bar/.config
+Provide a customized .config file for busybox.
+.TP
+\fB\-\-rename=\fR<initramfsname>
+Customize initramfs name
 .TP
 \fB\-\-oldconfig
 Will ask for new kernel options.
@@ -44,6 +59,9 @@ Include LUKS support. Append a static 'cryptsetup' binary to the initramfs.
 \fB\-\-lvm2
 Include LVM2 support. Append a static 'lvm' binary to the initramfs.
 .TP
+\fB\-\-glibc
+Include GLibC support. Append a set of libraries to allow network DNS resolution.
+.TP
 \fB\-\-evms
 Include evms support (evms must be merged).
 .TP
@@ -56,11 +74,8 @@ Include iscsi support.
 \fB\-\-mdadm
 Include mdadm support (mdadm must be merged).
 .TP
-\fB\-\-splash
-Include splash support (splashutils must be merged).
-.TP
-\fB\-\-stheme=<theme>
-Splash theme.
+\fB\-\-splash=<theme>
+Include splash support (splashutils must be merged) where <theme> is a directory from /etc/splash/.
 .TP
 \fB\-\-sres=INTxINT,INTxINT
 Splash resolution,comma separated list of INTxINT.
