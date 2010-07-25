@@ -27,7 +27,6 @@ def parse():
                                 "evms",         \
                                 "mdadm",        \
                                 "splash=",       \
-#                                "stheme=",      \
                                 "sres=",        \
                                 "sinitrd=",     \
                                 "firmware=",    \
@@ -75,8 +74,6 @@ def parse():
     cli['evms']         = False
     cli['mdadm']        = False
     cli['splash']       = ''
-#    cli['splash']       = False
-#    cli['stheme']       = ''
     cli['sres']         = '' # 1024x768
     cli['sinitrd']      = '' # a custom initrd.splash file
     cli['firmware']     = ''
@@ -138,36 +135,11 @@ def parse():
             cli['mrproper'] = True
         elif o in ("--menuconfig"):
             cli['menuconfig'] = True
-#       elif o in ("--allyesconfig"):
-#           if menuconfig is True       \
-#           or koldconfig is True       \
-#           or bboldconfig is True      \
-#           or allnoconfig is True:
-#               print "--allyesconfig --allnoconfig --menuconfig --oldconfig are exclusive."
-#               print "Choose only one."
-#               sys.exit(2)
-#           allyesconfig = True
-#       elif o in ("--allnoconfig"):
-#           if menuconfig is True       \
-#           or koldconfig is True       \
-#           or bboldconfig is True      \
-#           or allyesconfig is True:
-#               print "--allyesconfig --allnoconfig --menuconfig --oldconfig are exclusive."
-#               print "Choose only one."
-#               sys.exit(2)
-#           allnoconfig = 'yes'
         elif o in ("--nooldconfig"):
-#           if allyesconfig is True     \
-#           or menuconfig is True       \
-#           or allnoconfig is True:
-#               print "--oldconfig --menuconfig --allyesconfig --allnoconfig are exclusive."
-#               print "Choose only one."
-#               sys.exit(2)
             cli['oldconfig'] = False
         elif o in ("--oldconfig"):
             cli['oldconfig'] = True
         elif o in ("--splash"):
-#            cli['splash'] = True
             cli['splash'] = a
         elif o in ("--firmware"):
             if os.path.isdir(a):
@@ -181,8 +153,6 @@ def parse():
             cli['aufs'] = True
         elif o in ("--linuxrc"):
             cli['linuxrc'] = a
-#        elif o in ("--stheme"):
-#            cli['stheme'] = a
         elif o in ("--sres"):
             cli['sres'] = a
         elif o in ("--sinitrd"):
@@ -255,7 +225,7 @@ def print_usage():
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
     print '  --glibc                    Include host GNU C libraries (required for dns)'
-#    print yellow('  --dropbear             Include dropbear tools and daemon (host binaries if found)')
+    print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
     print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
 #    print yellow('   --sinitrd=/file        Splash custom initrd.splash (host if found)')

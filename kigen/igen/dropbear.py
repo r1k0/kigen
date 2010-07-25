@@ -28,8 +28,8 @@ class dropbear:
         self.extract()
     #   grr, tar thing to not return 0 when success
    
-#        ret = self.patch()
-#        if ret is not zero: self.fail('patch')
+        ret = self.patch()
+        if ret is not zero: self.fail('patch')
 
         ret = self.configure()
         if ret is not zero: self.fail('configure')
