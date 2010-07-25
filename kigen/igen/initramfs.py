@@ -143,11 +143,11 @@ class initramfs:
             os.chdir(self.temp['work'])
             ret = aobj.e2fsprogs()
             if ret is not zero: self.fail('e2fsprogs')
-#        # 13) append dropbear
-#        if self.cli['dropbear'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.dropbear()
-#            if ret is not zero: self.fail('dropbear')
+        # 13) append dropbear
+        if self.cli['dropbear'] is True:
+            os.chdir(self.temp['work'])
+            ret = aobj.dropbear()
+            if ret is not zero: self.fail('dropbear')
 #        # 14) append unionfs_fuse
 #        if self.cli['unionfs'] is True:
 #            os.chdir(self.temp['work'])
