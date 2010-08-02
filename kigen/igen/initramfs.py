@@ -51,7 +51,6 @@ class initramfs:
         self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
-#        self.glibc              = cli['glibc']
         self.pluginroot         = cli['plugin'] # string
 
     def build(self):
@@ -100,97 +99,87 @@ class initramfs:
         if ret is not zero: self.fail('baselayout')
         # 3) append busybox
         os.chdir(self.temp['work'])
-        ret = aobj.busybox()
-        if ret is not zero: self.fail('busybox')
+        if aobj.busybox() is not zero: self.fail('busybox')
         # 4) append modules
-        # note that /etc/boot.conf initrd modules overlap the ones from /etc/funkernel.conf
-        ret = aobj.modules()
-        if ret is not zero: self.fail('modules')
+        # note that /etc/boot.conf initrd modules overlap the ones from /etc/kigen.conf
+        if aobj.modules() is not zero: self.fail('modules')
         # 5) append lvm2
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
-            ret = aobj.lvm2()
-            if ret is not zero: self.fail('lvm2')
-#        # 6) append dmraid
-#        if self.cli['dmraid'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.dmraid()
-#            if ret is not zero: self.fail('dmraid')
-#        # 7) append iscsi
-#        if self.cli['iscsi'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.iscsi()
-#            if ret is not zero: self.fail('iscsi')
-#        # 8) append evms
-#        if self.cli['evms'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.evms()
-#            if ret is not zero: self.fail('evms')
-#        # 9) append mdadm
-#        if self.cli['mdadm'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobjmdadm()
-#            if ret is not zero: self.fail('mdadm')
+            if aobj.lvm2() is not zero: self.fail('lvm2')
+        # 6) append dmraid
+        if self.cli['dmraid'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.dmraid() is not zero: self.fail('dmraid')
+        # 7) append iscsi
+        if self.cli['iscsi'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.iscsi() is not zero: self.fail('iscsi')
+        # 8) append evms
+        if self.cli['evms'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.evms() is not zero: self.fail('evms')
+        # 9) append mdadm
+        if self.cli['mdadm'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.mdadm() is not zero: self.fail('mdadm')
         # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
-            ret = aobj.luks()
-            if ret is not zero: self.fail('luks')
+            if aobj.luks() is not zero: self.fail('luks')
         # 11) append multipath
         # TODO
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
-            ret = aobj.e2fsprogs()
-            if ret is not zero: self.fail('e2fsprogs')
+            if aobj.e2fsprogs() is not zero: self.fail('e2fsprogs')
         # 13) append dropbear
         if self.cli['dropbear'] is True:
             os.chdir(self.temp['work'])
-            ret = aobj.dropbear()
-            if ret is not zero: self.fail('dropbear')
-#        # 14) append unionfs_fuse
-#        if self.cli['unionfs'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.unionfs_fuse()
-#            if ret is not zero: self.fail('unionfs-fuse')
-#        # 15) append aufs
-#        if self.cli['aufs'] is True:
-#            os.chdir(self.temp['work'])
-#            ret = aobj.aufs()
-#            if ret is not zero: self.fail('aufs')
+            if aobj.dropbear() is not zero: self.fail('dropbear')
+        # 14) append unionfs_fuse
+        if self.cli['unionfs'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.unionfs_fuse() is not zero: self.fail('unionfs-fuse')
+        # 15) append aufs
+        if self.cli['aufs'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.aufs() is not zero: self.fail('aufs')
         # 16) append splash
         if self.cli['splash'] is not '':
             os.chdir(self.temp['work'])
-            ret = aobj.splash()
-            if ret is not zero: self.fail('splash')
-#        # 17) append firmware
-#        if os.path.isdir(self.firmware):
-#            os.chdir(self.temp['work'])
-#            ret = aobj.firmware()
-#            if ret is not zero: self.fail('firmware')
+            if aobj.splash() is not zero: self.fail('splash')
+        # 17) append firmware
+        if os.path.isdir(self.firmware):
+            os.chdir(self.temp['work'])
+            if aobj.firmware() is not zero: self.fail('firmware')
         # TODO
         # 18) append overlay
         # 19) append glibc
         if self.cli['glibc'] is True:
             os.chdir(self.temp['work'])
-            ret = aobj.glibc()
-            if ret is not zero: self.fail('glibc')
-
+            if aobj.glibc() is not zero: self.fail('glibc')
+        # 19bis) append libncurses
+        if self.cli['libncurses'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.libncurses() is not zero: self.fail('libncurses')
+        # 19terce) append zlib
+        if self.cli['zlib'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.zlib() is not zero: self.fail('zlib')
         # 20) append user plugin
         if self.pluginroot is not '':
             pluginlist = self.pluginroot.split(',')
             for j in pluginlist:
                 if j is not '': # this check else it copies from / :(
                     os.chdir(self.temp['work'])
-                    ret = aobj.plugin(j)
-                    if ret is not zero: self.fail('plugin')
+                    if aobj.plugin(j) is not zero: self.fail('plugin')
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
-        process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose)
-        if ret is not zero: self.fail('compress')
+        if process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose) is not zero: self.fail('compress')
     
-        return ret
+#        return ret
 
     def fail(self, step):
         """

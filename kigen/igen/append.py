@@ -350,94 +350,135 @@ class append:
 
         @return: bool
         """
-        ret = int('0')
-
         process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
         process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         print green(' * ') + turquoise('initramfs.append.glibc')
-        # this allows dns resolution inside the initramfs
+        # mostly for authentication
         process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        # resolves dns->ip
         process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        # for dropbear
+        process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libutil.so.1        %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
+        process('cp /lib/libcrypt.so.1       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-glibc-temp')
         return os.system(self.cpio())
 
-#    def dropbear(self):
-#        """
-#        Append dropbear support to the initramfs
-#    
-#        @return: bool
-#        """
-#        ret = int('0')
-#        dbscp_bin           = 'dbscp' # this needs dropbear-0.46-dbscp.patch
-#        dbclient_bin        = 'dbclient'
-#        dropbearkey_bin     = 'dropbearkey'
-#        dropbearconvert_bin = 'dropbearconvert'
-#        dropbear_sbin       = 'dropbear'
-#
-#        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
-#        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
-#        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-#        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-#
-#        if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
-#            print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
-#            # FIXME: check if dropbear is merged with USE=static if not fail
-#            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-#            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-#            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-#            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-#            process('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-#            for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
-#                process('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
-#            process('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
-#        else:
-#            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
-#            logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
-#            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_config['dropbear-version']+'.tar.gz') and self.nocache is False:
-#                # use cache
-#                print 'from ' + white('cache')
-#
-#                # extract cache
-#                # FIXME careful with the >
-#                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-dropbear-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-#                process('chmod a+x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
-#                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearkey' % self.temp['work'], self.verbose)
-#                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dropbearconvert' % self.temp['work'], self.verbose)
-#                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbclient' % self.temp['work'], self.verbose)
-#                process('chmod a+x %s/initramfs-dropbear-temp/usrs/bin/dbscp' % self.temp['work'], self.verbose)
-#
-#            else:
-#                # compile and cache
-#                print
-#                from dropbear import dropbear
-#                dropbearobj = dropbear(self.master_config, self.temp, self.verbose)
-#                dropbearobj.build()
-#
-#                # extract cache
-#                # FIXME careful with the >
-#                os.system('tar BLABLABLA ' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
-#                process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-#
-#        # copy required libs
-#        process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-#        process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-#        process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-#
-#        #cp -pr /etc/dropbear "${DESTDIR}/etc/"
-#        #cp -pr /etc/passwd "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
-#        #cp -pr /etc/shadow "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
-#        #cp -pr /etc/group "${DESTDIR}/etc/"
-#        #[ -d /root/.ssh ] && cp -pr /root/.ssh "${DESTDIR}/root/"
-#        #cp -pr /etc/nsswitch.conf "${DESTDIR}/etc/"
-#        #cp -pr /etc/localtime "${DESTDIR}/etc/"
-#
-#        os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
-#        return os.system(self.cpio())
+    def libncurses(self):
+        """
+        Append host libncurses libraries to the initramfs
+
+        @return: bool
+        """
+        print green(' * ') + turquoise('initramfs.append.libncurses')
+        process('mkdir -p ' + self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
+        process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-libncurses-temp')
+        return os.system(self.cpio())
+
+    def zlib(self):
+        """
+        Append host zlib libraries to the initramfs
+
+        @return: bool
+        """
+        print green(' * ') + turquoise('initramfs.append.zlib')
+        process('mkdir -p ' + self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
+        process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-zlib-temp')
+        return os.system(self.cpio())
+        
+    def dropbear(self):
+        """
+        Append dropbear support to the initramfs
+    
+        @return: bool
+        """
+        ret = int('0')
+        dbscp_bin           = 'scp' # we don't need to patch for scp->dbscp
+        dbclient_bin        = 'dbclient'
+        dropbearkey_bin     = 'dropbearkey'
+        dropbearconvert_bin = 'dropbearconvert'
+        dropbear_sbin       = 'dropbear'
+
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/dev', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/var/log', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/var/run', self.verbose)
+
+        # FIXME: check if dropbear is merged with USE=static if not fail
+        if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
+            print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            process('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+            for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
+                process('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
+        else:
+            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
+            logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
+            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_config['dropbear-version']+'.tar') and self.nocache is False:
+                # use cache
+                print 'from ' + white('cache')
+
+                # extract cache
+                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_config['dropbear-version'], self.temp['work']))
+
+            else:
+                # compile and cache
+                print
+                from dropbear import dropbear
+                dropbearobj = dropbear(self.master_config, self.temp, self.verbose)
+                dropbearobj.build()
+
+                # extract cache
+                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_config['dropbear-version'], self.temp['work']))
+
+        process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/lastlog', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/wtmp', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/run/utmp', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-dropbear-temp/dev')
+        process('mknod urandom c 1 9', self.verbose)
+        process('mknod ptmx c 5 2', self.verbose)
+        process('mknod tty c 5 0', self.verbose)
+        process('chmod 0666 urandom', self.verbose)
+        process('chmod 0666 ptmx', self.verbose)
+        process('chmod 0666 tty', self.verbose)
+
+        os.system('grep ^rik /etc/passwd > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
+        os.system('grep ^rik /etc/group  > %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
+        os.system('grep ^rik /etc/shadow > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
+        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
+        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
+        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
+        process('mkdir -p %s'                   % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
+        process('mkdir -p %s'                   % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
+        process('chown rik.rik %s'              % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
+        process('chown root.root %s'              % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
+        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
+        return os.system(self.cpio())
 
     def e2fsprogs(self):
         """

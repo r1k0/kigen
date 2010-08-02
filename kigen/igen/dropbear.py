@@ -1,7 +1,8 @@
 import os
 import sys
 from stdout import green, turquoise, white, red, yellow
-import utils
+from utils.shell import *
+from utils.misc import *
 
 class dropbear:
 
@@ -19,35 +20,28 @@ class dropbear:
 
         @return:    bool
         """
-        ret = zero = int('0')
+        zero = int('0')
     
-        if os.path.isfile('%s/distfiles/opendropbear-%s.tar.gz' % (utils.get_portdir(self.temp), str(self.dropbear_ver))) is not True:
-            ret = self.download()
-            if ret is not zero: self.fail('download')
+        if os.path.isfile('%s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.dropbear_ver))) is not True:
+            if self.download() is not zero: self.fail('download')
     
         self.extract()
-    #   grr, tar thing to not return 0 when success
-   
-        ret = self.patch()
-        if ret is not zero: self.fail('patch')
+        # grr, tar thing to not return 0 when success
 
-        ret = self.configure()
-        if ret is not zero: self.fail('configure')
+# there is no need to patch for scp->dbscp
+# because there is NO scp bin inside the initramfs
+# the patch only applies for cases when openssh is already installed
+# to make dropbear and openssh coexist
+#        if self.patch() is not zero: self.fail('patch')
+        if self.configure() is not zero: self.fail('configure')
+        if self.make() is not zero: self.fail('make')
+        if self.strip() is not zero: self.fail('strip')
+#        if self.libraries() is not zero: self.fail('libraries')
+#        if self.dsskey() is not zero: self.fail('dsskey')
+#        if self.rsakey() is not zero: self.fail('rsakey')
+        if self.compress() is not zero: self.fail('compress')
+        if self.cache() is not zero: self.fail('cache')
     
-        ret = self.compile()
-        if ret is not zero: self.fail('compile')
-    
-        ret = self.strip()
-        if ret is not zero: self.fail('strip')
-    
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
-    
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
-    
-        return ret
-
     def fail(self, step):
         """
         Exit
@@ -78,9 +72,10 @@ class dropbear:
         @return: bool
         """
         print green(' * ') + '... dropbear.download'
-        dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(dropbear_ver) + '.tar.gz'
-    #    return utils.sprocessor('/usr/bin/wget %s -O %s/distfiles/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_portdir(temp), str(dropbearversion)), verbose)
-        return os.system('/usr/bin/wget %s -O %s/distfiles/dropbear-%s.tar.gz %s' % (dropbear_url, utils.get_portdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
+        dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
+    #    return utils.process('/usr/bin/wget %s -O %s/distfiles/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_portdir(temp), str(dropbearversion)), verbose)
+
+        return os.system('/usr/bin/wget %s -O %s/distfiles/dropbear-%s.tar.gz %s' % (dropbear_url, get_portdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -89,27 +84,28 @@ class dropbear:
         @return: bool
         """
         print green(' * ') + '... dropbear.extract'
-    
-        os.system('tar xvfz %s/distfiles/dropbear-%s.tar.gz -C %s %s' % (utils.get_portdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
+        self.chgdir(self.temp['work'])
+
+        os.system('tar xvfz %s/distfiles/dropbear-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
    
-    def patch(self, file):
-        """
-        patch dropbear-0.46-dbscp.patch
+#    def patch(self): #, file):
+#        """
+#        patch dropbear-0.46-dbscp.patch
+#
+#        @return:    bool
+#        """
+#        # cd $D
+#        # patch -p0 < dropbear-0.46-dbscp.patch
+#        print green(' * ') + '... dropbear.patch'
+#        self.chgdir(self.dropbeartmp)
+#        # get dropbear-0.46-dbscp.patch
+#        return os.system('patch -p0 < dropbear-0.46-dbscp.patch %s' % self.verbose['std'])
 
-        @return:    bool
-        """
-# cd $D
-# patch -p0 < dropbear-0.46-dbscp.patch
-        print green(' * ') + '... dropbear.patch'
-        utils.chgdir(self.dropbeartmp)
-# get dropbear-0.46-dbscp.patch
-        return os.system('patch -p0 < dropbear-0.46-dbscp.patch %s' % self.verbose['std'])
-
-    def get_config(self):
-        """
-        """
-# get /etc/portage/savedconfig/net-misc/dropbear-0.52
-        pass
+#    def get_config(self):
+#        """
+#        """
+#        # get /etc/portage/savedconfig/net-misc/dropbear-0.52?
+#        pass
 
     def configure(self):
         """
@@ -118,35 +114,75 @@ class dropbear:
         @return: bool
         """
         print green(' * ') + '... dropbear.configure'
-        utils.chgdir(self.dropbeartmp)
+        self.chgdir(self.dropbeartmp)
     
         return os.system('CFLAGS="-Os -static -Wall" LDFLAGS="-static" ./configure --disable-zlib %s' % self.verbose['std'])
     
-    def compile(self):
+    def make(self):
         """
         dropbear interface to Makefile
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.compile'
-        utils.chgdir(self.dropbeartmp)
+        print green(' * ') + '... dropbear.make'
+        self.chgdir(self.dropbeartmp)
     
         return os.system('STATIC=1 PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" %s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
     
     def strip(self):
         """
-        blkid strip binary routine
+        dropbear strip binary routine
     
         @return: bool
         """
         print green(' * ') + '... dropbear.strip'
-        utils.chgdir(self.dropbeartmp)
+        self.chgdir(self.dropbeartmp)
     
-        os.system('strip %s/dbclient ' % self.dropbeartmp)
-        os.system('strip %s/dropbear ' % self.dropbeartmp)
-        os.system('strip %s/dropbearconvert ' % self.dropbeartmp)
+        os.system('strip %s/dbclient'           % self.dropbeartmp)
+        os.system('strip %s/dropbear'           % self.dropbeartmp)
+        os.system('strip %s/dropbearconvert'    % self.dropbeartmp)
+        os.system('strip %s/scp'                % self.dropbeartmp)
         return os.system('strip %s/dropbearkey ' % self.dropbeartmp)
-    
+
+#    def libraries(self):
+#        # TODO create user/group dropbear 
+#        # copy required libs
+#        print green(' * ') + '... dropbear.libraries'
+#        self.chgdir(self.dropbeartmp)
+#        process('mkdir -p dev/pts proc etc lib usr/lib var/run var/log', self.verbose)
+##        process('cp /lib/libncurses.so.5     %s' % self.dropbeartmp+'/lib', self.verbose)
+##        process('cp /lib/libnss_compat.so.2  %s' % self.dropbeartmp+'/lib', self.verbose)
+##        process('cp /lib/libutil.so.1  %s' % self.dropbeartmp+'/lib', self.verbose)
+##        return process('cp /etc/ld.so.cache         %s' % self.dropbeartmp+'/etc', self.verbose)
+#
+#        #cp -pr /etc/dropbear "${DESTDIR}/etc/"
+#        #cp -pr /etc/passwd "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
+#        #cp -pr /etc/shadow "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
+#        #cp -pr /etc/group "${DESTDIR}/etc/"
+#        #[ -d /root/.ssh ] && cp -pr /root/.ssh "${DESTDIR}/root/"
+#        #cp -pr /etc/nsswitch.conf "${DESTDIR}/etc/"
+#        #cp -pr /etc/localtime "${DESTDIR}/etc/"
+#    
+#    def dsskey(self):
+#        """
+#        dropbear dsskey creation
+#        """
+#        print green(' * ') + '... dropbear.dsskey'
+#        self.chgdir(self.dropbeartmp)
+#        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+#
+#        return process('./dropbearkey -t dss -f %s/etc/dropbear/dropbear.dss' % self.dropbeartmp, self.verbose)
+#
+#    def rsakey(self):
+#        """
+#        dropbear rsakey creation
+#        """
+#        print green(' * ') + '... dropbear.rsakey'
+#        self.chgdir(self.dropbeartmp)
+#        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+#
+#        return process('./dropbearkey -t rsa -s 4096 -f %s/etc/dropbear/dropbear.rsa' % self.dropbeartmp, self.verbose)
+
     def compress(self):
         """
         blkid compression routine
@@ -155,18 +191,16 @@ class dropbear:
         """
         print green(' * ') + '... dropbear.compress'
     
-        utils.chgdir(self.dropbeartmp)
+        self.chgdir(self.dropbeartmp)
         # create temp bin and sbin
-        utils.sprocessor('mkdir -p bin', self.verbose)
-        utils.sprocessor('mkdir -p sbin', self.verbose)
-        utils.sprocessor('mkdir -p usr/local/etc', self.verbose)
-        utils.sprocessor('cp dbclient dropbearconvert dropbearkey bin', self.verbose)
-        utils.sprocessor('cp dropbear sbin', self.verbose)
+        process('mkdir -p bin sbin usr/local/etc', self.verbose)
+        process('cp dbclient dropbearconvert dropbearkey scp bin', self.verbose)
+        process('cp dropbear sbin', self.verbose)
         # that is where dropbeard expects its conf file
-#        utils.sprocessor('cp dropbeard_config usr/local/etc', self.verbose)
-        # TODO create user/group dropbear 
+#        process('cp dropbeard_config usr/local/etc', self.verbose)
     
-        return os.system('tar cf dropbear.tar bin sbin usr')
+#        return os.system('tar cf dropbear.tar bin sbin dev etc lib proc usr var')
+        return os.system('tar cf dropbear.tar bin sbin  usr')
     
     def cache(self):
         """
@@ -175,6 +209,6 @@ class dropbear:
         @return: bool
         """
         print green(' * ') + '... dropbear.cache'
-        utils.chgdir(self.dropbeartmp)
+        self.chgdir(self.dropbeartmp)
     
-        return utils.sprocessor('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.master_config['dropbear-version']), self.verbose)
+        return process('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.master_config['dropbear-version']), self.verbose)

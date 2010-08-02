@@ -26,7 +26,7 @@ def parse():
                                 "logfile=",     \
                                 "evms",         \
                                 "mdadm",        \
-                                "splash=",       \
+                                "splash=",      \
                                 "sres=",        \
                                 "sinitrd=",     \
                                 "firmware=",    \
@@ -46,6 +46,8 @@ def parse():
                                 "nosaveconfig", \
                                 "nohostbin",    \
                                 "glibc",        \
+                                "libncurses",   \
+                                "zlib",         \
                                 "rename=",      \
                                 "plugin=",      \
                                 "debug"])
@@ -81,7 +83,7 @@ def parse():
     cli['unionfs']      = False
     cli['aufs']         = False
     cli['linuxrc']      = ''
-    cli['dropbear']          = False
+    cli['dropbear']     = False
     cli['nocache']      = False
     cli['noboot']       = False
     cli['selinux']      = False
@@ -92,6 +94,8 @@ def parse():
     cli['nosaveconfig'] = False
     cli['nohostbin']    = False
     cli['glibc']        = False
+    cli['libncurses']   = False
+    cli['zlib']         = False
     cli['rename']       = ''
     cli['plugin']       = ''
 
@@ -169,10 +173,17 @@ def parse():
             cli['config'] = a
         elif o in ("--dropbear"):
             cli['dropbear'] = True
+            cli['glibc'] = True         # dropbear needs glibc
+            cli['libncurses'] = True    # dropbear needs libncurses
+            cli['zlib'] = True          # dropbear needs zlib
         elif o in ("--nohostbin"):
             cli['nohostbin'] = True
         elif o in ("--glibc"):
             cli['glibc'] = True
+        elif o in ("--libncurses"):
+            cli['libncurses'] = True
+        elif o in ("--zlib"):
+            cli['zlib'] = True
         elif o in ("--rename"):
             cli['rename'] = a
         elif o in ("--plugin"):
@@ -225,6 +236,8 @@ def print_usage():
 #    print yellow('  --iscsi                Include iscsi support')
 #    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
     print '  --glibc                    Include host GNU C libraries (required for dns)'
+    print '  --libncurses               Include host libncurses (required for dropbear)'
+    print '  --zlib                     Include host zlib (required for dropbear)'
     print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
     print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
