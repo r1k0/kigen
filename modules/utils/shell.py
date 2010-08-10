@@ -4,7 +4,7 @@ import re
 import subprocess
 import logging
 
-# don't use colors here
+# WARN don't use colors here
 
 def process_pipe(cmd, verbose):
     """
@@ -102,8 +102,7 @@ def process(cmd, verbose):
     cmd = cmd.split()
     logging.debug(cmd)
 
-    # TODO pass logfile
-    f = open('/var/log/kgen.log')
+    f = open(verbose['logfile'])
     p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
 
     return p.wait() # , p.stdout #, p.stderr

@@ -1,6 +1,6 @@
 import os
 import sys
-from stdout import green, turquoise, white, red, yellow
+from modules.stdout import green, turquoise, white, red, yellow
 
 try:
     import funtoo.boot.config
@@ -16,7 +16,6 @@ def get_boot_initrd():
 
     @return     dict
     """
-
     d = {}
 
     if os.path.isfile('/sbin/boot-update'):

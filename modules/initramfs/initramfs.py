@@ -2,9 +2,9 @@ import os
 import sys
 import logging
 import commands
-from kigen.igen.stdout import *
-from kigen.utils.shell import *
-from kigen.utils.misc import *
+from modules.stdout import *
+from modules.utils.shell import *
+from modules.utils.misc import *
 from append import append
 
 class initramfs:

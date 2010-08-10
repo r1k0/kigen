@@ -6,58 +6,64 @@ import logging
 import subprocess
 
 if os.getuid() != 0:
-    print "Get rool pal!"
+    print "Get root pal!"
     sys.exit(2)
 
-# import /libs
+# get run path
 binpath = os.path.abspath(sys.argv[0])
 if os.path.islink(binpath):
     binpath = os.readlink(binpath)
+
 # this is set up by kigen ebuild
-if binpath == '/usr/sbin/igen':
-    # kigen is installed (likely on portage only) for now
+if binpath == '/usr/sbin/kigen':
+    # kigen is installed (likely by portage)
     libdir = '/usr/share/kigen'
-    # TODO: find another way to get the pyv, this works only for portage barely on debian/arch
+    # TODO: find another way to get the pyv, this won't work on debian
     pyv = os.popen('eselect python show --python2').read().strip()
-    sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen")
+    sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen/modules")
 else:
+    # assume we run from current dir
     libdir = os.path.dirname(binpath)
-    sys.path.append(libdir+'/kigen')
-# import python libs
+    sys.path.append(libdir+'/modules')
+
+# import kigen modules path
 sys.path.append(libdir)
 
-# hat trick
+# parse cli arguments
 cliargs = sys.argv[1:]
+
+# color hat trick
 if "--nocolor" in cliargs or "-n" in cliargs:
     from nocolor import green, turquoise, red, yellow, white
-    os.environ['IGEN_STDOUT'] = '1'
+    os.environ['KIGEN_STDOUT'] = '1'
 else:
     try:
         from portage.output import green, turquoise, red, yellow, white
-        os.environ['IGEN_STDOUT'] = '0'
+        os.environ['KIGEN_STDOUT'] = '0'
     except:
         from nocolor import green, turquoise, red, yellow, white
-        os.environ['IGEN_STDOUT'] = '1'
+        os.environ['KIGEN_STDOUT'] = '1'
 
-# igen modules are ready to be called
-from config import master_config
-from igen.config import temp
-import igen.cliparser
+# kigen modules are ready to be called
+from config import master_config, temp
+from cliparser import *
 from utils.misc import *
 from utils.shell import *
 
-if len(sys.argv) < 1:
-    igen.cliparser.print_usage()
-    sys.exit(2)
-
 # parse command line parameters
-cli, verbose = igen.cliparser.parse()
+target, cli, verbose = parse()
 
-# setup logfile
-if os.path.isfile(cli['logfile']):
-    os.remove(cli['logfile'])
-logging.basicConfig(filename=cli['logfile'],level=logging.DEBUG)
+# remove previous logfile
+if os.path.isfile(verbose['logfile']):
+    os.remove(verbose['logfile'])
+# create empty logfile
+#open(cli['logfile'], 'w').close()
+
+# set logfile for DBUG logging
+logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
+logging.debug('target is ' + target)
 logging.debug(cli)
+logging.debug(verbose)
 
 # parse kigen config file
 kigen_conf = cli['config']
@@ -65,7 +71,7 @@ if os.path.isfile(kigen_conf):
     master_config_temp = parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
 else:
-    print 'missing file: ' + red(kigen_conf) + '.'
+    print 'err: missing ' + red(kigen_conf)
     sys.exit(2)
 
 # set default kernel sources
@@ -75,7 +81,7 @@ if 'kernel-sources' in master_config:
     kerneldir = master_config['kernel-sources']
 
 # Funtoo bootupdate integration
-from igen.bootupdate import get_boot_initrd
+from initramfs.bootupdate import get_boot_initrd
 bootupdateinitrd = get_boot_initrd()
 if bootupdateinitrd:
     bootupdateset = True
@@ -124,18 +130,31 @@ if cli['nocache'] is True:
         shutil.rmtree(temp['cache'])
         process('mkdir -p %s' % temp['cache'], verbose)
 
-from igen.initramfs import initramfs
-iobj = initramfs(kerneldir,         \
-            arch,                   \
-            KV,                     \
-            libdir,                 \
-            master_config,          \
-            cli,                    \
-            temp,                   \
-            bootupdateset,          \
-            bootupdateinitrd,       \
-            verbose)
-iobj.build()
+# run the target
+if target == 'kernel' or target == 'k':
+    from kernel.kernel import kernel
+    kobj = kernel(kerneldir,            \
+                master_config,          \
+                arch,                   \
+                KV,                     \
+                cli,                    \
+                temp,                   \
+                verbose)
+    kobj.build()
+
+if target == 'initramfs' or target == 'i':
+    from initramfs.initramfs import initramfs
+    iobj = initramfs(kerneldir,         \
+                arch,                   \
+                KV,                     \
+                libdir,                 \
+                master_config,          \
+                cli,                    \
+                temp,                   \
+                bootupdateset,          \
+                bootupdateinitrd,       \
+                verbose)
+    iobj.build()
 
 # copy initramfs to /boot
 if cli['noboot'] is False:
@@ -151,7 +170,7 @@ elif cli['noboot'] is True:
     logging.debug(temp['cache']+'/initramfs-cpio.gz')
     print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
 
-# TODO unset os.environ['IGEN_STDOUT']?
+# TODO unset os.environ['KIGEN_STDOUT']?
 
 sys.exit(0)
 
