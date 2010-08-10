@@ -110,10 +110,10 @@ if KV is 'none':
 
 try:
     # try creating temp dirs
-    process('mkdir -p %s' % temp['root'],  verbose)
-    process('mkdir -p %s' % temp['work'],  verbose)
-    process('mkdir -p %s' % temp['cache'], verbose)
-    process('mkdir -p %s' % temp['distfiles'], verbose)
+    os.makedirs(temp['root'])
+    os.makedirs(temp['work'])
+    os.makedirs(temp['cache'])
+    os.makedirs(temp['distfiles'])
 except:
     # don't mind
     pass
@@ -122,13 +122,13 @@ except:
 import shutil
 if os.path.isdir(temp['work']):
     shutil.rmtree(temp['work'])
-    process('mkdir -p %s' % temp['work'], verbose)
+    os.makedirs(temp['work'])
 
 # --nocache
 if cli['nocache'] is True:
     if os.path.isdir(temp['cache']):
         shutil.rmtree(temp['cache'])
-        process('mkdir -p %s' % temp['cache'], verbose)
+        os.makedirs(temp['cache'])
 
 # run the target
 if target == 'kernel' or target == 'k':
@@ -141,6 +141,35 @@ if target == 'kernel' or target == 'k':
                 temp,                   \
                 verbose)
     kobj.build()
+
+    # copy kernel/system.map to /boot
+    if cli['noboot'] is False:
+    
+         print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
+         process('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
+    
+         if cli['rename'] is '':
+             print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV,
+             process('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
+         else:
+             print green(' * produced ') + '/boot/' + cli['rename'],
+             process('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['rename']), verbose)
+         if cli['initramfs'] is not '':
+             print ' with an ' + white('embedded') + ' initramfs'
+         else:
+             print
+    
+    # leave /boot alone but tell the user where to find his kernel/system.map
+    elif cli['noboot'] is True:
+        logging.debug(kerneldir+'/System.map')
+        print green(' * produced ') + kerneldir+'/System.map'
+    
+        logging.debug(kerneldir+'/arch/x86/boot/bzImage')
+        print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage',
+        if cli['initramfs'] is not '':
+            print 'with an ' + white('embedded') + ' initramfs'
+        else:
+            print
 
 if target == 'initramfs' or target == 'i':
     from initramfs.initramfs import initramfs
@@ -156,19 +185,19 @@ if target == 'initramfs' or target == 'i':
                 verbose)
     iobj.build()
 
-# copy initramfs to /boot
-if cli['noboot'] is False:
-    if cli['rename'] is '':
-        print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
-        process('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
-    else:
-        print green(' * produced ') + '/boot/' + cli['rename']
-        process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
-
-# leave /boot alone but tell the user where to find his initramfs
-elif cli['noboot'] is True:
-    logging.debug(temp['cache']+'/initramfs-cpio.gz')
-    print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
+    # copy initramfs to /boot
+    if cli['noboot'] is False:
+        if cli['rename'] is '':
+            print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
+            process('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
+        else:
+            print green(' * produced ') + '/boot/' + cli['rename']
+            process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+    
+    # leave /boot alone but tell the user where to find his initramfs
+    elif cli['noboot'] is True:
+        logging.debug(temp['cache']+'/initramfs-cpio.gz')
+        print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
 
 # TODO unset os.environ['KIGEN_STDOUT']?
 

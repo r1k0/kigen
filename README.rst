@@ -9,9 +9,7 @@ Introduction
 Definition
 ~~~~~~~~~~
 
-KIGen is a set of 2 commands: kgen and igen.
-
-**igen uses Genkernel linuxrc and provides the same boot interface as Genkernel does.**
+**kigen uses Genkernel linuxrc and provides the same boot interface as Genkernel does.**
 
 KIGen for Linux aims at providing first an equal set of features (in Python)
 as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update.

@@ -2,9 +2,9 @@ import os
 import sys
 import logging
 import commands
-from modules.stdout import *
-from modules.utils.shell import *
-from modules.utils.misc import *
+from stdout import *
+from utils.shell import *
+from utils.misc import *
 from append import append
 
 class initramfs:

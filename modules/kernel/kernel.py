@@ -26,6 +26,7 @@ class kernel:
         self.initramfs      = cli['initramfs']
         self.fixdotconfig   = cli['fixdotconfig']
         self.temp           = temp
+        self.temp['initramfs'] = self.temp['root'] + '/imported-initramfs'
 
     def build(self):
         """
@@ -171,7 +172,7 @@ class kernel:
         if os.path.isdir(kinitramfsdir):
             from time import time
             os.system('mv %s %s.%s ' % (kinitramfsdir, kinitramfsdir, str(time())))
-        os.system('mkdir -p %s' % kinitramfsdir)
+        process('mkdir -p %s' % kinitramfsdir, self.verbose)
 
         # copy initramfs to /usr/src/initramfs/
         os.system('cp %s/usr/initramfs_data.cpio %s ' % (self.kerneldir, kinitramfsdir))

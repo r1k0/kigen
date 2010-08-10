@@ -2,9 +2,9 @@ import os
 import sys
 import logging
 import commands
-from modules.stdout import *
-from modules.utils.shell import *
-from modules.utils.misc import *
+from stdout import *
+from utils.shell import *
+from utils.misc import *
 
 class append:
 
@@ -143,7 +143,7 @@ class append:
         build_date.close()
     
         # aux
-        process('mkdir -p ' + self.temp['work']+'/initramfs-base-temp/lib/keymaps', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-base-temp/lib/keymaps')
         process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-base-temp')
@@ -194,8 +194,8 @@ class append:
             bbobj.build()
 
         # append busybox to cpio
-        process('mkdir -p ' + self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
-        process('mkdir -p  %s/usr/share/udhcpc/' % (self.temp['work']+'/initramfs-busybox-temp'), self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/bin')
+        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/')
 
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
         process('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
@@ -227,7 +227,7 @@ class append:
         logging.debug('initramfs.append_modules ' + self.KV)
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
-        process('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV)
     
         # FIXME: ctrl c does not work during this function
         # TODO: rewrite (later)
@@ -252,7 +252,7 @@ class append:
                     # if the module is found copy it
                     module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                     module_dirname = os.path.dirname(module)
-                    process('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
+                    process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
                     process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
    
         # for each module in /etc/boot.conf
@@ -265,14 +265,14 @@ class append:
                         print green(' * ') + '... ' + white(i) + ' from /etc/boot.conf'
                         module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                         module_dirname = os.path.dirname(module)
-                        process('mkdir -p %s%s%s'% (self.temp['work'],'/initramfs-modules-'+self.KV+'-temp',  module_dirname), self.verbose)
+                        process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
     
         # TODO: make variable of /lib/modules in case of FAKEROOT export
         os.system('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ))
     
         # create etc/modules/<group>
-        process('mkdir -p ' + self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules')
         modconfdict = get_config_modules_dict(self.master_config)
     
         # Genkernel official boot module design
@@ -304,8 +304,8 @@ class append:
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
     
-        process('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-luks-temp/lib/luks')
+        os.makedirs(self.temp['work']+'/initramfs-luks-temp/sbin')
     
         if os.path.isfile(cryptsetup_bin) and self.nohostbin is False:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
@@ -350,9 +350,9 @@ class append:
 
         @return: bool
         """
-        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/')
+        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/etc')
+        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/lib')
 
         print green(' * ') + turquoise('initramfs.append.glibc')
         # mostly for authentication
@@ -378,7 +378,7 @@ class append:
         @return: bool
         """
         print green(' * ') + turquoise('initramfs.append.libncurses')
-        process('mkdir -p ' + self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
         process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-libncurses-temp')
@@ -391,7 +391,7 @@ class append:
         @return: bool
         """
         print green(' * ') + turquoise('initramfs.append.zlib')
-        process('mkdir -p ' + self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
         process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-zlib-temp')
@@ -410,13 +410,8 @@ class append:
         dropbearconvert_bin = 'dropbearconvert'
         dropbear_sbin       = 'dropbear'
 
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/dev', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/bin', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/usr/sbin', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/var/log', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dropbear-temp/var/run', self.verbose)
+        for i in ['dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run']:
+            os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
 
         # FIXME: check if dropbear is merged with USE=static if not fail
         if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
@@ -470,8 +465,8 @@ class append:
         os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
         os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
         os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
-        process('mkdir -p %s'                   % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
-        process('mkdir -p %s'                   % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/home/rik')
+        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
         process('chown rik.rik %s'              % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
         process('chown root.root %s'              % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
         process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
