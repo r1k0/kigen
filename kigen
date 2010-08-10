@@ -27,7 +27,7 @@ else:
     sys.path.append(libdir+'/modules')
 
 # import kigen modules path
-sys.path.append(libdir)
+#sys.path.append(libdir)
 
 # parse cli arguments
 cliargs = sys.argv[1:]

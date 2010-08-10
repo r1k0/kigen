@@ -1,6 +1,6 @@
 import os
 import sys
-from modules.stdout import green, turquoise, white, red, yellow
+from stdout import green, turquoise, white, red, yellow
 
 try:
     import funtoo.boot.config

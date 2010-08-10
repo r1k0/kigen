@@ -1,8 +1,8 @@
 import os
 import sys
-from modules.stdout import white, green, turquoise, red, yellow
-from modules.utils.shell import *
-from modules.utils.misc import *
+from stdout import white, green, turquoise, red, yellow
+from utils.shell import *
+from utils.misc import *
 
 class kernel:
 
