@@ -20,11 +20,11 @@ def parse():
 
     cliopts = sys.argv
 
-    # check we got at least one target
-    if 'kernel' not in cliopts and 'k' not in cliopts and 'initramfs' not in cliopts and 'i' not in cliopts:
-        print red('err: ') + 'kigen needs a target to build something'
-        print_usage()
-        sys.exit(2)
+#    # check we got at least one target
+#    if 'kernel' not in cliopts and 'k' not in cliopts and 'initramfs' not in cliopts and 'i' not in cliopts:
+#        print red('err: ') + 'kigen needs a target to build something'
+#        print_usage()
+#        sys.exit(2)
 
     # prevent multiple target from running
     if 'k' in cliopts and 'i' in cliopts:
@@ -401,7 +401,7 @@ def parse():
     return target, cli, verbose
 
 def print_version():
-    print '%s' % (version)
+    print green('%s' % version)
 
 def print_credits():
     print 'Copyright 2010 r1k0'
@@ -411,19 +411,18 @@ def print_credits():
     print 'Alphabetical list of authors:'
     print
     for i in author:
-        print i
+        print white(i)
     print 'Alphabetical list of contributors:'
     print
     for i in contributor:
-        print i
+        print white(i)
 
 def print_usage():
-#    print
-#    print white('  a Portage kernel|initramfs generator')
+    print
+    print white('  a Portage kernel|initramfs generator')
     print
     print white('Usage')+':'
-#    print '      ' + turquoise(os.path.basename(sys.argv[0])) + green(' [target]') + yellow(' <options>') 
-    print '      ' + turquoise(sys.argv[0]) + green(' <target|options>') + yellow(' [parameters]')
+    print '      ' + turquoise(sys.argv[0]) + green(' <options|target>') + yellow(' [') + 'parameters' + yellow(']')
     print
     print green('Options') + ':'
     print '  -h, --help                 This'
@@ -438,10 +437,9 @@ def print_usage():
     print '  k, kernel                  Build kernel/modules'
     print '  i, initramfs               Build initramfs'
     print
-    print yellow('Parameters help menu')+':'
-    print ' ' + sys.argv[0] + ' kernel    --help    Kernel parameter menu'
-    print ' ' + sys.argv[0] + ' initramfs --help    Initramfs parameter menu'
-    print
+    print 'Parameters help menu'+':'
+    print ' ' + turquoise(os.path.basename(sys.argv[0])) + green(' kernel') + yellow('    -h, --help')
+    print ' ' + turquoise(os.path.basename(sys.argv[0])) + green(' initramfs') + yellow(' -h, --help')
 
 def print_usage_kernel():
     print '  --dotconfig=/file          Custom kernel config file'
