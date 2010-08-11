@@ -171,7 +171,7 @@ class kernel:
         # clean previous root
         if os.path.isdir(kinitramfsdir):
             from time import time
-            os.system('mv %s %s.%s ' % (kinitramfsdir, kinitramfsdir, str(time())))
+            os.system('mv %s %s-%s ' % (kinitramfsdir, kinitramfsdir, str(time())))
         process('mkdir -p %s' % kinitramfsdir, self.verbose)
 
         # copy initramfs to /usr/src/initramfs/

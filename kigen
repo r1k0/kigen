@@ -30,12 +30,19 @@ else:
 #sys.path.append(libdir)
 
 # parse cli arguments
-cliargs = sys.argv[1:]
+#cliargs = sys.argv[1:]
 
 # color hat trick
-if "--nocolor" in cliargs or "-n" in cliargs:
+if "--nocolor" in sys.argv:
     from nocolor import green, turquoise, red, yellow, white
     os.environ['KIGEN_STDOUT'] = '1'
+    # remove --nocolor from args, we don't want to see it again
+    sys.argv.remove('--nocolor')
+elif "-n" in sys.argv:
+    from nocolor import green, turquoise, red, yellow, white
+    os.environ['KIGEN_STDOUT'] = '1'
+    # remove -n from args, we don't want to see it again
+    sys.argv.remove('-n')
 else:
     try:
         from portage.output import green, turquoise, red, yellow, white
@@ -61,6 +68,7 @@ if os.path.isfile(verbose['logfile']):
 
 # set logfile for DBUG logging
 logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
+logging.debug(sys.argv)
 logging.debug('target is ' + target)
 logging.debug(cli)
 logging.debug(verbose)
@@ -71,7 +79,7 @@ if os.path.isfile(kigen_conf):
     master_config_temp = parse_config_file(kigen_conf)
     master_config.update(master_config_temp)
 else:
-    print 'err: missing ' + red(kigen_conf)
+    print 'error: missing ' + red(kigen_conf)
     sys.exit(2)
 
 # set default kernel sources
@@ -123,6 +131,11 @@ import shutil
 if os.path.isdir(temp['work']):
     shutil.rmtree(temp['work'])
     os.makedirs(temp['work'])
+
+# --extract
+if cli['extract']:
+    import utils.extract
+    utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
 
 # --nocache
 if cli['nocache'] is True:

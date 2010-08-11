@@ -3,13 +3,20 @@ import os
 from getopt import getopt, GetoptError
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
+ 
+from config import master_config, temp
 
 # WARN don't import logging here
 
 def parse():
 
-    target = ''
-    cli = {}
+    target = 'none'
+
+    cli = { 'config':       '/etc/kigen.conf',  \
+            'nocache':      '',                 \
+            'oldconfig':    True,               \
+            'extract':      ''}
+    
     verbose = { 'std':      '',     \
                 'set':      False,  \
                 'logfile':  '/var/log/kigen.log'}
@@ -22,25 +29,25 @@ def parse():
 
 #    # check we got at least one target
 #    if 'kernel' not in cliopts and 'k' not in cliopts and 'initramfs' not in cliopts and 'i' not in cliopts:
-#        print red('err: ') + 'kigen needs a target to build something'
+#        print red('error: ') + 'kigen needs a target to build something'
 #        print_usage()
 #        sys.exit(2)
 
-    # prevent multiple target from running
+    # prevent multiple targets from running
     if 'k' in cliopts and 'i' in cliopts:
-        print red('err: ') + 'kigen cannot run multiple targets at once'
+        print red('error: ') + 'kigen cannot run multiple targets at once'
         print_usage()
         sys.exit(2)
     elif 'initramfs' in cliopts and 'kernel' in cliopts:
-        print red('err: ') + 'kigen cannot run multiple targets at once'
+        print red('error: ') + 'kigen cannot run multiple targets at once'
         print_usage()
         sys.exit(2)
     elif 'k' in cliopts and 'initramfs' in cliopts:
-        print red('err: ') + 'kigen cannot run multiple targets at once'
+        print red('error: ') + 'kigen cannot run multiple targets at once'
         print_usage()
         sys.exit(2)
     elif 'i' in cliopts and 'kernel' in cliopts:
-        print red('err: ') + 'kigen cannot run multiple targets at once'
+        print red('error: ') + 'kigen cannot run multiple targets at once'
         print_usage()
         sys.exit(2)
 
@@ -59,7 +66,7 @@ def parse():
                                     "help",                     \
                                     "info",                     \
                                     "version",                  \
-                                    "nocolor",                  \
+#                                    "nocolor",                  \
                                     "credits",                  \
                                     "conf=",                    \
                                     "dotconfig=",               \
@@ -161,8 +168,8 @@ def parse():
                     sys.exit(2)
             elif o in ("--noboot"):
                 cli['noboot'] = True
-            elif o in ("-n", "--nocolor"):
-                cli['color'] = False
+#            elif o in ("-n", "--nocolor"):
+#                cli['color'] = False
             elif o in ("--nosaveconfig"):
                 cli['nosaveconfig'] = True
             elif o in ("--config="):
@@ -212,7 +219,7 @@ def parse():
                                     "noboot",       \
                                     "selinux",      \
                                     "help",         \
-                                    "nocolor",      \
+#                                    "nocolor",      \
                                     "info",         \
                                     "version",      \
                                     "credits",      \
@@ -260,8 +267,8 @@ def parse():
         cli['nocache']      = False
         cli['noboot']       = False
         cli['selinux']      = False
-    #   quiet               = '2>&1 | tee -a ' + logfile # verbose
-    #   quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
+#       quiet               = '2>&1 | tee -a ' + logfile # verbose
+#       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
         cli['color']        = True
         cli['nosaveconfig'] = False
@@ -288,8 +295,8 @@ def parse():
                 cli['logfile'] = a
                 verbose['logfile'] = cli['logfile']
             elif o in ("-d", "--debug"):
-    #           quiet = '>>' + logfile + ' 2>&1' # logfile
-    #           quiet = '2>&1 | tee -a ' + logfile # verbose
+#               quiet = '>>' + logfile + ' 2>&1' # logfile
+#               quiet = '2>&1 | tee -a ' + logfile # verbose
                 verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
@@ -342,8 +349,8 @@ def parse():
                 cli['noboot'] = True
             elif o in ("--selinux"):
                 cli['selinux'] = True
-            elif o in ("-n", "--nocolor"):
-                cli['color'] = False
+#            elif o in ("-n", "--nocolor"):
+#                cli['color'] = False
             elif o in ("--config="):
                 cli['config'] = a
             elif o in ("--dropbear"):
@@ -369,11 +376,11 @@ def parse():
     else:
         # no target found in cliopts
         try:
-            opts, args = getopt(cliopts[1:], "hn", [ \
-                                "help",                 \
-                                "config=",              \
-                                "nocolor",              \
-                                "version",              \
+            opts, args = getopt(cliopts[1:], "hn", [\
+                                "help",             \
+                                "extract=",         \
+                                "to=",              \
+                                "version",          \
                                 "credits"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -381,6 +388,7 @@ def parse():
             sys.exit(2)
 
         # single options
+        cli['to'] = '/var/tmp/kigen/extracted-initramfs'
         for o, a in opts:
             if o in ("-h", "--help"):
                 print_usage()
@@ -391,10 +399,10 @@ def parse():
             elif o in ("--credits"):
                 print_credits()
                 sys.exit(0)
-#            elif o in ("--config="):
-#                cli['config'] = a
-            elif o in ("-n") or ("--nocolor"):
-                pass
+            elif o in ("--extract"):
+                cli['extract'] = a
+            elif o in ("--to"):
+                cli['to'] = a
             else:
                 assert False, "uncaught option"
 
@@ -411,37 +419,37 @@ def print_credits():
     print 'Alphabetical list of authors:'
     print
     for i in author:
-        print white(i)
+        print green(i)
     print 'Alphabetical list of contributors:'
     print
     for i in contributor:
-        print white(i)
+        print green(i)
 
 def print_usage():
     print
-    print white('  a Portage kernel|initramfs generator')
+    print '  a '+white('Portage')+' kernel|initramfs generator'
     print
-    print white('Usage')+':'
-    print '      ' + turquoise(sys.argv[0]) + green(' <options|target>') + yellow(' [') + 'parameters' + yellow(']')
+    print 'Usage'+':'
+    print '      '+white(sys.argv[0])+' <'+green('options')+'|'+turquoise('target')+'>'+' ['+turquoise('parameters')+']'
     print
     print green('Options') + ':'
     print '  -h, --help                 This'
-    print '  --config=/file             Custom master config file'
     print '  -n, --nocolor              Do not colorize output'
-#    print '  -v, --verbose              Give more verbose'
-#    print '  -d, --debug                Debug verbose'
+    print '  --extract=/file            Extract initramfs file'
+    print '   --to=/dir                 Custom extracting point'
     print '  --version                  Version'
     print '  --credits                  Credits and license'
     print
-    print green('Targets')+':'
+    print turquoise('Targets')+':'
     print '  k, kernel                  Build kernel/modules'
     print '  i, initramfs               Build initramfs'
     print
-    print 'Parameters help menu'+':'
-    print ' ' + turquoise(os.path.basename(sys.argv[0])) + green(' kernel') + yellow('    -h, --help')
-    print ' ' + turquoise(os.path.basename(sys.argv[0])) + green(' initramfs') + yellow(' -h, --help')
+    print turquoise('Parameters')+':'
+    print ' '+sys.argv[0]+' kernel'+'    --help, -h'
+    print ' '+sys.argv[0]+' initramfs'+' --help, -h'
 
 def print_usage_kernel():
+    print '  --config=/file             Custom master config file'
     print '  --dotconfig=/file          Custom kernel config file'
     print '  --fixdotconfig             Check and auto fix the kernel config file'
     print '  --rename=mykernel          Custom kernel file name'
@@ -456,33 +464,37 @@ def print_usage_kernel():
     print '  --nosaveconfig             Do not save kernel config in /etc/kernels'
     print '  --noboot                   Do not copy kernel to /boot'
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
+#   print '  -v, --verbose              Give more verbose'
     print '  -d, --debug                Debug verbose'
 
 def print_usage_initramfs():
+    print '  --config=/file             Custom master config file'
     print '  --dotconfig=/file          Custom busybox config file'
     print '  --rename=myinitramfs       Custom initramfs file name'
     print '  --menuconfig               Interactive initramfs options menu'
     print '  --linuxrc=/linuxrc[,/file] Include custom linuxrc (files copied over to etc)'
+    print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
+#   print '   --sinitrd=/file            Splash custom initrd.splash (host if found)'
     print '  --disklabel                Include support for UUID/LABEL'
     print '  --luks                     Include LUKS support (host binary if found)'
     print '  --lvm2                     Include LVM2 support (host binary if found)'
-#    print yellow('  --evms                 Include evms support (evms must be merged)')
-#    print yellow('  --dmraid               Include dmraid support')
-#    print yellow('   --selinux              Include selinux support in --dmraid')
-#    print yellow('  --iscsi                Include iscsi support')
-#    print yellow('  --mdadm                Include mdadm support (mdadm must be merged)')
-    print '  --glibc                    Include host GNU C libraries (required for dns)'
-    print '  --libncurses               Include host libncurses (required for dropbear)'
-    print '  --zlib                     Include host zlib (required for dropbear)'
+#   print '  --evms                    Include evms support (evms must be merged)'
+#   print '  --dmraid                  Include dmraid support'
+#   print '   --selinux                 Include selinux support in --dmraid'
+#   print '  --iscsi                   Include iscsi support'
+#   print '  --mdadm                   Include mdadm support (mdadm must be merged)'
     print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
-    print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
-#    print yellow('   --sinitrd=/file        Splash custom initrd.splash (host if found)')
-#    print yellow('  --unionfs-fuse         Include unionfs-fuse support')
-#    print red('  --aufs                 Include aufs support')
-#    print yellow('  --firmware=/dir        Include custom firmware support')
+    print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
+    print '   --libncurses               Include host libncurses (required for dropbear)'
+    print '   --zlib                     Include host zlib (required for dropbear)'
+#   print '  --unionfs-fuse            Include unionfs-fuse support'
+#   print '  --aufs                    Include aufs support'
+#   print '  --firmware=/dir           Include custom firmware support'
     print '  --plugin=/dir[,/dir]       Include list of user generated custom roots'
     print '  --nocache                  Do not use cached data'
     print '  --nohostbin                Do not use host binaries but compile from sources'
     print '  --noboot                   Do not copy initramfs to /boot'
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
+#   print '  -v, --verbose              Give more verbose'
+    print '  -d, --debug                Debug verbose'
