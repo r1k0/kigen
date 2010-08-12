@@ -37,8 +37,8 @@ class dropbear:
         if self.make() is not zero: self.fail('make')
         if self.strip() is not zero: self.fail('strip')
 #        if self.libraries() is not zero: self.fail('libraries')
-#        if self.dsskey() is not zero: self.fail('dsskey')
-#        if self.rsakey() is not zero: self.fail('rsakey')
+        if self.dsskey() is not zero: self.fail('dsskey')
+        if self.rsakey() is not zero: self.fail('rsakey')
         if self.compress() is not zero: self.fail('compress')
         if self.cache() is not zero: self.fail('cache')
     
@@ -144,44 +144,25 @@ class dropbear:
         os.system('strip %s/scp'                % self.dropbeartmp)
         return os.system('strip %s/dropbearkey ' % self.dropbeartmp)
 
-#    def libraries(self):
-#        # TODO create user/group dropbear 
-#        # copy required libs
-#        print green(' * ') + '... dropbear.libraries'
-#        self.chgdir(self.dropbeartmp)
-#        process('mkdir -p dev/pts proc etc lib usr/lib var/run var/log', self.verbose)
-##        process('cp /lib/libncurses.so.5     %s' % self.dropbeartmp+'/lib', self.verbose)
-##        process('cp /lib/libnss_compat.so.2  %s' % self.dropbeartmp+'/lib', self.verbose)
-##        process('cp /lib/libutil.so.1  %s' % self.dropbeartmp+'/lib', self.verbose)
-##        return process('cp /etc/ld.so.cache         %s' % self.dropbeartmp+'/etc', self.verbose)
-#
-#        #cp -pr /etc/dropbear "${DESTDIR}/etc/"
-#        #cp -pr /etc/passwd "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
-#        #cp -pr /etc/shadow "${DESTDIR}/etc/"    # quick and dirty, to keep file attributes
-#        #cp -pr /etc/group "${DESTDIR}/etc/"
-#        #[ -d /root/.ssh ] && cp -pr /root/.ssh "${DESTDIR}/root/"
-#        #cp -pr /etc/nsswitch.conf "${DESTDIR}/etc/"
-#        #cp -pr /etc/localtime "${DESTDIR}/etc/"
-#    
-#    def dsskey(self):
-#        """
-#        dropbear dsskey creation
-#        """
-#        print green(' * ') + '... dropbear.dsskey'
-#        self.chgdir(self.dropbeartmp)
-#        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
-#
-#        return process('./dropbearkey -t dss -f %s/etc/dropbear/dropbear.dss' % self.dropbeartmp, self.verbose)
-#
-#    def rsakey(self):
-#        """
-#        dropbear rsakey creation
-#        """
-#        print green(' * ') + '... dropbear.rsakey'
-#        self.chgdir(self.dropbeartmp)
-#        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
-#
-#        return process('./dropbearkey -t rsa -s 4096 -f %s/etc/dropbear/dropbear.rsa' % self.dropbeartmp, self.verbose)
+    def dsskey(self):
+        """
+        dropbear dsskey creation
+        """
+        print green(' * ') + '... dropbear.dsskey'
+        self.chgdir(self.dropbeartmp)
+        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+
+        return process('./dropbearkey -t dss -f %s/etc/dropbear/dropbear_dss_host_key' % self.dropbeartmp, self.verbose)
+
+    def rsakey(self):
+        """
+        dropbear rsakey creation
+        """
+        print green(' * ') + '... dropbear.rsakey'
+        self.chgdir(self.dropbeartmp)
+        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+
+        return process('./dropbearkey -t rsa -s 4096 -f %s/etc/dropbear/dropbear_rsa_host_key' % self.dropbeartmp, self.verbose)
 
     def compress(self):
         """
