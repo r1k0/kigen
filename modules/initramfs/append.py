@@ -358,6 +358,8 @@ class append:
         # mostly for authentication
         process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_nis.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnsl.so.1         %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         # resolves dns->ip
         process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
