@@ -181,7 +181,7 @@ class dropbear:
 #        process('cp dropbeard_config usr/local/etc', self.verbose)
     
 #        return os.system('tar cf dropbear.tar bin sbin dev etc lib proc usr var')
-        return os.system('tar cf dropbear.tar bin sbin  usr')
+        return os.system('tar cf dropbear.tar bin etc sbin  usr')
     
     def cache(self):
         """
