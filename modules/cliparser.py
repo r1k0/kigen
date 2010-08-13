@@ -27,12 +27,6 @@ def parse():
 
     cliopts = sys.argv
 
-#    # check we got at least one target
-#    if 'kernel' not in cliopts and 'k' not in cliopts and 'initramfs' not in cliopts and 'i' not in cliopts:
-#        print red('error: ') + 'kigen needs a target to build something'
-#        print_usage()
-#        sys.exit(2)
-
     # prevent multiple targets from running
     if 'k' in cliopts and 'i' in cliopts:
         print red('error: ') + 'kigen cannot run multiple targets at once'
@@ -230,6 +224,7 @@ def parse():
                                     "zlib",         \
                                     "rename=",      \
                                     "plugin=",      \
+                                    "rootpasswd=",  \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -278,6 +273,7 @@ def parse():
         cli['zlib']         = False
         cli['rename']       = ''
         cli['plugin']       = ''
+        cli['rootpasswd']     = ''
     
         # target options
         for o, a in opts:
@@ -366,10 +362,12 @@ def parse():
                 cli['libncurses'] = True
             elif o in ("--zlib"):
                 cli['zlib'] = True
-            elif o in ("--rename"):
+            elif o in ("--rename="):
                 cli['rename'] = a
             elif o in ("--plugin"):
                 cli['plugin'] = a # a is a list
+            elif o in ("--rootpasswd="):
+                cli['rootpasswd'] = a
             else:
                 assert False, "uncaught option"
 
@@ -488,6 +486,7 @@ def print_usage_initramfs():
     print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
     print '   --libncurses               Include host libncurses (required for dropbear)'
     print '   --zlib                     Include host zlib (required for dropbear)'
+    print '   --rootpasswd=passwd        Create and set root password'
 #   print '  --unionfs-fuse            Include unionfs-fuse support'
 #   print '  --aufs                    Include aufs support'
 #   print '  --firmware=/dir           Include custom firmware support'

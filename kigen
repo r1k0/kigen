@@ -26,12 +26,6 @@ else:
     libdir = os.path.dirname(binpath)
     sys.path.append(libdir+'/modules')
 
-# import kigen modules path
-#sys.path.append(libdir)
-
-# parse cli arguments
-#cliargs = sys.argv[1:]
-
 # color hat trick
 if "--nocolor" in sys.argv:
     from nocolor import green, turquoise, red, yellow, white
@@ -63,8 +57,6 @@ target, cli, verbose = parse()
 # remove previous logfile
 if os.path.isfile(verbose['logfile']):
     os.remove(verbose['logfile'])
-# create empty logfile
-#open(cli['logfile'], 'w').close()
 
 # set logfile for DBUG logging
 logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)

@@ -52,6 +52,7 @@ class initramfs:
         self.selinux            = cli['selinux']
         self.nohostbin          = cli['nohostbin']
         self.pluginroot         = cli['plugin'] # string
+        self.rootpasswd         = cli['rootpasswd']
 
     def build(self):
         """
@@ -89,7 +90,8 @@ class initramfs:
                         self.firmware,          \
                         self.selinux,           \
                         self.nocache,           \
-                        self.nohostbin)
+                        self.nohostbin,         \
+                        self.rootpasswd)
 
         # 1) create initial cpio and append object
         ret, output = process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
@@ -167,7 +169,11 @@ class initramfs:
         if self.cli['zlib'] is True:
             os.chdir(self.temp['work'])
             if aobj.zlib() is not zero: self.fail('zlib')
-        # 20) append user plugin
+        if self.cli['rootpasswd'] is not '':
+            os.chdir(self.temp['work'])
+            if aobj.rootpasswd() is not zero: self.fail('rootpasswd')
+
+        # last) append user plugin
         if self.pluginroot is not '':
             pluginlist = self.pluginroot.split(',')
             for j in pluginlist:

@@ -30,7 +30,8 @@ class append:
                 firmware,           \
                 selinux,            \
                 nocache,            \
-                nohostbin):
+                nohostbin,          \
+                rootpasswd):
         """
         init class variables
         """
@@ -56,6 +57,7 @@ class append:
         self.firmware           = firmware
         self.selinux            = selinux
         self.nohostbin          = nohostbin
+        self.rootpasswd         = rootpasswd
 
     def cpio(self):
         """
@@ -461,21 +463,42 @@ class append:
         process('chmod 0666 ptmx', self.verbose)
         process('chmod 0666 tty', self.verbose)
 
-        os.system('grep ^rik /etc/passwd > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
-        os.system('grep ^rik /etc/group  > %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
-        os.system('grep ^rik /etc/shadow > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
-        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
-        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
-        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
-        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/home/rik')
-        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
-        process('chown rik.rik %s'              % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
-        process('chown root.root %s'              % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
-        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd', self.verbose)
+##        os.system('grep ^rik /etc/passwd > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
+##        os.system('grep ^rik /etc/group  > %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
+##        os.system('grep ^rik /etc/shadow > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
+##        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/home/rik')
+##        process('chown rik.rik %s'              % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
+#        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
+#        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
+#        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
+#        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
+#        process('chown root.root %s'              % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
+#
+#        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
+#        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
         return os.system(self.cpio())
+
+    def rootpasswd(self):
+        """
+        Set root password of the initramfs
+        """
+        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/')
+
+# self.rootpasswd == a
+
+        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd')
+        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp//etc/group')
+        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/shadow')
+        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
+        process('chown root.root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
+        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
+        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
+        return os.system(self.cpio())
+
 
     def e2fsprogs(self):
         """

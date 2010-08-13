@@ -1,25 +1,26 @@
-TODO: igen --gnupg
+TODO: add nohup, screen, setsid to .config busybox
+TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: igen --disklabel 
+TODO: kigen i --disklabel 
     ./configure breaks when using 1.41.12 instead of 1.40.9
     configure: error: --with-ldopts no longer supported; use LDFLAGS= instead
-TODO: igen --udev for udevadm
+TODO: kigen i --udev for udevadm
     or --devtmpfs or --mdev
-TODO: igen --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
+TODO: kigen i --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
     dropbear-version = 0.52
-TODO: kgen --static option (see genkernel --static)
+TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
 TODO: pass $PORTDIR don't assume /usr/portage
-TODO: igen --aufs
+TODO: kigen i --aufs
     aufs-version = 0_p20100405
-TODO: igen --evms repair
+TODO: kigen i--evms repair
 	sprocessor * fix
-TODO: igen --keymap
+TODO: kigen i --keymap
     we already have some stuf in base()
-TODO: igen --linuxrc=/file
+TODO: kigen i --linuxrc=/file
     inject genkernel arch linuxrc into kigen
-TODO: kgen --fixdotconfig
+TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
     auto add/remove config if passed --fixdotconfig
