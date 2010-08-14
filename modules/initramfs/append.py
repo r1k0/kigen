@@ -484,9 +484,9 @@ class append:
         """
         Set root password of the initramfs
         """
-        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/')
+        print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
-# self.rootpasswd == a
+        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/')
 
         os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd')
         os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp//etc/group')
@@ -495,6 +495,17 @@ class append:
         process('chown root.root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
         process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd', self.verbose)
+
+#        # HACK quick ninja chroot to set password
+#        slash = os.open('/', os.O_RDONLY)
+#        os.chroot() # dive in
+#        os.system('echo "root:%s" | busybox chpasswd' % self.rootpasswd)
+#
+#        # HACK break out of chroot
+#        os.fchdir(slash)
+#        for i in range(100): # assume we haven't gone deeper than 100
+#            os.chdir('..')
+#        os.chroot('.')
 
         os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
         return os.system(self.cpio())
