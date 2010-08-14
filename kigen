@@ -124,10 +124,10 @@ if os.path.isdir(temp['work']):
     shutil.rmtree(temp['work'])
     os.makedirs(temp['work'])
 
-# --extract
-if cli['extract']:
-    import utils.extract
-    utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+## --extract
+#if cli['extract']:
+#    import utils.extract
+#    utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
 
 # --nocache
 if cli['nocache'] is True:
@@ -176,7 +176,19 @@ if target == 'kernel' or target == 'k':
         else:
             print
 
+    sys.exit(0)
+
 if target == 'initramfs' or target == 'i':
+
+    # HACK maybe add --extract here and then exit?
+    # HACK maybe add --compress here and then exit?
+    
+    # --extract
+    if cli['extract']:
+        import utils.extract
+        utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+        sys.exit(0)
+
     from initramfs.initramfs import initramfs
     iobj = initramfs(kerneldir,         \
                 arch,                   \
@@ -203,6 +215,8 @@ if target == 'initramfs' or target == 'i':
     elif cli['noboot'] is True:
         logging.debug(temp['cache']+'/initramfs-cpio.gz')
         print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
+
+    sys.exit(0)
 
 # TODO unset os.environ['KIGEN_STDOUT']?
 

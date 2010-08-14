@@ -225,6 +225,8 @@ def parse():
                                     "rename=",      \
                                     "plugin=",      \
                                     "rootpasswd=",  \
+                                    "extract=",     \
+                                    "to=",          \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -273,7 +275,8 @@ def parse():
         cli['zlib']         = False
         cli['rename']       = ''
         cli['plugin']       = ''
-        cli['rootpasswd']     = ''
+        cli['rootpasswd']   = ''
+        cli['to']           = '/var/tmp/kigen/extracted-initramfs'
     
         # target options
         for o, a in opts:
@@ -368,6 +371,11 @@ def parse():
                 cli['plugin'] = a # a is a list
             elif o in ("--rootpasswd="):
                 cli['rootpasswd'] = a
+            elif o in ("--extract"):
+                cli['extract'] = a
+            elif o in ("--to"):
+                cli['to'] = a
+
             else:
                 assert False, "uncaught option"
 
@@ -376,8 +384,6 @@ def parse():
         try:
             opts, args = getopt(cliopts[1:], "hn", [\
                                 "help",             \
-                                "extract=",         \
-                                "to=",              \
                                 "version",          \
                                 "credits"])
         except GetoptError, err:
@@ -386,7 +392,6 @@ def parse():
             sys.exit(2)
 
         # single options
-        cli['to'] = '/var/tmp/kigen/extracted-initramfs'
         for o, a in opts:
             if o in ("-h", "--help"):
                 print_usage()
@@ -397,10 +402,6 @@ def parse():
             elif o in ("--credits"):
                 print_credits()
                 sys.exit(0)
-            elif o in ("--extract"):
-                cli['extract'] = a
-            elif o in ("--to"):
-                cli['to'] = a
             else:
                 assert False, "uncaught option"
 
@@ -433,8 +434,6 @@ def print_usage():
     print green('Options') + ':'
     print '  -h, --help                 This'
     print '  -n, --nocolor              Do not colorize output'
-    print '  --extract=/file            Extract initramfs file'
-    print '   --to=/dir                 Custom extracting point'
     print '  --version                  Version'
     print '  --credits                  Credits and license'
     print
@@ -449,9 +448,9 @@ def print_usage():
 def print_usage_kernel():
     print '  --config=/file             Custom master config file'
     print '  --dotconfig=/file          Custom kernel config file'
-    print '  --fixdotconfig             Check and auto fix the kernel config file'
     print '  --rename=mykernel          Custom kernel file name'
     print '  --initramfs=/file          Embed initramfs into the kernel'
+    print yellow('   --fixdotconfig             Check and auto fix the kernel config file (experimental)')
     print '  --clean                    Clean precompiled objects only'
     print '  --mrproper                 Clean precompiled objects and remove config file'
     print '  --oldconfig                Ask for new kernel/initramfs options'
@@ -494,6 +493,10 @@ def print_usage_initramfs():
     print '  --nocache                  Do not use cached data'
     print '  --nohostbin                Do not use host binaries but compile from sources'
     print '  --noboot                   Do not copy initramfs to /boot'
+    print '  --extract=/file            Extract initramfs file'
+    print '   --to=/dir                 Custom extracting directory'
+    print '  --compress=/dir            Compress directory into initramfs'
+    print '   --to=/dir                 Custom output directory'
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
     print '  -d, --debug                Debug verbose'
