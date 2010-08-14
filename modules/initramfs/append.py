@@ -480,25 +480,25 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
         return os.system(self.cpio())
 
-    def rootpasswd(self):
+    def set_rootpasswd(self):
         """
         Set root password of the initramfs
         """
         print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
-        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/')
+        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
+        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
 
         os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd')
         os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp//etc/group')
         os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/shadow')
-        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
         process('chown root.root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
         process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd', self.verbose)
 
 #        # HACK quick ninja chroot to set password
 #        slash = os.open('/', os.O_RDONLY)
-#        os.chroot() # dive in
+#        os.chroot() # dive in # PROBLEM we don't have the FULL initramfs, hence no /bin/sh to chroot in
 #        os.system('echo "root:%s" | busybox chpasswd' % self.rootpasswd)
 #
 #        # HACK break out of chroot

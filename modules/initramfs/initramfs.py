@@ -171,7 +171,7 @@ class initramfs:
             if aobj.zlib() is not zero: self.fail('zlib')
         if self.cli['rootpasswd'] is not '':
             os.chdir(self.temp['work'])
-            if aobj.rootpasswd() is not zero: self.fail('rootpasswd')
+            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
 
         # last) append user plugin
         if self.pluginroot is not '':

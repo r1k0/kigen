@@ -14,8 +14,7 @@ def parse():
 
     cli = { 'config':       '/etc/kigen.conf',  \
             'nocache':      '',                 \
-            'oldconfig':    True,               \
-            'extract':      ''}
+            'oldconfig':    True}
     
     verbose = { 'std':      '',     \
                 'set':      False,  \
@@ -276,7 +275,10 @@ def parse():
         cli['rename']       = ''
         cli['plugin']       = ''
         cli['rootpasswd']   = ''
+        cli['extract']      = ''
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
+        cli['compress']     = ''
+        cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
     
         # target options
         for o, a in opts:
@@ -375,6 +377,10 @@ def parse():
                 cli['extract'] = a
             elif o in ("--to"):
                 cli['to'] = a
+            elif o in ("--compress"):
+                cli['compress'] = a
+            elif o in ("--into"):
+                cli['into'] = a
 
             else:
                 assert False, "uncaught option"
@@ -395,6 +401,7 @@ def parse():
         for o, a in opts:
             if o in ("-h", "--help"):
                 print_usage()
+                print_examples()
                 sys.exit(0)
             elif o in ("--version"):
                 print_version()
@@ -432,7 +439,7 @@ def print_usage():
     print '      '+white(sys.argv[0])+' <'+green('options')+'|'+turquoise('target')+'>'+' ['+turquoise('parameters')+']'
     print
     print green('Options') + ':'
-    print '  -h, --help                 This'
+    print '  -h, --help                 This and examples'
     print '  -n, --nocolor              Do not colorize output'
     print '  --version                  Version'
     print '  --credits                  Credits and license'
@@ -444,6 +451,20 @@ def print_usage():
     print turquoise('Parameters')+':'
     print ' '+sys.argv[0]+' kernel'+'    --help, -h'
     print ' '+sys.argv[0]+' initramfs'+' --help, -h'
+
+def print_examples():
+    print
+    print white('Examples')+':'
+    print ' '+os.path.basename(sys.argv[0])+' kernel'
+    print ' '+os.path.basename(sys.argv[0])+' --clean --menuconfig k'
+    print ' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile'
+    print ' '+os.path.basename(sys.argv[0])+' i --splash=sabayon'
+    print ' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs'
+    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --nohostbin'
+    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --dropbear --glibc --zlib --libncurses --rootpasswd=mypasswd --nohostbin --nocache'
+    print ' '+os.path.basename(sys.argv[0])+' --extract=/aninitramfs i --to=/here'
+    print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/initramfsdir --into=/myinitramfs'
+
 
 def print_usage_kernel():
     print '  --config=/file             Custom master config file'
@@ -460,6 +481,7 @@ def print_usage_kernel():
     print '  --nomodinstall             Do not install modules'
     print '  --nosaveconfig             Do not save kernel config in /etc/kernels'
     print '  --noboot                   Do not copy kernel to /boot'
+    print
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
     print '  -d, --debug                Debug verbose'
@@ -485,7 +507,7 @@ def print_usage_initramfs():
     print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
     print '   --libncurses               Include host libncurses (required for dropbear)'
     print '   --zlib                     Include host zlib (required for dropbear)'
-    print '   --rootpasswd=passwd        Create and set root password'
+    print '   --rootpasswd=passwd        Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse            Include unionfs-fuse support'
 #   print '  --aufs                    Include aufs support'
 #   print '  --firmware=/dir           Include custom firmware support'
@@ -493,10 +515,13 @@ def print_usage_initramfs():
     print '  --nocache                  Do not use cached data'
     print '  --nohostbin                Do not use host binaries but compile from sources'
     print '  --noboot                   Do not copy initramfs to /boot'
+    print 'Tools:'
     print '  --extract=/file            Extract initramfs file'
-    print '   --to=/dir                 Custom extracting directory'
+    print '   --to=/dir                  Custom extracting directory'
     print '  --compress=/dir            Compress directory into initramfs'
-    print '   --to=/dir                 Custom output directory'
+    print '   --into=/file               Custom initramfs file'
+    print
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
     print '  -d, --debug                Debug verbose'
+

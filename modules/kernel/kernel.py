@@ -36,8 +36,8 @@ class kernel:
         if self.dotconfig:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
-                from time import time
-                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(time()))
+                from time import strftime
+                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(strftime("%Y-%m-%d-%H-%M-%S")))
 
             # copy the custom .config
             self.copy_config(self.dotconfig, self.kerneldir + '/.config')
@@ -170,8 +170,8 @@ class kernel:
 
         # clean previous root
         if os.path.isdir(kinitramfsdir):
-            from time import time
-            os.system('mv %s %s-%s ' % (kinitramfsdir, kinitramfsdir, str(time())))
+            from time import strftime
+            os.system('mv %s %s-%s ' % (kinitramfsdir, kinitramfsdir, str(strftime("%Y-%m-%d-%H-%M-%S"))))
         process('mkdir -p %s' % kinitramfsdir, self.verbose)
 
         # copy initramfs to /usr/src/initramfs/

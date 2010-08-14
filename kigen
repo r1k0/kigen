@@ -185,8 +185,14 @@ if target == 'initramfs' or target == 'i':
     
     # --extract
     if cli['extract']:
-        import utils.extract
-        utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+        import initramfs.extract
+        initramfs.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+        sys.exit(0)
+
+    # --compress
+    if cli['compress']:
+        import initramfs.compress
+        initramfs.compress.initramfs(temp['work'], cli['compress'], cli['into'], verbose)
         sys.exit(0)
 
     from initramfs.initramfs import initramfs
