@@ -27,7 +27,7 @@ class initramfs:
         self.arch               = arch
         self.KV                 = KV
         self.libdir             = libdir
-        self.master_config      = master_config # TODO replace 
+        self.master_config      = master_config
         self.linuxrc            = cli['linuxrc'] # list
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
@@ -36,14 +36,14 @@ class initramfs:
         self.firmware           = cli['firmware']
         self.verbosestd         = verbose['std']
         self.verboseset         = verbose['set']
-        self.verbose            = verbose # TODO replace 
+        self.verbose            = verbose
         self.temproot           = temp['root']
         self.tempcache          = temp['cache']
-        self.temp               = temp # TODO replace 
+        self.temp               = temp
         self.dotconfig          = cli['dotconfig']
         self.nocache            = cli['nocache']
         self.firmware           = cli['firmware']
-        self.cli                = cli # TODO replace
+        self.cli                = cli
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
         self.splash             = cli['splash']
@@ -98,12 +98,12 @@ class initramfs:
         if ret is not zero: self.fail('cpio')
         # 2) append base
         aobj.base()
-        if ret is not zero: self.fail('baselayout')
         # 3) append busybox
         os.chdir(self.temp['work'])
         if aobj.busybox() is not zero: self.fail('busybox')
         # 4) append modules
-        # note that /etc/boot.conf initrd modules overlap the ones from /etc/kigen.conf
+        # note that /etc/boot.conf initrd modules if set
+        # overlap the ones from /etc/kigen.conf
         if aobj.modules() is not zero: self.fail('modules')
         # 5) append lvm2
         if self.cli['lvm2'] is True:
@@ -155,8 +155,7 @@ class initramfs:
         if os.path.isdir(self.firmware):
             os.chdir(self.temp['work'])
             if aobj.firmware() is not zero: self.fail('firmware')
-        # TODO
-        # 18) append overlay
+        # TODO # 18) append overlay
         # 19) append glibc
         if self.cli['glibc'] is True:
             os.chdir(self.temp['work'])
@@ -185,8 +184,6 @@ class initramfs:
         print green(' * ') + turquoise('initramfs.compress')
         if process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose) is not zero: self.fail('compress')
     
-#        return ret
-
     def fail(self, step):
         """
         @arg step   string

@@ -211,6 +211,7 @@ class append:
 # and then I ctrl+C luks auth to gain a shell
 # but so far, /linuxrc has run and busybox --install -s is called
 # problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
+# answer: yes!
         for i in self.busyboxprogs.split():
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
@@ -845,10 +846,8 @@ class append:
 
         @return: bool
         """
-        ret = int('0')
-        
-        logging.debug('initramfs.append.plugin')
         print green(' * ') + turquoise('initramfs.append.plugin ') + dir
+        logging.debug('initramfs.append.plugin')
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 

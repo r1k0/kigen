@@ -439,18 +439,18 @@ def print_usage():
     print '      '+white(sys.argv[0])+' <'+green('options')+'|'+turquoise('target')+'>'+' ['+turquoise('parameters')+']'
     print
     print green('Options') + ':'
-    print '  -h, --help                 This and examples'
-    print '  -n, --nocolor              Do not colorize output'
+    print '  --help, -h                 This and examples'
+    print '  --nocolor, -n              Do not colorize output'
     print '  --version                  Version'
     print '  --credits                  Credits and license'
     print
     print turquoise('Targets')+':'
-    print '  k, kernel                  Build kernel/modules'
-    print '  i, initramfs               Build initramfs'
+    print '  kernel, k                  Build kernel/modules'
+    print '  initramfs, i               Build initramfs'
     print
     print turquoise('Parameters')+':'
-    print ' '+sys.argv[0]+' kernel'+'    --help, -h'
-    print ' '+sys.argv[0]+' initramfs'+' --help, -h'
+    print ' '+os.path.basename(sys.argv[0])+' kernel'+'                --help, -h'
+    print ' '+os.path.basename(sys.argv[0])+' initramfs'+'             --help, -h'
 
 def print_examples():
     print
