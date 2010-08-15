@@ -22,31 +22,4 @@ def initramfs(temproot, compress, into, verbose):
     process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
     os.chdir(compress)
     process_pipe('find . -print | cpio --quiet -o -H newc --append -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose) 
-
-
-# gzip it now
-
     process('gzip %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
-
-
-
-
-#    # clean previous root
-#    if os.path.isdir(to):
-#        from time import strftime
-#        os.system('mv %s %s-%s ' % (to, to, strftime("%Y-%m-%d-%H-%M-%S")))
-#    process('mkdir -p %s' % to, verbose)
-#
-#    # create dir if needed
-#    if not os.path.isdir(to):
-#        os.makedirs(to)
-#
-#    process('cp %s %s/initramfs_data.cpio.gz' % (extract, to), verbose)
-#    # extract gzip archive
-#    process('gzip -d -f %s/initramfs_data.cpio.gz' % to, verbose)
-#
-#    # extract cpio archive
-#    os.chdir(to)
-#    os.system('cpio -id < initramfs_data.cpio &>/dev/null')
-#    os.system('rm initramfs_data.cpio')
-#

@@ -80,6 +80,7 @@ def parse():
                                     "nosaveconfig",             \
                                     "nohostbin",                \
                                     "fixdotconfig",             \
+                                    "getdotconfig=",            \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -114,6 +115,7 @@ def parse():
         cli['color']        = True
         cli['nosaveconfig'] = False
         cli['fixdotconfig'] = False
+        cli['getdotconfig'] = ''
 
         # target options
         for o, a in opts:
@@ -171,6 +173,8 @@ def parse():
                 cli['clean'] = True
             elif o in ("--fixdotconfig"):
                 cli['fixdotconfig'] = True
+            elif o in ("--getdotconfig"):
+                cli['getdotconfig'] = a
             else:
                 assert False, "uncaught option"
 
@@ -483,13 +487,11 @@ def print_usage_kernel():
     print '  --nomodinstall             Do not install modules'
     print '  --nosaveconfig             Do not save kernel config in /etc/kernels'
     print '  --noboot                   Do not copy kernel to /boot'
-    print 'Tools:'
-    print '  --getdotconfig=/vmlinuz    Extract .config from compiled binary kernel'
-    print '                              provided IKCONFIG has been set'
-    print
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
     print '  --debug, -d                Debug verbose'
+    print 'Tools:'
+    print '  --getdotconfig=/vmlinuz    Extract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs():
     print '  --config=/file             Custom master config file'
@@ -520,13 +522,11 @@ def print_usage_initramfs():
     print '  --nocache                  Do not use cached data'
     print '  --nohostbin                Do not use host binaries but compile from sources'
     print '  --noboot                   Do not copy initramfs to /boot'
+    print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
+#   print '  -v, --verbose              Give more verbose'
+    print '  --debug, -d                Debug verbose'
     print 'Tools:'
     print '  --extract=/file            Extract initramfs file'
     print '   --to=/dir                  Custom extracting directory'
     print '  --compress=/dir            Compress directory into initramfs'
     print '   --into=/file               Custom initramfs file'
-    print
-    print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
-#   print '  -v, --verbose              Give more verbose'
-    print '  --debug, -d                Debug verbose'
-

@@ -137,6 +137,12 @@ if cli['nocache'] is True:
 
 # run the target
 if target == 'kernel' or target == 'k':
+
+    # --getdotconfig
+    if cli['getdotconfig'] is not '':
+        from kernel.extract import getdotconfig
+        getdotconfig(cli['getdotconfig'], kerneldir, verbose)
+
     from kernel.kernel import kernel
     kobj = kernel(kerneldir,            \
                 master_config,          \
@@ -180,9 +186,6 @@ if target == 'kernel' or target == 'k':
 
 if target == 'initramfs' or target == 'i':
 
-    # HACK maybe add --extract here and then exit?
-    # HACK maybe add --compress here and then exit?
-    
     # --extract
     if cli['extract']:
         import initramfs.extract
