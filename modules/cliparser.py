@@ -491,7 +491,7 @@ def print_usage_kernel():
 #   print '  -v, --verbose              Give more verbose'
     print '  --debug, -d                Debug verbose'
     print 'Tools:'
-    print yellow('  --getdotconfig=/vmlinuz    Extract .config from compiled binary kernel (if IKCONFIG has been set)')
+    print '  --getdotconfig=/vmlinuz    Extract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs():
     print '  --config=/file             Custom master config file'
