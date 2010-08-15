@@ -142,6 +142,7 @@ if target == 'kernel' or target == 'k':
     if cli['getdotconfig'] is not '':
         from kernel.extract import getdotconfig
         getdotconfig(cli['getdotconfig'], kerneldir, verbose)
+        sys.exit(0)
 
     from kernel.kernel import kernel
     kobj = kernel(kerneldir,            \
