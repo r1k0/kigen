@@ -226,6 +226,8 @@ def parse():
                                     "rootpasswd=",  \
                                     "extract=",     \
                                     "to=",          \
+                                    "compress=",    \
+                                    "into",         \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -481,10 +483,13 @@ def print_usage_kernel():
     print '  --nomodinstall             Do not install modules'
     print '  --nosaveconfig             Do not save kernel config in /etc/kernels'
     print '  --noboot                   Do not copy kernel to /boot'
+    print 'Tools:'
+    print '  --getdotconfig=/vmlinuz    Extract .config from compiled binary kernel'
+    print '                              provided IKCONFIG has been set'
     print
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
-    print '  -d, --debug                Debug verbose'
+    print '  --debug, -d                Debug verbose'
 
 def print_usage_initramfs():
     print '  --config=/file             Custom master config file'
@@ -523,5 +528,5 @@ def print_usage_initramfs():
     print
     print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
 #   print '  -v, --verbose              Give more verbose'
-    print '  -d, --debug                Debug verbose'
+    print '  --debug, -d                Debug verbose'
 

@@ -24,3 +24,6 @@ TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
     auto add/remove config if passed --fixdotconfig
+TODO: kigen k --extractdotconfig=/vmlinuz
+    This actually depends on whether or not the compiled kernel used the CONFIG_IKCONFIG option. If you're lucky and it was, then you can use:
+    /usr/src/linux/scripts/extract-ikconfig /boot/bzImage > /tmp/config

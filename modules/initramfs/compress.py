@@ -10,11 +10,23 @@ def initramfs(temproot, compress, into, verbose):
 
     @return: bool
     """
-    print green(' * ') + turquoise('initramfs.compress.initramfs ') + 'into ' + into
+    print green(' * ')+turquoise('initramfs.compress.initramfs ')+'from '+compress+' into '+into
 
-    #process('cpio -f %s' % ,verbose)
+    if os.path.isdir(os.path.dirname(into)):
+        from time import strftime
+        os.system('mv %s %s-%s ' % (os.path.dirname(into), os.path.dirname(into), strftime("%Y-%m-%d-%H-%M-%S")))
+
+    if not os.path.isdir(os.path.dirname(into)):
+        os.makedirs(os.path.dirname(into))
+
+    process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
+    os.chdir(compress)
+    process_pipe('find . -print | cpio --quiet -o -H newc --append -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose) 
 
 
+# gzip it now
+
+    process('gzip %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
 
 
 
