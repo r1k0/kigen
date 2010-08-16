@@ -168,6 +168,8 @@ class initramfs:
         if self.cli['zlib'] is True:
             os.chdir(self.temp['work'])
             if aobj.zlib() is not zero: self.fail('zlib')
+
+        # before last)
         if self.cli['rootpasswd'] is not '':
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')

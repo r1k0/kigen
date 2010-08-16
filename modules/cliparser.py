@@ -480,7 +480,7 @@ def print_usage_kernel():
     print yellow('   --fixdotconfig             Check and auto fix the kernel config file (experimental)')
     print '  --clean                    Clean precompiled objects only'
     print '  --mrproper                 Clean precompiled objects and remove config file'
-    print '  --oldconfig                Ask for new kernel/initramfs options'
+    print '  --oldconfig                Ask for new kernel options'
     print '  --menuconfig               Interactive kernel options menu'
     print '  --fakeroot=/dir            Append modules to /dir/lib/modules'
     print '  --nooldconfig              Do not ask for new kernel/initramfs options'
@@ -497,7 +497,8 @@ def print_usage_initramfs():
     print '  --config=/file             Custom master config file'
     print '  --dotconfig=/file          Custom busybox config file'
     print '  --rename=myinitramfs       Custom initramfs file name'
-    print '  --menuconfig               Interactive initramfs options menu'
+    print '  --oldconfig                Ask for new busybox options'
+    print '  --menuconfig               Interactive busybox options menu'
     print '  --linuxrc=/linuxrc[,/file] Include custom linuxrc (files copied over to etc)'
     print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'

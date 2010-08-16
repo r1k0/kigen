@@ -493,13 +493,13 @@ class append:
         os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd')
         os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp//etc/group')
         os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/shadow')
-        process('chown root.root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
+        process('chown root:root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
         process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd', self.verbose)
 
 #        # HACK quick ninja chroot to set password
 #        slash = os.open('/', os.O_RDONLY)
-#        os.chroot() # dive in # PROBLEM we don't have the FULL initramfs, hence no /bin/sh to chroot in
+#        os.chroot(self.temp['work']+'/initramfs-rootpasswd-temp/') # dive in # PROBLEM we don't have the FULL initramfs, hence no /bin/sh to chroot in
 #        os.system('echo "root:%s" | busybox chpasswd' % self.rootpasswd)
 #
 #        # HACK break out of chroot
