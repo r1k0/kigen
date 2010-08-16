@@ -359,18 +359,29 @@ class append:
 
         print green(' * ') + turquoise('initramfs.append.glibc')
         # mostly for authentication
+        print green(' * ') + '... ' + '/lib/libnss_files.so.2'
         process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/libnss_dns.so.2'
         process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/libnss_nis.so.2'
         process('cp /lib/libnss_nis.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/libnsl.so.1'
         process('cp /lib/libnsl.so.1         %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         # resolves dns->ip
+        print green(' * ') + '... ' + '/lib/libresolv.so.2'
         process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/ld-linux.so.2'
         process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/libc.so.6'
         process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         # for dropbear
+        print green(' * ') + '... ' + '/lib/libnss_compat.so.2'
         process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/lib/libutil.so.1'
         process('cp /lib/libutil.so.1        %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        print green(' * ') + '... ' + '/etc/ld.so.cache'
         process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
+        print green(' * ') + '... ' + '/lib/libcrypt.so.1'
         process('cp /lib/libcrypt.so.1       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-glibc-temp')
@@ -384,6 +395,8 @@ class append:
         """
         print green(' * ') + turquoise('initramfs.append.libncurses')
         os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
+
+        print green(' * ') + '... ' + '/lib/libncurses.so.5'
         process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-libncurses-temp')
@@ -397,6 +410,8 @@ class append:
         """
         print green(' * ') + turquoise('initramfs.append.zlib')
         os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
+
+        print green(' * ') + '... ' + '/lib/libz.so.1'
         process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-zlib-temp')
@@ -463,20 +478,6 @@ class append:
         process('chmod 0666 urandom', self.verbose)
         process('chmod 0666 ptmx', self.verbose)
         process('chmod 0666 tty', self.verbose)
-
-##        os.system('grep ^rik /etc/passwd > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
-##        os.system('grep ^rik /etc/group  > %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
-##        os.system('grep ^rik /etc/shadow > %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
-##        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/home/rik')
-##        process('chown rik.rik %s'              % self.temp['work']+'/initramfs-dropbear-temp/home/rik', self.verbose)
-#        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd')
-#        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-dropbear-temp//etc/group')
-#        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-dropbear-temp/etc/shadow')
-#        os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/root')
-#        process('chown root.root %s'              % self.temp['work']+'/initramfs-dropbear-temp/root', self.verbose)
-#
-#        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-#        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc/passwd', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
         return os.system(self.cpio())
@@ -604,7 +605,7 @@ class append:
     
         if os.path.isfile(lvm2_static_bin) and self.nohostbin is False:
             # TODO see if we can use something else than import commands
-            #lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
+            # lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
             logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' from ' + white('host')
             process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
