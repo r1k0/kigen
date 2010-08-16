@@ -205,13 +205,13 @@ class append:
         process('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
 
-# FIXME: should be removed but wait!
-# we don't need it due to busybox --install -s from the /linuxrc
-# testcase: i see them auto symlinked on boot because /linuxrc is called
-# and then I ctrl+C luks auth to gain a shell
-# but so far, /linuxrc has run and busybox --install -s is called
-# problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
-# answer: yes!
+        # FIXME: should be removed but wait!
+        # we don't need it due to busybox --install -s from the /linuxrc
+        # testcase: i see them auto symlinked on boot because /linuxrc is called
+        # and then I ctrl+C luks auth to gain a shell
+        # but so far, /linuxrc has run and busybox --install -s is called
+        # problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
+        # answer: yes!
         for i in self.busyboxprogs.split():
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
@@ -496,7 +496,9 @@ class append:
 
         # TODO use a python API instead of openssl
         # TODO deal with /etc/shadow eventually, then use openssl passwd -1 mypass for proper type/salt/hash $1$salt$hash
+        print green(' * ') + '... ' + '/etc/passwd'
         os.system('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
+        print green(' * ') + '... ' + '/etc/group'
         os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
 
 #        # HACK quick ninja chroot to set password
