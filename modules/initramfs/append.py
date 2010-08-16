@@ -487,15 +487,16 @@ class append:
         """
         print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
+        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
+        process('cp /etc/shells %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
+        process('chown root:root %s'% self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
 
-        os.system('grep ^root /etc/passwd >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd')
-        os.system('grep ^root /etc/group  >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp//etc/group')
-        os.system('grep ^root /etc/shadow >> %s'  % self.temp['work']+'/initramfs-rootpasswd-temp/etc/shadow')
-        process('chown root:root %s'              % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
-        process('cp /etc/shells %s'             % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
-        process('sed -i s/bash/sh/ %s'          % self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd', self.verbose)
+        # TODO use a python API instead of openssl
+        # TODO deal with /etc/shadow eventually, then use openssl passwd -1 mypass for proper type/salt/hash $1$salt$hash
+        os.system('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
+        os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
 
 #        # HACK quick ninja chroot to set password
 #        slash = os.open('/', os.O_RDONLY)
@@ -510,7 +511,6 @@ class append:
 
         os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
         return os.system(self.cpio())
-
 
     def e2fsprogs(self):
         """
