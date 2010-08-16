@@ -169,10 +169,13 @@ class initramfs:
             os.chdir(self.temp['work'])
             if aobj.zlib() is not zero: self.fail('zlib')
 
-        # before last)
         if self.cli['rootpasswd'] is not '':
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
+
+        if self.cli['ttyecho'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.ttyecho() is not zero: self.fail('ttyecho')
 
         # last) append user plugin
         if self.pluginroot is not '':

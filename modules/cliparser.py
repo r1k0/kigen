@@ -232,6 +232,7 @@ def parse():
                                     "to=",          \
                                     "compress=",    \
                                     "into",         \
+                                    "ttyecho",      \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -285,6 +286,7 @@ def parse():
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
         cli['compress']     = ''
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
+        cli['ttyecho']      = False
     
         # target options
         for o, a in opts:
@@ -387,6 +389,8 @@ def parse():
                 cli['compress'] = a
             elif o in ("--into"):
                 cli['into'] = a
+            elif o in ("--ttyecho"):
+                cli['ttyecho'] = True
 
             else:
                 assert False, "uncaught option"
@@ -512,13 +516,14 @@ def print_usage_initramfs():
 #   print '  --iscsi                   Include iscsi support'
 #   print '  --mdadm                   Include mdadm support (mdadm must be merged)'
     print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
-    print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
-    print '   --libncurses               Include host libncurses (required for dropbear)'
-    print '   --zlib                     Include host zlib (required for dropbear)'
-    print '   --rootpasswd=passwd        Create and set root password (required for dropbear)'
+    print '  --glibc                    Include host GNU C libraries (required for dns,dropbear)'
+    print '  --libncurses               Include host libncurses (required for dropbear)'
+    print '  --zlib                     Include host zlib (required for dropbear)'
+    print '  --rootpasswd=passwd        Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse            Include unionfs-fuse support'
 #   print '  --aufs                    Include aufs support'
 #   print '  --firmware=/dir           Include custom firmware support'
+    print '  --ttyecho                  Include the handy ttyecho.c tool'
     print '  --plugin=/dir[,/dir]       Include list of user generated custom roots'
     print '  --nocache                  Do not use cached data'
     print '  --nohostbin                Do not use host binaries but compile from sources'

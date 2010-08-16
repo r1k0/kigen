@@ -843,6 +843,20 @@ class append:
 #        os.chdir(self.temp['work']+'/initramfs-aufs-temp')
 #        return os.system(self.cpio())
 
+    def ttyecho(self):
+        """
+        """
+        print green(' * ') + turquoise('initramfs.append.ttyecho')
+
+        process('mkdir -p ' + self.temp['work']+'/initramfs-ttyecho-temp/sbin', self.verbose)
+
+        print green(' * ') + '... ' + 'gcc %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho')
+        process('gcc %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-ttyecho-temp')
+        return os.system(self.cpio())
+
     def plugin(self, dir):
         """
         Append user generated file structure
