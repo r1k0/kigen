@@ -98,13 +98,13 @@ class initramfs:
         if ret is not zero: self.fail('cpio')
         # 2) append base
         aobj.base()
-        # 3) append busybox
-        os.chdir(self.temp['work'])
-        if aobj.busybox() is not zero: self.fail('busybox')
         # 4) append modules
         # note that /etc/boot.conf initrd modules if set
         # overlap the ones from /etc/kigen.conf
         if aobj.modules() is not zero: self.fail('modules')
+        # 3) append busybox
+        os.chdir(self.temp['work'])
+        if aobj.busybox() is not zero: self.fail('busybox')
         # 5) append lvm2
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
