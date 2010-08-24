@@ -1,29 +1,39 @@
-.TH KIGEN "8" "August 2010" "kigen 0.2.0" "Gentoo Linux"
+.TH KIGEN "8" "September 2010" "kigen 0.2.0" "Gentoo Linux"
 .SH NAME
 kigen \- a GNU/Linux kernel|initramfs generator.
 .SH SYNOPSIS
-\fBkigen\fR \fI<options>\fR
-.SH INTRODUCTION
-KIGen is designed to allow users to build their own kernel/initramfs
-provided adequate configuration and parameters.
+\fBkigen\fR \fI<options|target>\fR \fI[parameters]
+.SH DESCRIPTION
+KIGen is designed to allow users to build custom kernels and initramfs.
+It is split into 2 main targets:
+ - kernel
+ - initramfs
+
+The 'kernel' target accesses the kernel build features and 
+the 'initramfs' provides from scratch and sources boot features.
+
+KIGen supports other distributions by the mean of 
+the --linuxrc=/linuxrc[,/file] option but the engine has yet 
+some Portage assumptions (which will slowly be replaced across
+the 0.2.* cycle).
 .PP
-.SH USAGE
-You can add any appropriate options to customize its behavior.
-The most commonly used syntax would be:
-.PP
-# kigen kernel --clean --dotconfig=/file --menuconfig
-.PP
-.SH OPTIONS
+.SH MAIN OPTIONS
 kigen supports the following options.
 .TP
 \fB\-h, \-\-help
-Help menu.
-.TP
-\fB\-\-config=\fR/file
-Provide a custom master config file in case none exists as /etc/kigen.conf.
+Help menu and examples.
 .TP
 \fB\-n, \-\-nocolor
 Remove color ouput feature.
+.TP
+\fB\-\-version
+Display program version.
+.TP
+\fB\-\-credits
+Display credits and license.
+
+.PP
+.SH 'kernel' PARAMETERS
 .TP
 \fB\-d, \-\-debug
 Debug.
@@ -71,12 +81,17 @@ Do not copy kernel/initramfs to /boot.
 .TP
 \fB\-\-logfile=/file
 Log to file.
-./TP
-\fB\-\-version
-Display program version.
+
+.PP
+.SH 'initramfs' PARAMETERS
 .TP
-.RE
+
+.PP
+.SH EXAMPLES
+# kigen etc
+.PP
+
+.PP
 .SH AUTHORS
-.nf
 erick 'r1k0' michau <erick@openchill.org>
-.fi
+.PP
