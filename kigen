@@ -132,10 +132,6 @@ except:
     # don't mind
     pass
 
-try:
-    # make sure /var/tmp/kigen/cache is there
-    os.makedirs(temp['cache'])
-
 # run the target
 if target == 'kernel' or target == 'k':
 
