@@ -108,6 +108,20 @@ if KV is 'none':
     print red('error') + ': ' + kerneldir+'/Makefile not found'
     sys.exit(2)
 
+# ensure temp['work'] is clean
+import shutil
+if os.path.isdir(temp['work']):
+    shutil.rmtree(temp['work'])
+    os.makedirs(temp['work'])
+
+# --nocache
+if cli['nocache'] is True:
+    if os.path.isdir(temp['cache']):
+        # delete
+        shutil.rmtree(temp['cache'])
+        # re create
+        os.makedirs(temp['cache'])
+
 try:
     # try creating temp dirs
     os.makedirs(temp['root'])
@@ -118,22 +132,9 @@ except:
     # don't mind
     pass
 
-# ensure temp['work'] is clean
-import shutil
-if os.path.isdir(temp['work']):
-    shutil.rmtree(temp['work'])
-    os.makedirs(temp['work'])
-
-## --extract
-#if cli['extract']:
-#    import utils.extract
-#    utils.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
-
-# --nocache
-if cli['nocache'] is True:
-    if os.path.isdir(temp['cache']):
-        shutil.rmtree(temp['cache'])
-        os.makedirs(temp['cache'])
+try:
+    # make sure /var/tmp/kigen/cache is there
+    os.makedirs(temp['cache'])
 
 # run the target
 if target == 'kernel' or target == 'k':
