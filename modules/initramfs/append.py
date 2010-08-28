@@ -328,6 +328,7 @@ class append:
         else:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.master_config['luks-version'],
             logging.debug('initramfs.append.luks ' + self.master_config['luks-version'])
+
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.master_config['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
@@ -426,27 +427,34 @@ class append:
     
         @return: bool
         """
-        ret = int('0')
-        dbscp_bin           = 'scp' # we don't need to patch for scp->dbscp
-        dbclient_bin        = 'dbclient'
-        dropbearkey_bin     = 'dropbearkey'
-        dropbearconvert_bin = 'dropbearconvert'
-        dropbear_sbin       = 'dropbear'
-
-        for i in ['dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run']:
+        for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run']:
             os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
 
+        dropbear_sbin       = '/usr/sbin/dropbear'
+
         # FIXME: check if dropbear is merged with USE=static if not fail
-        if os.path.isfile('/usr/sbin/'+dropbear_sbin) and self.nohostbin is False:
-            print green(' * ') + turquoise('initramfs.append.dropbear') + ' from ' + white('host')
-            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-            process('cp /usr/bin/%s %s/initramfs-dropbear-temp/usr/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-            process('cp /usr/sbin/%s %s/initramfs-dropbear-temp/usr/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-            for i in [dbscp_bin, dbclient_bin, dropbearkey_bin, dropbearconvert_bin]:
-                process('chmod +x %s/initramfs-dropbear-temp/usr/bin/%s' % (self.temp['work'], i), self.verbose)
-            process('chmod +x %s/initramfs-dropbear-temp/usr/sbin/dropbear' % self.temp['work'], self.verbose)
+        if os.path.isfile(dropbear_sbin) and self.nohostbin is False:
+
+            dbscp_bin           = '/usr/bin/dbscp'  # assumes host version is patched w/ scp->dbscp because of openssh.
+                                                    # compilation of dropbear sources are not patched hence
+                                                    # FIXME if --dropbear --nohostbin
+                                                    # FIXME then /usr/bin/scp
+                                                    # FIXME else /usr/bin/dbscp
+            dbclient_bin        = '/usr/bin/dbclient'
+            dropbearkey_bin     = '/usr/bin/dropbearkey'
+            dropbearconvert_bin = '/usr/bin/dropbearconvert'
+
+            print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
@@ -525,25 +533,33 @@ class append:
         
         @return: bool
         """
-        logging.debug('initramfs.append.e2fsprogs ' + self.master_config['e2fsprogs-version'])
-        print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.master_config['e2fsprogs-version'],
-    
-        if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.master_config['e2fsprogs-version']+'.bz2') and self.nocache is False:
-            # use cache
-            print 'from ' + white('cache')
+        blkid_sbin = '/sbin/blkid'
+
+        os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
+
+        if os.path.isfile(blkid_sbin) and self.nohostbin is False:
+            # use from host
+            logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
+            process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+
         else:
-            # compile
-            print
-            from e2fsprogs import e2fsprogs
-            e2obj = e2fsprogs(self.master_config, self.temp, self.verbose)
-            e2obj.build()
+            logging.debug('initramfs.append.e2fsprogs ' + self.master_config['e2fsprogs-version'])
+            print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.master_config['e2fsprogs-version'],
+            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.master_config['e2fsprogs-version']+'.bz2') and self.nocache is False:
+                # use cache
+                print 'from ' + white('cache')
+            else:
+                # compile
+                print
+                from e2fsprogs import e2fsprogs
+                e2obj = e2fsprogs(self.master_config, self.temp, self.verbose)
+                e2obj.build()
     
-        process('mkdir -p ' + self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
-    
-        # FIXME careful with the >
-        os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.master_config['e2fsprogs-version'], self.temp['work']))
-        #utils.process_redir('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (temp['cache'], master_config['e2fsprogs_ver'], temp['work']), verbose)
-        process('chmod a+x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+            # FIXME careful with the >
+            os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.master_config['e2fsprogs-version'], self.temp['work']))
+            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-blkid-temp')
         return os.system(self.cpio())
