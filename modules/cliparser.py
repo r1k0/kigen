@@ -44,6 +44,7 @@ def parse():
         print_usage()
         sys.exit(2)
 
+    # === parsing for the kernel target ===
     if 'kernel' in sys.argv or 'k' in sys.argv:
         # we found the kernel target
         # parse accordingly
@@ -178,6 +179,7 @@ def parse():
             else:
                 assert False, "uncaught option"
 
+    # === parsing for the initramfs target ===
     elif 'initramfs' in sys.argv or 'i' in sys.argv:
         # we found the initramfs target
         # parse accordingly
@@ -195,6 +197,7 @@ def parse():
                                     "menuconfig",   \
                                     "allyesconfig", \
                                     "nooldconfig",  \
+                                    "defconfig",    \
                                     "oldconfig",    \
                                     "luks",         \
                                     "lvm2",         \
@@ -251,7 +254,8 @@ def parse():
         cli['info']         = False
         cli['mrproper']     = False
         cli['menuconfig']   = False
-        cli['oldconfig']    = False # because it produces too much output
+        cli['defconfig']    = False
+        cli['oldconfig']    = True # always ensure sane .config
         cli['luks']         = False
         cli['lvm2']         = False
         cli['dmraid']       = False
@@ -334,6 +338,8 @@ def parse():
                 cli['oldconfig'] = False
             elif o in ("--oldconfig"):
                 cli['oldconfig'] = True
+            elif o in ("--defconfig"):
+                cli['defconfig'] = True
             elif o in ("--splash"):
                 cli['splash'] = a
             elif o in ("--firmware"):
@@ -501,6 +507,7 @@ def print_usage_initramfs():
     print '  --config=/file             Custom master config file'
     print '  --dotconfig=/file          Custom busybox config file'
     print '  --rename=myinitramfs       Custom initramfs file name'
+    print '  --defconfig                Set .config to largest generic options'
     print '  --oldconfig                Ask for new busybox options'
     print '  --menuconfig               Interactive busybox options menu'
     print '  --linuxrc=/linuxrc[,/file] Include custom linuxrc (files copied over to etc)'
@@ -516,10 +523,10 @@ def print_usage_initramfs():
 #   print '  --iscsi                   Include iscsi support'
 #   print '  --mdadm                   Include mdadm support (mdadm must be merged)'
     print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
-    print '  --glibc                    Include host GNU C libraries (required for dns,dropbear)'
-    print '  --libncurses               Include host libncurses (required for dropbear)'
-    print '  --zlib                     Include host zlib (required for dropbear)'
-    print '  --rootpasswd=passwd        Create and set root password (required for dropbear)'
+    print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
+    print '   --libncurses               Include host libncurses (required for dropbear)'
+    print '   --zlib                     Include host zlib (required for dropbear)'
+    print '   --rootpasswd=passwd        Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse            Include unionfs-fuse support'
 #   print '  --aufs                    Include aufs support'
 #   print '  --firmware=/dir           Include custom firmware support'
