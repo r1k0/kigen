@@ -16,6 +16,7 @@ class append:
                 arch,               \
                 master_config,      \
                 libdir,             \
+                defconfig,          \
                 oldconfig,          \
                 menuconfig,         \
                 mrproper,           \
@@ -42,6 +43,7 @@ class append:
         self.arch               = arch
         self.master_config      = master_config
         self.libdir             = libdir
+        self.defconfig          = defconfig
         self.oldconfig          = oldconfig
         self.menuconfig         = menuconfig
         self.mrproper           = mrproper
@@ -189,6 +191,7 @@ class append:
                         self.master_config,          \
                         self.libdir,                 \
                         self.temp,                   \
+                        self.defconfig,              \
                         self.oldconfig,              \
                         self.menuconfig,             \
                         self.mrproper,               \

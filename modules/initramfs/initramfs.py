@@ -29,6 +29,7 @@ class initramfs:
         self.libdir             = libdir
         self.master_config      = master_config
         self.linuxrc            = cli['linuxrc'] # list
+        self.defconfig          = cli['defconfig']
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
         self.mrproper           = cli['mrproper']
@@ -76,6 +77,7 @@ class initramfs:
                         self.arch,              \
                         self.master_config,     \
                         self.libdir,            \
+                        self.defconfig,         \
                         self.oldconfig,         \
                         self.menuconfig,        \
                         self.mrproper,          \
