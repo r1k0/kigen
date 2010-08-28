@@ -12,6 +12,7 @@ class busybox:
                 master_config,  \
                 libdir,         \
                 temp,           \
+                defconfig,      \
                 oldconfig,      \
                 menuconfig,     \
                 mrproper,       \
@@ -22,6 +23,7 @@ class busybox:
         self.master_config = master_config
         self.libdir     = libdir
         self.temp       = temp
+        self.defconfig  = defconfig
         self.oldconfig  = oldconfig
         self.menuconfig = menuconfig
         self.mrproper   = mrproper
@@ -35,45 +37,36 @@ class busybox:
     
         @return         bool
         """
-        ret = zero = int('0')
+        zero = int('0')
     
         if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
-            ret = self.download()
-            if ret is not zero: 
+            if self.download() is not zero: 
                 process('rm -v %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version'])), self.verbose)
                 self.fail('download')
     
-        ret = self.extract()
-        if ret is not zero: self.fail('extract')
+        if self.extract() is not zero: self.fail('extract')
     
-        ret = self.copy_config()
-        if ret is not zero: self.fail('copy_config')
+        if self.copy_config() is not zero: self.fail('copy_config')
     
         if self.mrproper is True:
-            ret = self.make_mrproper()
-            if ret is not zero: self.fail('mrproper')
-    
+            if self.make_mrproper() is not zero: self.fail('mrproper')
+
+        if self.defconfig is True:
+            if self.make_defconfig() is not zero: self.fail('defconfig')
+ 
         if self.oldconfig is True:
-            ret = self.make_oldconfig()
-            if ret is not zero: self.fail('oldconfig')
+            if self.make_oldconfig() is not zero: self.fail('oldconfig')
 
         if self.menuconfig is True:
-            ret = self.make_menuconfig()
-            if ret is not zero: self.fail('menuconfig')
+            if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
-        ret = self.make()
-        if ret is not zero: self.fail('make')
+        if self.make() is not zero: self.fail('make')
     
-        ret = self.strip()
-        if ret is not zero: self.fail('stip')
+        if self.strip() is not zero: self.fail('stip')
     
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
+        if self.compress() is not zero: self.fail('compress')
     
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
-    
-        return ret
+        if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
         """
@@ -196,6 +189,20 @@ class busybox:
 
         return os.system(command)
     
+    def make_defconfig(self):
+        """
+        Busybox defconfig interface
+        
+        @return: bool
+        """
+        print green(' * ') + '... busybox.defconfig'
+        self.chgdir(self.bb_tmp)
+        command = self.build_command('defconfig', self.verbose['std'])
+        if self.verbose['set'] is True:
+            print command
+
+        return os.system(command)
+
     def make_oldconfig(self):
         """
         Busybox oldconfig interface
