@@ -1,7 +1,10 @@
-# temp directory
+# default temp directory
 temp_root = '/var/tmp/kigen'
 
-# temp directory structure
+# default kernel directory
+kerneldir = '/usr/src/linux'
+
+# default temp directory structure
 temp = {'root' :        temp_root,              \
         'work' :        temp_root + '/work',    \
         'cache':        temp_root + '/cache',   \

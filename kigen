@@ -48,7 +48,6 @@ else:
 # kigen modules are ready to be called
 from config import master_config, temp
 from cliparser import *
-from utils.misc import *
 from utils.shell import *
 
 # parse command line parameters
@@ -75,10 +74,9 @@ else:
     sys.exit(2)
 
 # set default kernel sources
-kerneldir = '/usr/src/linux'
 if 'kernel-sources' in master_config:
     # if set grab value from config file
-    kerneldir = master_config['kernel-sources']
+    cli['kerneldir'] = master_config['kernel-sources']
 
 # Funtoo bootupdate integration
 from initramfs.bootupdate import get_boot_initrd
@@ -88,24 +86,21 @@ if bootupdateinitrd:
 else:
     bootupdateset = False
 
-# what am I?
-arch = identify_arch()
-logging.debug('Building on ' + arch)
+logging.debug('Building on ' + cli['arch'])
 
 # which Portage flavor?
 flavor = identify_flavor()
 logging.debug(flavor)
 
-# show flavor on arch info
-print green(' * ') + white(flavor) + ' on ' + white(arch)
+# show flavor on cli['arch'] info
+print green(' * ') + white(flavor) + ' on ' + white(cli['arch'])
 
 # get kernel version from the Makefile source itself
-if not os.path.isdir(kerneldir):
-    print red('error') + ': ' + kerneldir + ' does not exist.'
+if not os.path.isdir(cli['kerneldir']):
+    print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
     sys.exit(2)
-KV = get_kernel_version(kerneldir)
-if KV is 'none': 
-    print red('error') + ': ' + kerneldir+'/Makefile not found'
+if cli['KV'] is 'none': 
+    print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
     sys.exit(2)
 
 # ensure temp['work'] is clean
@@ -138,14 +133,14 @@ if target == 'kernel' or target == 'k':
     # --getdotconfig
     if cli['getdotconfig'] is not '':
         from kernel.extract import getdotconfig
-        getdotconfig(cli['getdotconfig'], kerneldir, verbose)
+        getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
         sys.exit(0)
 
     from kernel.kernel import kernel
-    kobj = kernel(kerneldir,            \
+    kobj = kernel(cli['kerneldir'],            \
                 master_config,          \
-                arch,                   \
-                KV,                     \
+                cli['arch'],                   \
+                cli['KV'],                     \
                 cli,                    \
                 temp,                   \
                 verbose)
@@ -154,15 +149,12 @@ if target == 'kernel' or target == 'k':
     # copy kernel/system.map to /boot
     if cli['noboot'] is False:
     
-         print green(' * produced ') + '/boot/System.map-kigen-'+arch+'-'+KV
-         process('cp %s %s' % (kerneldir + '/System.map', '/boot/System.map-kigen-'+arch+'-'+KV), verbose)
+         print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
+         process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
     
-         if cli['rename'] is '':
-             print green(' * produced ') + '/boot/kernel-kigen-'+arch+'-'+KV,
-             process('cp %s %s' % (kerneldir + '/arch/x86/boot/bzImage', '/boot/kernel-kigen-'+arch+'-'+KV), verbose)
-         else:
-             print green(' * produced ') + '/boot/' + cli['rename'],
-             process('cp %s /boot/%s' % (kerneldir + '/arch/x86/boot/bzImage', cli['rename']), verbose)
+         print green(' * produced ')+cli['rename'],
+         process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+
          if cli['initramfs'] is not '':
              print ' with an ' + white('embedded') + ' initramfs'
          else:
@@ -170,11 +162,11 @@ if target == 'kernel' or target == 'k':
     
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif cli['noboot'] is True:
-        logging.debug(kerneldir+'/System.map')
-        print green(' * produced ') + kerneldir+'/System.map'
+        logging.debug(cli['kerneldir']+'/System.map')
+        print green(' * produced ') + cli['kerneldir']+'/System.map'
     
-        logging.debug(kerneldir+'/arch/x86/boot/bzImage')
-        print green(' * produced ') + kerneldir+'/arch/x86/boot/bzImage',
+        logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
+        print green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage',
         if cli['initramfs'] is not '':
             print 'with an ' + white('embedded') + ' initramfs'
         else:
@@ -197,9 +189,9 @@ if target == 'initramfs' or target == 'i':
         sys.exit(0)
 
     from initramfs.initramfs import initramfs
-    iobj = initramfs(kerneldir,         \
-                arch,                   \
-                KV,                     \
+    iobj = initramfs(cli['kerneldir'],         \
+                cli['arch'],                   \
+                cli['KV'],                     \
                 libdir,                 \
                 master_config,          \
                 cli,                    \
@@ -211,12 +203,8 @@ if target == 'initramfs' or target == 'i':
 
     # copy initramfs to /boot
     if cli['noboot'] is False:
-        if cli['rename'] is '':
-            print green(' * produced ') + '/boot/initramfs-kigen-'+arch+'-'+KV
-            process('cp %s/initramfs-cpio.gz %s/initramfs-kigen-%s-%s' % (temp['cache'], '/boot', arch, KV), verbose)
-        else:
-            print green(' * produced ') + '/boot/' + cli['rename']
-            process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+        print green(' * produced ')+cli['rename']
+        process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
     
     # leave /boot alone but tell the user where to find his initramfs
     elif cli['noboot'] is True:

@@ -50,7 +50,7 @@ class kernel:
             ret = make_clean()
             if ret is not zero: self.fail('clean')
 
-        # by default don't touch dotconfig
+        # by default don't alter dotconfig
         # only if --fixdotconfig is passed
         if self.initramfs is not '':
             # user provides an initramfs!
@@ -366,9 +366,8 @@ class kernel:
         print green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/' + self.KV
         self.chgdir(self.kerneldir)
         
-        if self.fakeroot is not '':
-            # export INSTALL_MOD_PATH 
-            os.environ['INSTALL_MOD_PATH'] = self.fakeroot
+        # export INSTALL_MOD_PATH 
+        os.environ['INSTALL_MOD_PATH'] = self.fakeroot
     
         command = self.build_command('modules_install', self.quiet)
         if self.quiet is '':
