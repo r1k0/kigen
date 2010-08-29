@@ -121,7 +121,7 @@ def parse():
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_kernel()
+                print_usage_kernel(cli)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()
@@ -295,7 +295,7 @@ def parse():
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_initramfs()
+                print_usage_initramfs(cli)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()
@@ -482,64 +482,116 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/initramfsdir --into=/myinitramfs'
 
 
-def print_usage_kernel():
-    print '  --config=/file             Custom master config file'
-    print '  --dotconfig=/file          Custom kernel config file'
-    print '  --rename=mykernel          Custom kernel file name'
-    print '  --initramfs=/file          Embed initramfs into the kernel'
-    print yellow('   --fixdotconfig             Check and auto fix the kernel config file (experimental)')
-    print '  --clean                    Clean precompiled objects only'
-    print '  --mrproper                 Clean precompiled objects and remove config file'
-    print '  --oldconfig                Ask for new kernel options'
-    print '  --menuconfig               Interactive kernel options menu'
-    print '  --fakeroot=/dir            Append modules to /dir/lib/modules'
-    print '  --nooldconfig              Do not ask for new kernel/initramfs options'
-    print '  --nomodinstall             Do not install modules'
-    print '  --nosaveconfig             Do not save kernel config in /etc/kernels'
-    print '  --noboot                   Do not copy kernel to /boot'
-    print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
-#   print '  -v, --verbose              Give more verbose'
-    print '  --debug, -d                Debug verbose'
-    print 'Tools:'
-    print '  --getdotconfig=/vmlinux    Extract .config from compiled binary kernel (if IKCONFIG has been set)'
+def print_usage_kernel(cli):
+    print 'Parameters:                  Default:                Description:'
+    print
+    print '  --config=/file             "'+cli['config']+'"       Custom master config file'
+    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom kernel .config file'
+    print '  --rename=mykernel          "'+cli['rename']+'"                      Custom kernel file name'
 
-def print_usage_initramfs():
-    print '  --config=/file             Custom master config file'
-    print '  --dotconfig=/file          Custom busybox config file'
-    print '  --rename=myinitramfs       Custom initramfs file name'
-    print '  --defconfig                Set .config to largest generic options'
-    print '  --oldconfig                Ask for new busybox options'
-    print '  --menuconfig               Interactive busybox options menu'
-    print '  --linuxrc=/linuxrc[,/file] Include custom linuxrc (files copied over to etc)'
-    print '  --splash=<theme>           Include splash support (media-gfx/splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]           Splash resolution, all if not set'
-#   print '   --sinitrd=/file            Splash custom initrd.splash (host if found)'
-    print '  --disklabel                Include support for UUID/LABEL'
-    print '  --luks                     Include LUKS support (host binary if found)'
-    print '  --lvm2                     Include LVM2 support (host binary if found)'
-#   print '  --evms                    Include evms support (evms must be merged)'
-#   print '  --dmraid                  Include dmraid support'
-#   print '   --selinux                 Include selinux support in --dmraid'
-#   print '  --iscsi                   Include iscsi support'
-#   print '  --mdadm                   Include mdadm support (mdadm must be merged)'
-    print '  --dropbear                 Include dropbear tools and daemon (host binaries if found)'
-    print '   --glibc                    Include host GNU C libraries (required for dns,dropbear)'
-    print '   --libncurses               Include host libncurses (required for dropbear)'
-    print '   --zlib                     Include host zlib (required for dropbear)'
-    print '   --rootpasswd=passwd        Create and set root password (required for dropbear)'
-#   print '  --unionfs-fuse            Include unionfs-fuse support'
-#   print '  --aufs                    Include aufs support'
-#   print '  --firmware=/dir           Include custom firmware support'
-    print '  --ttyecho                  Include the handy ttyecho.c tool'
-    print '  --plugin=/dir[,/dir]       Include list of user generated custom roots'
-    print '  --nocache                  Do not use cached data'
-    print '  --nohostbin                Do not use host binaries but compile from sources'
-    print '  --noboot                   Do not copy initramfs to /boot'
-    print '  --logfile=/file            Log to file, default to /var/log/kigen.log'
-#   print '  -v, --verbose              Give more verbose'
-    print '  --debug, -d                Debug verbose'
-    print 'Tools:'
-    print '  --extract=/file            Extract initramfs file'
-    print '   --to=/dir                  Custom extracting directory'
-    print '  --compress=/dir            Compress directory into initramfs'
-    print '   --into=/file               Custom initramfs file'
+    print '  --initramfs=/file          ""                      Embed initramfs into the kernel'
+    print yellow('   --fixdotconfig            False                    Check and auto fix the kernel config file (experimental)')
+    print '  --clean                    False                   Clean precompiled objects only'
+    print '  --mrproper                 False                   Clean precompiled objects and remove config file'
+    print '  --oldconfig                True                    Ask for new kernel options'
+    print '  --menuconfig               False                   Interactive kernel options menu'
+    print '  --fakeroot=/dir            False                   Append modules to /dir/lib/modules'
+    print '  --nooldconfig              False                   Do not ask for new kernel/initramfs options'
+    print '  --nomodinstall             False                   Do not install modules'
+    print '  --nosaveconfig             False                   Do not save kernel config in /etc/kernels'
+    print '  --noboot                   False                   Do not copy kernel to /boot'
+    print '  --logfile=/file            "/var/log/kigen.log"    Log to file'
+#   print '  -v, --verbose              False                   Give more verbose'
+    print '  --debug, -d                False                   Debug verbose'
+    print
+    print '  --getdotconfig=/vmlinux    ""                      Extract .config from compiled binary kernel (if IKCONFIG has been set)'
+
+def print_usage_initramfs(cli):
+    # passing cli is supposed to grab default from parse()
+    print 'Parameters:                  Default:                Description:'
+    print
+    print '  --config=/file             "'+cli['config']+'"       Custom master config file'
+    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
+    print '  --rename=myinitramfs       "'+cli['rename']+'"                      Custom initramfs file name'
+
+    print '  --defconfig               ',
+    print cli['defconfig'], # bool
+    print '                  Set .config to largest generic options'
+
+    print '  --oldconfig               ',
+    print cli['oldconfig'], # bool
+    print '                   Ask for new busybox options if any'
+
+    print '  --menuconfig              ',
+    print cli['menuconfig'], # bool
+    print '                  Interactive busybox options menu'
+
+    print '  --linuxrc=/linuxrc[,/file] ""                      Include custom linuxrc (files copied over to etc)'
+    print '  --splash=<theme>           ""                      Include splash support (splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]          ""                       Splash resolution, all if not set'
+#   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
+
+    print '  --disklabel               ',
+    print cli['disklabel'], # bool
+    print '                  Include support for UUID/LABEL'
+
+    print '  --luks                    ',
+    print cli['luks'], # bool 
+    print '                  Include LUKS support (host binary if found)'
+
+    print '  --lvm2                    ',
+    print cli['lvm2'], # bool
+    print '                  Include LVM2 support (host binary if found)'
+
+#   print '  --evms                     False                   Include evms support (evms must be merged)'
+#   print '  --dmraid                   False                   Include dmraid support'
+#   print '   --selinux                 False                    Include selinux support in --dmraid'
+#   print '  --iscsi                    False                   Include iscsi support'
+#   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
+    print '  --dropbear                ',
+    print cli['dropbear'], # bool
+    print '                  Include dropbear tools and daemon (host binaries if found)'
+
+    print '   --glibc                  ',
+    print cli['glibc'], # bool
+    print '                   Include host GNU C libraries (required for dns,dropbear)'
+
+    print '   --libncurses             ',
+    print cli['libncurses'], # bool
+    print '                   Include host libncurses (required for dropbear)'
+
+    print '   --zlib                   ',
+    print cli['zlib'], # bool
+    print '                   Include host zlib (required for dropbear)'
+
+    print '   --rootpasswd=<passwd>     ""                      Create and set root password (required for dropbear)'
+#   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
+#   print '  --aufs                     False                   Include aufs support'
+#   print '  --firmware=/dir            ""                      Include custom firmware support'
+
+    print '  --ttyecho                 ',
+    print cli['ttyecho'], # bool
+    print '                  Include the handy ttyecho.c tool'
+
+    print '  --plugin=/dir[,/dir]       ""                      Include list of user generated custom roots'
+
+    print '  --nocache                 ',
+    print cli['nocache'],
+    print '                  Do not use cached data'
+
+    print '  --nohostbin               ',
+    print cli['nohostbin'],
+    print '                  Do not use host binaries but compile from sources'
+
+    print '  --noboot                  ',
+    print cli['noboot'],
+    print '                  Do not copy initramfs to /boot'
+
+    print '  --logfile=/file            "/var/log/kigen.log"    Log to file'
+#   print '  -v, --verbose              False                   Give more verbose'
+    print '  --debug, -d                False                   Debug verbose'
+    print
+    print '  --extract=/file            ""                      Extract initramfs file'
+    print '   --to=/dir                 ""                       Custom extracting directory'
+    print '  --compress=/dir            ""                      Compress directory into initramfs'
+    print '   --into=/file              ""                       Custom initramfs file'

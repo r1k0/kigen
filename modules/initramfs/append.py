@@ -602,11 +602,12 @@ class append:
                 self.fail('/usr/share/splashutils/initrd.splash missing')
         else:
             # if splashutils is not merged
+            # FIXME write the splash routine from scratch?
             self.fail('media-gfx/splashutils must be merged')
             
-            from splash import splash
-            splashobj = splash(self.master_config, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
-            splashobj.build()
+#            from splash import splash
+#            splashobj = splash(self.master_config, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
+#            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
