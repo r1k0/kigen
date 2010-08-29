@@ -538,15 +538,18 @@ def print_usage_kernel(cli):
     print '  --logfile=/file            "'+cli['logfile']+'"\tLog to file'
     print '  --debug, -d                False\t\t\tDebug verbose'
     print
-    print '  --getdotconfig=/vmlinux    ""\t\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
+    print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs(cli):
     # passing cli is supposed to grab default from parse()
     print 'Parameters:\t\t     Default value:\t     Description:'
     print
     print '  --config=/file             "'+cli['config']+'"       Custom master config file'
-    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
-    print '  --rename=myinitramfs       "'+cli['rename']+'"                      Custom initramfs file name'
+#    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
+    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
+    print '\t\t\t\t\t\t     Custom busybox config file'
+    print '  --rename=myinitramfs       "'+cli['rename']+'"'
+    print '\t\t\t\t\t\t     Custom initramfs file name'
 
     print '  --defconfig               ',
     print cli['defconfig'], # bool
@@ -598,7 +601,7 @@ def print_usage_initramfs(cli):
     print cli['zlib'], # bool
     print '\t\t      Include host zlib (required for dropbear)'
 
-    print '   --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"                      Create and set root password (required for dropbear)'
+    print '   --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"                       Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
