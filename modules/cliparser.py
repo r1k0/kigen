@@ -492,7 +492,7 @@ def print_usage_kernel(cli):
     print
     print '  --config=/file             "'+cli['config']+'"\t\tCustom master config file'
     print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"\tCustom kernel .config file'
-    print '  --rename=mykernel          "'+cli['rename']+'"'
+    print '  --rename=/file             "'+cli['rename']+'"'
     print '\t\t\t\t\t\t\tCustom kernel file name'
 
     print '  --initramfs=/file          "'+cli['initramfs']+'"\t\t\t\tEmbed initramfs into the kernel'
@@ -548,7 +548,7 @@ def print_usage_initramfs(cli):
 #    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
     print '\t\t\t\t\t\t     Custom busybox config file'
-    print '  --rename=myinitramfs       "'+cli['rename']+'"'
+    print '  --rename=/file             "'+cli['rename']+'"'
     print '\t\t\t\t\t\t     Custom initramfs file name'
 
     print '  --defconfig               ',
