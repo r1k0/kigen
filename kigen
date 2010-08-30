@@ -46,12 +46,12 @@ else:
         os.environ['KIGEN_STDOUT'] = '1'
 
 # kigen modules are ready to be called
-from config import master_config, temp
+from config import temp
 from cliparser import *
 from utils.shell import *
 
 # parse command line parameters
-target, cli, verbose = parse()
+master_config, target, cli, verbose = parse()
 
 # remove previous logfile
 if os.path.isfile(verbose['logfile']):
@@ -63,20 +63,6 @@ logging.debug(sys.argv)
 logging.debug('target is ' + target)
 logging.debug(cli)
 logging.debug(verbose)
-
-# parse kigen config file
-kigen_conf = cli['config']
-if os.path.isfile(kigen_conf):
-    master_config_temp = parse_config_file(kigen_conf)
-    master_config.update(master_config_temp)
-else:
-    print 'error: missing ' + red(kigen_conf)
-    sys.exit(2)
-
-# set default kernel sources
-if 'kernel-sources' in master_config:
-    # if set grab value from config file
-    cli['kerneldir'] = master_config['kernel-sources']
 
 # Funtoo bootupdate integration
 from initramfs.bootupdate import get_boot_initrd
@@ -92,16 +78,15 @@ logging.debug('Building on ' + cli['arch'])
 flavor = identify_flavor()
 logging.debug(flavor)
 
-# show flavor on cli['arch'] info
+# show flavor
 print green(' * ') + white(flavor) + ' on ' + white(cli['arch'])
 
-# get kernel version from the Makefile source itself
-if not os.path.isdir(cli['kerneldir']):
-    print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
-    sys.exit(2)
-if cli['KV'] is 'none': 
-    print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
-    sys.exit(2)
+#if not os.path.isdir(cli['kerneldir']):
+#    print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
+#    sys.exit(2)
+#if cli['KV'] is 'none': 
+#    print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
+#    sys.exit(2)
 
 # ensure temp['work'] is clean
 import shutil

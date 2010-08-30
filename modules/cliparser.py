@@ -19,7 +19,28 @@ def parse():
             'kerneldir':    kerneldir,          \
             'arch':         identify_arch()}
 
+    # parse kigen config file
+    kigen_conf = cli['config']
+    if os.path.isfile(kigen_conf):
+        master_config_temp = parse_config_file(kigen_conf)
+        master_config.update(master_config_temp)
+    else:
+        print 'error: missing ' + red(kigen_conf)
+        sys.exit(2)
+
+    # set default kernel sources
+    if 'kernel-sources' in master_config:
+        # if set grab value from config file
+        cli['kerneldir'] = master_config['kernel-sources']
+
     cli['KV'] = get_kernel_version(cli['kerneldir'])
+
+    if not os.path.isdir(cli['kerneldir']):
+        print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
+        sys.exit(2)
+    if cli['KV'] is 'none':
+        print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
+        sys.exit(2)
 
     verbose = { 'std':      '',     \
                 'set':      False,  \
@@ -433,7 +454,7 @@ def parse():
             else:
                 assert False, "uncaught option"
 
-    return target, cli, verbose
+    return master_config, target, cli, verbose
 
 def print_version():
     print green('%s' % version)
