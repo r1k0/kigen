@@ -488,7 +488,7 @@ def print_examples():
 
 
 def print_usage_kernel(cli):
-    print 'Parameters:\t\t     Default value:\t\tDescription:'
+    print 'Parameter:\t\t     Default value:\t\tDescription:'
     print
     print '  --config=/file             "'+cli['config']+'"\t\tCustom master config file'
     print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"\tCustom kernel .config file'
@@ -542,7 +542,7 @@ def print_usage_kernel(cli):
 
 def print_usage_initramfs(cli):
     # passing cli is supposed to grab default from parse()
-    print 'Parameters:\t\t     Default value:\t     Description:'
+    print 'Parameter:\t\t     Default value:\t     Description:'
     print
     print '  --config=/file             "'+cli['config']+'"       Custom master config file'
 #    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
