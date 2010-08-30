@@ -81,13 +81,6 @@ logging.debug(flavor)
 # show flavor
 print green(' * ') + white(flavor) + ' on ' + white(cli['arch'])
 
-#if not os.path.isdir(cli['kerneldir']):
-#    print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
-#    sys.exit(2)
-#if cli['KV'] is 'none': 
-#    print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
-#    sys.exit(2)
-
 # ensure temp['work'] is clean
 import shutil
 if os.path.isdir(temp['work']):
