@@ -241,39 +241,51 @@ If you're not familiar with creating your own overlay, refer to http://www.gento
 
 - Merge KIGen
 
+Optionally set the +doc USE flag.
+::
+  pong ~ # echo "sys-kernel/kigen doc" >> /etc/portage/package.use
+
 emerge it.
 ::
-  pong ~ # emerge kigen
-  Calculating dependencies        ... done!      
+  pong ~ # emerge kigen -av
+
+  These are the packages that would be merged, in order:
+  
+  Calculating dependencies        ... done!                          
+  [ebuild  N    ] sys-kernel/kigen-9999  USE="doc" 0 kB [1]
+  
+  Total: 1 package (1 new), Size of downloads: 0 kB
+  Portage tree and overlays:
+   [0] /usr/portage
+   [1] /usr/local/portage
+  
+  Would you like to merge these packages? [Yes/No] 
   
   >>> Verifying ebuild manifests
   
   >>> Emerging (1 of 1) sys-kernel/kigen-9999 from r1k0
-   * checking ebuild checksums ;-) ...                                                                                  [ ok ]
-   * checking auxfile checksums ;-) ...                                                                                 [ ok ]
-   * checking miscfile checksums ;-) ...                                                                                [ ok ]
+   * checking ebuild checksums ;-) ...                                                                                                                                      [ ok ]
+   * checking auxfile checksums ;-) ...                                                                                                                                     [ ok ]
+   * checking miscfile checksums ;-) ...                                                                                                                                    [ ok ]
    * CPV:  sys-kernel/kigen-9999
    * REPO: r1k0
    * USE:  amd64 doc elibc_glibc kernel_linux multilib userland_GNU
   >>> Unpacking source...
    * GIT NEW clone -->
    *    repository:       git://github.com/r1k0/kigen.git
-  Initialized empty Git repository in /usr/portage/distfiles/git-src/kigen/
-  remote: Counting objects: 731, done.
-  remote: Compressing objects: 100% (725/725), done.
-  remote: Total 731 (delta 478), reused 0 (delta 0)
-  Receiving objects: 100% (731/731), 232.00 KiB | 293 KiB/s, done.
-  Resolving deltas: 100% (478/478), done.
-   *    at the commit:        75ef987008c5dcbfe1d916a8aa6c258db2052f85
+  Cloning into bare repository /usr/portage/distfiles/git-src/kigen...
+  remote: Counting objects: 1823, done.
+  remote: Compressing objects: 100% (1811/1811), done.
+  remote: Total 1823 (delta 1270), reused 0 (delta 0)
+  Receiving objects: 100% (1823/1823), 410.80 KiB | 298 KiB/s, done.
+  Resolving deltas: 100% (1270/1270), done.
+   *    at the commit:        06820483a5b859dace01f3210ec82c844b2170fd
    *    branch:           master
    *    storage directory:    "/usr/portage/distfiles/git-src/kigen"
-  Initialized empty Git repository in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999/.git/
+  Cloning into /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999...
+  done.
   >>> Unpacked to /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999
   >>> Source unpacked in /var/tmp/portage/sys-kernel/kigen-9999/work
-  >>> Preparing source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
-  >>> Source prepared.
-  >>> Configuring source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
-  >>> Source configured.
   >>> Compiling source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
   >>> Source compiled.
   >>> Test phase [not enabled]: sys-kernel/kigen-9999
@@ -284,6 +296,91 @@ emerge it.
   ecompressdir: bzip2 -9 /usr/share/man
   
   >>> Installing (1 of 1) sys-kernel/kigen-9999
+   * checking 49 files for package collisions
+  --- /etc/
+  >>> /etc/._cfg0000_kigen.conf
+  --- /usr/
+  --- /usr/share/
+  --- /usr/share/man/
+  --- /usr/share/man/man8/
+  >>> /usr/share/man/man8/kigen.8.bz2
+  --- /usr/share/kigen/
+  >>> /usr/share/kigen/defaults/
+  >>> /usr/share/kigen/defaults/modprobe
+  >>> /usr/share/kigen/defaults/initrd.scripts
+  >>> /usr/share/kigen/defaults/udhcpc.scripts
+  >>> /usr/share/kigen/defaults/linuxrc
+  >>> /usr/share/kigen/defaults/initrd.defaults
+  >>> /usr/share/kigen/defaults/keymaps.tar.gz
+  >>> /usr/share/kigen/arch/
+  >>> /usr/share/kigen/arch/x86_64/
+  >>> /usr/share/kigen/arch/x86_64/busybox.config
+  >>> /usr/share/kigen/arch/x86_64/kernel.config
+  >>> /usr/share/kigen/arch/x86/
+  >>> /usr/share/kigen/arch/x86/busybox.config
+  >>> /usr/share/kigen/arch/x86/kernel.config
+  --- /usr/share/doc/
+  >>> /usr/share/doc/kigen-9999/
+  >>> /usr/share/doc/kigen-9999/TODO.bz2
+  >>> /usr/share/doc/kigen-9999/README.rst.bz2
+  --- /usr/lib/
+  --- /usr/lib/python2.6/
+  --- /usr/lib/python2.6/site-packages/
+  --- /usr/lib/python2.6/site-packages/kigen/
+  --- /usr/lib/python2.6/site-packages/kigen/modules/
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/__init__.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/nocolor.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/cliparser.py
+  --- /usr/lib/python2.6/site-packages/kigen/modules/initramfs/
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/__init__.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/busybox.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/append.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/bootupdate.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/luks.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/compress.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/extract.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/__init__.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/gnupg.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/dmraid.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/device_mapper.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/evms.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/multipath.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/fuse.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/unionfs_fuse.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/aufs.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/splash.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dev/iscsi.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/initramfs.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/dropbear.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/e2fsprogs.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/initramfs/lvm2.py
+  --- /usr/lib/python2.6/site-packages/kigen/modules/utils/
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/utils/__init__.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/utils/misc.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/utils/shell.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/config.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/stdout.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/credits.py
+  --- /usr/lib/python2.6/site-packages/kigen/modules/kernel/
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/kernel/kernel.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/kernel/__init__.py
+  >>> /usr/lib/python2.6/site-packages/kigen/modules/kernel/extract.py
+  --- /usr/sbin/
+  >>> /usr/sbin/kigen
+   * 
+   * This is still experimental software, be cautious.
+   * 
+  
+  >>> Recording sys-kernel/kigen in "world" favorites file...
+  
+   * Messages for package sys-kernel/kigen-9999:
+  
+   * GIT NEW clone -->
+   *    repository:       git://github.com/r1k0/kigen.git
+   *    at the commit:        06820483a5b859dace01f3210ec82c844b2170fd
+   *    branch:           master
+   *    storage directory:    "/usr/portage/distfiles/git-src/kigen"
    * 
    * This is still experimental software, be cautious.
    * 
@@ -292,7 +389,6 @@ emerge it.
   >>> No outdated packages were found on your system.
   
    * GNU info directory index is up-to-date.
-  pong ~ # 
 
 - Care for **/etc/kigen.conf**
 
