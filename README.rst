@@ -859,4 +859,4 @@ It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
     Portage community (linuxrc scripts),
 
-:Version: 0.1.5
+:Version: 0.2.0
