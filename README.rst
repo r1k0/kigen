@@ -388,6 +388,7 @@ emerge it.
   >>> No outdated packages were found on your system.
   
    * GNU info directory index is up-to-date.
+   pong ~ #
 
 - Care for **/etc/kigen.conf**
 
