@@ -848,42 +848,11 @@ Re run from cache.
   pong ~ # 
 
 
-Typically this adds support for splash luks and lvm2 to the initramfs.
-Note that by default igen will pick up and ship host binaries.
+Typically this adds support for splash/luks/lvm2/dropbear to the initramfs.
+Note that by default kigen will pick up and ship host binaries.
 Passing --nohostbin will fetch sources and compile statically.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
-
-Funtoo Portage
-~~~~~~~~~~~~~~
-
-- Add to local overlay
-
-- Merge KIGen
-
-- Care for /etc/kigen.conf
-
-- Use of kgen to generate a kernel/system.map
-
-- Use of igen to generate an initramfs
-
-- Use of igen to generate an initramfs with support for sys-boot/boot-update
-
-Sabayon Portage
-~~~~~~~~~~~~~~~
-
-- Add to local overlay
-
-- Merge KIGen
-
-- Care for /etc/kigen.conf
-
-- Use of kgen to generate a kernel/system.map
-
-- Use of igen to generate an initramfs
-
-- Use of igen to generate an initramfs with support for sys-boot/boot-update
-
 
 :Authors: 
     erick 'r1k0' michau (python engine),
