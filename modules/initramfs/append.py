@@ -115,7 +115,7 @@ class append:
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
             linuxrclist = self.linuxrc.split(',')
-            print str(linuxrclist) + ' from host'
+            print str(linuxrclist) + ' from ' + white(host)
             # copy first the linuxrc to /init
             process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
             # then all possible files
