@@ -504,8 +504,8 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs'
     print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --nohostbin'
     print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --dropbear --glibc --zlib --libncurses --rootpasswd=mypasswd --ttyecho --nohostbin --nocache --oldconfig'
-    print ' '+os.path.basename(sys.argv[0])+' --extract=/aninitramfs i --to=/here'
-    print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/initramfsdir --into=/myinitramfs'
+    print ' '+os.path.basename(sys.argv[0])+' --extract=/file i --to=/dir'
+    print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file'
 
 
 def print_usage_kernel(cli):
