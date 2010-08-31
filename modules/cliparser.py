@@ -281,7 +281,7 @@ def parse():
         cli['mrproper']     = False
         cli['menuconfig']   = False
         cli['defconfig']    = False
-        cli['oldconfig']    = True # always ensure sane .config
+        cli['oldconfig']    = False # too much verbose
         cli['luks']         = False
         cli['lvm2']         = False
         cli['dmraid']       = False

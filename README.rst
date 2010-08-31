@@ -12,7 +12,7 @@ Definition
 **kigen uses Genkernel linuxrc and provides the same boot interface as Genkernel does.**
 
 KIGen for Linux aims at providing first an equal set of features (in Python)
-as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update.
+as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update for Funtoo.
 Genkernel being a bash script, interfacing it with boot-update is 'tricky' if not insane.
 
 In Funtoo, sys-boot/boot-update is now responsible for managing a unified boot
@@ -50,16 +50,15 @@ Features
 - UUID (blkid binary)
 - splash decorator
 - customizable busybox toolbox
-  - telnet
-  - vi
-  - httpd
-  - awk
-  - a lot more
+  - system stack tools
+  - network stack tools
+  - alot more
+- SSH daemon (dropbear)
 
 Supported OS
 ~~~~~~~~~~~~
 
-KIGen supports Portage and provides support for the following linux based flavors:
+KIGen supports Portage and works on the following linux based flavors:
 
 - Funtoo  and its boot-update interface,
 - Gentoo  (no boot-update interface yet),
@@ -399,17 +398,40 @@ You might want to tweak the modules to fit your needs.
   kernel-sources          = /usr/src/linux
   
   # initramfs programs' versions
-  busybox-version         = 1.16.0
-  luks-version            = 1.1.2
-  e2fsprogs-version       = 1.40.9
-  lvm2-version            = 2.02.65
+  busybox-version         = 1.17.1
+  luks-version            = 1.1.3
+  e2fsprogs-version       = 1.41.12
+  lvm2-version            = 2.02.73
+  dropbear-version        = 0.52
   
   # busybox shipping programs
   # remember you have a busybox
-  # config file that supports it
-  busybox-progs           = [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
+  # config file that has to support it
+  # leave the variable empty if the linuxrc handles
+  # 'busybox --install -s' at boot
+  # symlinks will be automagically created
+  busybox-progs           = [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd telnetd setsid nohup
+  
+  # initramfs modules configuration
+  # put your module in the appropriate group variable
+  MODULES_ATARAID         = ataraid pdcraid hptraid
+  MODULES_DMRAID          = dm-mod dm-mirror dm-crypt
+  MODULES_EVMS            = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
+  MODULES_LVM             = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr
+  MODULES_MDADM           = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
+  MODULES_PATA            = pata_mpiix pata_pdc2027x pata_radisys pata_sil680 pata_rz1000 pata_efar pata_cmd64x pata_hpt366 pata_hpt37x pata_hpt3x3 pata_hpt3x2n pata_optidma pata_it821x pata_artop pata_oldpiix pata_cypress pata_platform pata_serverworks pata_legacy pata_ns87410 pata_ns87415 pata_pcmcia pata_isapnp pata_it8213 pata_ali pata_amd pata_opti pata_atiixp pata_triflex pata_pdc202xx_old pata_sc1200 pata_qdi pata_netcell pata_sis pata_hpt3x2n pata_marvell pata_jmicron pata_via pata_cs5520 pata_cs5530 pata_cs5535 pata_sl82c105 libata
+  MODULES_SATA            = sata_promise sata_sil sata_sil24 sata_svw sata_via sata_nv sata_sx4 sata_sis sata_uli sata_vsc sata_qstor ahci libata ata_piix sata_mv sata_inic162x pdc_adma
+  MODULES_SCSI            = sd_mod sg sr_mod aic79xx aic7xxx aic7xxx_old arcmsr BusLogic ncr53c8xx NCR53c406a initio advansys aha1740 aha1542 aha152x dtc fdomain gdth pas16 pci2220i pci2000 psi240i qlogicfas qlogicfc qlogicisp qlogicpti seagate t128 u14-34f ultrastor wd7000 NCR53c406a sym53c8xx dmx3191d imm in2000 ips qla1280 sim710 sym53c416 dc395x atp870u mptbase mptscsih mptspi mptfc mptsas 3w-xxxx 3w-9xxx cpqarray cciss DAC960 sx8 aacraid megaraid megaraid_mbox megaraid_mm megaraid_sas qla2xxx lpfc scsi_transport_fc aic94xx
+  MODULES_WAITSCAN        = scsi_wait_scan
+  MODULES_NET             = e1000 tg3 sky2 # atl1c
+  MODULES_ISCSI           = scsi_transport_iscsi libiscsi iscsi_tcp
+  MODULES_FIREWIRE        = ieee1394 ohci1394 sbp2
+  MODULES_PCMCIA          = pcmcia pcmcia_core yenta_socket pd6729 i82092 i82365 tcic ds ide-cs firmware_class
+  MODULES_USB             = ehci-hcd uhci usb-ohci hid usb-storage uhci-hcd ohci-hcd usbhid sl811-hcd
+  MODULES_FS              = ext2 ext3 reiserfs jfs nfs xfs fuse
   
   # compilation options
+  # (usually leave as is on x86)
   UTILS_MAKE              = make
   UTILS_CC                = gcc
   UTILS_AS                = as
@@ -424,24 +446,6 @@ You might want to tweak the modules to fit your needs.
   DEFAULT_UTILS_AS        = as
   DEFAULT_UTILS_LD        = ld
   
-  # initramfs modules configuration
-  # put your module in the appropriate group variable
-  MODULES_ATARAID         = ataraid pdcraid hptraid
-  MODULES_DMRAID          = dm-mod dm-mirror dm-crypt
-  MODULES_EVMS            = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
-  MODULES_LVM             = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr
-  MODULES_MDADM           = dm-mod dm-snapshot dm-mirror dm-crypt dm-bbr raid0 raid1 raid456 raid5 raid6 raid10
-  MODULES_PATA            = pata_mpiix pata_pdc2027x pata_radisys pata_sil680 pata_rz1000 pata_efar pata_cmd64x pata_hpt366 pata_hpt37x pata_hpt3x3 pata_hpt3x2n pata_optidma pata_it821x pata_artop pata_oldpiix pata_cypress pata_platform pata_serverworks pata_legacy pata_ns87410 pata_ns87415 pata_pcmcia pata_isapnp pata_it8213 pata_ali pata_amd pata_opti pata_atiixp pata_triflex pata_pdc202xx_old pata_sc1200 pata_qdi pata_netcell pata_sis pata_hpt3x2n pata_marvell pata_jmicron pata_via pata_cs5520 pata_cs5530 pata_cs5535 pata_sl82c105 libata
-  MODULES_SATA            = sata_promise sata_sil sata_sil24 sata_svw sata_via sata_nv sata_sx4 sata_sis sata_uli sata_vsc sata_qstor ahci libata ata_piix sata_mv sata_inic162x pdc_adma
-  MODULES_SCSI            = sd_mod sg sr_mod aic79xx aic7xxx aic7xxx_old arcmsr BusLogic ncr53c8xx NCR53c406a initio advansys aha1740 aha1542 aha152x dtc fdomain gdth pas16 pci2220i pci2000 psi240i qlogicfas qlogicfc qlogicisp qlogicpti seagate t128 u14-34f ultrastor wd7000 NCR53c406a sym53c8xx dmx3191d imm in2000 ips qla1280 sim710 sym53c416 dc395x atp870u mptbase mptscsih mptspi mptfc mptsas 3w-xxxx 3w-9xxx cpqarray cciss DAC960 sx8 aacraid megaraid megaraid_mbox megaraid_mm megaraid_sas qla2xxx lpfc scsi_transport_fc aic94xx
-  MODULES_WAITSCAN        = scsi_wait_scan
-  MODULES_NET             = e1000 tg3 atl1c
-  MODULES_ISCSI           = scsi_transport_iscsi libiscsi iscsi_tcp
-  MODULES_FIREWIRE        = ieee1394 ohci1394 sbp2
-  MODULES_PCMCIA          = pcmcia pcmcia_core yenta_socket pd6729 i82092 i82365 tcic ds ide-cs firmware_class
-  MODULES_USB             = ehci-hcd uhci usb-ohci hid usb-storage uhci-hcd ohci-hcd usbhid sl811-hcd
-  MODULES_FS              = ext2 ext3 reiserfs jfs nfs xfs fuse
-  
   #========================
   # BELOW NOT YET SUPPORTED
   #KERNEL_MAKE_DIRECTIVE  = bzImage
@@ -450,108 +454,126 @@ You might want to tweak the modules to fit your needs.
   #COMPRESS_INITRD        = yes
   #========================
 
- 
+- Main help menu
+::
+  pong ~ # kigen
+  
+    a Portage kernel|initramfs generator
+  
+  Usage:
+        /usr/sbin/kigen <options|target> [parameters]
+  
+  Options:
+    --help, -h                 This and examples
+    --nocolor, -n              Do not colorize output
+    --version                  Version
+    --credits                  Credits and license
+  
+  Targets:
+    kernel, k                  Build kernel/modules
+    initramfs, i               Build initramfs
+  
+  Parameters:
+   kigen kernel                --help, -h
+   kigen initramfs             --help, -h
+  pong ~ # 
 
-- Use of **kgen** to generate a kernel/system.map
+- Use of **kigen kernel** to generate a kernel/system.map
 
 Help menu.
 ::
-  pong ~ # kgen -h
+  pong ~ # kigen --help kernel
+  Parameter:           Default value:     Description:
   
-    a GNU/Linux kernel generator
+    --config=/file             "/etc/kigen.conf"      Custom master config file
+    --dotconfig=/file          "/usr/src/linux/.config"   Custom kernel .config file
+    --rename=/file             "/boot/kernel-kigen-x86_64-2.6.35-sabayon"
+                              Custom kernel file name
+    --initramfs=/file          ""             Embed initramfs into the kernel
+     --fixdotconfig            False           Check and auto fix the kernel config file (experimental)
+    --clean                    False          Clean precompiled objects only
+    --mrproper                 False          Clean precompiled objects and remove config file
+    --oldconfig                True           Ask for new kernel options if any
+    --menuconfig               False          Interactive kernel options menu
+    --fakeroot=/dir            "/"            Append modules to /dir/lib/modules
+    --nooldconfig              False          Do not ask for new kernel/initramfs options
+    --nomodinstall             False          Do not install modules
+    --nosaveconfig             False          Do not save kernel config in /etc/kernels
+    --noboot                   False          Do not copy kernel to /boot
+    --logfile=/file            "/var/log/kigen.log"   Log to file
+    --debug, -d                False          Debug verbose
   
-  Usage:
-        kgen <options>
-  
-  Options:
-    --conf=/file           Custom master config file
-    -h, --help             This
-    -n, --nocolor          Do not colorize output
-    -d, --debug            Show more output
-    --logfile=/file        Log to file, default to /var/log/kgen.log
-    --version              Version
-    --credits              Credits and license
-  
-    --dotconfig=/file      Custom kernel config file (full path)
-    --kernname=mykernel    Custom kernel file name
-    --nooldconfig          Will not ask for new kernel/initramfs options
-    --mrproper             Clean precompiled objects and remove config file
-    --clean                Clean precompiled objects only
-    --oldconfig            Will ask for new kernel/initramfs options
-    --menuconfig           Interactive kernel options menu
-    --nomodinstall         Do not install modules
-    --nosaveconfig         Do not save kernel config in /etc/kernels
-    --fakeroot=/dir        Append modules to /dir/lib/modules
-    --noboot               Do not copy kernel to /boot
-  pong ~ #
+    --getdotconfig=/vmlinux    ""             Extract .config from compiled binary kernel (if IKCONFIG has been set)
+  pong ~ # 
 
 Default behavior.
 ::
-  pong ~ # kgen
-   * kernel.oldconfig 2.6.34-gentoo-r1
+  pong ~ # kigen kernel
+   * Sabayon Linux amd64 G on x86_64
+   * kernel.oldconfig 2.6.35-sabayon
   scripts/kconfig/conf -o arch/x86/Kconfig
   #
   # configuration written to .config
   #
-   * kernel.prepare 2.6.34-gentoo-r1
-   * kernel.bzImage 2.6.34-gentoo-r1
-   * kernel.modules 2.6.34-gentoo-r1
-   * kernel.modules_install /lib/modules/2.6.34-gentoo-r1
-   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.34-gentoo-r1
-   * produced /boot/kernel-kigen-x86_64-2.6.34-gentoo-r1
-   * produced /boot/System.map-kigen-x86_64-2.6.34-gentoo-r1
+   * kernel.prepare 2.6.35-sabayon
+   * kernel.bzImage 2.6.35-sabayon
+   * kernel.modules 2.6.35-sabayon
+   * kernel.modules_install //lib/modules/2.6.35-sabayon
+   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.35-sabayon
+   * produced /boot/System.map-kigen-x86_64-2.6.35-sabayon
+   * produced /boot/kernel-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
-- Use of **igen** to generate an initramfs
+- Use of **kigen initramfs** to generate an initramfs
 
 Help menu.
 ::
-  pong ~ # igen -h
+  pong ~ # kigen --help initramfs
+  Parameter:           Default value:      Description:
   
-    a GNU/Linux initramfs generator
+    --config=/file             "/etc/kigen.conf" Custom master config file
+    --dotconfig=/file          "/var/tmp/kigen/work/busybox-1.17.1/.config"
+                                                Custom busybox config file
+    --rename=/file             "/boot/initramfs-kigen-x86_64-2.6.35-sabayon"
+                                                Custom initramfs file name
+    --defconfig                False           Set .config to largest generic options
+    --oldconfig                False           Ask for new busybox options if any
+    --menuconfig               False           Interactive busybox options menu
+    --linuxrc=/linuxrc[,/file] ""              Include custom linuxrc (files copied over to etc)
+    --splash=<theme>           ""              Include splash support (splashutils must be merged)
+     --sres=YxZ[,YxZ]          ""               Splash resolution, all if not set
+    --disklabel                False           Include support for UUID/LABEL
+    --luks                     False           Include LUKS support (host binary if found)
+    --lvm2                     False           Include LVM2 support (host binary if found)
+    --dropbear                 False           Include dropbear tools and daemon (host binaries if found)
+     --glibc                   False            Include host GNU C libraries (required for dns,dropbear)
+     --libncurses              False            Include host libncurses (required for dropbear)
+     --zlib                    False            Include host zlib (required for dropbear)
+     --rootpasswd=<passwd>     ""               Create and set root password (required for dropbear)
+    --ttyecho                  False           Include the handy ttyecho.c tool
+    --plugin=/dir[,/dir]       ""              Include list of user generated custom roots
+    --nocache                  False           Do not use cached data
+    --nohostbin                False           Do not use host binaries but compile from sources
+    --noboot                   False           Do not copy initramfs to /boot
+    --logfile=/file            "/var/log/kigen.log"    Log to file
+    --debug, -d                False           Debug verbose
   
-  Usage:
-        igen <options>
-  
-  Options:
-    --conf=/file           Custom master config file
-    -h, --help             This
-    -n, --nocolor          Do not colorize output
-    -d, --debug            Show more output
-    --logfile=/file        Log to file, default to /var/log/igen.log
-    --version              Version
-    --credits              Credits and license
-  
-    --dotconfig=/file      Custom busybox config file (full path)
-    --menuconfig           Interactive initramfs options menu
-    --linuxrc=/file        Custom linuxrc /init for the initramfs
-    --disklabel            Include support for disklabel and UUID
-    --luks                 Include LUKS support (host binary if found)
-    --lvm2                 Include LVM2 support (host binary if found)
-    --splash               Include splash support (media-gfx/splashutils if found)
-     --stheme=<theme>       Splash theme, gentoo by default
-     --sres=INTxINT         Splash resolution,comma separated list of INTxINT, all if not set
-     --sinitrd=/file        Splash custom initrd.splash (host if found)
-    --nocache              Do not use cached data
-    --nohostbin            Do not use host binaries but compile from sources
-    --noboot               Do not copy initramfs to /boot
+    --extract=/file            ""              Extract initramfs file
+     --to=/dir                 "/var/tmp/kigen/extracted-initramfs"
+                                                Custom extracting directory
+    --compress=/dir            ""              Compress directory into initramfs
+     --into=/file              "/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz"
+                                                Custom initramfs file
   pong ~ #
 
 Default behavior.
 ::
-  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
-   * initramfs.append.base
-   * initramfs.append.busybox 1.16.0 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
-   * ... busybox.download
-   * ... busybox.extract
-   * ... busybox.copy_config
-   * ... busybox.compile
-   * ... busybox.strip
-   * ... busybox.compress
-   * ... busybox.cache
-   * initramfs.append.modules 2.6.34-gentoo-r1
+  pong ~ # kigen initramfs
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
    * ... pata_legacy
    * ... pata_pcmcia
    * ... fdomain
@@ -560,7 +582,7 @@ Default behavior.
    * ... scsi_wait_scan
    * ... e1000
    * ... tg3
-   * ... atl1c
+   * ... sky2
    * ... pcmcia
    * ... yenta_socket
    * ... pd6729
@@ -569,20 +591,25 @@ Default behavior.
    * ... uhci-hcd
    * ... ohci-hcd
    * ... sl811-hcd
-   * initramfs.append.lvm2 /sbin/lvm.static from host
-   * initramfs.append.luks 1.1.2 /sbin/cryptsetup from host
-   * initramfs.append.splash gentoo 
+   * initramfs.append.busybox 1.17.1 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd telnetd setsid nohup
+   * ... busybox.extract
+   * ... busybox.copy_config
+   * ... busybox.make
+   * ... busybox.strip
+   * ... busybox.compress
+   * ... busybox.cache
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
 A second run would use what has been cached.
+Generally, what can be compiled with KIGen should be cacheable.
 In this case, busybox cache is used.
 ::
-  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo
-   * initramfs.append.base
-   * initramfs.append.busybox 1.16.0 from cache
-   * initramfs.append.modules 2.6.34-gentoo-r1
+  pong ~ # kigen initramfs
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
    * ... pata_legacy
    * ... pata_pcmcia
    * ... fdomain
@@ -591,7 +618,7 @@ In this case, busybox cache is used.
    * ... scsi_wait_scan
    * ... e1000
    * ... tg3
-   * ... atl1c
+   * ... sky2
    * ... pcmcia
    * ... yenta_socket
    * ... pd6729
@@ -600,26 +627,78 @@ In this case, busybox cache is used.
    * ... uhci-hcd
    * ... ohci-hcd
    * ... sl811-hcd
-   * initramfs.append.lvm2 /sbin/lvm.static from host
-   * initramfs.append.luks 1.1.2 /sbin/cryptsetup from host
-   * initramfs.append.splash gentoo 
+   * initramfs.append.busybox 1.17.1 from cache
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
-Now let's make a 3rd run without any host binaries and remove previous cached data.
+Now let's make a full blown initramfs using host binaries (which is default).
 ::
-  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo --nohostbin --nocache
-   * initramfs.append.base
-   * initramfs.append.busybox 1.16.0 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd
-   * ... busybox.download
+  pong ~ # kigen initramfs --defconfig --splash=sabayon --disklabel --luks --lvm2 --dropbear --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... sky2
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.busybox 1.17.1 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd telnetd setsid nohup
    * ... busybox.extract
    * ... busybox.copy_config
-   * ... busybox.compile
+   * ... busybox.defconfig
+   * ... busybox.make
    * ... busybox.strip
    * ... busybox.compress
    * ... busybox.cache
-   * initramfs.append.modules 2.6.34-gentoo-r1
+   * initramfs.append.lvm2 /sbin/lvm.static from host
+   * initramfs.append.luks 1.1.1 /sbin/cryptsetup from host
+   * initramfs.append.e2fsprogs /sbin/blkid from host
+   * initramfs.append.dropbear /usr/bin/dbscp /usr/bin/dbclient /usr/bin/dropbearkey /usr/bin/dropbearconvert /usr/sbin/dropbear from host
+   * initramfs.append.splash sabayon 
+   * initramfs.append.glibc
+   * ... /lib/libnss_files.so.2
+   * ... /lib/libnss_dns.so.2
+   * ... /lib/libnss_nis.so.2
+   * ... /lib/libnsl.so.1
+   * ... /lib/libresolv.so.2
+   * ... /lib/ld-linux.so.2
+   * ... /lib/libc.so.6
+   * ... /lib/libnss_compat.so.2
+   * ... /lib/libutil.so.1
+   * ... /etc/ld.so.cache
+   * ... /lib/libcrypt.so.1
+   * initramfs.append.libncurses
+   * ... /lib/libncurses.so.5
+   * initramfs.append.zlib
+   * ... /lib/libz.so.1
+   * initramfs.append.rootpasswd
+   * ... /etc/passwd
+   * ... /etc/group
+   * initramfs.append.ttyecho
+   * ... gcc /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
+  pong ~ # 
+
+Let's compile from sources.
+::
+  pong ~ # kigen initramfs --defconfig --splash=sabayon --disklabel --luks --lvm2 --dropbear --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --nohostbin
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
    * ... pata_legacy
    * ... pata_pcmcia
    * ... fdomain
@@ -628,7 +707,7 @@ Now let's make a 3rd run without any host binaries and remove previous cached da
    * ... scsi_wait_scan
    * ... e1000
    * ... tg3
-   * ... atl1c
+   * ... sky2
    * ... pcmcia
    * ... yenta_socket
    * ... pd6729
@@ -637,34 +716,86 @@ Now let's make a 3rd run without any host binaries and remove previous cached da
    * ... uhci-hcd
    * ... ohci-hcd
    * ... sl811-hcd
-   * initramfs.append.lvm2 2.02.67
+   * initramfs.append.busybox 1.17.1 [ ash sh mount uname echo cut cat telnet udhcpc vi sed cmp patch awk httpd telnetd setsid nohup
+   * ... busybox.download
+   * ... busybox.extract
+   * ... busybox.copy_config
+   * ... busybox.defconfig
+   * ... busybox.make
+   * ... busybox.strip
+   * ... busybox.compress
+   * ... busybox.cache
+   * initramfs.append.lvm2 2.02.73
    * ... lvm2.download
    * ... lvm2.extract
    * ... lvm2.configure
-   * ... lvm2.compile
+   * ... lvm2.make
    * ... lvm2.install
    * ... lvm2.strip
    * ... lvm2.compress
    * ... lvm2.cache
-   * initramfs.append.luks 1.1.2
+   * initramfs.append.luks 1.1.3
    * ... luks.download
    * ... luks.extract
    * ... luks.configure
-   * ... luks.compile
+   * ... luks.make
    * ... luks.strip
    * ... luks.compress
    * ... luks.cache
-   * initramfs.append.splash gentoo 
+   * initramfs.append.e2fsprogs 1.41.12
+   * ... e2fsprogs.download
+   * ... e2fsprogs.extract
+   * ... e2fsprogs.configure
+   * ... e2fsprogs.make
+   * ... e2fsprogs.strip
+   * ... e2fsprogs.compress
+   * ... e2fsprogs.cache
+   * initramfs.append.dropbear 0.52
+   * ... dropbear.download
+   * ... dropbear.extract
+   * ... dropbear.configure
+   * ... dropbear.make
+   * ... dropbear.strip
+   * ... dropbear.dsskey
+  Will output 1024 bit dss secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_dss_host_key'
+  Generating key, this may take a while...
+   * ... dropbear.rsakey
+  Will output 4096 bit rsa secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_rsa_host_key'
+  Generating key, this may take a while...
+   * ... dropbear.compress
+   * ... dropbear.cache
+   * initramfs.append.splash sabayon 
+   * initramfs.append.glibc
+   * ... /lib/libnss_files.so.2
+   * ... /lib/libnss_dns.so.2
+   * ... /lib/libnss_nis.so.2
+   * ... /lib/libnsl.so.1
+   * ... /lib/libresolv.so.2
+   * ... /lib/ld-linux.so.2
+   * ... /lib/libc.so.6
+   * ... /lib/libnss_compat.so.2
+   * ... /lib/libutil.so.1
+   * ... /etc/ld.so.cache
+   * ... /lib/libcrypt.so.1
+   * initramfs.append.libncurses
+   * ... /lib/libncurses.so.5
+   * initramfs.append.zlib
+   * ... /lib/libz.so.1
+   * initramfs.append.rootpasswd
+   * ... /etc/passwd
+   * ... /etc/group
+   * initramfs.append.ttyecho
+   * ... gcc /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
-Now let's use the cache.
+Re run from cache.
 ::
-  pong ~ # igen --luks --lvm2 --splash --stheme=gentoo --nohostbin
-   * initramfs.append.base
-   * initramfs.append.busybox 1.16.0 from cache
-   * initramfs.append.modules 2.6.34-gentoo-r1
+  pong ~ # kigen initramfs --defconfig --splash=sabayon --disklabel --luks --lvm2 --dropbear --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --nohostbin
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
    * ... pata_legacy
    * ... pata_pcmcia
    * ... fdomain
@@ -673,7 +804,7 @@ Now let's use the cache.
    * ... scsi_wait_scan
    * ... e1000
    * ... tg3
-   * ... atl1c
+   * ... sky2
    * ... pcmcia
    * ... yenta_socket
    * ... pd6729
@@ -682,11 +813,35 @@ Now let's use the cache.
    * ... uhci-hcd
    * ... ohci-hcd
    * ... sl811-hcd
-   * initramfs.append.lvm2 2.02.67 from cache
-   * initramfs.append.luks 1.1.2 from cache
-   * initramfs.append.splash gentoo 
+   * initramfs.append.busybox 1.17.1 from cache
+   * initramfs.append.lvm2 2.02.73 from cache
+   * initramfs.append.luks 1.1.3 from cache
+   * initramfs.append.e2fsprogs 1.41.12 from cache
+   * initramfs.append.dropbear 0.52 from cache
+   * initramfs.append.splash sabayon 
+   * initramfs.append.glibc
+   * ... /lib/libnss_files.so.2
+   * ... /lib/libnss_dns.so.2
+   * ... /lib/libnss_nis.so.2
+   * ... /lib/libnsl.so.1
+   * ... /lib/libresolv.so.2
+   * ... /lib/ld-linux.so.2
+   * ... /lib/libc.so.6
+   * ... /lib/libnss_compat.so.2
+   * ... /lib/libutil.so.1
+   * ... /etc/ld.so.cache
+   * ... /lib/libcrypt.so.1
+   * initramfs.append.libncurses
+   * ... /lib/libncurses.so.5
+   * initramfs.append.zlib
+   * ... /lib/libz.so.1
+   * initramfs.append.rootpasswd
+   * ... /etc/passwd
+   * ... /etc/group
+   * initramfs.append.ttyecho
+   * ... gcc /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.34-gentoo-r1
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
 
