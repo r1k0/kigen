@@ -2,6 +2,7 @@
 
 . /etc/initrd.defaults
 . /etc/initrd.scripts
+. /etc/initrd.dropbear
 
 splash() {
 	return 0
@@ -227,6 +228,9 @@ do
 		aufs)
 			USE_AUFS_NORMAL=1
 		;;
+        dodropbear)
+            DROPBEAR="yes"
+        ;;
 		nounionfs)
 			USE_UNIONFS_NORMAL=0
 			;;
@@ -306,6 +310,9 @@ setup_md_device
 startVolumes
 
 setup_keymap
+
+# Run dropbear if dodropbear is passed to the kernel
+rundropbear
 
 # Initialize LUKS root device except for livecd's
 if [ "${CDROOT}" != 1 ]
