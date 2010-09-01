@@ -51,7 +51,7 @@ class initramfs:
         self.sres               = cli['sres']
         self.sinitrd            = cli['sinitrd']
         self.selinux            = cli['selinux']
-        self.nohostbin          = cli['nohostbin']
+        self.hostbin            = cli['hostbin']
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
 
@@ -92,7 +92,7 @@ class initramfs:
                         self.firmware,          \
                         self.selinux,           \
                         self.nocache,           \
-                        self.nohostbin,         \
+                        self.hostbin,           \
                         self.rootpasswd)
 
         # 1) create initial cpio and append object

@@ -31,7 +31,7 @@ class append:
                 firmware,           \
                 selinux,            \
                 nocache,            \
-                nohostbin,          \
+                hostbin,            \
                 rootpasswd):
         """
         init class variables
@@ -58,7 +58,7 @@ class append:
         self.nocache            = nocache
         self.firmware           = firmware
         self.selinux            = selinux
-        self.nohostbin          = nohostbin
+        self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
 
     def cpio(self):
@@ -313,13 +313,13 @@ class append:
         os.makedirs(self.temp['work']+'/initramfs-luks-temp/lib/luks')
         os.makedirs(self.temp['work']+'/initramfs-luks-temp/sbin')
     
-        if os.path.isfile(cryptsetup_bin) and self.nohostbin is False:
+        if os.path.isfile(cryptsetup_bin) and self.hostbin is True:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
             process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-        elif os.path.isfile(cryptsetup_sbin) and self.nohostbin is False:
+        elif os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
             luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
             logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
             print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
@@ -433,11 +433,11 @@ class append:
         dropbear_sbin       = '/usr/sbin/dropbear'
 
         # FIXME: check if dropbear is merged with USE=static if not fail
-        if os.path.isfile(dropbear_sbin) and self.nohostbin is False:
+        if os.path.isfile(dropbear_sbin) and self.hostbin is True:
 
             dbscp_bin           = '/usr/bin/dbscp'  # assumes host version is patched w/ scp->dbscp because of openssh.
                                                     # compilation of dropbear sources are not patched hence
-                                                    # FIXME if --dropbear --nohostbin
+                                                    # FIXME if --dropbear --hostbin
                                                     # FIXME then /usr/bin/scp
                                                     # FIXME else /usr/bin/dbscp
             dbclient_bin        = '/usr/bin/dbclient'
@@ -537,7 +537,7 @@ class append:
 
         os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
 
-        if os.path.isfile(blkid_sbin) and self.nohostbin is False:
+        if os.path.isfile(blkid_sbin) and self.hostbin is True:
             # use from host
             logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
@@ -625,13 +625,13 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
-        if os.path.isfile(lvm2_static_bin) and self.nohostbin is False:
+        if os.path.isfile(lvm2_static_bin) and self.hostbin is True:
             # TODO see if we can use something else than import commands
             # lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
             logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' from ' + white('host')
             process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
-        elif os.path.isfile(lvm2_bin) and self.nohostbin is False:
+        elif os.path.isfile(lvm2_bin) and self.hostbin is True:
             logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' from host')
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_bin + ' from ' + white('host')
             process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)

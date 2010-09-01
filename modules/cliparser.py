@@ -105,7 +105,7 @@ def parse():
                                     "logfile=",                 \
                                     "noboot",                   \
                                     "nosaveconfig",             \
-                                    "nohostbin",                \
+                                    "hostbin",                  \
                                     "fixdotconfig",             \
                                     "getdotconfig=",            \
                                     "debug"])
@@ -250,7 +250,7 @@ def parse():
                                     "version",      \
                                     "credits",      \
                                     "nosaveconfig", \
-                                    "nohostbin",    \
+                                    "hostbin",      \
                                     "glibc",        \
                                     "libncurses",   \
                                     "zlib",         \
@@ -305,7 +305,7 @@ def parse():
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
         cli['color']        = True
         cli['nosaveconfig'] = False
-        cli['nohostbin']    = False
+        cli['hostbin']      = False
         cli['glibc']        = False
         cli['libncurses']   = False
         cli['zlib']         = False
@@ -399,8 +399,8 @@ def parse():
                 cli['glibc'] = True         # dropbear needs glibc
                 cli['libncurses'] = True    # dropbear needs libncurses
                 cli['zlib'] = True          # dropbear needs zlib
-            elif o in ("--nohostbin"):
-                cli['nohostbin'] = True
+            elif o in ("--hostbin"):
+                cli['hostbin'] = True
             elif o in ("--glibc"):
                 cli['glibc'] = True
             elif o in ("--libncurses"):
@@ -502,8 +502,8 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile'
     print ' '+os.path.basename(sys.argv[0])+' i --splash=sabayon'
     print ' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs'
-    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --nohostbin'
-    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --dropbear --glibc --zlib --libncurses --rootpasswd=mypasswd --ttyecho --nohostbin --nocache --oldconfig'
+    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --hostbin'
+    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --dropbear --glibc --zlib --libncurses --rootpasswd=mypasswd --ttyecho --nocache --oldconfig'
     print ' '+os.path.basename(sys.argv[0])+' --extract=/file i --to=/dir'
     print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file'
 
@@ -637,9 +637,9 @@ def print_usage_initramfs(cli):
     print cli['nocache'],
     print '\t\t     Do not use cached data'
 
-    print '  --nohostbin               ',
-    print cli['nohostbin'],
-    print '\t\t     Do not use host binaries but compile from sources'
+    print '  --hostbin                 ',
+    print cli['hostbin'],
+    print '\t\t     Use host binaries over sources when possible'
 
     print '  --noboot                  ',
     print cli['noboot'],
