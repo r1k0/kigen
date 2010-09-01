@@ -115,13 +115,19 @@ class append:
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
             linuxrclist = self.linuxrc.split(',')
-            print str(linuxrclist) + ' from ' + white(host)
+            print str(linuxrclist) + ' from ' + white('host')
             # copy first the linuxrc to /init
-            process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
+            if os.path.isfile(linuxrclist[0]):
+                process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
+            else:
+                self.fail('%s does not exist.')
             # then all possible files
             for i in linuxrclist[1:]:
-                process('cp %s %s/initramfs-base-temp/etc' % (i, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-base-temp/etc/%s' % (self.temp['work'], os.path.basename(i)), self.verbose)
+                if os.path.isfile(i):
+                    process('cp %s %s/initramfs-base-temp/etc' % (i, self.temp['work']), self.verbose)
+                    process('chmod +x %s/initramfs-base-temp/etc/%s' % (self.temp['work'], os.path.basename(i)), self.verbose)
+                else:
+                    self.fail('%s does not exist.' % i)
     
         # make init executable
         process('chmod 0755 %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
