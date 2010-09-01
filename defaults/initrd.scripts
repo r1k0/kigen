@@ -912,6 +912,14 @@ rundebugshell() {
 	fi
 }
 
+rundropbear() {
+    if [ -n "$DROPBEAR" ]
+    then
+        good_msg 'Starting SSH dropbear daemon.'
+        [ -x /bin/sh ] && /bin/sh || /bin/ash
+    fi
+}
+
 do_resume() {
 	if [ -d /proc/suspend2 -o -d /sys/power/suspend2 -o -d /sys/power/tuxonice ]; then
 		tuxonice_resume

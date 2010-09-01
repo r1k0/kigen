@@ -2,7 +2,6 @@
 
 . /etc/initrd.defaults
 . /etc/initrd.scripts
-. /etc/initrd.dropbear
 
 splash() {
 	return 0
@@ -229,7 +228,7 @@ do
 			USE_AUFS_NORMAL=1
 		;;
         dodropbear)
-            DROPBEAR="yes"
+            DROPBEAR='yes'
         ;;
 		nounionfs)
 			USE_UNIONFS_NORMAL=0
