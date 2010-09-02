@@ -368,6 +368,9 @@ class append:
         os.makedirs(self.temp['work']+'/initramfs-glibc-temp/lib')
 
         print green(' * ') + turquoise('initramfs.append.glibc')
+        # for shell
+        print green(' * ') + '... ' + '/lib/libm.so.6'
+        process('cp /lib/libm.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         # mostly for authentication
         print green(' * ') + '... ' + '/lib/libnss_files.so.2'
         process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
