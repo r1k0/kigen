@@ -917,10 +917,10 @@ rundropbear() {
     then
         good_msg 'Starting SSH stack.'
 
-        echo -ne "${BOLD}   ::${NORMAL} Setting job control on..."
+        echo "${BOLD}   ::${NORMAL} Setting job control on..."
         setsid cttyhack sh
 
-        echo -ne "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+        echo "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
         dropbear
         
         [ -x /bin/sh ] && /bin/sh || /bin/ash
