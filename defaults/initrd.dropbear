@@ -1,0 +1,22 @@
+#!/bin/ash
+
+. /etc/initrd.defaults
+. /etc/initrd.scripts
+
+rundropbear() {
+    if [ -n "$DROPBEAR" ]
+    then
+        good_msg 'Starting SSH stack.'
+
+        echo -e "${BOLD}   ::${NORMAL} Bringing up DHCP..."
+        udhcpc
+
+        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+        dropbear
+
+        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+        setsid cttyhack sh
+        [ -x /bin/sh ] && /bin/sh || /bin/ash
+    fi
+}
+

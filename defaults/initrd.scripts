@@ -912,23 +912,6 @@ rundebugshell() {
 	fi
 }
 
-rundropbear() {
-    if [ -n "$DROPBEAR" ]
-    then
-        good_msg 'Starting SSH stack.'
-
-        echo -e "${BOLD}   ::${NORMAL} Bringing up DHCP..."
-        udhcpc
-
-        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
-        dropbear
-
-        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
-        setsid cttyhack sh
-        [ -x /bin/sh ] && /bin/sh || /bin/ash
-    fi
-}
-
 do_resume() {
 	if [ -d /proc/suspend2 -o -d /sys/power/suspend2 -o -d /sys/power/tuxonice ]; then
 		tuxonice_resume

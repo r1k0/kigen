@@ -2,6 +2,7 @@
 
 . /etc/initrd.defaults
 . /etc/initrd.scripts
+. /etc/initrd.dropbear
 
 splash() {
 	return 0
@@ -310,7 +311,7 @@ startVolumes
 
 setup_keymap
 
-# Run dropbear if dodropbear is passed to the kernel
+# Run dropbear if dodropbear is passed to kernel
 rundropbear
 
 # Initialize LUKS root device except for livecd's
