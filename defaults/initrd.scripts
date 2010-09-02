@@ -915,6 +915,8 @@ rundebugshell() {
 rundropbear() {
     if [ -n "$DROPBEAR" ]
     then
+        good_msg 'Setting job control on'
+        setsid cttyhack sh
         good_msg 'Starting SSH dropbear daemon.'
         [ -x /bin/sh ] && /bin/sh || /bin/ash
     fi
