@@ -117,7 +117,7 @@ class busybox:
         
         @return         bool
         """
-        print green(' * ') + '... busybox.copy_config'
+        print green(' * ') + '... busybox.copy_config '+self.dotconfig
         cpv = ''
         if self.verbose['set'] is True: cpv = '-v'
         if self.dotconfig:
