@@ -44,10 +44,10 @@ class kernel:
         # WARN do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
 
         if self.mrproper is True:
-            ret = make_mrproper()
+            ret = self.make_mrproper()
             if ret is not zero: self.fail('mrproper')
         if self.clean is True:
-            ret = make_clean()
+            ret = self.make_clean()
             if ret is not zero: self.fail('clean')
 
         # by default don't alter dotconfig
