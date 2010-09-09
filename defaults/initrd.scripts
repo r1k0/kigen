@@ -1102,7 +1102,7 @@ rundropbear() {
         udhcpc
 
         echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
-        dropbear
+        dropbear -E
 
 #        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
 #        setsid cttyhack sh
