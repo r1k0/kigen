@@ -2,9 +2,6 @@ TODO: add nohup, screen, setsid to .config busybox
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: kigen i --disklabel 
-    ./configure breaks when using 1.41.12 instead of 1.40.9
-    configure: error: --with-ldopts no longer supported; use LDFLAGS= instead
 TODO: kigen i --udev for udevadm
     or --devtmpfs or --mdev
 TODO: kigen i --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
@@ -16,14 +13,21 @@ TODO: kigen i --aufs
     aufs-version = 0_p20100405
 TODO: kigen i--evms repair
 	sprocessor * fix
-TODO: kigen i --keymap
-    we already have some stuf in base()
 TODO: kigen i --linuxrc=/file
     inject genkernel arch linuxrc into kigen
 TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
     auto add/remove config if passed --fixdotconfig
-TODO: kigen k --extractdotconfig=/vmlinuz
-    This actually depends on whether or not the compiled kernel used the CONFIG_IKCONFIG option. If you're lucky and it was, then you can use:
-    /usr/src/linux/scripts/extract-ikconfig /boot/bzImage > /tmp/config
+TODO: lvm2 fail on Gentoo
+    see http://bugs.gentoo.org/show_bug.cgi?id=332905
+    need lvm2-2.02.72-dynamic-static-ldflags.patch
+TODO: kigen i --strace
+    this will help debug why:"attempt nonexistent user login from" on real hardware
+    as auth works fine on virtualbox :(
+
+INFO: manual ssh boot
+  cryptsetup luksOpen /dev/sda2 root
+  vgscan -a 
+  vgchange -a y
+  /sbin/ttyecho -n /dev/console exec /sbin/switch_root 
