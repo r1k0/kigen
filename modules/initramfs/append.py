@@ -210,13 +210,7 @@ class append:
         process('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
 
-        # FIXME: should be removed but wait!
-        # we don't need it due to busybox --install -s from the /linuxrc
-        # testcase: i see them auto symlinked on boot because /linuxrc is called
-        # and then I ctrl+C luks auth to gain a shell
-        # but so far, /linuxrc has run and busybox --install -s is called
-        # problem: what if /linuxrc is not called and I get a shell? will i miss my symlinks?
-        # answer: yes!
+#       TO BE REMOVED : linuxrc's bb --install -s takes care of it
         for i in self.busyboxprogs.split():
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
