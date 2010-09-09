@@ -109,8 +109,8 @@ class append:
             print 'Gentoo linuxrc 3.4.10.907-r2'
             # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
-            process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/initrd.scripts' % (self.libdir, self.temp['work']), self.verbose)
-            process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/initrd.defaults' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
