@@ -1,7 +1,7 @@
 #!/bin/sh
 
-. /etc/initrd.defaults
-. /etc/initrd.scripts
+. /etc/initrd.defaults.dropbear
+. /etc/initrd.scripts.dropbear
 
 splash() {
 	return 0
