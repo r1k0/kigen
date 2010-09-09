@@ -93,7 +93,7 @@ findmediamount() {
 					skip=1
 					break;
 				done
-				if [ ${skip} -eq 1 ]
+				if [ ${skip} = 1 ]
 				then
 					continue
 				fi
@@ -192,12 +192,12 @@ cache_cd_contents() {
 mount_sysfs() {
 	mount -t sysfs /sys /sys >/dev/null 2>&1
 	ret=$?
-	[ "$ret" -eq '0' ] || bad_msg "Failed to mount /sys!"
+	[ "$ret" = '0' ] || bad_msg "Failed to mount /sys!"
 }
 
 aufs_setup_dir() {
 	mount -t aufs -o "br:$OVERLAY=rw:$2=ro" -- aufs $1
-	if [ "$?" -eq '0' ]; then
+	if [ "$?" = '0' ]; then
 		good_msg "Addition of $2 to $OVERLAY merged into $1"
 	fi
 }
@@ -329,7 +329,7 @@ warn_msg() {
 }
 
 crypt_filter() {
-	if [ ${CRYPT_SILENT} -eq 1 ]
+	if [ ${CRYPT_SILENT} = 1 ]
 	then
 		eval $1 >/dev/null 2>/dev/null
 	else
@@ -423,7 +423,7 @@ cmdline_hwopts() {
 			fi
 			if [ "$(echo ${y} | cut -b -7)" = "keymap=" ]
 			then
-				MY_HWOPTS="${MY_HWOPTS} dokeymap"
+				MY_HWOPTS="${MY_HWOPTS} keymap" # FIX keymap->DO_keymap
 			fi
 		done
 	done
@@ -431,7 +431,7 @@ cmdline_hwopts() {
 	# Shouldnt need to sort this as the following loop should figure out the
 	# duplicates and strip them out
 	#MY_HWOPTS=`echo ${MY_HWOPTS}|  sort`
-	
+
 	for x in ${MY_HWOPTS}
 	do
 		FOUND=0
@@ -479,7 +479,7 @@ setup_keymap() {
 
 		[ "${DEVBIND}" = '1' ] && umount /dev
 		
-		if [ -e /etc/sysconfig/keyboard -a "${CDROOT}" -eq '1' ]
+		if [ -e /etc/sysconfig/keyboard -a "${CDROOT}" = '1' ]
 		then
 			mkdir -p ${NEW_ROOT}/etc/sysconfig/
 			cp /etc/sysconfig/keyboard ${NEW_ROOT}/etc/sysconfig/keyboard
@@ -544,7 +544,7 @@ chooseKeymap() {
 		loadkmap < /lib/keymaps/${keymap}.map
 #		xkeymap=${keymap}
 #		echo ${keymap} | egrep -e "[0-9]+" >/dev/null 2>&1
-#		if [ "$?" -eq '0'  ]
+#		if [ "$?" = '0'  ]
 #		then
 #			xkeymap=`tail -n 7 /lib/keymaps/keymapList | grep ${keymap} | sed -r "s/.*\s+${keymap}\s+([a-z-]+).*/\1/g" | egrep -v 1`
 #		fi
@@ -573,7 +573,7 @@ startVolumes() {
 		ln -sf /dev/device-mapper /dev/mapper/control
 	fi
 	
-	if [ "${USE_MDADM}" -eq '1' ]
+	if [ "${USE_MDADM}" = '1' ]
 	then
 		if [ ! -e '/etc/mdadm.conf' ]
 		then
@@ -706,25 +706,25 @@ openLUKS() {
 	while [ 1 ]
 	do
 		# if crypt_silent=1 and some error occurs, enter shell quietly
-		if [ \( ${CRYPT_SILENT} -eq 1 \) -a \( \( \( ${DEV_ERROR} -eq 1 \) -o \( ${KEY_ERROR} -eq 1 \) \) -o \( ${KEYDEV_ERROR} -eq 1 \) \) ]
+		if [ \( ${CRYPT_SILENT} = 1 \) -a \( \( \( ${DEV_ERROR} = 1 \) -o \( ${KEY_ERROR} = 1 \) \) -o \( ${KEYDEV_ERROR} = 1 \) \) ]
 		then
 			run_shell
-		elif [ ${DEV_ERROR} -eq 1 ]
+		elif [ ${DEV_ERROR} = 1 ]
 		then
 			whereis "LUKS_DEVICE" "${LUKS_NAME}"
 			DEV_ERROR=0
-		elif [ ${KEY_ERROR} -eq 1 ]
+		elif [ ${KEY_ERROR} = 1 ]
 		then
 			whereis "LUKS_KEY" "${LUKS_NAME} key"
 			KEY_ERROR=0
-		elif [ ${KEYDEV_ERROR} -eq 1 ]
+		elif [ ${KEYDEV_ERROR} = 1 ]
 		then
 			whereis "LUKS_KEYDEV" "${LUKS_NAME} key device"
 			KEYDEV_ERROR=0
 		else
 			setup_md_device ${LUKS_DEVICE}
 			cryptsetup isLuks ${LUKS_DEVICE}
-			if [ ! "$?" -eq '0' ]
+			if [ ! "$?" = '0' ]
 			then
 				bad_msg "The LUKS device ${LUKS_DEVICE} does not contain a LUKS header" ${CRYPT_SILENT}
 				DEV_ERROR=1
@@ -793,7 +793,7 @@ openLUKS() {
 				fi
 				# At this point, keyfile or not, we're ready!
 				crypt_filter "cryptsetup ${cryptsetup_options} luksOpen ${LUKS_DEVICE} ${LUKS_NAME}"
-				if [ $? -eq 0 ]
+				if [ $? = 0 ]
 				then
 					good_msg "LUKS device ${LUKS_DEVICE} opened" ${CRYPT_SILENT}
 					break
@@ -1063,7 +1063,7 @@ setup_unionfs() {
 #                                 bad_msg "mount of $CHANGESDEV failed falling back to ramdisk based unionfs" 	 
 #                                 mount -t tmpfs tmpfs $MEMORY 	 
 #                         fi 	 
-#                         if [ "${CDROOT}" -eq '1' -a ! -f ${MEMORY}/livecd.unionfs  ] 	 
+#                         if [ "${CDROOT}" = '1' -a ! -f ${MEMORY}/livecd.unionfs  ] 	 
 #                         then 	 
 #                                 umount $MEMORY 	 
 #                                 bad_msg "failed to find livecd.unionfs file on $CHANGESDEV" 	 
@@ -1092,3 +1092,21 @@ setup_unionfs() {
 		USE_UNIONFS_NORMAL=0
 	fi
 }
+
+rundropbear() {
+    if [ -n "$DROPBEAR" ]
+    then
+        good_msg 'Starting SSH stack.'
+
+        echo -e "${BOLD}   ::${NORMAL} Bringing up DHCP..."
+        udhcpc
+
+        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+        dropbear
+
+        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+        setsid cttyhack sh
+        [ -x /bin/sh ] && /bin/sh || /bin/ash
+    fi
+}
+

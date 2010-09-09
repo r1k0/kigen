@@ -152,10 +152,6 @@ class append:
         build_date.writelines(strftime("%Y-%m-%d %H:%M:%S")+ '\n')
         build_date.close()
     
-        # aux
-        os.makedirs(self.temp['work']+'/initramfs-base-temp/lib/keymaps')
-        process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-base-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
-    
         os.chdir(self.temp['work']+'/initramfs-base-temp')
 
         # link linuxrc to /init
@@ -871,6 +867,19 @@ class append:
 #    
 #        os.chdir(self.temp['work']+'/initramfs-aufs-temp')
 #        return os.system(self.cpio())
+
+    def keymaps(self):
+        """
+        Ship all keymaps within initramfs
+        It's up to the user to provide the correct kernel cmdline parameter
+        """
+        print green(' * ') + turquoise('initramfs.append.keymaps')
+
+        os.makedirs(self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps')
+        process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
+        return os.system(self.cpio())
 
     def ttyecho(self):
         """

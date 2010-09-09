@@ -175,6 +175,10 @@ class initramfs:
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
 
+        if self.cli['keymaps'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.keymaps() is not zero: self.fail('keympas')
+
         if self.cli['ttyecho'] is True:
             os.chdir(self.temp['work'])
             if aobj.ttyecho() is not zero: self.fail('ttyecho')

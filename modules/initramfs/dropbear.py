@@ -23,7 +23,9 @@ class dropbear:
         zero = int('0')
     
         if os.path.isfile('%s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.dropbear_ver))) is not True:
-            if self.download() is not zero: self.fail('download')
+            if self.download() is not zero: 
+                process('rm -v %s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.master_config['dropbear-version'])), self.verbose)
+                self.fail('download')
     
         self.extract()
         # grr, tar thing to not return 0 when success

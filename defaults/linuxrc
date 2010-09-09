@@ -227,6 +227,10 @@ do
 		aufs)
 			USE_AUFS_NORMAL=1
 		;;
+        dodropbear)
+            DROPBEAR='yes'
+        ;;
+
 		nounionfs)
 			USE_UNIONFS_NORMAL=0
 			;;
@@ -239,7 +243,7 @@ do
 #                                 USE_UNIONFS_NORMAL=1 	 
 #                                 CMD_UNIONFS=`parse_opt "${x}"` 	 
 #                                 echo ${CMD_UNIONFS}|grep , >/dev/null 2>&1 	 
-#                                 if [ "$?" -eq '0' ] 	 
+#                                 if [ "$?" = '0' ] 	 
 #                                 then 	 
 #                                         UID=`echo ${CMD_UNIONFS#*,}` 	 
 #                                         UNIONFS=`echo ${CMD_UNIONFS%,*}` 	 
@@ -251,7 +255,7 @@ do
 	esac
 done
 
-if [ -z "${REAL_ROOT}" -a \( "${CDROOT}" -eq 0 \)  -a \( "${FAKE_ROOT}" != "/dev/ram0" \) ]
+if [ -z "${REAL_ROOT}" -a \( "${CDROOT}" = 0 \)  -a \( "${FAKE_ROOT}" != "/dev/ram0" \) ]
 then
 	REAL_ROOT="${FAKE_ROOT}"	
 fi
@@ -310,6 +314,9 @@ startVolumes
 
 setup_keymap
 
+# Start SSH daemon and go to shell
+rundropbear
+
 # Initialize LUKS root device except for livecd's
 if [ "${CDROOT}" != 1 ]
 then
@@ -337,7 +344,7 @@ then
 					retval=$?
 				fi
 				
-				if [ "${retval}" -eq '0' ] && [ -n "${RESUME_DEV}" ]; then
+				if [ "${retval}" = '0' ] && [ -n "${RESUME_DEV}" ]; then
 					good_msg "Detected real_resume=${RESUME_DEV}"
 					REAL_RESUME="${RESUME_DEV}"
 				fi
@@ -444,7 +451,7 @@ do
 					retval=$?
 				fi
 				
-				if [ "${retval}" -eq '0' ] && [ -n "${ROOT_DEV}" ]; then
+				if [ "${retval}" = '0' ] && [ -n "${ROOT_DEV}" ]; then
 					good_msg "Detected real_root=${ROOT_DEV}"
 					REAL_ROOT="${ROOT_DEV}"
 				else
@@ -630,7 +637,7 @@ then
 	fi
 
 
-	if [ "${USE_AUFS_NORMAL}" -eq '1' ]
+	if [ "${USE_AUFS_NORMAL}" = '1' ]
 	then
 		good_msg 'Setting up aufs mounts'
 		setup_aufs
@@ -713,7 +720,7 @@ else
 		setup_unionfs /union_changes ${NEW_ROOT}
 		mkdir -p ${UNION}/tmp/.initrd
 	fi
-	if [ "${USE_AUFS_NORMAL}" -eq '1' ]
+	if [ "${USE_AUFS_NORMAL}" = '1' ]
 	then
 		setup_aufs
 		mkdir -p ${UNION}/tmp/.initrd

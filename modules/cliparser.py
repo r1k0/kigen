@@ -261,6 +261,7 @@ def parse():
                                     "to=",          \
                                     "compress=",    \
                                     "into=",        \
+                                    "keymaps",      \
                                     "ttyecho",      \
                                     "debug"])
         except GetoptError, err:
@@ -317,6 +318,7 @@ def parse():
         cli['compress']     = ''
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
         cli['ttyecho']      = False
+        cli['keymaps']      = False
     
         # target options
         for o, a in opts:
@@ -423,6 +425,8 @@ def parse():
                 cli['into'] = a
             elif o in ("--ttyecho"):
                 cli['ttyecho'] = True
+            elif o in ("--keymaps"):
+                cli['keymaps'] = True
 
             else:
                 assert False, "uncaught option"
@@ -626,6 +630,10 @@ def print_usage_initramfs(cli):
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
+
+    print '  --keymaps                 ',
+    print cli['keymaps'], # bool
+    print '\t\t     Include all keymaps'
 
     print '  --ttyecho                 ',
     print cli['ttyecho'], # bool
