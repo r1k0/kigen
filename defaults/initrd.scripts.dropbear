@@ -1,6 +1,6 @@
 #!/bin/ash
 
-. /etc/initrd.defaults
+. /etc/initrd.defaults.dropbear
 
 backup() {
 	echo -ne "\033[0G\033[0K"
