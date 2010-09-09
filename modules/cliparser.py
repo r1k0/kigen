@@ -260,7 +260,7 @@ def parse():
                                     "extract=",     \
                                     "to=",          \
                                     "compress=",    \
-                                    "into",         \
+                                    "into=",        \
                                     "ttyecho",      \
                                     "debug"])
         except GetoptError, err:
