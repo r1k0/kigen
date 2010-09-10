@@ -21,37 +21,27 @@ class lvm2:
         @return: bool
         """
         zero = int('0')
-        ret = True
     
         if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver)) is not True:
-            ret = self.download()
-            if ret is not zero:
+            if self.download() is not zero:
                 process('rm -v %s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
         # grr, tar thing to not return 0 when success
     
-        ret = self.configure()
-        if ret is not zero: self.fail('configure')
+        if self.configure() is not zero: self.fail('configure')
     
-        ret = self.make()
-        if ret is not zero: self.fail('make')
+        if self.make() is not zero: self.fail('make')
     
-        ret = self.install()
-        if ret is not zero: self.fail('install')
+        if self.install() is not zero: self.fail('install')
     
-        ret = self.strip()
-        if ret is not zero: self.fail('strip')
+        if self.strip() is not zero: self.fail('strip')
     
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
+        if self.compress() is not zero: self.fail('compress')
     
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
+        if self.cache() is not zero: self.fail('cache')
     
-        return ret
-
     def fail(self, step):
         """
         @arg step   string
