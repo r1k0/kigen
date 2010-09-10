@@ -30,7 +30,7 @@ class luks:
         self.extract()
     #   grr, tar thing to not return 0 when success
     
-        if elf.configure()is not zero: self.fail('configure')
+        if self.configure()is not zero: self.fail('configure')
     
         if self.make() is not zero: self.fail('make')
     
