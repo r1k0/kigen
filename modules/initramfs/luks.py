@@ -23,8 +23,7 @@ class luks:
         zero = int('0')
     
         if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (get_portdir(self.temp), self.luks_ver)) is not True:
-            ret = self.download()
-            if ret is not zero: 
+            if self.download() is not zero: 
                 process('rm -v %s/distfiles/cryptsetup-%s.tar.bz2' % (get_portdir(self.temp), self.luks_ver), self.verbose)
                 self.fail('download')
     
