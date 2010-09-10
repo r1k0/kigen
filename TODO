@@ -30,4 +30,5 @@ INFO: manual ssh boot
   cryptsetup luksOpen /dev/sda2 root
   vgscan -a 
   vgchange -a y
-  /sbin/ttyecho -n /dev/console exec /sbin/switch_root 
+  #/sbin/ttyecho -n /dev/console exec /sbin/switch_root
+  /sbin/ttyecho -n /dev/console q # this will continue normal boot
