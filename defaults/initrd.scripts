@@ -1108,6 +1108,7 @@ rundropbear() {
         then
             echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
             setsid cttyhack sh
+        fi
 
        [ -x /bin/sh ] && /bin/sh || /bin/ash
     fi
