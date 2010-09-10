@@ -22,9 +22,9 @@ class strace:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/strace-%s.tar.gz' % (get_portdir(self.temp), self.strace_ver)) is not True:
+        if os.path.isfile('%s/distfiles/strace-%s.tar.bz2' % (get_portdir(self.temp), self.strace_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/strace-%s.tar.gz' % (get_portdir(self.temp), self.strace_ver), self.verbose)
+                process('rm %s/distfiles/strace-%s.tar.bz2' % (get_portdir(self.temp), self.strace_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
