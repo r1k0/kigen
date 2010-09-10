@@ -183,6 +183,10 @@ class initramfs:
             os.chdir(self.temp['work'])
             if aobj.ttyecho() is not zero: self.fail('ttyecho')
 
+        if self.cli['strace'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.strace() is not zero: self.fail('strace')
+
         # last) append user plugin
         if self.pluginroot is not '':
             pluginlist = self.pluginroot.split(',')

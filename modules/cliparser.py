@@ -263,6 +263,7 @@ def parse():
                                     "into=",        \
                                     "keymaps",      \
                                     "ttyecho",      \
+                                    "strace",       \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -319,6 +320,7 @@ def parse():
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
         cli['ttyecho']      = False
         cli['keymaps']      = False
+        cli['strace']       = False
     
         # target options
         for o, a in opts:
@@ -427,6 +429,8 @@ def parse():
                 cli['ttyecho'] = True
             elif o in ("--keymaps"):
                 cli['keymaps'] = True
+            elif o in ("--strace"):
+                cli['strace'] = True
 
             else:
                 assert False, "uncaught option"
@@ -638,6 +642,10 @@ def print_usage_initramfs(cli):
     print '  --ttyecho                 ',
     print cli['ttyecho'], # bool
     print '\t\t     Include the handy ttyecho.c tool'
+
+    print '  --strace                  ',
+    print cli['strace'], # bool
+    print '\t\t     Include the strace binary tool'
 
     print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                      Include list of user generated custom roots'
 
