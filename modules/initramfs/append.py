@@ -889,6 +889,44 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-ttyecho-temp')
         return os.system(self.cpio())
 
+    def strace(self):
+        """
+        Append srace binary to the initramfs
+        for debugging purposes
+        
+        @return: bool
+        """
+        strace_bin = '/usr/bin/strace'
+
+        os.makedirs(self.temp['work']+'/initramfs-strace-temp/bin')
+
+        if os.path.isfile(strace_bin) and self.hostbin is True:
+            # use from host
+            logging.debug('initramfs.append.strace from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
+            process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+
+        else:
+            logging.debug('initramfs.append.strace ' + self.master_config['strace-version'])
+            print green(' * ') + turquoise('initramfs.append.strace ') + self.master_config['strace-version'],
+            if os.path.isfile(self.temp['cache'] + '/strace-' + self.master_config['strace-version']+'.bz2') and self.nocache is False:
+                # use cache
+                print 'from ' + white('cache')
+            else:
+                # compile
+                print
+                from strace import strace
+                strobj = strace(self.master_config, self.temp, self.verbose)
+                strobj.build()
+
+            # FIXME careful with the >
+            os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.master_config['strace-version'], self.temp['work']))
+            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-strace-temp')
+        return os.system(self.cpio())
+
     def plugin(self, dir):
         """
         Append user generated file structure
