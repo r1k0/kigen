@@ -38,7 +38,6 @@ class dropbear:
         if self.configure() is not zero: self.fail('configure')
         if self.make() is not zero: self.fail('make')
         if self.strip() is not zero: self.fail('strip')
-#        if self.libraries() is not zero: self.fail('libraries')
         if self.dsskey() is not zero: self.fail('dsskey')
         if self.rsakey() is not zero: self.fail('rsakey')
         if self.compress() is not zero: self.fail('compress')
@@ -108,6 +107,18 @@ class dropbear:
 #        """
 #        # get /etc/portage/savedconfig/net-misc/dropbear-0.52?
 #        pass
+
+    def patch_debug_header(self):
+        """
+        Patch debug.h by adding
+        #define DEBUG_TRACE
+        """
+        print green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE'
+        self.chgdir(self.dropbeartmp)
+
+        os.system('mv debug.h debug.h.tmp')
+        os.system('echo #define DEBUG_TRACE > debug.h')
+        os.system('cat debug.h.tmp >> denug.h')
 
     def configure(self):
         """
