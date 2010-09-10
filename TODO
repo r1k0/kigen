@@ -25,10 +25,12 @@ TODO: lvm2 fail on Gentoo
 TODO: kigen i --strace
     this will help debug why:"attempt nonexistent user login from" on real hardware
     as auth works fine on virtualbox :(
+TODO: kigen i --dropbear --debugflag
+    we need to be able to compile DB with DEBUG if needed
 
 INFO: manual ssh boot
   cryptsetup luksOpen /dev/sda2 root
-  vgscan -a 
+  vgscan
   vgchange -a y
   #/sbin/ttyecho -n /dev/console exec /sbin/switch_root
   /sbin/ttyecho -n /dev/console q # this will continue normal boot
