@@ -6,13 +6,14 @@ from utils.misc import *
 
 class dropbear:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, debugflag, temp, verbose):
         
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.dropbear_ver   = master_config['dropbear-version']
         self.dropbeartmp    = temp['work'] + '/dropbear-' + master_config['dropbear-version']
+        self.debugflag      = debugflag
 
     def build(self):
         """
@@ -34,7 +35,10 @@ class dropbear:
 # because there is NO scp bin inside the initramfs
 # the patch only applies for cases when openssh is already installed
 # to make dropbear and openssh coexist
-#        if self.patch() is not zero: self.fail('patch')
+#       if self.patch() is not zero: self.fail('patch')
+
+        if self.debugflag is True:
+            if self.patch_debug_header() is not zero: self.fail('patch_debug_header')
         if self.configure() is not zero: self.fail('configure')
         if self.make() is not zero: self.fail('make')
         if self.strip() is not zero: self.fail('strip')
@@ -116,9 +120,7 @@ class dropbear:
         print green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE'
         self.chgdir(self.dropbeartmp)
 
-        os.system('mv debug.h debug.h.tmp')
-        os.system('echo #define DEBUG_TRACE > debug.h')
-        os.system('cat debug.h.tmp >> denug.h')
+        return os.system('mv debug.h debug.h.tmp && echo "#define DEBUG_TRACE" > debug.h && cat debug.h.tmp >> debug.h && rm debug.h.tmp')
 
     def configure(self):
         """

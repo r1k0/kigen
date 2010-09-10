@@ -264,6 +264,7 @@ def parse():
                                     "keymaps",      \
                                     "ttyecho",      \
                                     "strace",       \
+                                    "debugflag",    \
                                     "debug"])
         except GetoptError, err:
             print str(err) # "option -a not recognized"
@@ -321,6 +322,7 @@ def parse():
         cli['ttyecho']      = False
         cli['keymaps']      = False
         cli['strace']       = False
+        cli['debugflag']    = False
     
         # target options
         for o, a in opts:
@@ -431,6 +433,8 @@ def parse():
                 cli['keymaps'] = True
             elif o in ("--strace"):
                 cli['strace'] = True
+            elif o in ("--debugflag"):
+                cli['debugflag'] = True
 
             else:
                 assert False, "uncaught option"
@@ -617,6 +621,10 @@ def print_usage_initramfs(cli):
     print '  --dropbear                ',
     print cli['dropbear'], # bool
     print '\t\t     Include dropbear tools and daemon (host binaries if found)'
+
+    print '   --debugflag              ',
+    print cli['debugflag'], # bool
+    print '\t\t      Compile dropbear with #define DEBUG_TRACE in debug.h'
 
     print '   --glibc                  ',
     print cli['glibc'], # bool

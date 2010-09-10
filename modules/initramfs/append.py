@@ -30,6 +30,7 @@ class append:
                 sinitrd,            \
                 firmware,           \
                 selinux,            \
+                dbdebugflag,        \
                 nocache,            \
                 hostbin,            \
                 rootpasswd):
@@ -60,6 +61,7 @@ class append:
         self.selinux            = selinux
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
+        self.dbdebugflag        = dbdebugflag
 
     def cpio(self):
         """
@@ -468,7 +470,7 @@ class append:
                 # compile and cache
                 print
                 from dropbear import dropbear
-                dropbearobj = dropbear(self.master_config, self.temp, self.verbose)
+                dropbearobj = dropbear(self.master_config, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
 
                 # extract cache

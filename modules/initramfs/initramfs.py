@@ -54,6 +54,7 @@ class initramfs:
         self.hostbin            = cli['hostbin']
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
+        self.dbdebugflag        = cli['debugflag']
 
     def build(self):
         """
@@ -91,6 +92,7 @@ class initramfs:
                         self.sinitrd,           \
                         self.firmware,          \
                         self.selinux,           \
+                        self.dbdebugflag,       \
                         self.nocache,           \
                         self.hostbin,           \
                         self.rootpasswd)
