@@ -20,33 +20,25 @@ class strace:
 
         @return     bool
         """
-        ret = zero = int('0')
+        zero = int('0')
     
         if os.path.isfile('%s/distfiles/strace-%s.tar.gz' % (get_portdir(self.temp), self.strace_ver)) is not True:
-            ret = self.download()
-            if ret is not zero:
+            if self.download() is not zero:
                 process('rm %s/distfiles/strace-%s.tar.gz' % (get_portdir(self.temp), self.strace_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
     #   grr, tar thing to not return 0 when success
     
-        ret = self.configure()
-        if ret is not zero: self.fail('configure')
+        if self.configure() is not zero: self.fail('configure')
     
-        ret = self.make()
-        if ret is not zero: self.fail('make')
+        if self.make() is not zero: self.fail('make')
     
-        ret = self.strip()
-        if ret is not zero: self.fail('strip')
+        if self.strip() is not zero: self.fail('strip')
     
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
+        if self.compress() is not zero: self.fail('compress')
     
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
-    
-        return ret
+        if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
         """
@@ -77,10 +69,10 @@ class strace:
         @return: bool
         """
         print green(' * ') + '... strace.download'
-        strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.gz'
+        strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget %s -O %s/distfiles/strace-%s.tar.gz %s' % (strace_url, get_portdir(self.temp), str(self.strace_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/distfiles/strace-%s.tar.bz2 %s' % (strace_url, get_portdir(self.temp), str(self.strace_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -90,9 +82,9 @@ class strace:
         """
         print green(' * ') + '... strace.extract'
     
-        os.system('tar xvfz %s/distfiles/strace-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfj %s/distfiles/strace-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
     
-    # e2fsprogrs building functions
+    # strace building functions
     def configure(self):
         """
         strace Makefile interface to configure
@@ -100,7 +92,7 @@ class strace:
         @return: bool
         """
         print green(' * ') + '... strace.configure'
-        self.chgdir(self.e2tmp)
+        self.chgdir(self.stracetmp)
     
 #        return os.system('./configure --with-ldopts=-static %s' % self.verbose['std'])
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
@@ -112,46 +104,46 @@ class strace:
         @return: bool
         """
         print green(' * ') + '... strace.make'
-        self.chgdir(self.e2tmp)
+        self.chgdir(self.stracetmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
     
     def strip(self):
         """
-        blkid strip binary routine
+        strace strip binary routine
     
-        @arg e2tmp          string
+        @arg stracetmp          string
         @arg master_config  dict
     
         @return: bool
         """
         print green(' * ') + '... strace.strip'
-        self.chgdir(self.e2tmp)
+        self.chgdir(self.stracetmp)
     
-        return os.system('strip %s/misc/blkid ' % self.e2tmp)
+        return os.system('strip %s/strace ' % self.stracetmp)
     
     def compress(self):
         """
-        blkid compression routine
+        strace compression routine
     
-        @arg e2tmp          string
+        @arg stracetmp          string
         @arg master_config  dict
     
         @return: bool
         """
         print green(' * ') + '... strace.compress'
-        self.chgdir(self.e2tmp)
+        self.chgdir(self.stracetmp)
     
-        return os.system('bzip2 %s/misc/blkid' % self.e2tmp)
+        return os.system('bzip2 %s/strace' % self.stracetmp)
     
     def cache(self):
         """
-        blkid tarball cache routine
+        strace tarball cache routine
     
         @return: bool
         """
         print green(' * ') + '... strace.cache'
-        self.chgdir(self.e2tmp)
+        self.chgdir(self.stracetmp)
     
-        return process('mv %s/misc/blkid.bz2 %s/blkid-strace-%s.bz2' % (self.e2tmp, self.temp['cache'], self.master_config['strace-version']), self.verbose)
+        return process('mv %s/strace.bz2 %s/strace-%s.bz2' % (self.stracetmp, self.temp['cache'], self.master_config['strace-version']), self.verbose)
 
