@@ -23,30 +23,22 @@ class e2fsprogs:
         ret = zero = int('0')
     
         if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (get_portdir(self.temp), self.e2fsprogs_ver)) is not True:
-            ret = self.download()
-            if ret is not zero:
+            if self.download() is not zero:
                 process('rm %s/distfiles/e2fsprogs-%s.tar.gz' % (get_portdir(self.temp), self.e2fsprogs_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
     #   grr, tar thing to not return 0 when success
     
-        ret = self.configure()
-        if ret is not zero: self.fail('configure')
+        if self.configure() is not zero: self.fail('configure')
     
-        ret = self.make()
-        if ret is not zero: self.fail('make')
+        if self.make() is not zero: self.fail('make')
     
-        ret = self.strip()
-        if ret is not zero: self.fail('strip')
+        if self.strip() is not zero: self.fail('strip')
     
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
+        if self.compress() is not zero: self.fail('compress')
     
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
-    
-        return ret
+        if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
         """
