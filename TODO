@@ -32,5 +32,8 @@ INFO: manual ssh boot
   cryptsetup luksOpen /dev/sda2 root
   vgscan
   vgchange -a y
+  mkdir /newroot
+  mount /dev/mapper/vg_sabayon-lv_root /newroot
+  q
   #/sbin/ttyecho -n /dev/console exec /sbin/switch_root
   /sbin/ttyecho -n /dev/console q # this will continue normal boot
