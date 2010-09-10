@@ -1104,9 +1104,12 @@ rundropbear() {
         echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
         dropbear -E
 
-#        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
-#        setsid cttyhack sh
-        [ -x /bin/sh ] && /bin/sh || /bin/ash
+        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
+        then
+            echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+            setsid cttyhack sh
+
+       [ -x /bin/sh ] && /bin/sh || /bin/ash
     fi
 }
 
