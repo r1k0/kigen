@@ -20,7 +20,7 @@ class luks:
     
         @return: bool
         """
-        ret = zero = int('0')
+        zero = int('0')
     
         if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (get_portdir(self.temp), self.luks_ver)) is not True:
             ret = self.download()
@@ -31,23 +31,16 @@ class luks:
         self.extract()
     #   grr, tar thing to not return 0 when success
     
-        ret = self.configure()
-        if ret is not zero: self.fail('configure')
+        if elf.configure()is not zero: self.fail('configure')
     
-        ret = self.make()
-        if ret is not zero: self.fail('make')
+        if self.make() is not zero: self.fail('make')
     
-        ret = self.strip()
-        if ret is not zero: self.fail('strip')
+        if self.strip() is not zero: self.fail('strip')
     
-        ret = self.compress()
-        if ret is not zero: self.fail('compress')
+        if self.compress() is not zero: self.fail('compress')
     
-        ret = self.cache()
-        if ret is not zero: self.fail('cache')
+        if self.cache() is not zero: self.fail('cache')
     
-        return ret
-
     def fail(self, step):
         """
         Exit
