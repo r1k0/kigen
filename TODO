@@ -1,11 +1,8 @@
-TODO: add nohup, screen, setsid to .config busybox
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
 TODO: kigen i --udev for udevadm
     or --devtmpfs or --mdev
-TODO: kigen i --dropbear http://www.howtoforge.com/chrooted-drop-bear-howto
-    dropbear-version = 0.52
 TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
 TODO: pass $PORTDIR don't assume /usr/portage
@@ -22,11 +19,6 @@ TODO: kigen i --fixdotconfig
 TODO: lvm2 fail on Gentoo
     see http://bugs.gentoo.org/show_bug.cgi?id=332905
     need lvm2-2.02.72-dynamic-static-ldflags.patch
-TODO: kigen i --strace
-    this will help debug why:"attempt nonexistent user login from" on real hardware
-    as auth works fine on virtualbox :(
-TODO: kigen i --dropbear --debugflag
-    we need to be able to compile DB with DEBUG if needed
 
 INFO: manual ssh boot
   cryptsetup luksOpen /dev/sda2 root
