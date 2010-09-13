@@ -523,96 +523,86 @@ def print_examples():
 def print_usage_kernel(cli):
     print 'Parameter:\t\t     Default value:\t\tDescription:'
     print
+    print 'Config:'
     print '  --config=/file             "'+cli['config']+'"\t\tCustom master config file'
+    print
+    print  'Kernel:'
     print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"\tCustom kernel .config file'
-    print '  --rename=/file             "'+cli['rename']+'"'
-    print '\t\t\t\t\t\t\tCustom kernel file name'
-
     print '  --initramfs=/file          "'+cli['initramfs']+'"\t\t\t\tEmbed initramfs into the kernel'
-
     print yellow('   --fixdotconfig           '),
     print cli['fixdotconfig'],
     print yellow('\t\t\t Check and auto fix the kernel config file (experimental)')
-
     print '  --clean                   ',
     print cli['clean'],
     print '\t\t\tClean precompiled objects only'
-
     print '  --mrproper                ',
     print cli['mrproper'],
     print '\t\t\tClean precompiled objects and remove config file'
-
     print '  --oldconfig               ',
     print cli['oldconfig'],
     print '\t\t\tAsk for new kernel options if any'
-
     print '  --menuconfig              ',
     print cli['menuconfig'],
     print '\t\t\tInteractive kernel options menu'
-
     print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\t\tAppend modules to /dir/lib/modules'
-
     print '  --nooldconfig             ',
     print not cli['oldconfig'],
     print '\t\t\tDo not ask for new kernel/initramfs options'
-
     print '  --nomodinstall            ',
     print cli['nomodinstall'],
     print '\t\t\tDo not install modules'
-
+    print
+    print 'Misc:'
     print '  --nosaveconfig            ',
     print cli['nosaveconfig'],
     print '\t\t\tDo not save kernel config in /etc/kernels'
-
     print '  --noboot                  ',
     print cli['noboot'],
     print '\t\t\tDo not copy kernel to /boot'
-
+    print '  --rename=/file             "'+cli['rename']+'"'
+    print '\t\t\t\t\t\t\tCustom kernel file name'
     print '  --logfile=/file            "'+cli['logfile']+'"\tLog to file'
     print '  --debug, -d                False\t\t\tDebug verbose'
     print
+    print 'Tools:'
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs(cli):
     # passing cli is supposed to grab default from parse()
     print 'Parameter:\t\t     Default value:\t     Description:'
     print
+    print 'Config:'
     print '  --config=/file             "'+cli['config']+'"       Custom master config file'
-#    print '  --dotconfig=/file          "'+cli['dotconfig']+'"                      Custom busybox config file'
-    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
     print '\t\t\t\t\t\t     Custom busybox config file'
-    print '  --rename=/file             "'+cli['rename']+'"'
-    print '\t\t\t\t\t\t     Custom initramfs file name'
-
+    print
+    print 'Linuxrc:'
+    print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                      Include custom linuxrc (files copied over to etc)'
+    print
+    print 'Busybox:'
+    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
     print '  --defconfig               ',
     print cli['defconfig'], # bool
     print '\t\t     Set .config to largest generic options'
-
     print '  --oldconfig               ',
     print cli['oldconfig'], # bool
     print '\t\t     Ask for new busybox options if any'
-
     print '  --menuconfig              ',
     print cli['menuconfig'], # bool
     print '\t\t     Interactive busybox options menu'
-
-    print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                      Include custom linuxrc (files copied over to etc)'
+    print
+    print 'Features:'
     print '  --splash=<theme>           "'+cli['splash']+'"                      Include splash support (splashutils must be merged)'
     print '   --sres=YxZ[,YxZ]          "'+cli['sres']+'"                       Splash resolution, all if not set'
 #   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
-
     print '  --disklabel               ',
     print cli['disklabel'], # bool
     print '\t\t     Include support for UUID/LABEL'
-
     print '  --luks                    ',
     print cli['luks'], # bool 
     print '\t\t     Include LUKS support (host binary if found)'
-
     print '  --lvm2                    ',
     print cli['lvm2'], # bool
     print '\t\t     Include LVM2 support (host binary if found)'
-
 #   print '  --evms                     False                   Include evms support (evms must be merged)'
 #   print '  --dmraid                   False                   Include dmraid support'
 #   print '   --selinux                 False                    Include selinux support in --dmraid'
@@ -621,57 +611,51 @@ def print_usage_initramfs(cli):
     print '  --dropbear                ',
     print cli['dropbear'], # bool
     print '\t\t     Include dropbear tools and daemon (host binaries if found)'
-
     print '   --debugflag              ',
     print cli['debugflag'], # bool
     print '\t\t      Compile dropbear with #define DEBUG_TRACE in debug.h'
-
-    print '   --glibc                  ',
-    print cli['glibc'], # bool
-    print '\t\t      Include host GNU C libraries (required for dns,dropbear)'
-
-    print '   --libncurses             ',
-    print cli['libncurses'], # bool
-    print '\t\t      Include host libncurses (required for dropbear)'
-
-    print '   --zlib                   ',
-    print cli['zlib'], # bool
-    print '\t\t      Include host zlib (required for dropbear)'
-
-    print '   --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"                       Create and set root password (required for dropbear)'
+    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"                      Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
-
     print '  --keymaps                 ',
     print cli['keymaps'], # bool
     print '\t\t     Include all keymaps'
-
     print '  --ttyecho                 ',
     print cli['ttyecho'], # bool
     print '\t\t     Include the handy ttyecho.c tool'
-
     print '  --strace                  ',
     print cli['strace'], # bool
     print '\t\t     Include the strace binary tool'
-
     print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                      Include list of user generated custom roots'
-
+    print
+    print 'Libraries:'
+    print '  --glibc                   ',
+    print cli['glibc'], # bool
+    print '\t\t     Include host GNU C libraries (required for dns,dropbear)'
+    print '  --libncurses              ',
+    print cli['libncurses'], # bool
+    print '\t\t     Include host libncurses (required for dropbear)'
+    print '  --zlib                    ',
+    print cli['zlib'], # bool
+    print '\t\t     Include host zlib (required for dropbear)'
+    print
+    print 'Misc:'
     print '  --nocache                 ',
     print cli['nocache'],
     print '\t\t     Do not use cached data'
-
     print '  --hostbin                 ',
     print cli['hostbin'],
     print '\t\t     Use host binaries over sources when possible'
-
     print '  --noboot                  ',
     print cli['noboot'],
     print '\t\t     Do not copy initramfs to /boot'
-
+    print '  --rename=/file             "'+cli['rename']+'"'
+    print '\t\t\t\t\t\t     Custom initramfs file name'
     print '  --logfile=/file            "'+cli['logfile']+'"    Log to file'
     print '  --debug, -d                False                   Debug verbose'
     print
+    print 'Tools:'
     print '  --extract=/file            "'+cli['extract']+'"                      Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
     print '\t\t\t\t\t\t      Custom extracting directory'
