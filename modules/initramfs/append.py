@@ -432,7 +432,7 @@ class append:
     
         @return: bool
         """
-        for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run']:
+        for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
             os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
 
         dropbear_sbin       = '/usr/sbin/dropbear'
@@ -486,6 +486,10 @@ class append:
         process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/lastlog', self.verbose)
         process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/wtmp', self.verbose)
         process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/run/utmp', self.verbose)
+
+        # ship the boot-luks.sh script too
+        process('cp %s/tools/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-dropbear-temp/root/boot-luks.sh', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp/dev')
         process('mknod urandom c 1 9', self.verbose)
