@@ -1096,7 +1096,7 @@ setup_unionfs() {
 rundropbear() {
     if [ -n "$DROPBEAR" ]
     then
-        good_msg 'Starting SSH stack.'
+        good_msg 'Starting SSH stack'
 
         echo -e "${BOLD}   ::${NORMAL} Bringing up DHCP..."
         udhcpc
