@@ -524,7 +524,7 @@ Help menu.
     --debug, -d                False              Debug verbose
   
   Tools:
-    --getdotconfig=/vmlinux    ""         Extract .config from compiled binary kernel (if IKCONFIG has been set)
+    --getdotconfig=/vmlinux    ""                 Extract .config from compiled binary kernel (if IKCONFIG has been set)
   pong ~ # 
 
 Default behavior.
@@ -669,7 +669,7 @@ In this case, busybox cache is used.
    * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
   pong ~ # 
 
-Now let's make a full blown initramfs using host binaries (which is default).
+Now let's make a full blown initramfs.
 ::
   pong ~ # kigen initramfs --splash=sabayon --disklabel --luks --lvm2 --keymaps --dropbear --debugflag --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --strace
    * Sabayon Linux amd64 G on x86_64
@@ -898,6 +898,23 @@ Note that by default kigen will pick up and ship host binaries.
 Passing --nohostbin will fetch sources and compile statically.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
+
+==========================================
+Howto boot LUKS/LVM through SSH (dropbear)
+==========================================
+
+Build initramfs with SSH support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set kernel command option
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kill dropbear daemon and restart openssh
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Connect to initramfs and boot remotly
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 :Authors: 
     erick 'r1k0' michau (python engine),
