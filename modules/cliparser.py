@@ -521,51 +521,52 @@ def print_examples():
 
 
 def print_usage_kernel(cli):
-    print 'Parameter:\t\t     Default value:\t\tDescription:'
+    print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Config:'
-    print '  --config=/file             "'+cli['config']+'"\t\tCustom master config file'
+    print '  --config=/file             "'+cli['config']+'"\tCustom master config file'
     print
     print  'Kernel:'
-    print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"\tCustom kernel .config file'
-    print '  --initramfs=/file          "'+cli['initramfs']+'"\t\t\t\tEmbed initramfs into the kernel'
+    print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"'
+    print '\t\t\t\t\t\tCustom kernel .config file'
+    print '  --initramfs=/file          "'+cli['initramfs']+'"\t\t\tEmbed initramfs into the kernel'
     print yellow('   --fixdotconfig           '),
     print cli['fixdotconfig'],
-    print yellow('\t\t\t Check and auto fix the kernel config file (experimental)')
+    print yellow('\t\t Check and auto fix the kernel config file (experimental)')
     print '  --clean                   ',
     print cli['clean'],
-    print '\t\t\tClean precompiled objects only'
+    print '\t\tClean precompiled objects only'
     print '  --mrproper                ',
     print cli['mrproper'],
-    print '\t\t\tClean precompiled objects and remove config file'
+    print '\t\tClean precompiled objects and remove config file'
     print '  --oldconfig               ',
     print cli['oldconfig'],
-    print '\t\t\tAsk for new kernel options if any'
+    print '\t\tAsk for new kernel options if any'
     print '  --menuconfig              ',
     print cli['menuconfig'],
-    print '\t\t\tInteractive kernel options menu'
+    print '\t\tInteractive kernel options menu'
     print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\t\tAppend modules to /dir/lib/modules'
     print '  --nooldconfig             ',
     print not cli['oldconfig'],
-    print '\t\t\tDo not ask for new kernel/initramfs options'
+    print '\t\tDo not ask for new kernel/initramfs options'
     print '  --nomodinstall            ',
     print cli['nomodinstall'],
-    print '\t\t\tDo not install modules'
+    print '\t\tDo not install modules'
     print
     print 'Misc:'
     print '  --nosaveconfig            ',
     print cli['nosaveconfig'],
-    print '\t\t\tDo not save kernel config in /etc/kernels'
+    print '\t\tDo not save kernel config in /etc/kernels'
     print '  --noboot                  ',
     print cli['noboot'],
-    print '\t\t\tDo not copy kernel to /boot'
+    print '\t\tDo not copy kernel to /boot'
     print '  --rename=/file             "'+cli['rename']+'"'
-    print '\t\t\t\t\t\t\tCustom kernel file name'
-    print '  --logfile=/file            "'+cli['logfile']+'"\tLog to file'
-    print '  --debug, -d                False\t\t\tDebug verbose'
+    print '\t\t\t\t\t\tCustom kernel file name'
+    print '  --logfile=/file            "'+cli['logfile']+'"Log to file'
+    print '  --debug, -d                False\t\tDebug verbose'
     print
     print 'Tools:'
-    print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
+    print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs(cli):
     # passing cli is supposed to grab default from parse()
