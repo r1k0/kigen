@@ -13,4 +13,4 @@ mkdir /newroot
 /sbin/ttyecho -n /dev/console exit
 /sbin/ttyecho -n /dev/console exit
 /sbin/ttyecho -n /dev/console q
-
+exit
