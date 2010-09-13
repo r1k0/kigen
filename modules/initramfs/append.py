@@ -893,7 +893,7 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-ttyecho-temp/sbin', self.verbose)
 
         print green(' * ') + '... ' + 'gcc %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho')
-        process('gcc %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'), self.verbose)
+        process('gcc -static %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'), self.verbose)
         process('chmod +x %s' % self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-ttyecho-temp')
