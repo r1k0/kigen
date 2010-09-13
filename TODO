@@ -21,11 +21,10 @@ TODO: lvm2 fail on Gentoo
     need lvm2-2.02.72-dynamic-static-ldflags.patch
 
 INFO: manual ssh boot
-  cryptsetup luksOpen /dev/sda2 root
+  /sbin/cryptsetup luksOpen /dev/sda2 root
   vgscan
   vgchange -a y
   mkdir /newroot
-  mount /dev/mapper/vg_sabayon-lv_root /newroot
-  q
-  #/sbin/ttyecho -n /dev/console exec /sbin/switch_root
-  /sbin/ttyecho -n /dev/console q # this will continue normal boot
+  /sbin/ttyecho -n /dev/console exit
+  /sbin/ttyecho -n /dev/console exit # we need it twice due to setsid cttyhack
+  /sbin/ttyecho -n /dev/console q # continue normal boot
