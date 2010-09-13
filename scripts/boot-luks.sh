@@ -7,10 +7,10 @@ then
 fi
 
 /sbin/cryptsetup luksOpen $1 root
-vgscan
-vgchange -a y
 mkdir /newroot
 /sbin/ttyecho -n /dev/console exit
+sleep 1
 /sbin/ttyecho -n /dev/console exit
+sleep 1
 /sbin/ttyecho -n /dev/console q
 exit

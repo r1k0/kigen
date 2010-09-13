@@ -487,8 +487,10 @@ class append:
         process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/wtmp', self.verbose)
         process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/run/utmp', self.verbose)
 
-        # ship the boot-luks.sh script too
-        process('cp %s/tools/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
+        # ship the boot* scripts too
+        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
+        process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
         process('chmod +x %s' % self.temp['work']+'/initramfs-dropbear-temp/root/boot-luks.sh', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-dropbear-temp/dev')
