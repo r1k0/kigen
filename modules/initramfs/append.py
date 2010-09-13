@@ -377,6 +377,10 @@ class append:
         process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         print green(' * ') + '... ' + '/lib/ld-linux.so.2'
         process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        # this is for 64b arch
+        if os.path.isfile('/lib/ld-linux-x86-64.so.2'):
+            print green(' * ') + '... ' + '/lib/ld-linux-x86-64.so.2'
+            process('cp /lib/ld-linux-x86-64.so.2  %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         print green(' * ') + '... ' + '/lib/libc.so.6'
         process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
         # for dropbear
