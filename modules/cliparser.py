@@ -573,13 +573,13 @@ def print_usage_initramfs(cli):
     print
     print 'Config:'
     print '  --config=/file             "'+cli['config']+'"       Custom master config file'
-    print '\t\t\t\t\t\t     Custom busybox config file'
     print
     print 'Linuxrc:'
     print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                      Include custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
+    print '\t\t\t\t\t\t     Custom busybox config file'
     print '  --defconfig               ',
     print cli['defconfig'], # bool
     print '\t\t     Set .config to largest generic options'
