@@ -569,40 +569,40 @@ def print_usage_kernel(cli):
 
 def print_usage_initramfs(cli):
     # passing cli is supposed to grab default from parse()
-    print 'Parameter:\t\t     Default value:\t     Description:'
+    print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Config:'
-    print '  --config=/file             "'+cli['config']+'"       Custom master config file'
+    print '  --config=/file             "'+cli['config']+'"  Custom master config file'
     print
     print 'Linuxrc:'
-    print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                      Include custom linuxrc (files copied over to etc)'
+    print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
-    print '\t\t\t\t\t\t     Custom busybox config file'
+    print '\t\t\t\t\t\tCustom busybox config file'
     print '  --defconfig               ',
     print cli['defconfig'], # bool
-    print '\t\t     Set .config to largest generic options'
+    print '\t\tSet .config to largest generic options'
     print '  --oldconfig               ',
     print cli['oldconfig'], # bool
-    print '\t\t     Ask for new busybox options if any'
+    print '\t\tAsk for new busybox options if any'
     print '  --menuconfig              ',
     print cli['menuconfig'], # bool
-    print '\t\t     Interactive busybox options menu'
+    print '\t\tInteractive busybox options menu'
     print
     print 'Features:'
-    print '  --splash=<theme>           "'+cli['splash']+'"                      Include splash support (splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]          "'+cli['sres']+'"                       Splash resolution, all if not set'
+    print '  --splash=<theme>           "'+cli['splash']+'"                 Include splash support (splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]          "'+cli['sres']+'"                  Splash resolution, all if not set'
 #   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
     print '  --disklabel               ',
     print cli['disklabel'], # bool
-    print '\t\t     Include support for UUID/LABEL'
+    print '\t\tInclude support for UUID/LABEL'
     print '  --luks                    ',
     print cli['luks'], # bool 
-    print '\t\t     Include LUKS support (host binary if found)'
+    print '\t\tInclude LUKS support (host binary if found)'
     print '  --lvm2                    ',
     print cli['lvm2'], # bool
-    print '\t\t     Include LVM2 support (host binary if found)'
+    print '\t\tInclude LVM2 support (host binary if found)'
 #   print '  --evms                     False                   Include evms support (evms must be merged)'
 #   print '  --dmraid                   False                   Include dmraid support'
 #   print '   --selinux                 False                    Include selinux support in --dmraid'
@@ -610,55 +610,56 @@ def print_usage_initramfs(cli):
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
     print '  --dropbear                ',
     print cli['dropbear'], # bool
-    print '\t\t     Include dropbear tools and daemon (host binaries if found)'
+    print '\t\tInclude dropbear tools and daemon (host binaries if found)'
     print '   --debugflag              ',
     print cli['debugflag'], # bool
-    print '\t\t      Compile dropbear with #define DEBUG_TRACE in debug.h'
-    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"                      Create and set root password (required for dropbear)'
+    print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
+    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"                 Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
     print '  --keymaps                 ',
     print cli['keymaps'], # bool
-    print '\t\t     Include all keymaps'
+    print '\t\tInclude all keymaps'
     print '  --ttyecho                 ',
     print cli['ttyecho'], # bool
-    print '\t\t     Include the handy ttyecho.c tool'
+    print '\t\tInclude the handy ttyecho.c tool'
     print '  --strace                  ',
     print cli['strace'], # bool
-    print '\t\t     Include the strace binary tool'
+    print '\t\tInclude the strace binary tool'
     print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                      Include list of user generated custom roots'
     print
     print 'Libraries:'
     print '  --glibc                   ',
     print cli['glibc'], # bool
-    print '\t\t     Include host GNU C libraries (required for dns,dropbear)'
+    print '\t\tInclude host GNU C libraries (required for dns,dropbear)'
     print '  --libncurses              ',
     print cli['libncurses'], # bool
-    print '\t\t     Include host libncurses (required for dropbear)'
+    print '\t\tInclude host libncurses (required for dropbear)'
     print '  --zlib                    ',
     print cli['zlib'], # bool
-    print '\t\t     Include host zlib (required for dropbear)'
+    print '\t\tInclude host zlib (required for dropbear)'
     print
     print 'Misc:'
     print '  --nocache                 ',
     print cli['nocache'],
-    print '\t\t     Do not use cached data'
+    print '\t\tDo not use cached data'
     print '  --hostbin                 ',
     print cli['hostbin'],
-    print '\t\t     Use host binaries over sources when possible'
+    print '\t\tUse host binaries over sources when possible'
     print '  --noboot                  ',
     print cli['noboot'],
-    print '\t\t     Do not copy initramfs to /boot'
+    print '\t\tDo not copy initramfs to /boot'
     print '  --rename=/file             "'+cli['rename']+'"'
-    print '\t\t\t\t\t\t     Custom initramfs file name'
-    print '  --logfile=/file            "'+cli['logfile']+'"    Log to file'
-    print '  --debug, -d                False                   Debug verbose'
+    print '\t\t\t\t\t\tCustom initramfs file name'
+    print '  --logfile=/file            "'+cli['logfile']+'"'
+    print '\t\t\t\t\t\tLog to file'
+    print '  --debug, -d                False              Debug verbose'
     print
     print 'Tools:'
-    print '  --extract=/file            "'+cli['extract']+'"                      Extract initramfs file'
+    print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
-    print '\t\t\t\t\t\t      Custom extracting directory'
-    print '  --compress=/dir            "'+cli['compress']+'"                      Compress directory into initramfs'
+    print '\t\t\t\t\t\t Custom extracting directory'
+    print '  --compress=/dir            "'+cli['compress']+'"                 Compress directory into initramfs'
     print '   --into=/file              "'+cli['into']+'"'
-    print '\t\t\t\t\t\t      Custom initramfs file'
+    print '\t\t\t\t\t\t Custom initramfs file'
