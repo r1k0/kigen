@@ -143,6 +143,10 @@ class initramfs:
         if self.cli['dropbear'] is True:
             os.chdir(self.temp['work'])
             if aobj.dropbear() is not zero: self.fail('dropbear')
+        # append strace
+        if self.cli['strace'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.strace() is not zero: self.fail('strace')
         # 14) append unionfs_fuse
         if self.cli['unionfs'] is True:
             os.chdir(self.temp['work'])
@@ -151,10 +155,22 @@ class initramfs:
         if self.cli['aufs'] is True:
             os.chdir(self.temp['work'])
             if aobj.aufs() is not zero: self.fail('aufs')
+        # append ttyecho
+        if self.cli['ttyecho'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.ttyecho() is not zero: self.fail('ttyecho')
         # 16) append splash
         if self.cli['splash'] is not '':
             os.chdir(self.temp['work'])
             if aobj.splash() is not zero: self.fail('splash')
+        # append rootpasswd
+        if self.cli['rootpasswd'] is not '':
+            os.chdir(self.temp['work'])
+            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
+        # append keymaps
+        if self.cli['keymaps'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.keymaps() is not zero: self.fail('keympas')
         # 17) append firmware
         if os.path.isdir(self.firmware):
             os.chdir(self.temp['work'])
@@ -172,23 +188,6 @@ class initramfs:
         if self.cli['zlib'] is True:
             os.chdir(self.temp['work'])
             if aobj.zlib() is not zero: self.fail('zlib')
-
-        if self.cli['rootpasswd'] is not '':
-            os.chdir(self.temp['work'])
-            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
-
-        if self.cli['keymaps'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.keymaps() is not zero: self.fail('keympas')
-
-        if self.cli['ttyecho'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.ttyecho() is not zero: self.fail('ttyecho')
-
-        if self.cli['strace'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.strace() is not zero: self.fail('strace')
-
         # last) append user plugin
         if self.pluginroot is not '':
             pluginlist = self.pluginroot.split(',')
