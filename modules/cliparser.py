@@ -545,7 +545,7 @@ def print_usage_kernel(cli):
     print '  --menuconfig              ',
     print cli['menuconfig'],
     print '\t\tInteractive kernel options menu'
-    print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\t\tAppend modules to /dir/lib/modules'
+    print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules'
     print '  --nooldconfig             ',
     print not cli['oldconfig'],
     print '\t\tDo not ask for new kernel/initramfs options'
