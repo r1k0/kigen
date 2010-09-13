@@ -53,7 +53,13 @@ Features
   - system stack tools
   - network stack tools
   - alot more
-- SSH daemon (dropbear)
+- SSH daemon (dropbear+debug)
+- strace binary
+- keymaps (from genkernel)
+- ttyecho binary (handy for ssh tty->console)
+- GLibC libraries (auth, dns)
+- libncurses
+- zlib
 
 Supported OS
 ~~~~~~~~~~~~
