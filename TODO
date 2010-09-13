@@ -1,30 +1,20 @@
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: kigen i --udev for udevadm
-    or --devtmpfs or --mdev
+TODO: study kigen i --udev for udevadm?
+    or --devtmpfs or --mdev?
 TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
+    i got the same on eeepc
 TODO: pass $PORTDIR don't assume /usr/portage
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
-TODO: kigen i--evms repair
-	sprocessor * fix
-TODO: kigen i --linuxrc=/file
-    inject genkernel arch linuxrc into kigen
+TODO: kigen i --evms repair
+	process * fix
 TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
     auto add/remove config if passed --fixdotconfig
-TODO: lvm2 fail on Gentoo
+TODO: lvm2 may fail
     see http://bugs.gentoo.org/show_bug.cgi?id=332905
     need lvm2-2.02.72-dynamic-static-ldflags.patch
-
-INFO: manual ssh boot
-  /sbin/cryptsetup luksOpen /dev/sda2 root
-  vgscan
-  vgchange -a y
-  mkdir /newroot
-  /sbin/ttyecho -n /dev/console exit
-  /sbin/ttyecho -n /dev/console exit # we need it twice due to setsid cttyhack
-  /sbin/ttyecho -n /dev/console q # continue normal boot
