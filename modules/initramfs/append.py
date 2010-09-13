@@ -94,7 +94,7 @@ class append:
         print green(' * ') + turquoise('initramfs.append.base'),
     
         # create the baselayout
-        for i in ['dev', 'bin', 'etc', 'usr', 'proc', 'temp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
+        for i in ['dev', 'bin', 'etc', 'home', 'usr', 'proc', 'temp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
             os.makedirs(self.temp['work']+'/initramfs-base-temp/%s' % i)
     
         os.chdir(self.kernel_dir_opt) # WHY? # TODO: change os.chdir by subprocess.popen(..., cwd=kernel_dir_opt
