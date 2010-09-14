@@ -1,3 +1,6 @@
+TODO: kigen i --screen
+    see if screen can attach to /dev/console
+    I need something clean to replace ttyecho 
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
