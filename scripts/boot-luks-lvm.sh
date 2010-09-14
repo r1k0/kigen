@@ -15,4 +15,5 @@ sleep 1
 /sbin/ttyecho -n /dev/console exit
 sleep 1
 /sbin/ttyecho -n /dev/console q
+sleep 1
 exit
