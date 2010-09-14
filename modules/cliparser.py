@@ -628,7 +628,7 @@ def print_usage_initramfs(cli):
     print '  --strace                  ',
     print cli['strace'], # bool
     print '\t\tInclude the strace binary tool'
-    print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                      Include list of user generated custom roots'
+    print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                 Include list of user generated custom roots'
     print
     print 'Libraries:'
     print '  --glibc                   ',
