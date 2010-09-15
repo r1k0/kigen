@@ -921,4 +921,4 @@ Connect to initramfs and boot remotly
 
     Portage community (linuxrc scripts),
 
-:Version: 0.2.0
+:Version: 0.2.1
