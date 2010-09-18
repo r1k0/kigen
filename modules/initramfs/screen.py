@@ -22,9 +22,9 @@ class screen:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/screen-%s.tar.bz2' % (get_portdir(self.temp), self.screen_ver)) is not True:
+        if os.path.isfile('%s/distfiles/screen-%s.tar.gz' % (get_portdir(self.temp), self.screen_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/screen-%s.tar.bz2' % (get_portdir(self.temp), self.screen_ver), self.verbose)
+                process('rm %s/distfiles/screen-%s.tar.gz' % (get_portdir(self.temp), self.screen_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
