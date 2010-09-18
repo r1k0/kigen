@@ -1069,9 +1069,12 @@ ssh to initramfs (you might have to remove the previous certificate in .ssh/know
     Found volume group "vg_sabayon" using metadata type lvm2
   File descriptor 5 (pipe:[2521]) leaked on vgchange invocation. Parent PID 3984: /bin/sh
     2 logical volume(s) in volume group "vg_sabayon" now active
-  # 
+  # Connection to 192.168.1.68 closed by remote host.
+  Connection to 192.168.1.68 closed.
+  rik@hogbarn ~ $ 
 
 The initramfs is now booting from the content of the LUKS container remotely! Yiha
+Note the autodeconnection done by the host thanks to /etc/conf.d/local.
 
 :Authors: 
     erick 'r1k0' michau (python engine),
