@@ -35,61 +35,155 @@ Display credits and license.
 .PP
 .SH 'kernel' PARAMETERS
 .TP
-\fB\-d, \-\-debug
-Debug.
+
+\fB\-\-config
+Custom master config file
 .TP
-\fB\-\-dotconfig=\fR/foo/bar/.config
-Provide a customized .config file for the kernel.
-.TP
-\fB\-\-rename=\fR<kernelname>
-Customize kernel name
+\fB\-\-dotconfig=\fR/file
+Custom kernel .config file
 .TP
 \fB\-\-initramfs=\fR/file
-Will add an initramfs compiled into the kernel itself.
-You can use igen to create an initramfs and then feed it back to kigen.
+Embed initramfs into the kernel
 .TP
-\fB\-\-fixdotconfig
-Will attempt to fix kernel .config options. Supported:
- - CONFIG_INITRAMFS_SOURCE for --initramfs=/file --fixdotconfig
-.TP
-\fB\-\-mrproper
-Clean precompiled objects and configuration.
+  \fB\-\-fixdotconfig
+  Check and auto fix the kernel config file (experimental)
 .TP
 \fB\-\-clean
-Clean precompiled objects.
+Clean precompiled objects only
+.TP
+\fB\-\-mrproper
+Clean precompiled objects and remove config file
 .TP
 \fB\-\-oldconfig
-Will ask for new kernel options.
-.TP
-\fB\-\-nooldconfig
-Will not ask for new kernel options.
+Ask for new kernel options if any
 .TP
 \fB\-\-menuconfig
-Interactive kernel/initramfs options menu.
+Interactive kernel options menu
+.TP
+\fB\-\-fakeroot=\fR/dir
+Append modules to /dir/lib/modules
+.TP
+\fB\-\-nooldconfig
+Do not ask for new kernel/initramfs options
 .TP
 \fB\-\-nomodinstall
-Do not install kernel modules
+Do not install modules
 .TP
 \fB\-\-nosaveconfig
-Do not save kernel config
-.TP
-\fB\-\-fakeroot=\fR</dir>
-Use a fake root dir to install kernel modules
+Do not save kernel config in /etc/kernels
 .TP
 \fB\-\-noboot
-Do not copy kernel/initramfs to /boot.
+Do not copy kernel to /boot
 .TP
-\fB\-\-logfile=/file
-Log to file.
+\fB\-\-rename=\fR/file
+Custom kernel file name
+.TP
+\fB\-\-logfile=\fR/file
+Log to file
+.TP
+\fB\-\-debug, \fB\-d
+Debug verbose
+.TP
+\fB\-\-getdotconfig=\fR/vmlinux
+Extract .config from compiled binary kernel (if IKCONFIG has been set)
 
 .PP
 .SH 'initramfs' PARAMETERS
 .TP
 
-.PP
-.SH EXAMPLES
-# kigen etc
-.PP
+\fB\-\-config
+Custom master config file
+.TP
+\fB\-\-linuxrc=\fRlinuxrc[,/file]
+Include custom linuxrc (files copied over to etc)
+.TP
+\fB\-\-dotconfig=\fR/file
+Custom busybox .config file
+.TP
+\fB\-\-defconfig
+Set .config to largest generic options
+.TP
+\fB\-\-oldconfig
+Ask for new busybox options if any
+.TP
+\fB\-\-menuconfig
+Interactive busybox options menu
+.TP
+\fB\-\-splash=\fR<theme>
+Include splash support (splashutils must be merged)
+.TP
+  \fB\-\-sres=\fR[YxZ[,YxZ]
+  Splash resolution, all if not set
+.TP
+\fB\-\-disklabel
+Include support for UUID/LABEL
+.TP
+\fB\-\-luks
+Include LUKS support (host binary if found)
+.TP
+\fB\-\-lvm2
+Include LVM2 support (host binary if found)
+.TP
+\fB\-\-dropbear
+Include dropbear tools and daemon (host binaries if found)
+.TP
+  \fB\-\-debugflag
+  Compile dropbear with #define DEBUG_TRACE in debug.h
+.TP
+\fB\-\-rootpasswd=\fR<passwd>
+Create and set root password (required for dropbear)
+.TP
+\fB\-\-keymaps
+Include all keymaps
+.TP
+\fB\-\-ttyecho
+Include the handy ttyecho.c tool
+.TP
+\fB\-\-strace
+Include the strace binary tool
+.TP
+\fB\-\-plugin=\fR/dir[,/dir]
+Include list of user generated custom roots
+.TP
+\fB\-\-glibc
+Include host GNU C libraries (required for dns,dropbear)
+.TP
+\fB\-\-libncurses
+Include host libncurses (required for dropbear)
+.TP
+\fB\-\-zlib
+Include host zlib (required for dropbear)
+.TP
+\fB\-\-nocache
+Do not use cached data
+.TP
+\fB\-\-hostbin
+Use host binaries over sources when possible
+.TP
+\fB\-\-noboot
+Do not copy initramfs to /boot
+.TP
+\fB\-\-rename=\fR/file
+Custom initramfs file name
+.TP
+\fB\-\-logfile=\fR/file
+Log to file
+.TP
+\fB\-\-debug, \fB\-d
+Debug verbose
+.TP
+\fB\-\-extract=\fR/file
+Extract initramfs file
+.TP
+  \fB\-\-to=\fR/dir
+  Custom extracting directory
+.TP
+\fB\-\-compress=\fR/dir
+Compress directory into initramfs
+.TP
+  \fB\-\-into=\fR/file
+  Custom initramfs file
+.TP
 
 .PP
 .SH AUTHORS
