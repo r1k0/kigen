@@ -69,7 +69,7 @@ class screen:
         @return: bool
         """
         print green(' * ') + '... screen.download'
-        screen_url = 'http://ftpmirror.gnu.org/screen/'+str(self.screen_ver)+'/screen-' + str(self.screen_ver) + '.tar.gz'
+        screen_url = 'http://ftpmirror.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
         return os.system('/usr/bin/wget %s -O %s/distfiles/screen-%s.tar.gz %s' % (screen_url, get_portdir(self.temp), str(self.screen_ver), self.verbose['std']))
