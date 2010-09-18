@@ -906,15 +906,172 @@ Howto boot LUKS/LVM through SSH (dropbear)
 Build initramfs with SSH support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Make sure libraries are called.
+::
+  pong ~ # kigen i --splash=sabayon --disklabel --luks --lvm2 --dropbear --debugflag --rootpasswd=sabayon --keymaps --ttyecho --strace --glibc --libncurses --zlib
+   * Sabayon Linux amd64 G on x86_64
+   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
+   * initramfs.append.modules 2.6.35-sabayon
+   * ... pata_legacy
+   * ... pata_pcmcia
+   * ... fdomain
+   * ... imm
+   * ... sx8
+   * ... scsi_wait_scan
+   * ... e1000
+   * ... tg3
+   * ... iscsi_tcp
+   * ... pcmcia
+   * ... yenta_socket
+   * ... pd6729
+   * ... i82092
+   * ... ehci-hcd
+   * ... uhci-hcd
+   * ... ohci-hcd
+   * ... sl811-hcd
+   * initramfs.append.busybox 1.17.2 [ ash sh mount uname echo cut cat
+   * ... busybox.extract
+   * ... busybox.copy_config 
+   * ... busybox.make
+   * ... busybox.strip
+   * ... busybox.compress
+   * ... busybox.cache
+   * initramfs.append.lvm2 2.02.73
+   * ... lvm2.extract
+   * ... lvm2.configure
+   * ... lvm2.make
+   * ... lvm2.install
+   * ... lvm2.strip
+   * ... lvm2.compress
+   * ... lvm2.cache
+   * initramfs.append.luks 1.1.3
+   * ... luks.extract
+   * ... luks.configure
+   * ... luks.make
+   * ... luks.strip
+   * ... luks.compress
+   * ... luks.cache
+   * initramfs.append.e2fsprogs 1.41.12
+   * ... e2fsprogs.extract
+   * ... e2fsprogs.configure
+   * ... e2fsprogs.make
+   * ... e2fsprogs.strip
+   * ... e2fsprogs.compress
+   * ... e2fsprogs.cache
+   * initramfs.append.dropbear 0.52
+   * ... dropbear.extract
+   * ... dropbear.patch_debug_header #define DEBUG_TRACE
+   * ... dropbear.configure
+   * ... dropbear.make
+   * ... dropbear.strip
+   * ... dropbear.dsskey
+  Will output 1024 bit dss secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_dss_host_key'
+  Generating key, this may take a while...
+   * ... dropbear.rsakey
+  Will output 4096 bit rsa secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_rsa_host_key'
+  Generating key, this may take a while...
+   * ... dropbear.compress
+   * ... dropbear.cache
+   * initramfs.append.strace 4.5.20
+   * ... strace.extract
+   * ... strace.configure
+   * ... strace.make
+   * ... strace.strip
+   * ... strace.compress
+   * ... strace.cache
+   * initramfs.append.ttyecho
+   * ... gcc -static /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
+   * initramfs.append.splash sabayon 
+   * initramfs.append.rootpasswd
+   * ... /etc/passwd
+   * ... /etc/group
+   * initramfs.append.keymaps
+   * initramfs.append.glibc
+   * ... /lib/libm.so.6
+   * ... /lib/libnss_files.so.2
+   * ... /lib/libnss_dns.so.2
+   * ... /lib/libnss_nis.so.2
+   * ... /lib/libnsl.so.1
+   * ... /lib/libresolv.so.2
+   * ... /lib/ld-linux.so.2
+   * ... /lib/ld-linux-x86-64.so.2
+   * ... /lib/libc.so.6
+   * ... /lib/libnss_compat.so.2
+   * ... /lib/libutil.so.1
+   * ... /etc/ld.so.cache
+   * ... /lib/libcrypt.so.1
+   * initramfs.append.libncurses
+   * ... /lib/libncurses.so.5
+   * initramfs.append.zlib
+   * ... /lib/libz.so.1
+   * initramfs.compress
+   * produced /boot/initramfs-kigen-x86_64-2.6.35-sabayon
+  pong ~ # 
+
+
 Set kernel command option
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To boot in SSH mode, pass the 'dodropbear' option in the kernel command line.
+Edit /boot/grub/grub.cfg to have the kernel command line look like.
+::
+  linux /kernel-genkernel-x86_64-2.6.35-sabayon ro single init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear
 
 Kill dropbear daemon and restart openssh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Connect to initramfs and boot remotly
+Make sure existing connections with initramfs are killed and openssh binds to :22 correctly.
+Add on the following to /etc/conf.d/local.
+::
+  pkill dropbear
+  sleep 1
+  /etc/init.d/sshd restart
+
+Connect to initramfs and boot remotely
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ssh to initramfs (you might have to remove the previous certificate in .ssh/known_hosts).
+::
+  rik@hogbarn ~ $ ssh 192.168.1.68 -l root
+  root@192.168.1.68's password: 
+  
+  
+  BusyBox v1.17.2 (2010-09-15 11:14:56 CEST) built-in shell (ash)
+  Enter 'help' for a list of built-in commands.
+  
+  # uname -a
+  Linux (none) 2.6.34-sabayon #19 SMP Thu Sep 9 10:06:15 CEST 2010 i686 GNU/Linux
+  # ls /
+  bin            home           lib64          root           temp
+  dev            init           modules.cache  sbin           usr
+  etc            lib            proc           sys            var
+  # ip a
+  1: lo: <LOOPBACK> mtu 16436 qdisc noop state DOWN 
+      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+  2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+      link/ether 08:00:27:54:d1:a9 brd ff:ff:ff:ff:ff:ff
+      inet 192.168.1.68/24 brd 192.168.1.255 scope global eth0
+  # netstat 
+  Active Internet connections (w/o servers)
+  Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+  tcp        0      0 sabayon.lan:22          gritch.lan:44967        ESTABLISHED 
+  Active UNIX domain sockets (w/o servers)
+  Proto RefCnt Flags       Type       State         I-Node Path
+  # 
+  # ls
+  boot-luks-lvm.sh  boot-luks.sh
+  # ./boot-luks-lvm.sh 
+  ./boot-luks-lvm.sh <root device>
+  # ./boot-luks-lvm.sh /dev/sda2
+  Enter passphrase for /dev/sda2: 
+  File descriptor 5 (pipe:[2521]) leaked on vgscan invocation. Parent PID 3984: /bin/sh
+    Reading all physical volumes.  This may take a while...
+    Found volume group "vg_sabayon" using metadata type lvm2
+  File descriptor 5 (pipe:[2521]) leaked on vgchange invocation. Parent PID 3984: /bin/sh
+    2 logical volume(s) in volume group "vg_sabayon" now active
+  # 
+
+The initramfs is now booting from the content of the LUKS container remotely! Yiha
 
 :Authors: 
     erick 'r1k0' michau (python engine),
