@@ -82,7 +82,7 @@ class screen:
         """
         print green(' * ') + '... screen.extract'
     
-        os.system('tar xvfj %s/distfiles/screen-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfz %s/distfiles/screen-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
         """
