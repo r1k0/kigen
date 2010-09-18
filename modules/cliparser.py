@@ -264,6 +264,7 @@ def parse():
                                     "keymaps",      \
                                     "ttyecho",      \
                                     "strace",       \
+                                    "screen",       \
                                     "debugflag",    \
                                     "debug"])
         except GetoptError, err:
@@ -322,6 +323,7 @@ def parse():
         cli['ttyecho']      = False
         cli['keymaps']      = False
         cli['strace']       = False
+        cli['screen']       = False
         cli['debugflag']    = False
     
         # target options
@@ -433,6 +435,8 @@ def parse():
                 cli['keymaps'] = True
             elif o in ("--strace"):
                 cli['strace'] = True
+            elif o in ("--screen"):
+                cli['screen'] = True
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
 
@@ -628,6 +632,9 @@ def print_usage_initramfs(cli):
     print '  --strace                  ',
     print cli['strace'], # bool
     print '\t\tInclude the strace binary tool'
+    print '  --screen                  ',
+    print cli['screen'], # bool
+    print '\t\tInclude the screen binary tool'
     print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                 Include list of user generated custom roots'
     print
     print 'Libraries:'

@@ -147,6 +147,10 @@ class initramfs:
         if self.cli['strace'] is True:
             os.chdir(self.temp['work'])
             if aobj.strace() is not zero: self.fail('strace')
+        # append screen
+        if self.cli['screen'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.screen() is not zero: self.fail('screen')
         # 14) append unionfs_fuse
         if self.cli['unionfs'] is True:
             os.chdir(self.temp['work'])
