@@ -8,12 +8,11 @@ TODO: kigen i --screen
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: study kigen i --udev for udevadm?
-    or --devtmpfs or --mdev?
 TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
     i got the same on eeepc
 TODO: pass $PORTDIR don't assume /usr/portage
+    get an elegant python way of getting $PORTDIR
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
 TODO: kigen i --evms repair
@@ -22,6 +21,7 @@ TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
     auto add/remove config if passed --fixdotconfig
-TODO: lvm2 may fail
+TODO: lvm2 may fail on gentoo/funtoo
+    works all the time patchless on sabayon ;o)
     see http://bugs.gentoo.org/show_bug.cgi?id=332905
-    need lvm2-2.02.72-dynamic-static-ldflags.patch
+    need lvm2-2.02.72-dynamic-static-ldflags.patch?
