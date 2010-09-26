@@ -976,7 +976,7 @@ class append:
         # add required /usr/share/terminfo/l/linux for screen
         # FIXME: to support other arch copy accordingly
         os.makedirs(self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
-        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
+        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-screen-temp')
         return os.system(self.cpio())
