@@ -894,8 +894,8 @@ Now let's use binaries when possible.
   pong ~ # 
 
 Typically this adds support for splash/luks/lvm2/dropbear to the initramfs.
-Note that by default kigen will pick up and ship host binaries.
-Passing --nohostbin will fetch sources and compile statically.
+Note that by default kigen will will fetch the sources and link statically.
+Passing --hostbin will use host binaries when possible.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
