@@ -519,7 +519,7 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' i --splash=sabayon'
     print ' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs'
     print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --hostbin'
-    print ' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --dropbear --glibc --zlib --libncurses --rootpasswd=mypasswd --ttyecho --nocache --oldconfig'
+    print ' '+os.path.basename(sys.argv[0])+' i --splash=sabayon --disklabel --luks --lvm2 --dropbear --debugflag --rootpasswd=mypasswd --keymaps --ttyecho --strace --screen --glibc --zlib --libncurses --defconfig --nocache'
     print ' '+os.path.basename(sys.argv[0])+' --extract=/file i --to=/dir'
     print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file'
 
