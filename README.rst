@@ -1060,6 +1060,26 @@ ssh to initramfs (you might have to remove the previous certificate in .ssh/know
   # 
   # ls
   boot-luks-lvm.sh  boot-luks.sh
+  # cat boot-luks-lvm.sh 
+  #!/bin/sh
+  
+  if [ "$1" = "-h" ] || [ "$1" = "" ]
+  then
+      echo "$0 <root device>"
+      exit
+  fi
+  
+  /sbin/cryptsetup luksOpen $1 root
+  vgscan
+  vgchange -a y
+  mkdir /newroot
+  /sbin/ttyecho -n /dev/console exit
+  sleep 1
+  /sbin/ttyecho -n /dev/console exit
+  sleep 1
+  /sbin/ttyecho -n /dev/console q
+  sleep 1
+  exit
   # ./boot-luks-lvm.sh 
   ./boot-luks-lvm.sh <root device>
   # ./boot-luks-lvm.sh /dev/sda2
