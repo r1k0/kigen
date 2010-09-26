@@ -973,6 +973,11 @@ class append:
             os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.master_config['screen-version'], self.temp['work']))
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
+        # add required /usr/share/terminfo/l/linux for screen
+        # FIXME: to support other arch copy accordingly
+        os.makedirs(self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
+        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
+
         os.chdir(self.temp['work']+'/initramfs-screen-temp')
         return os.system(self.cpio())
 
