@@ -9,6 +9,8 @@ TODO: change /etc/kigen.conf to /etc/kigen/{master.conf,modules.conf,default.con
 
 0.2.*
 =====
+TODO: introduce raise error handling
+    but see how we improve current 
 TODO: find a way to get pkg use flag in python
     like: i want to know if strace is merged with -static-libs or not
     this is for use  when copying host binaries (they gotta be staticallty linked
