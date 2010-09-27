@@ -1062,13 +1062,11 @@ ssh to initramfs (you might have to remove the previous certificate in .ssh/know
   boot-luks-lvm.sh  boot-luks.sh
   # cat boot-luks-lvm.sh 
   #!/bin/sh
-  
   if [ "$1" = "-h" ] || [ "$1" = "" ]
   then
       echo "$0 <root device>"
       exit
   fi
-  
   /sbin/cryptsetup luksOpen $1 root
   vgscan
   vgchange -a y
