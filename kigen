@@ -59,6 +59,7 @@ if os.path.isfile(verbose['logfile']):
 
 # set logfile for DBUG logging
 logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
+
 logging.debug(sys.argv)
 logging.debug('target is ' + target)
 logging.debug(cli)
@@ -90,22 +91,36 @@ if os.path.isdir(temp['work']):
 # --nocache
 if cli['nocache'] is True:
     if os.path.isdir(temp['cache']):
+        logging.debug('deleting '+temp['cache'])
         # delete
         shutil.rmtree(temp['cache'])
         # re create
+        logging.debug('creating '+temp['cache'])
         os.makedirs(temp['cache'])
 
+# create temp[] dirs
 try:
-    # try creating temp dirs
+    logging.debug('creating '+temp['root'])
     os.makedirs(temp['root'])
+except Exception:
+    logging.debug('failed creating '+temp['root'])
+try:
+    logging.debug('creating '+temp['work'])
     os.makedirs(temp['work'])
+except Exception:
+    logging.debug('failed creating '+temp['work'])
+try:
+    logging.debug('creating '+temp['cache'])
     os.makedirs(temp['cache'])
+except Exception:
+    logging.debug('failed creating '+temp['cache'])
+try:
+    logging.debug('creating '+temp['distfiles'])
     os.makedirs(temp['distfiles'])
-except:
-    # don't mind
-    pass
+except Exception:
+    logging.debug('failed creating '+temp['distfiles'])
 
-# run the target
+# run the kernel target
 if target == 'kernel' or target == 'k':
 
     # --getdotconfig
@@ -152,6 +167,7 @@ if target == 'kernel' or target == 'k':
 
     sys.exit(0)
 
+# run the initramfs target
 if target == 'initramfs' or target == 'i':
 
     # --extract
