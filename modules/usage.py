@@ -120,7 +120,7 @@ def print_usage_initramfs(cli):
     print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
-    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_config['busybox-version']+'/.config"'
+    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
     print '\t\t\t\t\t\tCustom busybox config file'
     print '  --defconfig               ',
     print cli['defconfig'], # bool
