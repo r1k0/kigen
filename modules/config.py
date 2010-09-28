@@ -3,6 +3,8 @@ import os
 from default import *
 from utils.misc import *
 
+from stdout import white, green, turquoise, yellow, red
+
 def etc_parser():
 
     etc = { 'kigen':        '/etc/kigen',               \
