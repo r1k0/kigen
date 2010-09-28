@@ -47,17 +47,26 @@ else:
 
 # kigen modules are ready to be called
 from default import temp
+from config import *
 from cliparser import *
 from utils.shell import *
 
+# parse /etc/kigen/*.conf
+# --> <--
+# etc_kigen_parsed = etc_parser() # pass it to cli_parser()
+
 # parse command line parameters
-master_config, target, cli, verbose = parse()
+master_config, target, cli, verbose = cli_parser()
+
+## FIXME
+# because we get verbose['logfile'] from cli_parser(),
+# we can only start logging after here, that sucks ass big time
 
 # remove previous logfile
 if os.path.isfile(verbose['logfile']):
     os.remove(verbose['logfile'])
 
-# set logfile for DBUG logging
+# set logfile for DEBUG logging
 logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
 
 logging.debug(sys.argv)
