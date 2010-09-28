@@ -651,7 +651,7 @@ def print_usage_initramfs(cli):
     print 'Misc:'
     print '  --nocache                 ',
     print cli['nocache'],
-    print '\t\tDo not use cached data'
+    print '\t\tDelete previous cached data on startup'
     print '  --hostbin                 ',
     print cli['hostbin'],
     print '\t\tUse host binaries over sources when possible'
