@@ -11,7 +11,7 @@ from usage import *
 
 # WARN don't import logging here
 
-def parse():
+def cli_parser():
 
     target = 'none'
 
