@@ -46,7 +46,7 @@ else:
         os.environ['KIGEN_STDOUT'] = '1'
 
 # kigen modules are ready to be called
-from config import temp
+from default import temp
 from cliparser import *
 from utils.shell import *
 

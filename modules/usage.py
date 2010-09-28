@@ -4,7 +4,7 @@ import os
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
  
-from config import master_config, temp, kerneldir
+from default import master_config, temp, kerneldir
 from utils.misc import *
 
 # WARN don't import logging here
