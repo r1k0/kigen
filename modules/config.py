@@ -1,30 +1,38 @@
 import sys
 import os
+from default import *
+from utils.misc import *
 
 def etc_parser():
 
-# check /etc/kigen isdir
-# check /etc/kigen/master.conf E
-# check /etc/kigen/modules.conf E
-# check /etc/kigen/default.conf E
-# parse /etc/kigen/master.conf
-# parse /etc/kigen/modules.conf
-# parse /etc/kigen/default.conf
-#
+    etc = { 'kigen':        '/etc/kigen',               \
+            'master_conf':  '/etc/kigen/master.conf',   \
+            'modules_conf': '/etc/kigen/modules.conf',  \
+            'default_conf': '/etc/kigen/default.conf'}
 
-    etc = { 'kigen':        '/etc/kigen',  \
-            'master_conf'   '/etc/kigen/master.conf', \
-            'modules_conf'  '/etc/kigen/modules.conf', \
-            'default_conf'  '/etc/kigen/default.conf'}
-
-    # parse kigen config file
-    kigen_conf = etc['config']
-    if os.path.isfile(kigen_conf):
-        master_config_temp = parse_config_file(kigen_conf)
-        master_config.update(master_config_temp)
-    else:
-        print 'error: missing ' + red(kigen_conf)
+    if not os.path.isdir(etc['kigen']):
+        print 'error: missing directory ' + red(etc['kigen'])
+        sys.exit(2)
+    
+    if not os.path.isfile(etc['master_conf']):
+        print 'error: missing file ' + red(etc['master_conf'])
         sys.exit(2)
 
+    if not os.path.isfile(etc['modules_conf']):
+        print 'error: missing file ' + red(etc['modules_conf'])
+        sys.exit(2)
 
-    return etc
+    if not os.path.isfile(etc['default_conf']):
+        print 'error: missing file ' + red(etc['default_conf'])
+        sys.exit(2)
+
+    master_conf_temp = parse_config_file(etc['master_conf'])
+    master_conf.update(master_conf_temp)
+
+    modules_conf_temp = parse_config_file(etc['modules_conf'])
+    modules_conf.update(modules_conf_temp)
+
+    default_conf_temp = parse_config_file(etc['default_conf'])
+    default_conf.update(default_conf_temp)
+
+    return master_conf, modules_conf, default_conf

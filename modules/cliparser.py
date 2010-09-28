@@ -4,14 +4,14 @@ from getopt import getopt, GetoptError
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
  
-from default import master_config, temp, kerneldir
+from default import *
 from utils.misc import *
 
 from usage import *
 
 # WARN don't import logging here
 
-def cli_parser():
+def cli_parser(master_confblabla, modules_conf, default_conf):
 
     target = 'none'
 
@@ -24,16 +24,16 @@ def cli_parser():
     # parse kigen config file
     kigen_conf = cli['config']
     if os.path.isfile(kigen_conf):
-        master_config_temp = parse_config_file(kigen_conf)
-        master_config.update(master_config_temp)
+        master_conf_temp = parse_config_file(kigen_conf)
+        master_conf.update(master_conf_temp)
     else:
         print 'error: missing ' + red(kigen_conf)
         sys.exit(2)
 
     # set default kernel sources
-    if 'kernel-sources' in master_config:
+    if 'kernel-sources' in master_conf:
         # if set grab value from config file
-        cli['kerneldir'] = master_config['kernel-sources']
+        cli['kerneldir'] = master_conf['kernel-sources']
 
     cli['KV'] = get_kernel_version(cli['kerneldir'])
 
@@ -472,4 +472,4 @@ def cli_parser():
             else:
                 assert False, "uncaught option"
 
-    return master_config, target, cli, verbose
+    return master_conf, target, cli, verbose

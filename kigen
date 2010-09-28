@@ -52,11 +52,10 @@ from cliparser import *
 from utils.shell import *
 
 # parse /etc/kigen/*.conf
-# --> <--
-# etc_kigen_parsed = etc_parser() # pass it to cli_parser()
+master_conf, modules_conf, default_conf = etc_parser()
 
 # parse command line parameters
-master_config, target, cli, verbose = cli_parser()
+master_conf2, target, cli, verbose = cli_parser(master_conf, modules_conf, default_conf)
 
 ## FIXME
 # because we get verbose['logfile'] from cli_parser(),
@@ -140,7 +139,7 @@ if target == 'kernel' or target == 'k':
 
     from kernel.kernel import kernel
     kobj = kernel(cli['kerneldir'],            \
-                master_config,          \
+                master_conf2,          \
                 cli['arch'],                   \
                 cli['KV'],                     \
                 cli,                    \
@@ -196,7 +195,7 @@ if target == 'initramfs' or target == 'i':
                 cli['arch'],                   \
                 cli['KV'],                     \
                 libdir,                 \
-                master_config,          \
+                master_conf2,          \
                 cli,                    \
                 temp,                   \
                 bootupdateset,          \

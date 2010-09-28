@@ -4,7 +4,7 @@ import os
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
  
-from default import master_config, temp, kerneldir
+from default import master_conf, temp, kerneldir
 from utils.misc import *
 
 # WARN don't import logging here
@@ -65,7 +65,7 @@ def print_usage_kernel(cli):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Config:'
-    print '  --config=/file             "'+cli['config']+'"\tCustom master config file'
+    print '  --config=/dir              "'+cli['config']+'"\tCustom master config dir'
     print
     print  'Kernel:'
     print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"'
@@ -114,7 +114,7 @@ def print_usage_initramfs(cli):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Config:'
-    print '  --config=/file             "'+cli['config']+'"  Custom master config file'
+    print '  --config=/dir              "'+cli['config']+'"  Custom master config dir'
     print
     print 'Linuxrc:'
     print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'

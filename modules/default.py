@@ -11,7 +11,7 @@ temp = {'root' :        temp_root,              \
         'distfiles':    temp_root + '/distfiles'}
 
 # default values
-master_config = {
+master_conf = {
         'busybox-version':      '',             \
         'dm_ver':               '',             \
         'dmraid_ver':           '',             \
@@ -52,3 +52,6 @@ master_config = {
         'UTILS_MAKE':           'make',         \
         'UTILS_LD':             'ld'}
 
+modules_conf = {}
+
+default_conf = {}
