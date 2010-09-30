@@ -11,7 +11,7 @@ from usage import *
 
 # WARN don't import logging here
 
-def cli_parser(master_confblabla, modules_conf, default_conf):
+def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
 
     target = 'none'
 

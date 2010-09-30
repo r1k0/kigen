@@ -52,10 +52,10 @@ from cliparser import *
 from utils.shell import *
 
 # parse /etc/kigen/*.conf
-master_conf, modules_conf, default_conf = etc_parser()
+master_conf, modules_conf, kernel_conf, initramfs_conf = etc_parser()
 
 # parse command line parameters
-master_conf2, target, cli, verbose = cli_parser(master_conf, modules_conf, default_conf)
+master_conf2, target, cli, verbose = cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf)
 
 ## FIXME
 # because we get verbose['logfile'] from cli_parser(),
