@@ -54,4 +54,6 @@ master_conf = {
 
 modules_conf = {}
 
-default_conf = {}
+kernel_conf = {}
+
+initramfs_conf = {}
