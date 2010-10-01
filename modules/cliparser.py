@@ -3,56 +3,58 @@ import os
 from getopt import getopt, GetoptError
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
- 
 from default import *
 from utils.misc import *
-
 from usage import *
+from etcparser import *
 
 # WARN don't import logging here
 
-def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
+def cli_parser():
 
     target = 'none'
 
-    cli = { 'config':       '/etc/kigen.conf',  \
-            'nocache':      '',                 \
+    cli = { 'nocache':      '',                 \
             'oldconfig':    True,               \
             'kerneldir':    kerneldir,          \
             'arch':         identify_arch()}
 
-    # parse kigen config file
-    kigen_conf = cli['config']
-    if os.path.isfile(kigen_conf):
-        master_conf_temp = parse_config_file(kigen_conf)
-        master_conf.update(master_conf_temp)
-    else:
-        print 'error: missing ' + red(kigen_conf)
+    verbose = { 'std':      '',     \
+                'set':      False,  \
+                'logfile':  '/var/log/kigen.log'}
+
+    master_conf = {}
+    kernel_conf = {}
+    modules_conf = {}
+    initramfs_conf = {}
+
+    # copy command line arguments
+    cliopts = sys.argv
+
+    # parse /etc/kigen/master.conf
+    master_conf = etc_parser_master()
+
+    # if not enough parameters exit with usage
+    if len(sys.argv) < 2:
+        print_usage()
         sys.exit(2)
 
     # set default kernel sources
     if 'kernel-sources' in master_conf:
         # if set grab value from config file
         cli['kerneldir'] = master_conf['kernel-sources']
+    # else: exit
 
     cli['KV'] = get_kernel_version(cli['kerneldir'])
 
+    # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):
         print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
         sys.exit(2)
+    # exit if kernel version is not found
     if cli['KV'] is 'none':
         print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
         sys.exit(2)
-
-    verbose = { 'std':      '',     \
-                'set':      False,  \
-                'logfile':  '/var/log/kigen.log'}
-
-    if len(sys.argv) < 2:
-        print_usage()
-        sys.exit(2)
-
-    cliopts = sys.argv
 
     # prevent multiple targets from running
     if 'k' in cliopts and 'i' in cliopts:
@@ -83,12 +85,14 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
             target = 'kernel'
             cliopts.remove('k')
         try:
+            # parse /etc/kigen/kernel/kernel.conf
+            kernel_conf = etc_parser_kernel()
+
+            # parse command line
             opts, args = getopt(cliopts[1:], "idhn", [  \
-                                    "config=",                  \
                                     "help",                     \
                                     "info",                     \
                                     "version",                  \
-#                                    "nocolor",                  \
                                     "credits",                  \
                                     "conf=",                    \
                                     "dotconfig=",               \
@@ -123,7 +127,6 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
             if o in ("--logfile"):
                 cli['logfile'] = a
         # default
-        cli['config']       = '/etc/kigen.conf'
         cli['dotconfig']    = ''
         cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
         cli['initramfs']    = ''
@@ -149,7 +152,7 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_kernel(cli)
+                print_usage_kernel(cli, kernel_conf)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()
@@ -192,12 +195,8 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
                     sys.exit(2)
             elif o in ("--noboot"):
                 cli['noboot'] = True
-#            elif o in ("-n", "--nocolor"):
-#                cli['color'] = False
             elif o in ("--nosaveconfig"):
                 cli['nosaveconfig'] = True
-            elif o in ("--config="):
-                cli['config'] = a
             elif o in ("--clean"):
                 cli['clean'] = True
             elif o in ("--fixdotconfig"):
@@ -218,8 +217,12 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
             target = 'initramfs'
             cliopts.remove('i')
         try:
+            # parse /etc/kigen/initramfs/modules.conf and 
+            # /etc/kigen/initramfs/initramfs.conf
+            modules_conf, initramfs_conf= etc_parser_initramfs()
+
+            # parse command line
             opts, args = getopt(cliopts[1:], "hdin", [  \
-                                    "config=",      \
                                     "dotconfig=",   \
                                     "mrproper",     \
                                     "menuconfig",   \
@@ -247,7 +250,6 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
                                     "noboot",       \
                                     "selinux",      \
                                     "help",         \
-#                                    "nocolor",      \
                                     "info",         \
                                     "version",      \
                                     "credits",      \
@@ -281,7 +283,6 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
             if o in ("--logfile"):
                 cli['logfile'] = a
         # default
-        cli['config']       = '/etc/kigen.conf'
         cli['dotconfig']    = ''
         cli['info']         = False
         cli['mrproper']     = False
@@ -331,7 +332,7 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_initramfs(cli)
+                print_usage_initramfs(cli, modules_conf, initramfs_conf)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()
@@ -400,10 +401,6 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
                 cli['noboot'] = True
             elif o in ("--selinux"):
                 cli['selinux'] = True
-#            elif o in ("-n", "--nocolor"):
-#                cli['color'] = False
-            elif o in ("--config="):
-                cli['config'] = a
             elif o in ("--dropbear"):
                 cli['dropbear'] = True
                 cli['glibc'] = True         # dropbear needs glibc
@@ -472,4 +469,4 @@ def cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf):
             else:
                 assert False, "uncaught option"
 
-    return master_conf, target, cli, verbose
+    return master_conf, modules_conf, kernel_conf, initramfs_conf, target, cli, verbose

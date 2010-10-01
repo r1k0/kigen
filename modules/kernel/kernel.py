@@ -6,7 +6,15 @@ from utils.misc import *
 
 class kernel:
 
-    def __init__(self, kerneldir, master_config, arch, KV, cli, temp, verbose):
+    def __init__(self,          \
+                kerneldir,      \
+                master_config,  \
+                kernel_conf,    \
+                arch,           \
+                KV,             \
+                cli,            \
+                temp,           \
+                verbose):
 
         self.kerneldir      = kerneldir
         self.master_config  = master_config

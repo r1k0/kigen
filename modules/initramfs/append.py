@@ -14,7 +14,9 @@ class append:
                 linuxrc,            \
                 kernel_dir_opt,     \
                 arch,               \
-                master_config,      \
+                master_conf,        \
+                modules_conf,       \
+                initramfs_conf,     \
                 libdir,             \
                 defconfig,          \
                 oldconfig,          \
@@ -42,7 +44,9 @@ class append:
         self.linuxrc            = linuxrc # list
         self.kernel_dir_opt     = kernel_dir_opt
         self.arch               = arch
-        self.master_config      = master_config
+        self.master_conf        = master_conf
+        self.modules_conf       = modules_conf
+        self.initramfs_conf     = initramfs_conf
         self.libdir             = libdir
         self.defconfig          = defconfig
         self.oldconfig          = oldconfig
@@ -181,9 +185,9 @@ class append:
         """
         ret = zero = int('0')
         logging.debug('initramfs.append.busybox')
-        print green(' * ') + turquoise('initramfs.append.busybox ') + self.master_config['busybox-version'],
+        print green(' * ') + turquoise('initramfs.append.busybox ') + self.master_conf['busybox-version'],
     
-        if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.master_config['busybox-version']+'.tar.bz2') and self.nocache is False:
+        if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.master_conf['busybox-version']+'.tar.bz2') and self.nocache is False:
             # use cache
             print 'from ' + white('cache')
         else:
@@ -192,7 +196,7 @@ class append:
             from busybox import busybox
             bbobj = busybox( self.arch, \
                         self.bbconf,                 \
-                        self.master_config,          \
+                        self.master_conf,          \
                         self.libdir,                 \
                         self.temp,                   \
                         self.defconfig,              \
@@ -207,7 +211,7 @@ class append:
         os.makedirs(self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/')
 
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
-        process('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_config['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
+        process('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.master_conf['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         process('chmod +x %s/busybox' % (self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
         process('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
@@ -242,7 +246,7 @@ class append:
     
         # identify and copy kernel modules
         modsyslist  = get_sys_modules_list(self.KV)
-        modconflist = get_config_modules_list(self.master_config) #.split()
+        modconflist = get_config_modules_list(self.modules_conf) #.split()
         # TODO: add support for the 'probe' key
     
         # for each module in the list modconflist
@@ -277,7 +281,7 @@ class append:
     
         # create etc/modules/<group>
         os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules')
-        modconfdict = get_config_modules_dict(self.master_config)
+        modconfdict = get_config_modules_dict(self.modules_conf)
     
         # Genkernel official boot module design
         # for each key value in the module config dictionary
@@ -324,26 +328,26 @@ class append:
             process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.luks ') + self.master_config['luks-version'],
-            logging.debug('initramfs.append.luks ' + self.master_config['luks-version'])
+            print green(' * ') + turquoise('initramfs.append.luks ') + self.master_conf['luks-version'],
+            logging.debug('initramfs.append.luks ' + self.master_conf['luks-version'])
 
-            if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.master_config['luks-version']+'.bz2') and self.nocache is False:
+            if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.master_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
 
                 # extract cache
-                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
+                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_conf['luks-version'], self.temp['work']))
                 process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
             else:
                 # compile and cache
                 print
                 from luks import luks
-                luksobj = luks(self.master_config, self.temp, self.verbose)
+                luksobj = luks(self.master_conf, self.temp, self.verbose)
                 luksobj.build()
 
                 # extract cache
-                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_config['luks-version'], self.temp['work']))
+                os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.master_conf['luks-version'], self.temp['work']))
                 process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-luks-temp')
@@ -461,24 +465,24 @@ class append:
             process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_config['dropbear-version'],
-            logging.debug('initramfs.append.dropbear ' + self.master_config['dropbear-version'])
-            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_config['dropbear-version']+'.tar') and self.nocache is False:
+            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.master_conf['dropbear-version'],
+            logging.debug('initramfs.append.dropbear ' + self.master_conf['dropbear-version'])
+            if os.path.isfile(self.temp['cache']+'/dropbear-'+self.master_conf['dropbear-version']+'.tar') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
 
                 # extract cache
-                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_config['dropbear-version'], self.temp['work']))
+                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_conf['dropbear-version'], self.temp['work']))
 
             else:
                 # compile and cache
                 print
                 from dropbear import dropbear
-                dropbearobj = dropbear(self.master_config, self.dbdebugflag, self.temp, self.verbose)
+                dropbearobj = dropbear(self.master_conf, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
 
                 # extract cache
-                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_config['dropbear-version'], self.temp['work']))
+                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.master_conf['dropbear-version'], self.temp['work']))
 
         process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
         process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
@@ -556,20 +560,20 @@ class append:
             process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
 
         else:
-            logging.debug('initramfs.append.e2fsprogs ' + self.master_config['e2fsprogs-version'])
-            print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.master_config['e2fsprogs-version'],
-            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.master_config['e2fsprogs-version']+'.bz2') and self.nocache is False:
+            logging.debug('initramfs.append.e2fsprogs ' + self.master_conf['e2fsprogs-version'])
+            print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.master_conf['e2fsprogs-version'],
+            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.master_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
             else:
                 # compile
                 print
                 from e2fsprogs import e2fsprogs
-                e2obj = e2fsprogs(self.master_config, self.temp, self.verbose)
+                e2obj = e2fsprogs(self.master_conf, self.temp, self.verbose)
                 e2obj.build()
     
             # FIXME careful with the >
-            os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.master_config['e2fsprogs-version'], self.temp['work']))
+            os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.master_conf['e2fsprogs-version'], self.temp['work']))
             process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-blkid-temp')
@@ -617,7 +621,7 @@ class append:
             self.fail('media-gfx/splashutils must be merged')
             
 #            from splash import splash
-#            splashobj = splash(self.master_config, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
+#            splashobj = splash(self.master_conf, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
 #            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
@@ -647,24 +651,24 @@ class append:
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_bin + ' from ' + white('host')
             process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
-            logging.debug('initramfs.append.lvm2 ' + self.master_config['lvm2-version'])
-            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2') and self.nocache is False:
-                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version'],
+            logging.debug('initramfs.append.lvm2 ' + self.master_conf['lvm2-version'])
+            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.master_conf['lvm2-version']+'.bz2') and self.nocache is False:
+                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_conf['lvm2-version'],
                 # use cache
                 print 'from ' + white('cache')
 
                 # extract cache
-                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
+                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_conf['lvm2-version']+'.bz2', self.temp['work']))
                 process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
             else: 
                 # compile and cache
-                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_config['lvm2-version']
+                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.master_conf['lvm2-version']
                 from lvm2 import lvm2
-                lvm2obj = lvm2(self.master_config, self.temp, self.verbose)
+                lvm2obj = lvm2(self.master_conf, self.temp, self.verbose)
                 lvm2obj.build()
 
                 # extract cache
-                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_config['lvm2-version']+'.bz2', self.temp['work']))
+                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.master_conf['lvm2-version']+'.bz2', self.temp['work']))
                 process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
 
         if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
@@ -747,12 +751,12 @@ class append:
 #    
 #        @return: bool
 #        """
-#        logging.debug('initramfs.append.dmraid ' + self.master_config['dmraid_ver'])
-#        print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_config['dmraid_ver'],
+#        logging.debug('initramfs.append.dmraid ' + self.master_conf['dmraid_ver'])
+#        print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_conf['dmraid_ver'],
 #    
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
 #    
-#        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_config['dmraid_ver']+'.bz2') and self.nocache is False:
+#        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_conf['dmraid_ver']+'.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
 #            pass
@@ -760,10 +764,10 @@ class append:
 #            # compile
 #            print
 #            import dmraid
-#            dmraid.build_sequence(self.master_config, self.selinux, self.temp, self.verbose['std'])
+#            dmraid.build_sequence(self.master_conf, self.selinux, self.temp, self.verbose['std'])
 #    
 #        # FIXME careful with the > 
-#        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.master_config['dmraid_ver'], self.temp['work']))
+#        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.master_conf['dmraid_ver'], self.temp['work']))
 #        process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
 #    
 #        # TODO ln -sf raid456.ko raid45.ko ?
@@ -780,21 +784,21 @@ class append:
 #    
 #        @return: bool
 #        """
-#        logging.debug('initramfs.append.iscsi ' + self.master_config['iscsi_ver'])
-#        print green(' * ') + turquoise('initramfs.append.iscsi ') + self.master_config['iscsi_ver'],
+#        logging.debug('initramfs.append.iscsi ' + self.master_conf['iscsi_ver'])
+#        print green(' * ') + turquoise('initramfs.append.iscsi ') + self.master_conf['iscsi_ver'],
 #    
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
 #    
-#        if os.path.isfile(self.temp['cache']+'/iscsistart-'+self.master_config['iscsi_ver']+'.bz2') and self.nocache is False:
+#        if os.path.isfile(self.temp['cache']+'/iscsistart-'+self.master_conf['iscsi_ver']+'.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
 #        else:
 #            # compile
 #            print
 #            import iscsi
-#            iscsi.build_sequence(self.master_config, self.temp, self.verbose['std'])
+#            iscsi.build_sequence(self.master_conf, self.temp, self.verbose['std'])
 #    
-#        os.system('/bin/bzip2 -dc %s/iscsistart-%s.bz2 > %s/initramfs-iscsi-temp/bin/iscsistart' % (self.temp['cache'], self.master_config['iscsi_ver'], self.temp['work']))
+#        os.system('/bin/bzip2 -dc %s/iscsistart-%s.bz2 > %s/initramfs-iscsi-temp/bin/iscsistart' % (self.temp['cache'], self.master_conf['iscsi_ver'], self.temp['work']))
 #        process('chmod +x %s/initramfs-iscsi-temp/bin/iscsistart' % self.temp['work'], self.verbose)
 #    
 #        os.chdir(self.temp['work']+'/initramfs-iscsi-temp')
@@ -808,10 +812,10 @@ class append:
 #        """
 #        self.build_fuse()
 #    
-#        logging.debug('initramfs.append.unionfs_fuse ' + self.master_config['unionfs_fuse_ver'])
-#        print green(' * ') + turquoise('initramfs.append.unionfs_fuse ') + self.master_config['unionfs_fuse_ver'],
+#        logging.debug('initramfs.append.unionfs_fuse ' + self.master_conf['unionfs_fuse_ver'])
+#        print green(' * ') + turquoise('initramfs.append.unionfs_fuse ') + self.master_conf['unionfs_fuse_ver'],
 #    
-#        if os.path.isfile(self.temp['cache']+'/unionfs-fuse.static-'+self.master_config['unionfs_fuse_ver']+'.bz2') and self.nocache is False:
+#        if os.path.isfile(self.temp['cache']+'/unionfs-fuse.static-'+self.master_conf['unionfs_fuse_ver']+'.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
 #        else:
@@ -820,13 +824,13 @@ class append:
 #            if os.path.isfile('/usr/include/fuse.h'):
 #                # compile
 #                import unionfs_fuse
-#                unionfs_fuse.build_sequence(self.master_config, self.temp, self.verbose)
+#                unionfs_fuse.build_sequence(self.master_conf, self.temp, self.verbose)
 #            else:
 #                self.fail('we need libfuse: sys-fs/fuse must be merged')
 #    
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
 #        # FIXME careful with the > passed to process()
-#        os.system('/bin/bzip2 -dc %s/unionfs-fuse.static-%s.bz2 > %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % (self.temp['cache'], self.master_config['unionfs_fuse_ver'], self.temp['work']))
+#        os.system('/bin/bzip2 -dc %s/unionfs-fuse.static-%s.bz2 > %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % (self.temp['cache'], self.master_conf['unionfs_fuse_ver'], self.temp['work']))
 #        os.system('chmod +x %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % self.temp['work'])
 #    
 #        os.chdir(self.temp['work']+'/initramfs-unionfs-fuse-temp')
@@ -839,20 +843,20 @@ class append:
 #    
 #        @return: bool
 #        """
-#        logging.debug('initramfs.build_fuse ' + self.master_config['fuse_ver'])
-#        print green(' * ') + turquoise('initramfs.build_fuse ') +self.master_config['fuse_ver'],
+#        logging.debug('initramfs.build_fuse ' + self.master_conf['fuse_ver'])
+#        print green(' * ') + turquoise('initramfs.build_fuse ') +self.master_conf['fuse_ver'],
 #    
-#        if os.path.isfile(self.temp['cache']+'/fuse-dircache-'+self.master_config['fuse_ver']+'.tar.bz2') and self.nocache is False:
+#        if os.path.isfile(self.temp['cache']+'/fuse-dircache-'+self.master_conf['fuse_ver']+'.tar.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
 #        else:
 #            # compile and cache
 #            print
 #            import fuse
-#            fuse.build_sequence(self.master_config, self.temp, self.verbose)
+#            fuse.build_sequence(self.master_conf, self.temp, self.verbose)
 #    
 #        # extract
-#        os.system('tar xfj %s -C %s' % (self.temp['cache']+'/fuse-dircache-'+self.master_config['fuse_ver']+'.tar.bz2', self.temp['work']))
+#        os.system('tar xfj %s -C %s' % (self.temp['cache']+'/fuse-dircache-'+self.master_conf['fuse_ver']+'.tar.bz2', self.temp['work']))
 #    
 #        return
 #    
@@ -920,20 +924,20 @@ class append:
             process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
         else:
-            logging.debug('initramfs.append.strace ' + self.master_config['strace-version'])
-            print green(' * ') + turquoise('initramfs.append.strace ') + self.master_config['strace-version'],
-            if os.path.isfile(self.temp['cache'] + '/strace-' + self.master_config['strace-version']+'.bz2') and self.nocache is False:
+            logging.debug('initramfs.append.strace ' + self.master_conf['strace-version'])
+            print green(' * ') + turquoise('initramfs.append.strace ') + self.master_conf['strace-version'],
+            if os.path.isfile(self.temp['cache'] + '/strace-' + self.master_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
             else:
                 # compile
                 print
                 from strace import strace
-                strobj = strace(self.master_config, self.temp, self.verbose)
+                strobj = strace(self.master_conf, self.temp, self.verbose)
                 strobj.build()
 
             # FIXME careful with the >
-            os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.master_config['strace-version'], self.temp['work']))
+            os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.master_conf['strace-version'], self.temp['work']))
             process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-strace-temp')
@@ -957,20 +961,20 @@ class append:
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
         else:
-            logging.debug('initramfs.append.screen ' + self.master_config['screen-version'])
-            print green(' * ') + turquoise('initramfs.append.screen ') + self.master_config['screen-version'],
-            if os.path.isfile(self.temp['cache'] + '/screen-' + self.master_config['screen-version']+'.bz2') and self.nocache is False:
+            logging.debug('initramfs.append.screen ' + self.master_conf['screen-version'])
+            print green(' * ') + turquoise('initramfs.append.screen ') + self.master_conf['screen-version'],
+            if os.path.isfile(self.temp['cache'] + '/screen-' + self.master_conf['screen-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print 'from ' + white('cache')
             else:
                 # compile
                 print
                 from screen import screen
-                strobj = screen(self.master_config, self.temp, self.verbose)
+                strobj = screen(self.master_conf, self.temp, self.verbose)
                 strobj.build()
 
             # FIXME careful with the >
-            os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.master_config['screen-version'], self.temp['work']))
+            os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.master_conf['screen-version'], self.temp['work']))
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
         # add required /usr/share/terminfo/l/linux for screen

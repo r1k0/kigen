@@ -61,11 +61,8 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file'
 
 
-def print_usage_kernel(cli):
+def print_usage_kernel(cli, kernel_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
-    print
-    print 'Config:'
-    print '  --config=/dir              "'+cli['config']+'"\tCustom master config dir'
     print
     print  'Kernel:'
     print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"'
@@ -109,12 +106,8 @@ def print_usage_kernel(cli):
     print 'Tools:'
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
-def print_usage_initramfs(cli):
-    # passing cli is supposed to grab default from parse()
+def print_usage_initramfs(cli, modules_conf, initramfs_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
-    print
-    print 'Config:'
-    print '  --config=/dir              "'+cli['config']+'"  Custom master config dir'
     print
     print 'Linuxrc:'
     print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'

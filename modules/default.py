@@ -32,6 +32,16 @@ master_conf = {
         'DEFAULT_UTILS_CC':     'gcc',          \
         'DEFAULT_UTILS_LD':     'ld',           \
         'DEFAULT_UTILS_MAKE':   'make',         \
+        'UTILS_AS':             'as',           \
+        'UTILS_CC':             'gcc',          \
+        'UTILS_MAKE':           'make',         \
+        'UTILS_LD':             'ld'}
+
+# default kernel values
+kernel_conf = {}
+
+# default modules values
+modules_conf = {
         'MODULES_ATARAID':      '',             \
         'MODULES_DMRAID':       '',             \
         'MODULES_EVMS':         '',             \
@@ -46,14 +56,7 @@ master_conf = {
         'MODULES_SATA':         '',             \
         'MODULES_SCSI':         '',             \
         'MODULES_USB':          '',             \
-        'MODULES_WAITSCAN':     '',             \
-        'UTILS_AS':             'as',           \
-        'UTILS_CC':             'gcc',          \
-        'UTILS_MAKE':           'make',         \
-        'UTILS_LD':             'ld'}
+        'MODULES_WAITSCAN':     ''}
 
-modules_conf = {}
-
-kernel_conf = {}
-
+# default initramfs values
 initramfs_conf = {}

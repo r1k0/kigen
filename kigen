@@ -46,18 +46,18 @@ else:
         os.environ['KIGEN_STDOUT'] = '1'
 
 # kigen modules are ready to be called
-from default import temp
-from config import *
-from cliparser import *
-from utils.shell import *
-
-# parse /etc/kigen/*.conf
-master_conf, modules_conf, kernel_conf, initramfs_conf = etc_parser()
-
-logging.debug(master_conf)
+from default        import temp
+from cliparser      import *
+from utils.shell    import *
 
 # parse command line parameters
-master_conf2, target, cli, verbose = cli_parser(master_conf, modules_conf, kernel_conf, initramfs_conf)
+master_conf,       \
+modules_conf,      \
+kernel_conf,       \
+initramfs_conf,    \
+target,            \
+cli,               \
+verbose = cli_parser()
 
 ## FIXME
 # because we get verbose['logfile'] from cli_parser(),
@@ -70,8 +70,20 @@ if os.path.isfile(verbose['logfile']):
 # set logfile for DEBUG logging
 logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
 
+logging.debug('dumping /etc/kigen/master.conf')
+logging.debug(master_conf)
+logging.debug('dumping /etc/kigen/kernel/kernel.conf')
+logging.debug(kernel_conf)
+logging.debug('dumping /etc/kigen/initramfs/modules.conf')
+logging.debug(modules_conf)
+logging.debug('dumping /etc/kigen/initramfs/initramfs.conf')
+logging.debug(initramfs_conf)
+
+# FIXME logging start here 
+logging.debug('dumping ARGV')
 logging.debug(sys.argv)
-logging.debug('target is ' + target)
+logging.debug(target)
+logging.debug('dumping command line interface options')
 logging.debug(cli)
 logging.debug(verbose)
 
@@ -113,22 +125,22 @@ try:
     logging.debug('creating '+temp['root'])
     os.makedirs(temp['root'])
 except Exception:
-    logging.debug('failed creating '+temp['root'])
+    logging.debug(temp['root'] + ' already exists!')
 try:
     logging.debug('creating '+temp['work'])
     os.makedirs(temp['work'])
 except Exception:
-    logging.debug('failed creating '+temp['work'])
+    logging.debug(temp['work'] + ' already exists!')
 try:
     logging.debug('creating '+temp['cache'])
     os.makedirs(temp['cache'])
 except Exception:
-    logging.debug('failed creating '+temp['cache'])
+    logging.debug(temp['cache'] + ' already exists!')
 try:
     logging.debug('creating '+temp['distfiles'])
     os.makedirs(temp['distfiles'])
 except Exception:
-    logging.debug('failed creating '+temp['distfiles'])
+    logging.debug(temp['distfiles'] + ' already exists!')
 
 # run the kernel target
 if target == 'kernel' or target == 'k':
@@ -140,12 +152,13 @@ if target == 'kernel' or target == 'k':
         sys.exit(0)
 
     from kernel.kernel import kernel
-    kobj = kernel(cli['kerneldir'],            \
-                master_conf2,          \
-                cli['arch'],                   \
-                cli['KV'],                     \
-                cli,                    \
-                temp,                   \
+    kobj = kernel(cli['kerneldir'],   \
+                master_conf,          \
+                kernel_conf,          \
+                cli['arch'],          \
+                cli['KV'],            \
+                cli,                  \
+                temp,                 \
                 verbose)
     kobj.build()
 
@@ -193,11 +206,13 @@ if target == 'initramfs' or target == 'i':
         sys.exit(0)
 
     from initramfs.initramfs import initramfs
-    iobj = initramfs(cli['kerneldir'],         \
-                cli['arch'],                   \
-                cli['KV'],                     \
+    iobj = initramfs(cli['kerneldir'],  \
+                cli['arch'],            \
+                cli['KV'],              \
                 libdir,                 \
-                master_conf2,          \
+                master_conf,            \
+                modules_conf,           \
+                initramfs_conf,         \
                 cli,                    \
                 temp,                   \
                 bootupdateset,          \
