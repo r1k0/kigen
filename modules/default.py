@@ -38,7 +38,7 @@ master_conf = {
         'UTILS_LD':             'ld'}
 
 # default kernel values
-kernel_conf = {}
+kernel_conf = {'menuconfig': '' }
 
 # default modules values
 modules_conf = {

@@ -84,10 +84,11 @@ def cli_parser():
         if 'k' in sys.argv:
             target = 'kernel'
             cliopts.remove('k')
-        try:
-            # parse /etc/kigen/kernel/kernel.conf
-            kernel_conf = etc_parser_kernel()
 
+        # parse 
+        kernel_conf = etc_parser_kernel()
+
+        try:
             # parse command line
             opts, args = getopt(cliopts[1:], "idhn", [  \
                                     "help",                     \
@@ -133,10 +134,14 @@ def cli_parser():
         cli['info']         = False
         cli['mrproper']     = False
         cli['menuconfig']   = False
+        if kernel_conf['menuconfig'] == 'True':
+            cli['menuconfig'] = True
         cli['clean']        = False
         cli['allyesconfig'] = False
         cli['allnoconfig']  = False
-        cli['oldconfig']    = True
+        cli['oldconfig']    = False
+        if kernel_conf['nooldconfig'] == 'False':
+            cli['oldconfig'] = True
         cli['nomodinstall'] = False
         cli['fakeroot']     = '/'
         cli['nocache']      = False
@@ -469,4 +474,4 @@ def cli_parser():
             else:
                 assert False, "uncaught option"
 
-    return master_conf, modules_conf, kernel_conf, initramfs_conf, target, cli, verbose
+    return master_conf, kernel_conf, modules_conf, initramfs_conf, target, cli, verbose

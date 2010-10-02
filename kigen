@@ -51,13 +51,7 @@ from cliparser      import *
 from utils.shell    import *
 
 # parse command line parameters
-master_conf,       \
-modules_conf,      \
-kernel_conf,       \
-initramfs_conf,    \
-target,            \
-cli,               \
-verbose = cli_parser()
+master_conf, kernel_conf, modules_conf, initramfs_conf, target, cli, verbose = cli_parser()
 
 ## FIXME
 # because we get verbose['logfile'] from cli_parser(),
@@ -72,18 +66,21 @@ logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
 
 logging.debug('dumping /etc/kigen/master.conf')
 logging.debug(master_conf)
-logging.debug('dumping /etc/kigen/kernel/kernel.conf')
+
+logging.debug('dumping /etc/kigen/kernel/default.conf')
 logging.debug(kernel_conf)
+
 logging.debug('dumping /etc/kigen/initramfs/modules.conf')
 logging.debug(modules_conf)
-logging.debug('dumping /etc/kigen/initramfs/initramfs.conf')
+
+logging.debug('dumping /etc/kigen/initramfs/default.conf')
 logging.debug(initramfs_conf)
 
 # FIXME logging start here 
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
 logging.debug('kigen target is '+target)
-logging.debug('dumping command line interface options')
+logging.debug('dumping command line interface')
 logging.debug(cli)
 logging.debug(verbose)
 

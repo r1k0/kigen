@@ -8,7 +8,7 @@ class kernel:
 
     def __init__(self,          \
                 kerneldir,      \
-                master_config,  \
+                master_conf,    \
                 kernel_conf,    \
                 arch,           \
                 KV,             \
@@ -17,7 +17,8 @@ class kernel:
                 verbose):
 
         self.kerneldir      = kerneldir
-        self.master_config  = master_config
+        self.master_conf    = master_conf
+        self.kernel_conf    = kernel_conf
         self.arch           = arch
         self.KV             = KV
         self.verbose        = verbose
@@ -41,7 +42,7 @@ class kernel:
         Build kernel
         """
         zero = int('0')
-        if self.dotconfig or self.master_conf['dotconfig']:
+        if self.dotconfig:# or self.kernel_conf['dotconfig']:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import strftime
@@ -69,9 +70,9 @@ class kernel:
             if self.fixdotconfig is True:
                 self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
-        if self.oldconfig is True or self.master_conf['oldconfig']:
+        if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
-        if self.menuconfig is True:
+        if (self.menuconfig is True) or (self.menuconfig is 'True'):
             if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
         # check for kernel .config (gotta be sure)
@@ -249,11 +250,11 @@ class kernel:
 
         @return: string
         """
-        command = '%s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_config['DEFAULT_KERNEL_MAKE'], \
-                    self.master_config['DEFAULT_MAKEOPTS'],     \
-                    self.master_config['DEFAULT_KERNEL_CC'],    \
-                    self.master_config['DEFAULT_KERNEL_LD'],    \
-                    self.master_config['DEFAULT_KERNEL_AS'],    \
+        command = '%s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_conf['DEFAULT_KERNEL_MAKE'], \
+                    self.master_conf['DEFAULT_MAKEOPTS'],     \
+                    self.master_conf['DEFAULT_KERNEL_CC'],    \
+                    self.master_conf['DEFAULT_KERNEL_LD'],    \
+                    self.master_conf['DEFAULT_KERNEL_AS'],    \
                     self.arch,                                  \
                     target,                                     \
                     verbose)

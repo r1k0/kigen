@@ -2,7 +2,6 @@ import sys
 import os
 from default import *
 from utils.misc import *
-
 from stdout import white, green, turquoise, yellow, red
 
 # parse /etc/kigen/master.conf
@@ -28,7 +27,7 @@ def etc_parser_master():
 def etc_parser_kernel():
 
     etc = { 'kigen':            '/etc/kigen',                           \
-            'kernel_conf':      '/etc/kigen/kernel/kernel.conf'}
+            'kernel_conf':      '/etc/kigen/kernel/default.conf'}
 
     if not os.path.isfile(etc['kernel_conf']):
         print 'error: missing file ' + red(etc['kernel_conf'])
@@ -45,7 +44,7 @@ def etc_parser_initramfs():
     
     etc = { 'kigen':            '/etc/kigen',                           \
             'modules_conf':     '/etc/kigen/initramfs/modules.conf',    \
-            'initramfs_conf':   '/etc/kigen/initramfs/initramfs.conf'}
+            'initramfs_conf':   '/etc/kigen/initramfs/default.conf'}
 
     if not os.path.isfile(etc['modules_conf']):
         print 'error: missing file ' + red(etc['modules_conf'])
