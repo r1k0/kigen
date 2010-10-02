@@ -42,15 +42,29 @@ class kernel:
         Build kernel
         """
         zero = int('0')
-        if self.dotconfig:# or self.kernel_conf['dotconfig']:
+        if self.dotconfig: #or self.kernel_conf['dotconfig']:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import strftime
                 self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(strftime("%Y-%m-%d-%H-%M-%S")))
 
-            # copy the custom .config
-            self.copy_config(self.dotconfig, self.kerneldir + '/.config')
+            # copy the custom .config if they are not the same
+            print self.dotconfig 
+            print self.kerneldir + '/.config'
+            if self.dotconfig != self.kerneldir + '/.config':
+                self.copy_config(self.dotconfig, self.kerneldir + '/.config')
         # WARN do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
+
+        if self.kernel_conf['dotconfig']:
+            # backup the previous .config if found
+            if os.path.isfile(self.kernel_conf['dotconfig']):
+                from time import strftime
+                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(strftime("%Y-%m-%d-%H-%M-%S")))
+
+            # copy the custom .config if they are not the same
+            if self.kernel_conf['dotconfig'] != self.kerneldir + '/.config':
+                self.copy_config(self.kernel_conf['dotconfig'], self.kerneldir + '/.config')
+
 
         if self.mrproper is True:
             if self.make_mrproper() is not zero: self.fail('mrproper')
