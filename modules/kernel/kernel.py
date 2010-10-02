@@ -40,8 +40,8 @@ class kernel:
         """
         Build kernel
         """
-        ret = zero = int('0')
-        if self.dotconfig:
+        zero = int('0')
+        if self.dotconfig or self.master_conf['dotconfig']:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import strftime
@@ -52,11 +52,9 @@ class kernel:
         # WARN do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
 
         if self.mrproper is True:
-            ret = self.make_mrproper()
-            if ret is not zero: self.fail('mrproper')
+            if self.make_mrproper() is not zero: self.fail('mrproper')
         if self.clean is True:
-            ret = self.make_clean()
-            if ret is not zero: self.fail('clean')
+            if self.make_clean() is not zero: self.fail('clean')
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
@@ -71,33 +69,27 @@ class kernel:
             if self.fixdotconfig is True:
                 self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
-        if self.oldconfig is True:
-            ret = self.make_oldconfig()
-            if ret is not zero: self.fail('oldconfig')
+        if self.oldconfig is True or self.master_conf['oldconfig']:
+            if self.make_oldconfig() is not zero: self.fail('oldconfig')
         if self.menuconfig is True:
-            ret = self.make_menuconfig()
-            if ret is not zero: self.fail('menuconfig')
+            if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
         # check for kernel .config (gotta be sure)
         if os.path.isfile(self.kerneldir+'/.config') is not True: self.fail(self.kerneldir+'/.config'+' does not exist.')
 
         # prepare
-        ret = self.make_prepare()
-        if ret is not zero: self.fail('prepare')
+        if self.make_prepare() is not zero: self.fail('prepare')
     
         # bzImage
-        ret = self.make_bzImage()
-        if ret is not zero: self.fail('bzImage')
+        if self.make_bzImage() is not zero: self.fail('bzImage')
     
         # modules
         # if --allnoconfig is passed, then modules are disabled
         if self.allnoconfig is not True:
-            ret = self.make_modules()
-            if ret is not zero: self.fail('modules')
+            if self.make_modules() is not zero: self.fail('modules')
             if self.nomodinstall is False:
                 # modules_install
-                ret = self.make_modules_install()
-                if ret is not zero: self.fail('modules_install')
+                if self.make_modules_install() is not zero: self.fail('modules_install')
         # save kernel config
         if self.nosaveconfig is False:
             if os.path.isdir('/etc/kernels/'):

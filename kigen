@@ -82,7 +82,7 @@ logging.debug(initramfs_conf)
 # FIXME logging start here 
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
-logging.debug(target)
+logging.debug('kigen target is '+target)
 logging.debug('dumping command line interface options')
 logging.debug(cli)
 logging.debug(verbose)
