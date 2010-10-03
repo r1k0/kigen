@@ -85,16 +85,19 @@ class kernel:
             if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
             self.import_user_initramfs(self.initramfs)
-        else:
-            # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
-            if self.fixdotconfig is True:
-                self.remove_option('CONFIG_INITRAMFS_SOURCE')
+#        else:
+#            # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
+#            if self.fixdotconfig is True:
+#                self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
         # initramfs provided by config file 
-        if self.kernel_conf['initramfs'] is not '':
+        elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is ''):
             if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
             self.import_user_initramfs(self.kernel_conf['initramfs'])
+        else:
+            if self.fixdotconfig is True:
+                self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
 
 
@@ -105,7 +108,8 @@ class kernel:
             if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
         # check for kernel .config (gotta be sure)
-        if os.path.isfile(self.kerneldir+'/.config') is not True: self.fail(self.kerneldir+'/.config'+' does not exist.')
+        if os.path.isfile(self.kerneldir+'/.config') is not True: 
+            self.fail(self.kerneldir+'/.config'+' does not exist.')
 
         # prepare
         if self.make_prepare() is not zero: self.fail('prepare')
