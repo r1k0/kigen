@@ -170,7 +170,7 @@ class initramfs:
             os.chdir(self.temp['work'])
             if aobj.ttyecho() is not zero: self.fail('ttyecho')
         # 16) append splash
-        if self.cli['splash'] is not '':
+        if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
             os.chdir(self.temp['work'])
             if aobj.splash() is not zero: self.fail('splash')
         # append rootpasswd

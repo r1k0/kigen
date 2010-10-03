@@ -193,7 +193,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '\t\t\t\t\t\tCustom initramfs file name'
     print '  --logfile=/file            "'+master_conf['logfile']+'"'
     print '\t\t\t\t\t\tLog to file'
-    print '  --debug, -d                False              Debug verbose'
+    print '  --debug, -d                '+master_conf['debug']+'              Debug verbose'
     print
     print 'Tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
