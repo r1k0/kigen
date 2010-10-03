@@ -133,24 +133,34 @@ def cli_parser():
         cli['initramfs']    = ''
         cli['info']         = False
         cli['mrproper']     = False
+        if kernel_conf['mrproper'] == 'True':
+            cli['mrproper'] = True
         cli['menuconfig']   = False
         if kernel_conf['menuconfig'] == 'True':
             cli['menuconfig'] = True
         cli['clean']        = False
+        if kernel_conf['clean'] == 'True':
+            cli['clean'] = True
         cli['allyesconfig'] = False
         cli['allnoconfig']  = False
         cli['oldconfig']    = False
         if kernel_conf['nooldconfig'] == 'False':
             cli['oldconfig'] = True
         cli['nomodinstall'] = False
+        if kernel_conf['nomodinstall'] == 'True':
+            cli['nomodinstall'] = True
         cli['fakeroot']     = '/'
         cli['nocache']      = False
         cli['noboot']       = False
+        if kernel_conf['noboot'] == 'True':
+            cli['noboot'] = True
 #       quiet               = '2>&1 | tee -a ' + logfile # verbose
 #       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
         cli['color']        = True
         cli['nosaveconfig'] = False
+        if kernel_conf['nosaveconfig'] == 'True':
+            cli['nosaveconfig'] = True
         cli['fixdotconfig'] = False
         if kernel_conf['fixdotconfig'] == 'True':
             cli['fixdotconfig'] = True

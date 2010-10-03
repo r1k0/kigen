@@ -160,7 +160,7 @@ if target == 'kernel' or target == 'k':
     kobj.build()
 
     # copy kernel/system.map to /boot
-    if cli['noboot'] is False:
+    if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
     
          print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
          process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
@@ -174,7 +174,7 @@ if target == 'kernel' or target == 'k':
              print
     
     # leave /boot alone but tell the user where to find his kernel/system.map
-    elif cli['noboot'] is True:
+    elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
         logging.debug(cli['kerneldir']+'/System.map')
         print green(' * produced ') + cli['kerneldir']+'/System.map'
     

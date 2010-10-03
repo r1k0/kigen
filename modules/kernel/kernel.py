@@ -68,14 +68,10 @@ class kernel:
             if self.kernel_conf['dotconfig'] != self.kerneldir + '/.config':
                 self.copy_config(self.kernel_conf['dotconfig'], self.kerneldir + '/.config')
 
-        if self.mrproper is True:
+        if (self.mrproper is True) or (self.mrproper == 'True'):
             if self.make_mrproper() is not zero: self.fail('mrproper')
-        if self.clean is True:
+        if (self.clean is True) or (self.clean == 'True' ):
             if self.make_clean() is not zero: self.fail('clean')
-
-
-
-
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
@@ -104,7 +100,7 @@ class kernel:
 
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
-        if (self.menuconfig is True) or (self.menuconfig is 'True'):
+        if (self.menuconfig is True) or (self.menuconfig == 'True'):
             if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
         # check for kernel .config (gotta be sure)
@@ -121,11 +117,11 @@ class kernel:
         # if --allnoconfig is passed, then modules are disabled
         if self.allnoconfig is not True:
             if self.make_modules() is not zero: self.fail('modules')
-            if self.nomodinstall is False:
+            if (self.nomodinstall is False) or (self.nomodinstall == 'False'):
                 # modules_install
                 if self.make_modules_install() is not zero: self.fail('modules_install')
         # save kernel config
-        if self.nosaveconfig is False:
+        if (self.nosaveconfig is False) or (self.nosaveconfig == 'False'):
             if os.path.isdir('/etc/kernels/'):
                 process('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
             else:
