@@ -21,7 +21,7 @@ class append:
                 defconfig,          \
                 oldconfig,          \
                 menuconfig,         \
-                mrproper,           \
+#                mrproper,           \
                 verbose,            \
                 bbconf,             \
                 busyboxprogs,       \
@@ -30,8 +30,8 @@ class append:
                 stheme,             \
                 sres,               \
                 sinitrd,            \
-                firmware,           \
-                selinux,            \
+#                firmware,           \
+#                selinux,            \
                 dbdebugflag,        \
                 nocache,            \
                 hostbin,            \
@@ -51,7 +51,7 @@ class append:
         self.defconfig          = defconfig
         self.oldconfig          = oldconfig
         self.menuconfig         = menuconfig
-        self.mrproper           = mrproper
+#        self.mrproper           = mrproper
         self.verbose            = verbose
         self.bbconf             = bbconf
         self.busyboxprogs       = busyboxprogs
@@ -61,8 +61,8 @@ class append:
         self.sres               = sres
         self.sinitrd            = sinitrd
         self.nocache            = nocache
-        self.firmware           = firmware
-        self.selinux            = selinux
+#        self.firmware           = firmware
+#        self.selinux            = selinux
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
         self.dbdebugflag        = dbdebugflag
@@ -202,7 +202,7 @@ class append:
                         self.defconfig,              \
                         self.oldconfig,              \
                         self.menuconfig,             \
-                        self.mrproper,               \
+#                        self.mrproper,               \
                         self.verbose)
             bbobj.build()
 

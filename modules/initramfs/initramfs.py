@@ -36,9 +36,9 @@ class initramfs:
         self.defconfig          = cli['defconfig']
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
-        self.mrproper           = cli['mrproper']
+#        self.mrproper           = cli['mrproper']
         self.nocache            = cli['nocache']
-        self.firmware           = cli['firmware']
+#        self.firmware           = cli['firmware']
         self.verbosestd         = verbose['std']
         self.verboseset         = verbose['set']
         self.verbose            = verbose
@@ -47,14 +47,14 @@ class initramfs:
         self.temp               = temp
         self.dotconfig          = cli['dotconfig']
         self.nocache            = cli['nocache']
-        self.firmware           = cli['firmware']
+#        self.firmware           = cli['firmware']
         self.cli                = cli
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
         self.splash             = cli['splash']
         self.sres               = cli['sres']
         self.sinitrd            = cli['sinitrd']
-        self.selinux            = cli['selinux']
+#        self.selinux            = cli['selinux']
         self.hostbin            = cli['hostbin']
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
@@ -87,7 +87,7 @@ class initramfs:
                         self.defconfig,         \
                         self.oldconfig,         \
                         self.menuconfig,        \
-                        self.mrproper,          \
+#                        self.mrproper,          \
                         self.verbose,           \
                         self.dotconfig,         \
                         self.master_conf['busybox-progs'],  \
@@ -96,8 +96,8 @@ class initramfs:
                         self.splash,            \
                         self.sres,              \
                         self.sinitrd,           \
-                        self.firmware,          \
-                        self.selinux,           \
+#                        self.firmware,          \
+#                        self.selinux,           \
                         self.dbdebugflag,       \
                         self.nocache,           \
                         self.hostbin,           \
@@ -119,22 +119,22 @@ class initramfs:
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
             if aobj.lvm2() is not zero: self.fail('lvm2')
-        # 6) append dmraid
-        if self.cli['dmraid'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.dmraid() is not zero: self.fail('dmraid')
-        # 7) append iscsi
-        if self.cli['iscsi'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.iscsi() is not zero: self.fail('iscsi')
-        # 8) append evms
-        if self.cli['evms'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.evms() is not zero: self.fail('evms')
-        # 9) append mdadm
-        if self.cli['mdadm'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.mdadm() is not zero: self.fail('mdadm')
+#        # 6) append dmraid
+#        if self.cli['dmraid'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.dmraid() is not zero: self.fail('dmraid')
+#        # 7) append iscsi
+#        if self.cli['iscsi'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.iscsi() is not zero: self.fail('iscsi')
+#        # 8) append evms
+#        if self.cli['evms'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.evms() is not zero: self.fail('evms')
+#        # 9) append mdadm
+#        if self.cli['mdadm'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.mdadm() is not zero: self.fail('mdadm')
         # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
@@ -157,14 +157,14 @@ class initramfs:
         if self.cli['screen'] is True:
             os.chdir(self.temp['work'])
             if aobj.screen() is not zero: self.fail('screen')
-        # 14) append unionfs_fuse
-        if self.cli['unionfs'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.unionfs_fuse() is not zero: self.fail('unionfs-fuse')
-        # 15) append aufs
-        if self.cli['aufs'] is True:
-            os.chdir(self.temp['work'])
-            if aobj.aufs() is not zero: self.fail('aufs')
+#        # 14) append unionfs_fuse
+#        if self.cli['unionfs'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.unionfs_fuse() is not zero: self.fail('unionfs-fuse')
+#        # 15) append aufs
+#        if self.cli['aufs'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.aufs() is not zero: self.fail('aufs')
         # append ttyecho
         if self.cli['ttyecho'] is True:
             os.chdir(self.temp['work'])
@@ -181,10 +181,10 @@ class initramfs:
         if self.cli['keymaps'] is True:
             os.chdir(self.temp['work'])
             if aobj.keymaps() is not zero: self.fail('keympas')
-        # 17) append firmware
-        if os.path.isdir(self.firmware):
-            os.chdir(self.temp['work'])
-            if aobj.firmware() is not zero: self.fail('firmware')
+#        # 17) append firmware
+#        if os.path.isdir(self.firmware):
+#            os.chdir(self.temp['work'])
+#            if aobj.firmware() is not zero: self.fail('firmware')
         # TODO # 18) append overlay
         # 19) append glibc
         if self.cli['glibc'] is True:

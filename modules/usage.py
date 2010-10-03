@@ -107,37 +107,37 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print 'Tools:'
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
-def print_usage_initramfs(cli, modules_conf, initramfs_conf):
+def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Linuxrc:'
-    print '  --linuxrc=/linuxrc[,/file] "'+cli['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'
+    print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
     print '\t\t\t\t\t\tCustom busybox config file'
     print '  --defconfig               ',
-    print cli['defconfig'], # bool
+    print initramfs_conf['defconfig'], # bool
     print '\t\tSet .config to largest generic options'
     print '  --oldconfig               ',
-    print cli['oldconfig'], # bool
+    print initramfs_conf['oldconfig'], # bool
     print '\t\tAsk for new busybox options if any'
     print '  --menuconfig              ',
-    print cli['menuconfig'], # bool
+    print initramfs_conf['menuconfig'], # bool
     print '\t\tInteractive busybox options menu'
     print
     print 'Features:'
-    print '  --splash=<theme>           "'+cli['splash']+'"                 Include splash support (splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]          "'+cli['sres']+'"                  Splash resolution, all if not set'
+    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"                 Include splash support (splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"                  Splash resolution, all if not set'
 #   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
     print '  --disklabel               ',
-    print cli['disklabel'], # bool
+    print initramfs_conf['disklabel'], # bool
     print '\t\tInclude support for UUID/LABEL'
     print '  --luks                    ',
-    print cli['luks'], # bool 
+    print initramfs_conf['luks'], # bool 
     print '\t\tInclude LUKS support (host binary if found)'
     print '  --lvm2                    ',
-    print cli['lvm2'], # bool
+    print initramfs_conf['lvm2'], # bool
     print '\t\tInclude LVM2 support (host binary if found)'
 #   print '  --evms                     False                   Include evms support (evms must be merged)'
 #   print '  --dmraid                   False                   Include dmraid support'
@@ -145,53 +145,53 @@ def print_usage_initramfs(cli, modules_conf, initramfs_conf):
 #   print '  --iscsi                    False                   Include iscsi support'
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
     print '  --dropbear                ',
-    print cli['dropbear'], # bool
+    print initramfs_conf['dropbear'], # bool
     print '\t\tInclude dropbear tools and daemon (host binaries if found)'
     print '   --debugflag              ',
-    print cli['debugflag'], # bool
+    print initramfs_conf['debugflag'], # bool
     print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
     print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"                 Create and set root password (required for dropbear)'
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
     print '  --keymaps                 ',
-    print cli['keymaps'], # bool
+    print initramfs_conf['keymaps'], # bool
     print '\t\tInclude all keymaps'
     print '  --ttyecho                 ',
-    print cli['ttyecho'], # bool
+    print initramfs_conf['ttyecho'], # bool
     print '\t\tInclude the handy ttyecho.c tool'
     print '  --strace                  ',
-    print cli['strace'], # bool
+    print initramfs_conf['strace'], # bool
     print '\t\tInclude the strace binary tool'
     print '  --screen                  ',
-    print cli['screen'], # bool
+    print initramfs_conf['screen'], # bool
     print '\t\tInclude the screen binary tool'
     print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                 Include list of user generated custom roots'
     print
     print 'Libraries:'
     print '  --glibc                   ',
-    print cli['glibc'], # bool
+    print initramfs_conf['glibc'], # bool
     print '\t\tInclude host GNU C libraries (required for dns,dropbear)'
     print '  --libncurses              ',
-    print cli['libncurses'], # bool
+    print initramfs_conf['libncurses'], # bool
     print '\t\tInclude host libncurses (required for dropbear)'
     print '  --zlib                    ',
-    print cli['zlib'], # bool
+    print initramfs_conf['zlib'], # bool
     print '\t\tInclude host zlib (required for dropbear)'
     print
     print 'Misc:'
     print '  --nocache                 ',
-    print cli['nocache'],
+    print initramfs_conf['nocache'],
     print '\t\tDelete previous cached data on startup'
     print '  --hostbin                 ',
-    print cli['hostbin'],
+    print initramfs_conf['hostbin'],
     print '\t\tUse host binaries over sources when possible'
     print '  --noboot                  ',
-    print cli['noboot'],
+    print initramfs_conf['noboot'],
     print '\t\tDo not copy initramfs to /boot'
-    print '  --rename=/file             "'+cli['rename']+'"'
+    print '  --rename=/file             "'+initramfs_conf['rename']+'"'
     print '\t\t\t\t\t\tCustom initramfs file name'
-    print '  --logfile=/file            "'+cli['logfile']+'"'
+    print '  --logfile=/file            "'+master_conf['logfile']+'"'
     print '\t\t\t\t\t\tLog to file'
     print '  --debug, -d                False              Debug verbose'
     print

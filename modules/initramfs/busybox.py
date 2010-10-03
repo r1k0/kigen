@@ -15,7 +15,7 @@ class busybox:
                 defconfig,      \
                 oldconfig,      \
                 menuconfig,     \
-                mrproper,       \
+ #               mrproper,       \
                 verbose):
 
         self.arch       = arch
@@ -26,7 +26,7 @@ class busybox:
         self.defconfig  = defconfig
         self.oldconfig  = oldconfig
         self.menuconfig = menuconfig
-        self.mrproper   = mrproper
+#        self.mrproper   = mrproper
         self.verbose    = verbose
         self.bb_version = master_config['busybox-version']
         self.bb_tmp     = temp['work'] + '/busybox-' + master_config['busybox-version']
@@ -48,8 +48,8 @@ class busybox:
     
         if self.copy_config() is not zero: self.fail('copy_config')
     
-        if self.mrproper is True:
-            if self.make_mrproper() is not zero: self.fail('mrproper')
+#        if self.mrproper is True:
+#            if self.make_mrproper() is not zero: self.fail('mrproper')
 
         if self.defconfig is True:
             if self.make_defconfig() is not zero: self.fail('defconfig')

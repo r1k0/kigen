@@ -246,11 +246,12 @@ def cli_parser():
         if 'i' in sys.argv:
             target = 'initramfs'
             cliopts.remove('i')
-        try:
-            # parse /etc/kigen/initramfs/modules.conf and 
-            # /etc/kigen/initramfs/initramfs.conf
-            modules_conf, initramfs_conf= etc_parser_initramfs()
 
+        # parse /etc/kigen/initramfs/modules.conf and 
+        # /etc/kigen/initramfs/initramfs.conf
+        initramfs_conf, modules_conf = etc_parser_initramfs()
+
+        try:
             # parse command line
             opts, args = getopt(cliopts[1:], "hdin", [  \
                                     "dotconfig=",   \
@@ -309,43 +310,80 @@ def cli_parser():
         # this has to be taken care before quiet is initialized
         # hence the extra loop, catch --logfile before all
         cli['logfile'] = '/var/log/kigen.log'
+        if master_conf['logfile'] != '':
+            cli['logfile'] = master_conf['logfile']
         for o, a in opts:
             if o in ("--logfile"):
                 cli['logfile'] = a
+
         # default
-        cli['dotconfig']    = ''
-        cli['info']         = False
-        cli['mrproper']     = False
+        cli['dotconfig']    = master_conf['kernel-sources']+'/.config'
+        if initramfs_conf['dotconfig'] != '':
+            cli['dotconfig'] = initramfs_conf['dotconfig']
+
+#        cli['info']         = False
+#        cli['mrproper']     = False
+#        if initramfs_conf['mrproper'] == 'True':
+#            cli['mrproper'] = True
+
         cli['menuconfig']   = False
+        if initramfs_conf['menuconfig'] == 'True':
+            cli['menuconfig'] = True
         cli['defconfig']    = False
+        if initramfs_conf['defconfig'] == 'True':
+            cli['defconfig'] = True
         cli['oldconfig']    = False # too much verbose
+        if initramfs_conf['oldconfig'] == 'True':
+            cli['oldconfig'] = True
         cli['luks']         = False
+        if initramfs_conf['luks'] == 'True':
+            cli['luks'] = True
         cli['lvm2']         = False
-        cli['dmraid']       = False
-        cli['iscsi']        = False
-        cli['evms']         = False
-        cli['mdadm']        = False
+        if initramfs_conf['lvm2'] == 'True':
+            cli['lvm2'] = True
+#        cli['dmraid']       = False
+#        cli['iscsi']        = False
+#        cli['evms']         = False
+#        cli['mdadm']        = False
         cli['splash']       = ''
         cli['sres']         = '' # 1024x768
         cli['sinitrd']      = '' # a custom initrd.splash file
-        cli['firmware']     = ''
+#        cli['firmware']     = ''
         cli['disklabel']    = False
-        cli['unionfs']      = False
-        cli['aufs']         = False
+        if initramfs_conf['disklabel'] == 'True':
+            cli['disklabel'] = True
+#        cli['unionfs']      = False
+#        cli['aufs']         = False
         cli['linuxrc']      = ''
         cli['dropbear']     = False
+        if initramfs_conf['dropbear'] == 'True':
+            cli['dropbear'] = True
         cli['nocache']      = False
+        if initramfs_conf['nocache'] == 'True':
+            cli['nocache'] = True
         cli['noboot']       = False
-        cli['selinux']      = False
+        if initramfs_conf['noboot'] == 'True':
+            cli['noboot'] = True
+#        cli['selinux']      = False
 #       quiet               = '2>&1 | tee -a ' + logfile # verbose
 #       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
         cli['color']        = True
         cli['nosaveconfig'] = False
+#        if initramfs_conf['nosaveconfig'] == 'True':
+#            cli['nosaveconfig'] = True
         cli['hostbin']      = False
+        if initramfs_conf['hostbin'] == 'True':
+            cli['hostbin'] = True
         cli['glibc']        = False
+        if initramfs_conf['glibc'] == 'True':
+            cli['glibc'] = True
         cli['libncurses']   = False
+        if initramfs_conf['libncurses'] == 'True':
+            cli['libncurses'] = True
         cli['zlib']         = False
+        if initramfs_conf['zlib'] == 'True':
+            cli['zlib'] = True
         cli['rename']       = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         cli['plugin']       = ''
         cli['rootpasswd']   = ''
@@ -354,15 +392,25 @@ def cli_parser():
         cli['compress']     = ''
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
         cli['ttyecho']      = False
+        if initramfs_conf['ttyecho'] == 'True':
+            cli['ttyecho'] = True
         cli['keymaps']      = False
+        if initramfs_conf['keymaps'] == 'True':
+            cli['keymaps'] = True
         cli['strace']       = False
+        if initramfs_conf['strace'] == 'True':
+            cli['strace'] = True
         cli['screen']       = False
+        if initramfs_conf['screen'] == 'True':
+            cli['screen'] = True
         cli['debugflag']    = False
+        if initramfs_conf['debugflag'] == 'True':
+            cli['debugflag'] = True
     
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_initramfs(cli, modules_conf, initramfs_conf)
+                print_usage_initramfs(cli, initramfs_conf, modules_conf)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()
