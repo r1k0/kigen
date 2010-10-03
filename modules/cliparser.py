@@ -128,8 +128,12 @@ def cli_parser():
             if o in ("--logfile"):
                 cli['logfile'] = a
         # default
-        cli['dotconfig']    = ''
+        cli['dotconfig']    = '/usr/src/linux/.config'
+        if kernel_conf['dotconfig'] != '':
+            cli['dotconfig'] = kernel_conf['dotconfig']
         cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
+        if kernel_conf['rename'] != '':
+            cli['rename'] = kernel_conf['rename']
         cli['initramfs']    = ''
         cli['info']         = False
         cli['mrproper']     = False
@@ -150,6 +154,8 @@ def cli_parser():
         if kernel_conf['nomodinstall'] == 'True':
             cli['nomodinstall'] = True
         cli['fakeroot']     = '/'
+        if kernel_conf['fakeroot'] != '':
+            cli['fakeroot'] = kernel_conf['fakeroot']
         cli['nocache']      = False
         cli['noboot']       = False
         if kernel_conf['noboot'] == 'True':
@@ -205,11 +211,11 @@ def cli_parser():
             elif o in ("--nomodinstall"):
                 cli['nomodinstall'] = True
             elif o in ("--fakeroot"):
-                if os.path.isdir(a):
-                    cli['fakeroot'] = a
-                else:
-                    print "%s is not a directory" % a
-                    sys.exit(2)
+#                if os.path.isdir(a):
+                 cli['fakeroot'] = a
+#                else:
+#                    print "%s is not a directory" % a
+#                    sys.exit(2)
             elif o in ("--noboot"):
                 cli['noboot'] = True
             elif o in ("--nosaveconfig"):

@@ -103,8 +103,8 @@ You can simply ignore either one or the other or both configuration files.
 Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
-kgen works on Debian and Arch with no support for color (but who cares?).
-igen could fully work too except for --splash that currently uses splashutils from Portage.
+kigen works on Debian and Arch with no support for color (but who cares?).
+kigen could fully work too except for --splash that currently uses splashutils from Portage.
 It is planned to support --splash on Debian and Arch too.
 KIGen is not meant (for now) to be installed on non Portage systems but will in the future.
 

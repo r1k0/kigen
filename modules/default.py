@@ -38,7 +38,20 @@ master_conf = {
         'UTILS_LD':             'ld'}
 
 # default kernel values
-kernel_conf = {'menuconfig': '' }
+kernel_conf = {
+         'dotconfig'   : '', \
+         'initramfs'   : '', \
+         'fixdotconfig': '', \
+         'clean'       : '', \
+         'mrproper'    : '', \
+         'menuconfig'  : '', \
+         'fakeroot'    : '', \
+         'nooldconfig' : '', \
+         'nomodinstall': '', \
+         'nosaveconfig': '', \
+         'noboot'      : '', \
+         'rename'      : ''} 
+
 
 # default modules values
 modules_conf = {
