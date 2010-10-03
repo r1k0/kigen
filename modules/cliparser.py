@@ -124,6 +124,8 @@ def cli_parser():
         # this has to be taken care before quiet is initialized
         # hence the extra loop, catch --logfile before all
         cli['logfile'] = '/var/log/kigen.log'
+        if master_conf['logfile'] != '':
+            cli['logfile'] = master_conf['logfile']
         for o, a in opts:
             if o in ("--logfile"):
                 cli['logfile'] = a
@@ -163,6 +165,11 @@ def cli_parser():
 #       quiet               = '2>&1 | tee -a ' + logfile # verbose
 #       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
+        verbose['set']      = False
+        if master_conf['debug'] == 'True':
+            verbose['set'] = True
+            verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+            verbose['logfile'] = cli['logfile']
         cli['color']        = True
         cli['nosaveconfig'] = False
         if kernel_conf['nosaveconfig'] == 'True':
@@ -175,7 +182,7 @@ def cli_parser():
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_kernel(cli, kernel_conf)
+                print_usage_kernel(cli, master_conf, kernel_conf)
                 sys.exit(0)
             elif o in ("--credits"):
                 print_credits()

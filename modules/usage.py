@@ -61,7 +61,7 @@ def print_examples():
     print ' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file'
 
 
-def print_usage_kernel(cli, kernel_conf):
+def print_usage_kernel(cli, master_conf, kernel_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print  'Kernel:'
@@ -100,8 +100,9 @@ def print_usage_kernel(cli, kernel_conf):
     print '\t\tDo not copy kernel to /boot'
     print '  --rename=/file             "'+kernel_conf['rename']+'"'
     print '\t\t\t\t\t\tCustom kernel file name'
-    print '  --logfile=/file            "'+cli['logfile']+'"Log to file'
-    print '  --debug, -d                False\t\tDebug verbose'
+    print '  --logfile=/file            "'+master_conf['logfile']+'"'
+    print '\t\t\t\t\t\tLog to file'
+    print '  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose'
     print
     print 'Tools:'
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
