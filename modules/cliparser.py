@@ -128,7 +128,7 @@ def cli_parser():
             if o in ("--logfile"):
                 cli['logfile'] = a
         # default
-        cli['dotconfig']    = '/usr/src/linux/.config'
+        cli['dotconfig']    = master_conf['kernel-sources']+'/.config'
         if kernel_conf['dotconfig'] != '':
             cli['dotconfig'] = kernel_conf['dotconfig']
         cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
