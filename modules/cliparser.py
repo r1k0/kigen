@@ -442,6 +442,12 @@ def cli_parser():
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
         cli['compress']     = ''
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
+
+        verbose['set'] = False
+        if master_conf['debug'] == 'True':
+            verbose['set'] = True
+            verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+            verbose['logfile'] = cli['logfile']
     
         # target options
         for o, a in opts:

@@ -111,7 +111,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Linuxrc:'
-    print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"                 Include custom linuxrc (files copied over to etc)'
+    print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"'
+    print '\t\t\t\t\t\tInclude custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
@@ -127,8 +128,10 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '\t\tInteractive busybox options menu'
     print
     print 'Features:'
-    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"                 Include splash support (splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"                  Splash resolution, all if not set'
+    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"'
+    print '\t\t\t\t\t\tInclude splash support (splashutils must be merged)'
+    print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"'
+    print '\t\t\t\t\t\t Splash resolution, all if not set'
 #   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
     print '  --disklabel               ',
     print initramfs_conf['disklabel'], # bool
@@ -166,7 +169,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '  --screen                  ',
     print initramfs_conf['screen'], # bool
     print '\t\tInclude the screen binary tool'
-    print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"                 Include list of user generated custom roots'
+    print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"'
+    print '\t\t\t\t\t\tInclude list of user generated custom roots'
     print
     print 'Libraries:'
     print '  --glibc                   ',
@@ -193,7 +197,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '\t\t\t\t\t\tCustom initramfs file name'
     print '  --logfile=/file            "'+master_conf['logfile']+'"'
     print '\t\t\t\t\t\tLog to file'
-    print '  --debug, -d                '+master_conf['debug']+'              Debug verbose'
+    print '  --debug, -d                '+master_conf['debug']+'               Debug verbose'
     print
     print 'Tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
