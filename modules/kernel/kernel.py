@@ -42,7 +42,9 @@ class kernel:
         Build kernel
         """
         zero = int('0')
-        if self.dotconfig: #or self.kernel_conf['dotconfig']:
+
+        # dot config provided by cli
+        if self.dotconfig:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import strftime
@@ -55,6 +57,7 @@ class kernel:
                 self.copy_config(self.dotconfig, self.kerneldir + '/.config')
         # WARN do not use self.dotconfig from now on but use self.kerneldir + '/.config' to point to kernel config
 
+        # dotconfig provided by config file
         if self.kernel_conf['dotconfig']:
             # backup the previous .config if found
             if os.path.isfile(self.kernel_conf['dotconfig']):
@@ -65,24 +68,36 @@ class kernel:
             if self.kernel_conf['dotconfig'] != self.kerneldir + '/.config':
                 self.copy_config(self.kernel_conf['dotconfig'], self.kerneldir + '/.config')
 
-
         if self.mrproper is True:
             if self.make_mrproper() is not zero: self.fail('mrproper')
         if self.clean is True:
             if self.make_clean() is not zero: self.fail('clean')
+
+
+
+
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
         if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
-            if self.fixdotconfig is True:
+            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
-            self.import_user_initramfs()
+            self.import_user_initramfs(self.initramfs)
         else:
             # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
             if self.fixdotconfig is True:
                 self.remove_option('CONFIG_INITRAMFS_SOURCE')
+
+        # initramfs provided by config file 
+        if self.kernel_conf['initramfs'] is not '':
+            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
+                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
+            self.import_user_initramfs(self.kernel_conf['initramfs'])
+
+
+
 
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
@@ -169,7 +184,7 @@ class kernel:
         # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
 
-    def import_user_initramfs(self):
+    def import_user_initramfs(self, initramfs_from_cli_or_config):
         """
         Import user initramfs into the kernel
 
@@ -178,8 +193,9 @@ class kernel:
         kinitramfsdir = self.temp['initramfs']
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-        print green(' * ') + turquoise('kernel.import_user_initramfs ') + 'to ' + kinitramfsdir
-        process('cp %s %s/usr/initramfs_data.cpio.gz' % (self.initramfs, self.kerneldir), self.verbose)
+        print green(' * ') + turquoise('kernel.import_user_initramfs ') + initramfs_from_cli_or_config
+        process('cp %s %s/usr/initramfs_data.cpio.gz' % (initramfs_from_cli_or_config, self.kerneldir), self.verbose)
+
         # extract gzip archive
         process('gzip -d -f %s/usr/initramfs_data.cpio.gz' % self.kerneldir, self.verbose)
 

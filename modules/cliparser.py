@@ -152,6 +152,8 @@ def cli_parser():
         cli['color']        = True
         cli['nosaveconfig'] = False
         cli['fixdotconfig'] = False
+        if kernel_conf['fixdotconfig'] == 'True':
+            cli['fixdotconfig'] = True
         cli['getdotconfig'] = ''
 
         # target options
