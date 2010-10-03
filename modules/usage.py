@@ -65,10 +65,11 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print  'Kernel:'
-    print '  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"'
-    print '\t\t\t\t\t\tCustom kernel .config file'
+    print '  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"',
+    print '\t\tCustom kernel .config file'
 
-    print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"\t\t\tEmbed initramfs into the kernel'
+    print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"',
+    print '\t\tEmbed initramfs into the kernel'
 
     print yellow('   --fixdotconfig           '),
     print kernel_conf['fixdotconfig'],
@@ -109,11 +110,11 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print kernel_conf['noboot'],
     print '\t\tDo not copy kernel to /boot'
 
-    print '  --rename=/file             "'+kernel_conf['rename']+'"'
-    print '\t\t\t\t\t\tCustom kernel file name'
+    print '  --rename=/file             "'+kernel_conf['rename']+'"',
+    print '\t\tCustom kernel file name'
 
-    print '  --logfile=/file            "'+master_conf['logfile']+'"'
-    print '\t\t\t\t\t\tLog to file'
+    print '  --logfile=/file            "'+master_conf['logfile']+'"',
+    print '\t\tLog to file'
 
     print '  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose'
     print
@@ -124,12 +125,13 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print 'Linuxrc:'
-    print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"'
-    print '\t\t\t\t\t\tInclude custom linuxrc (files copied over to etc)'
+    print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"',
+    print '\t\tInclude custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
-    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
-    print '\t\t\t\t\t\tCustom busybox config file'
+#    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
+    print '  --dotconfig=/file          "'+initramfs_conf['dotconfig']+'"',
+    print '\t\tCustom busybox config file'
 
     print '  --defconfig               ',
     print initramfs_conf['defconfig'], # bool
@@ -176,8 +178,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['debugflag'], # bool
     print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
 
-    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"'
-    print '\t\t\t\t\t\tCreate and set root password (required for dropbear)'
+    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"',
+    print '\t\tCreate and set root password (required for dropbear)'
 
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
@@ -199,8 +201,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['screen'], # bool
     print '\t\tInclude the screen binary tool'
 
-    print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"'
-    print '\t\t\t\t\t\tInclude list of user generated custom roots'
+    print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"',
+    print '\t\tInclude list of user generated custom roots'
     print
     print 'Libraries:'
     print '  --glibc                   ',
