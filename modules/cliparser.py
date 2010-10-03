@@ -316,10 +316,15 @@ def cli_parser():
             if o in ("--logfile"):
                 cli['logfile'] = a
 
+        cli['oldconfig']    = False # too much verbose
+        if initramfs_conf['oldconfig'] == 'True':
+            cli['oldconfig'] = True
+
         # default
-        cli['dotconfig']    = master_conf['kernel-sources']+'/.config'
+        cli['dotconfig']    = ''
         if initramfs_conf['dotconfig'] != '':
             cli['dotconfig'] = initramfs_conf['dotconfig']
+            cli['oldconfig'] = True # make sure .config is ok
 
 #        cli['info']         = False
 #        cli['mrproper']     = False
@@ -333,10 +338,6 @@ def cli_parser():
         cli['defconfig']    = False
         if initramfs_conf['defconfig'] == 'True':
             cli['defconfig'] = True
-
-        cli['oldconfig']    = False # too much verbose
-        if initramfs_conf['oldconfig'] == 'True':
-            cli['oldconfig'] = True
 
         cli['luks']         = False
         if initramfs_conf['luks'] == 'True':

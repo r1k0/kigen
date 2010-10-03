@@ -67,26 +67,35 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print  'Kernel:'
     print '  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"'
     print '\t\t\t\t\t\tCustom kernel .config file'
+
     print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"\t\t\tEmbed initramfs into the kernel'
+
     print yellow('   --fixdotconfig           '),
     print kernel_conf['fixdotconfig'],
     print yellow('\t\t Check and auto fix the kernel config file (experimental)')
+
     print '  --clean                   ',
     print kernel_conf['clean'],
     print '\t\tClean precompiled objects only'
+
     print '  --mrproper                ',
     print kernel_conf['mrproper'],
     print '\t\tClean precompiled objects and remove config file'
+
 #    print '  --oldconfig               ',
 #    print kernel_conf['oldconfig'],
 #    print '\t\tAsk for new kernel options if any'
+
     print '  --menuconfig              ',
     print kernel_conf['menuconfig'],
     print '\t\tInteractive kernel options menu'
+
     print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules'
+
     print '  --nooldconfig             ',
     print kernel_conf['nooldconfig'],
     print '\t\tDo not ask for new kernel/initramfs options'
+
     print '  --nomodinstall            ',
     print kernel_conf['nomodinstall'],
     print '\t\tDo not install modules'
@@ -95,13 +104,17 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print '  --nosaveconfig            ',
     print kernel_conf['nosaveconfig'],
     print '\t\tDo not save kernel config in /etc/kernels'
+
     print '  --noboot                  ',
     print kernel_conf['noboot'],
     print '\t\tDo not copy kernel to /boot'
+
     print '  --rename=/file             "'+kernel_conf['rename']+'"'
     print '\t\t\t\t\t\tCustom kernel file name'
+
     print '  --logfile=/file            "'+master_conf['logfile']+'"'
     print '\t\t\t\t\t\tLog to file'
+
     print '  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose'
     print
     print 'Tools:'
@@ -117,28 +130,35 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Busybox:'
     print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
     print '\t\t\t\t\t\tCustom busybox config file'
+
     print '  --defconfig               ',
     print initramfs_conf['defconfig'], # bool
     print '\t\tSet .config to largest generic options'
+
     print '  --oldconfig               ',
     print initramfs_conf['oldconfig'], # bool
     print '\t\tAsk for new busybox options if any'
+
     print '  --menuconfig              ',
     print initramfs_conf['menuconfig'], # bool
     print '\t\tInteractive busybox options menu'
     print
     print 'Features:'
-    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"'
-    print '\t\t\t\t\t\tInclude splash support (splashutils must be merged)'
-    print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"'
-    print '\t\t\t\t\t\t Splash resolution, all if not set'
+    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"',
+    print '\t\tInclude splash support (splashutils must be merged)'
+
+    print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"',
+    print '\t\t Splash resolution, all if not set'
 #   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
+
     print '  --disklabel               ',
     print initramfs_conf['disklabel'], # bool
     print '\t\tInclude support for UUID/LABEL'
+
     print '  --luks                    ',
     print initramfs_conf['luks'], # bool 
     print '\t\tInclude LUKS support (host binary if found)'
+
     print '  --lvm2                    ',
     print initramfs_conf['lvm2'], # bool
     print '\t\tInclude LVM2 support (host binary if found)'
@@ -147,28 +167,38 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 #   print '   --selinux                 False                    Include selinux support in --dmraid'
 #   print '  --iscsi                    False                   Include iscsi support'
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
+
     print '  --dropbear                ',
     print initramfs_conf['dropbear'], # bool
     print '\t\tInclude dropbear tools and daemon (host binaries if found)'
+
     print '   --debugflag              ',
     print initramfs_conf['debugflag'], # bool
     print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
-    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"                 Create and set root password (required for dropbear)'
+
+    print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"'
+    print '\t\t\t\t\t\tCreate and set root password (required for dropbear)'
+
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
+
     print '  --keymaps                 ',
     print initramfs_conf['keymaps'], # bool
     print '\t\tInclude all keymaps'
+
     print '  --ttyecho                 ',
     print initramfs_conf['ttyecho'], # bool
     print '\t\tInclude the handy ttyecho.c tool'
+
     print '  --strace                  ',
     print initramfs_conf['strace'], # bool
     print '\t\tInclude the strace binary tool'
+
     print '  --screen                  ',
     print initramfs_conf['screen'], # bool
     print '\t\tInclude the screen binary tool'
+
     print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"'
     print '\t\t\t\t\t\tInclude list of user generated custom roots'
     print
@@ -176,9 +206,11 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '  --glibc                   ',
     print initramfs_conf['glibc'], # bool
     print '\t\tInclude host GNU C libraries (required for dns,dropbear)'
+
     print '  --libncurses              ',
     print initramfs_conf['libncurses'], # bool
     print '\t\tInclude host libncurses (required for dropbear)'
+
     print '  --zlib                    ',
     print initramfs_conf['zlib'], # bool
     print '\t\tInclude host zlib (required for dropbear)'
@@ -187,22 +219,29 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '  --nocache                 ',
     print initramfs_conf['nocache'],
     print '\t\tDelete previous cached data on startup'
+
     print '  --hostbin                 ',
     print initramfs_conf['hostbin'],
     print '\t\tUse host binaries over sources when possible'
+
     print '  --noboot                  ',
     print initramfs_conf['noboot'],
     print '\t\tDo not copy initramfs to /boot'
+
     print '  --rename=/file             "'+initramfs_conf['rename']+'"'
     print '\t\t\t\t\t\tCustom initramfs file name'
-    print '  --logfile=/file            "'+master_conf['logfile']+'"'
-    print '\t\t\t\t\t\tLog to file'
-    print '  --debug, -d                '+master_conf['debug']+'               Debug verbose'
+
+    print '  --logfile=/file            "'+master_conf['logfile']+'"',
+    print '\t\tLog to file'
+
+    print '  --debug, -d                "'+master_conf['debug']+'"',
+    print '\t\tDebug verbose'
     print
     print 'Tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
     print '\t\t\t\t\t\t Custom extracting directory'
+
     print '  --compress=/dir            "'+cli['compress']+'"                 Compress directory into initramfs'
     print '   --into=/file              "'+cli['into']+'"'
     print '\t\t\t\t\t\t Custom initramfs file'

@@ -72,4 +72,5 @@ modules_conf = {
         'MODULES_WAITSCAN':     ''}
 
 # default initramfs values
-initramfs_conf = {}
+initramfs_conf = {
+    }
