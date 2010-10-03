@@ -118,7 +118,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
 
     print '  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose'
     print
-    print 'Tools:'
+    print 'Handy tools:'
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs(cli, initramfs_conf, modules_conf):
@@ -239,7 +239,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '  --debug, -d                "'+master_conf['debug']+'"',
     print '\t\tDebug verbose'
     print
-    print 'Tools:'
+    print 'Handy tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
     print '\t\t\t\t\t\t Custom extracting directory'
