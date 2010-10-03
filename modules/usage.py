@@ -65,40 +65,40 @@ def print_usage_kernel(cli, kernel_conf):
     print 'Parameter:\t\t     Default value:\tDescription:'
     print
     print  'Kernel:'
-    print '  --dotconfig=/file          "'+cli['kerneldir']+'/.config'+'"'
+    print '  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"'
     print '\t\t\t\t\t\tCustom kernel .config file'
-    print '  --initramfs=/file          "'+cli['initramfs']+'"\t\t\tEmbed initramfs into the kernel'
+    print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"\t\t\tEmbed initramfs into the kernel'
     print yellow('   --fixdotconfig           '),
-    print cli['fixdotconfig'],
+    print kernel_conf['fixdotconfig'],
     print yellow('\t\t Check and auto fix the kernel config file (experimental)')
     print '  --clean                   ',
-    print cli['clean'],
+    print kernel_conf['clean'],
     print '\t\tClean precompiled objects only'
     print '  --mrproper                ',
-    print cli['mrproper'],
+    print kernel_conf['mrproper'],
     print '\t\tClean precompiled objects and remove config file'
-    print '  --oldconfig               ',
-    print cli['oldconfig'],
-    print '\t\tAsk for new kernel options if any'
+#    print '  --oldconfig               ',
+#    print kernel_conf['oldconfig'],
+#    print '\t\tAsk for new kernel options if any'
     print '  --menuconfig              ',
-    print cli['menuconfig'],
+    print kernel_conf['menuconfig'],
     print '\t\tInteractive kernel options menu'
     print '  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules'
     print '  --nooldconfig             ',
-    print not cli['oldconfig'],
+    print kernel_conf['nooldconfig'],
     print '\t\tDo not ask for new kernel/initramfs options'
     print '  --nomodinstall            ',
-    print cli['nomodinstall'],
+    print kernel_conf['nomodinstall'],
     print '\t\tDo not install modules'
     print
     print 'Misc:'
     print '  --nosaveconfig            ',
-    print cli['nosaveconfig'],
+    print kernel_conf['nosaveconfig'],
     print '\t\tDo not save kernel config in /etc/kernels'
     print '  --noboot                  ',
-    print cli['noboot'],
+    print kernel_conf['noboot'],
     print '\t\tDo not copy kernel to /boot'
-    print '  --rename=/file             "'+cli['rename']+'"'
+    print '  --rename=/file             "'+kernel_conf['rename']+'"'
     print '\t\t\t\t\t\tCustom kernel file name'
     print '  --logfile=/file            "'+cli['logfile']+'"Log to file'
     print '  --debug, -d                False\t\tDebug verbose'
