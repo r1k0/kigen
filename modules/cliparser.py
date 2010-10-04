@@ -27,6 +27,7 @@ def cli_parser():
     kernel_conf = {}
     modules_conf = {}
     initramfs_conf = {}
+    version_conf = {}
 
     # copy command line arguments
     cliopts = sys.argv
