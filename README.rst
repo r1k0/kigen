@@ -407,7 +407,7 @@ emerge it.
 Kigen has 3 sets of config files:
  - /etc/kigen/master.conf
  - /etc/kigen/kernel/default.conf
- - /etc/kigen/kernel/{initramfs.conf,modules.conf,version.conf}
+ - /etc/kigen/initramfs/{default.conf,modules.conf,version.conf}
 
 They are heavily commented, their options should be self explanatory.
 Just remember that command line parameters will always overwrite the config files.
