@@ -38,3 +38,5 @@ TODO: lvm2 may fail on gentoo/funtoo
     works all the time patchless on sabayon ;o)
     see http://bugs.gentoo.org/show_bug.cgi?id=332905
     need lvm2-2.02.72-dynamic-static-ldflags.patch?
+TODO: support xen-sources
+    http://en.gentoo-wiki.com/wiki/Xen
