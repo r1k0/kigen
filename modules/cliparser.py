@@ -249,7 +249,7 @@ def cli_parser():
 
         # parse /etc/kigen/initramfs/modules.conf and 
         # /etc/kigen/initramfs/initramfs.conf
-        initramfs_conf, modules_conf = etc_parser_initramfs()
+        initramfs_conf, modules_conf, version_conf = etc_parser_initramfs()
 
         try:
             # parse command line
@@ -590,4 +590,4 @@ def cli_parser():
             else:
                 assert False, "uncaught option"
 
-    return master_conf, kernel_conf, modules_conf, initramfs_conf, target, cli, verbose
+    return master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose

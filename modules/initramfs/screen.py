@@ -6,13 +6,13 @@ from utils.misc import *
 
 class screen:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, version_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.screen_ver     = master_config['screen-version']
-        self.screentmp      = temp['work'] + '/screen-' + master_config['screen-version']
+        self.screen_ver     = version_conf['screen-version']
+        self.screentmp      = temp['work'] + '/screen-' + self.screen_ver
         
     def build(self):
         """
@@ -28,7 +28,7 @@ class screen:
                 self.fail('download')
     
         self.extract()
-    #   grr, tar thing to not return 0 when success
+        # grr, tar thing to not return 0 when success
     
         if self.configure() is not zero: self.fail('configure')
     
@@ -143,5 +143,5 @@ class screen:
         print green(' * ') + '... screen.cache'
         self.chgdir(self.screentmp)
     
-        return process('mv %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.master_config['screen-version']), self.verbose)
+        return process('mv %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.screen_ver), self.verbose)
 

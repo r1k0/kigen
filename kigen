@@ -18,7 +18,7 @@ if os.path.islink(binpath):
 if binpath == '/usr/sbin/kigen':
     # kigen is installed (likely by portage)
     libdir = '/usr/share/kigen'
-    # TODO: find another way to get the pyv, this won't work on debian
+    # FIXME: find another way to get the pyv, this won't work on debian
     pyv = os.popen('eselect python show --python2').read().strip()
     sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen/modules")
 else:
@@ -51,10 +51,9 @@ from cliparser      import *
 from utils.shell    import *
 
 # parse command line parameters
-master_conf, kernel_conf, modules_conf, initramfs_conf, target, cli, verbose = cli_parser()
+master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose = cli_parser()
 
-## FIXME
-# because we get verbose['logfile'] from cli_parser(),
+# FIXME because we get verbose['logfile'] from cli_parser()
 # we can only start logging after here, that sucks ass big time
 
 # remove previous logfile
@@ -76,7 +75,9 @@ logging.debug(modules_conf)
 logging.debug('dumping /etc/kigen/initramfs/default.conf')
 logging.debug(initramfs_conf)
 
-# FIXME logging start here 
+logging.debug('dumping /etc/kigen/initramfs/version.conf')
+logging.debug(version_conf)
+
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
 logging.debug('kigen target is '+target)
@@ -210,6 +211,7 @@ if target == 'initramfs' or target == 'i':
                 master_conf,            \
                 modules_conf,           \
                 initramfs_conf,         \
+                version_conf,           \
                 cli,                    \
                 temp,                   \
                 bootupdateset,          \
@@ -229,7 +231,7 @@ if target == 'initramfs' or target == 'i':
 
     sys.exit(0)
 
-# TODO unset os.environ['KIGEN_STDOUT']?
+# FIXME unset os.environ['KIGEN_STDOUT']?
 
 sys.exit(0)
 

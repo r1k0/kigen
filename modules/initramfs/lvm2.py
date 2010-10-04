@@ -6,13 +6,13 @@ from utils.misc import *
 
 class lvm2:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, version_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.lvm2_ver       = str(master_config['lvm2-version'])
-        self.lvm2_tmp       = temp['work']+'/LVM2.'+master_config['lvm2-version']
+        self.lvm2_ver       = str(version_conf['lvm2-version'])
+        self.lvm2_tmp       = temp['work']+'/LVM2.'+self.lvm2_ver
 
     def build(self):
         """
@@ -182,7 +182,7 @@ class lvm2:
     	print green(' * ') + '... lvm2.compress'
     	self.chgdir(self.lvm2_tmp)
     
-    #	return os.system('tar -cj -f %s tools/lvm.static %s' % (temp['cache']+'/lvm.static-'+master_config['lvm2-version']+'.tar.bz2', verbose))
+#   	return os.system('tar -cj -f %s tools/lvm.static %s' % (temp['cache']+'/lvm.static-'+self.lvm2_ver+'.tar.bz2', verbose))
         return os.system('bzip2 tools/lvm.static')
 #    	return os.system('bzip2 tools/lvm')
     
@@ -197,5 +197,5 @@ class lvm2:
     	mvv = ''
     	if self.verbose['set'] is '': mvv = '-v'
 
-    	return os.system('mv %s tools/lvm.static.bz2 %s/lvm.static-%s.bz2' % (mvv, self.temp['cache'], self.master_config['lvm2-version']))
+    	return os.system('mv %s tools/lvm.static.bz2 %s/lvm.static-%s.bz2' % (mvv, self.temp['cache'], self.lvm2_ver))
 

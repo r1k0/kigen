@@ -6,13 +6,13 @@ from utils.misc import *
 
 class strace:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, version_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.strace_ver     = master_config['strace-version']
-        self.stracetmp      = temp['work'] + '/strace-' + master_config['strace-version']
+        self.strace_ver     = version_conf['strace-version']
+        self.stracetmp      = temp['work'] + '/strace-' + self.strace_ver
         
     def build(self):
         """
@@ -28,7 +28,7 @@ class strace:
                 self.fail('download')
     
         self.extract()
-    #   grr, tar thing to not return 0 when success
+        # grr, tar thing to not return 0 when success
     
         if self.configure() is not zero: self.fail('configure')
     
@@ -145,5 +145,5 @@ class strace:
         print green(' * ') + '... strace.cache'
         self.chgdir(self.stracetmp)
     
-        return process('mv %s/strace.bz2 %s/strace-%s.bz2' % (self.stracetmp, self.temp['cache'], self.master_config['strace-version']), self.verbose)
+        return process('mv %s/strace.bz2 %s/strace-%s.bz2' % (self.stracetmp, self.temp['cache'], self.strace_ver), self.verbose)
 

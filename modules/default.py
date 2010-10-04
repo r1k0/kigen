@@ -52,7 +52,6 @@ kernel_conf = {
          'noboot'      : '', \
          'rename'      : ''} 
 
-
 # default modules values
 modules_conf = {
         'MODULES_ATARAID':      '',             \
@@ -72,5 +71,7 @@ modules_conf = {
         'MODULES_WAITSCAN':     ''}
 
 # default initramfs values
-initramfs_conf = {
-    }
+initramfs_conf = {}
+
+# default version values
+version_conf = {}

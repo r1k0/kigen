@@ -179,7 +179,7 @@ class kernel:
         kinitramfsdir = self.temp['initramfs']
         print green(' * ') + turquoise('kernel.enable_dotconfig_initramfs ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
         # FIXME or not? actually let make oldconfig deal with it
-        # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can handle 
+        # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can cleanup
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
 
     def import_user_initramfs(self, initramfs_from_cli_or_config):
@@ -317,7 +317,7 @@ class kernel:
 
         return os.system(command)
     
-    # TODO: should we add a sort of yes '' | make oldconfig?
+    # FIXME: should we add a sort of yes '' | make oldconfig?
     def make_oldconfig(self):
         """
         Kernel command interface for oldconfig

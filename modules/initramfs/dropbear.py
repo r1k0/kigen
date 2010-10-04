@@ -6,13 +6,13 @@ from utils.misc import *
 
 class dropbear:
 
-    def __init__(self, master_config, debugflag, temp, verbose):
+    def __init__(self, master_config, version_conf, debugflag, temp, verbose):
         
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.dropbear_ver   = master_config['dropbear-version']
-        self.dropbeartmp    = temp['work'] + '/dropbear-' + master_config['dropbear-version']
+        self.dropbear_ver   = version_conf['dropbear-version']
+        self.dropbeartmp    = temp['work'] + '/dropbear-' + self.dropbear_ver
         self.debugflag      = debugflag
 
     def build(self):
@@ -25,17 +25,17 @@ class dropbear:
     
         if os.path.isfile('%s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.dropbear_ver))) is not True:
             if self.download() is not zero: 
-                process('rm -v %s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.master_config['dropbear-version'])), self.verbose)
+                process('rm -v %s/distfiles/dropbear-%s.tar.gz' % (get_portdir(self.temp), str(self.dropbear_ver)), self.verbose)
                 self.fail('download')
     
         self.extract()
         # grr, tar thing to not return 0 when success
 
-# there is no need to patch for scp->dbscp
-# because there is NO scp bin inside the initramfs
-# the patch only applies for cases when openssh is already installed
-# to make dropbear and openssh coexist
-#       if self.patch() is not zero: self.fail('patch')
+# FIXME there is no need to patch for scp->dbscp
+# FIXME because there is NO scp bin inside the initramfs
+# FIXME the patch only applies for cases when openssh is already installed
+# FIXME to make dropbear and openssh coexist
+# FIXME       if self.patch() is not zero: self.fail('patch')
 
         if self.debugflag is True:
             if self.patch_debug_header() is not zero: self.fail('patch_debug_header')
@@ -78,8 +78,8 @@ class dropbear:
         """
         print green(' * ') + '... dropbear.download'
         dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
-    #    return utils.process('/usr/bin/wget %s -O %s/distfiles/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_portdir(temp), str(dropbearversion)), verbose)
 
+#       return utils.process('/usr/bin/wget %s -O %s/distfiles/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_portdir(temp), str(dropbearversion)), verbose)
         return os.system('/usr/bin/wget %s -O %s/distfiles/dropbear-%s.tar.gz %s' % (dropbear_url, get_portdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
     
     def extract(self):
@@ -207,4 +207,4 @@ class dropbear:
         print green(' * ') + '... dropbear.cache'
         self.chgdir(self.dropbeartmp)
     
-        return process('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.master_config['dropbear-version']), self.verbose)
+        return process('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.dropbear_ver), self.verbose)

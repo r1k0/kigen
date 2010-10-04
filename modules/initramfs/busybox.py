@@ -9,27 +9,26 @@ class busybox:
     def __init__(self,          \
                 arch,           \
                 dotconfig,      \
-                master_config,  \
+                master_conf,    \
+                version_conf,   \
                 libdir,         \
                 temp,           \
                 defconfig,      \
                 oldconfig,      \
                 menuconfig,     \
- #               mrproper,       \
                 verbose):
 
         self.arch       = arch
         self.dotconfig     = dotconfig
-        self.master_config = master_config
+        self.master_conf = master_conf
         self.libdir     = libdir
         self.temp       = temp
         self.defconfig  = defconfig
         self.oldconfig  = oldconfig
         self.menuconfig = menuconfig
-#        self.mrproper   = mrproper
         self.verbose    = verbose
-        self.bb_version = master_config['busybox-version']
-        self.bb_tmp     = temp['work'] + '/busybox-' + master_config['busybox-version']
+        self.bb_version = version_conf['busybox-version']
+        self.bb_tmp     = temp['work'] + '/busybox-' + self.bb_version
  
     def build(self):
         """
@@ -39,17 +38,14 @@ class busybox:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version']))) is not True:
+        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.bb_version))) is not True:
             if self.download() is not zero: 
-                process('rm -v %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.master_config['busybox-version'])), self.verbose)
+                process('rm -v %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.bb_version)), self.verbose)
                 self.fail('download')
     
         if self.extract() is not zero: self.fail('extract')
     
         if self.copy_config() is not zero: self.fail('copy_config')
-    
-#        if self.mrproper is True:
-#            if self.make_mrproper() is not zero: self.fail('mrproper')
 
         if self.defconfig is True:
             if self.make_defconfig() is not zero: self.fail('defconfig')
@@ -145,7 +141,7 @@ class busybox:
         print green(' * ') + '... busybox.compress'
         self.chgdir(self.bb_tmp)
 
-        return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.master_config['busybox-version']))
+        return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.bb_version))
     
     def cache(self):
         """
@@ -155,7 +151,7 @@ class busybox:
         """
         print green(' * ') + '... busybox.cache'
 
-        return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.master_config['busybox-version'], self.temp['cache'], self.master_config['busybox-version']))
+        return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.bb_version, self.temp['cache'], self.bb_version))
     
     # busybox building functions
     def build_command(self, target, verbose):
@@ -166,28 +162,14 @@ class busybox:
 
         @return: string
         """
-        command = '%s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_config['UTILS_MAKE'],	\
-                    self.master_config['UTILS_CC'],	\
-                    self.master_config['UTILS_LD'],	\
-                    self.master_config['UTILS_AS'],	\
+        command = '%s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_conf['UTILS_MAKE'],	\
+                    self.master_conf['UTILS_CC'],	\
+                    self.master_conf['UTILS_LD'],	\
+                    self.master_conf['UTILS_AS'],	\
                     self.arch,                      \
                     target,                          \
                     verbose)
         return command
-    
-    def make_mrproper(self):
-        """
-        Busybox mrproper interface
-        
-        @return: bool
-        """
-        print green(' * ') + '... busybox.mrproper'
-        self.chgdir(self.bb_tmp)
-        command = self.build_command('mrproper', self.verbose['std'])
-        if self.verbose['set'] is True:
-            print command
-
-        return os.system(command)
     
     def make_defconfig(self):
         """

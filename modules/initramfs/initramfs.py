@@ -14,9 +14,10 @@ class initramfs:
                 arch,               \
                 KV,                 \
                 libdir,             \
-                master_conf,      \
+                master_conf,        \
                 modules_conf,       \
                 initramfs_conf,     \
+                version_conf,       \
                 cli,                \
                 temp,               \
                 bootupdateset,      \
@@ -32,6 +33,7 @@ class initramfs:
         self.master_conf        = master_conf
         self.modules_conf       = modules_conf
         self.initramfs_conf     = initramfs_conf
+        self.version_conf       = version_conf
         self.linuxrc            = cli['linuxrc'] # list
         self.defconfig          = cli['defconfig']
         self.oldconfig          = cli['oldconfig']
@@ -83,6 +85,7 @@ class initramfs:
                         self.master_conf,       \
                         self.modules_conf,      \
                         self.initramfs_conf,    \
+                        self.version_conf,      \
                         self.libdir,            \
                         self.defconfig,         \
                         self.oldconfig,         \

@@ -7,8 +7,6 @@ from credits import author, productname, version, description, contributor
 from default import master_conf, temp, kerneldir
 from utils.misc import *
 
-# WARN don't import logging here
-
 def print_version():
     print green('%s' % version)
 
@@ -83,10 +81,6 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print kernel_conf['mrproper'],
     print '\t\tClean precompiled objects and remove config file'
 
-#    print '  --oldconfig               ',
-#    print kernel_conf['oldconfig'],
-#    print '\t\tAsk for new kernel options if any'
-
     print '  --menuconfig              ',
     print kernel_conf['menuconfig'],
     print '\t\tInteractive kernel options menu'
@@ -129,7 +123,6 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '\t\tInclude custom linuxrc (files copied over to etc)'
     print
     print 'Busybox:'
-#    print '  --dotconfig=/file          "'+temp['work'] + '/busybox-' + master_conf['busybox-version']+'/.config"'
     print '  --dotconfig=/file          "'+initramfs_conf['dotconfig']+'"',
     print '\t\tCustom busybox config file'
 
@@ -151,7 +144,6 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"',
     print '\t\t Splash resolution, all if not set'
-#   print '   --sinitrd=/file           ""                       Splash custom initrd.splash (host if found)'
 
     print '  --disklabel               ',
     print initramfs_conf['disklabel'], # bool

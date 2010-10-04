@@ -44,7 +44,8 @@ def etc_parser_initramfs():
     
     etc = { 'kigen':            '/etc/kigen',                           \
             'initramfs_conf':   '/etc/kigen/initramfs/default.conf',    \
-            'modules_conf':     '/etc/kigen/initramfs/modules.conf'}
+            'modules_conf':     '/etc/kigen/initramfs/modules.conf',    \
+            'version_conf':     '/etc/kigen/initramfs/version.conf'}
 
     if not os.path.isfile(etc['modules_conf']):
         print 'error: missing file ' + red(etc['modules_conf'])
@@ -54,10 +55,17 @@ def etc_parser_initramfs():
         print 'error: missing file ' + red(etc['initramfs_conf'])
         sys.exit(2)
 
+    if not os.path.isfile(etc['version_conf']):
+        print 'error: missing file ' + red(etc['version_conf'])
+        sys.exit(2)
+
     modules_conf_temp = parse_config_file(etc['modules_conf'])
     modules_conf.update(modules_conf_temp)
 
     initramfs_conf_temp = parse_config_file(etc['initramfs_conf'])
     initramfs_conf.update(initramfs_conf_temp)
 
-    return initramfs_conf, modules_conf
+    version_conf_temp = parse_config_file(etc['version_conf'])
+    version_conf.update(version_conf_temp)
+
+    return initramfs_conf, modules_conf, version_conf

@@ -6,13 +6,13 @@ from utils.misc import *
 
 class e2fsprogs:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, version_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.e2fsprogs_ver  = master_config['e2fsprogs-version']
-        self.e2tmp          = temp['work'] + '/e2fsprogs-' + master_config['e2fsprogs-version']
+        self.e2fsprogs_ver  = version_conf['e2fsprogs-version']
+        self.e2tmp          = temp['work'] + '/e2fsprogs-' + self.e2fsprogs_ver
         
     def build(self):
         """
@@ -28,7 +28,7 @@ class e2fsprogs:
                 self.fail('download')
     
         self.extract()
-    #   grr, tar thing to not return 0 when success
+        # grr, tar thing to not return 0 when success
     
         if self.configure() is not zero: self.fail('configure')
     
@@ -71,7 +71,7 @@ class e2fsprogs:
         print green(' * ') + '... e2fsprogs.download'
         e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
 
-        # FIXME utils.shell.process does not remove the output!!!!
+        # FIXME utils.shell.process does not remove the output!
         return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, get_portdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
     
     def extract(self):
@@ -145,5 +145,5 @@ class e2fsprogs:
         print green(' * ') + '... e2fsprogs.cache'
         self.chgdir(self.e2tmp)
     
-        return process('mv %s/misc/blkid.bz2 %s/blkid-e2fsprogs-%s.bz2' % (self.e2tmp, self.temp['cache'], self.master_config['e2fsprogs-version']), self.verbose)
+        return process('mv %s/misc/blkid.bz2 %s/blkid-e2fsprogs-%s.bz2' % (self.e2tmp, self.temp['cache'], self.e2fsprogs_ver), self.verbose)
 

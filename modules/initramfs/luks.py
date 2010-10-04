@@ -6,13 +6,13 @@ from utils.misc import *
 
 class luks:
 
-    def __init__(self, master_config, temp, verbose):
+    def __init__(self, master_config, version_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
-        self.luks_ver       = master_config['luks-version']
-        self.lukstmp        = temp['work'] + '/cryptsetup-' + master_config['luks-version']
+        self.luks_ver       = version_conf['luks-version']
+        self.lukstmp        = temp['work'] + '/cryptsetup-' + self.luks_ver
 
     def build(self):
         """
@@ -28,7 +28,7 @@ class luks:
                 self.fail('download')
     
         self.extract()
-    #   grr, tar thing to not return 0 when success
+        # grr, tar thing to not return 0 when success
     
         if self.configure()is not zero: self.fail('configure')
     
@@ -138,5 +138,5 @@ class luks:
         print green(' * ') + '... luks.cache'
         self.chgdir(self.lukstmp)
     
-        return process('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.master_config['luks-version']), self.verbose)
+        return process('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.luks_ver), self.verbose)
 
