@@ -85,7 +85,7 @@ class append:
 
         @return     exit
         """
-        logging.debug('error'+msg)
+        logging.debug('error: '+msg)
         print red('error')+': '+msg
         sys.exit(2)
 
@@ -96,7 +96,7 @@ class append:
         @return: bool
         """
         ret = int('0')
-        logging.debug('initramfs.append.base')
+        logging.debug('>>> entering initramfs.append.base')
         print green(' * ') + turquoise('initramfs.append.base'),
     
         # create the baselayout
@@ -186,7 +186,7 @@ class append:
         @return: bool
         """
         ret = zero = int('0')
-        logging.debug('initramfs.append.busybox')
+        logging.debug('>>> entering initramfs.append.busybox')
         print green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version'],
     
         if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.version_conf['busybox-version']+'.tar.bz2') and self.nocache is False:
@@ -196,7 +196,7 @@ class append:
             print self.busyboxprogs
             # compile
             from busybox import busybox
-            bbobj = busybox( self.arch, \
+            bbobj = busybox( self.arch,             \
                         self.bbconf,                \
                         self.master_conf,           \
                         self.version_conf,          \
@@ -205,7 +205,6 @@ class append:
                         self.defconfig,             \
                         self.oldconfig,             \
                         self.menuconfig,            \
-#                        self.mrproper,              \
                         self.verbose)
             bbobj.build()
 
@@ -220,6 +219,7 @@ class append:
         process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
 
 #       TO BE REMOVED : linuxrc's bb --install -s takes care of it
+        # FIXME if busybox not exist then ln the default set -> [ ash sh mount uname echo cut cat
         for i in self.busyboxprogs.split():
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
@@ -235,7 +235,7 @@ class append:
         @return: bool
         """
         ret = int('0')
-        logging.debug('initramfs.append_modules ' + self.KV)
+        logging.debug('>>> entering initramfs.append.modules')
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
         os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV)
@@ -311,6 +311,7 @@ class append:
     
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.luks')
         ret = int('0')
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
@@ -362,6 +363,7 @@ class append:
 
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.glibc')
         os.makedirs(self.temp['work']+'/initramfs-glibc-temp/')
         os.makedirs(self.temp['work']+'/initramfs-glibc-temp/etc')
         os.makedirs(self.temp['work']+'/initramfs-glibc-temp/lib')
@@ -409,6 +411,7 @@ class append:
 
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.libncurses')
         print green(' * ') + turquoise('initramfs.append.libncurses')
         os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
 
@@ -424,6 +427,7 @@ class append:
 
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.zlib')
         print green(' * ') + turquoise('initramfs.append.zlib')
         os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
 
@@ -439,6 +443,7 @@ class append:
     
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.dropbear')
         for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
             os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
 
@@ -515,6 +520,7 @@ class append:
         """
         Set root password of the initramfs
         """
+        logging.debug('>>> entering initramfs.append.set_rootpasswd')
         print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
@@ -551,6 +557,7 @@ class append:
         
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.e2fsprogs')
         blkid_sbin = '/sbin/blkid'
 
         os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
@@ -588,6 +595,7 @@ class append:
     
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.splash')
         ret = zero = int('0')
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
    
@@ -634,6 +642,7 @@ class append:
     
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.lvm2')
         ret = int('0')
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
@@ -883,6 +892,7 @@ class append:
         Ship all keymaps within initramfs
         It's up to the user to provide the correct kernel cmdline parameter
         """
+        logging.debug('>>> entering initramfs.append.keymaps')
         print green(' * ') + turquoise('initramfs.append.keymaps')
 
         os.makedirs(self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps')
@@ -894,6 +904,7 @@ class append:
     def ttyecho(self):
         """
         """
+        logging.debug('>>> entering initramfs.append.ttyecho')
         print green(' * ') + turquoise('initramfs.append.ttyecho')
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-ttyecho-temp/sbin', self.verbose)
@@ -912,6 +923,7 @@ class append:
         
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.strace')
         strace_bin = '/usr/bin/strace'
 
         os.makedirs(self.temp['work']+'/initramfs-strace-temp/bin')
@@ -949,13 +961,14 @@ class append:
         
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.screen')
         screen_bin = '/usr/bin/screen'
 
         os.makedirs(self.temp['work']+'/initramfs-screen-temp/bin')
 
         if os.path.isfile(screen_bin) and self.hostbin is True:
             # use from host
-            logging.debug('initramfs.append.screen from %s' % white('host'))
+            logging.debug('initramfs.append.screen binary from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host')
             process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
@@ -991,8 +1004,8 @@ class append:
 
         @return: bool
         """
+        logging.debug('>>> entering initramfs.append.plugin')
         print green(' * ') + turquoise('initramfs.append.plugin ') + dir
-        logging.debug('initramfs.append.plugin')
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 

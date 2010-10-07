@@ -68,7 +68,7 @@ class initramfs:
     
         @return: bool
         """
-        ret = zero = int('0')
+        zero = int('0')
         import shutil
         cpv = ''
         if self.verboseset is True: cpv = '-v'

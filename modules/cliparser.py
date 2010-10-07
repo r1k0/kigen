@@ -8,7 +8,7 @@ from utils.misc import *
 from usage import *
 from etcparser import *
 
-# WARN don't import logging here
+# WARN don't import logging here as it's not already declared in kigen
 
 def cli_parser():
 

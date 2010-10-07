@@ -4,8 +4,6 @@ import re
 import subprocess
 import logging
 
-# WARN don't use colors here
-
 def process_pipe(cmd, verbose):
     """
     SINGLE Piped process launcher

@@ -1,6 +1,5 @@
 import sys
 import os
-#from getopt import getopt, GetoptError
 from stdout import white, green, turquoise, yellow, red
 from credits import author, productname, version, description, contributor
  

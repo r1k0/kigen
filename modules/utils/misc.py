@@ -3,7 +3,7 @@ import sys
 import re
 import commands
 
-# WARN don't use colors here
+# WARN don't import logging here as it's not already declared in kigen
 
 def failed(string):
     print string

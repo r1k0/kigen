@@ -4,6 +4,8 @@ from default import *
 from utils.misc import *
 from stdout import white, green, turquoise, yellow, red
 
+# WARN don't import logging here as it's not already declared in kigen
+
 # parse /etc/kigen/master.conf
 def etc_parser_master():
 

@@ -55,6 +55,9 @@ master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cl
 
 # FIXME because we get verbose['logfile'] from cli_parser()
 # we can only start logging after here, that sucks ass big time
+# NOFIX but then if fixed, means we can log the parsers
+# useful? we already log the content of 
+# master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose
 
 # remove previous logfile
 if os.path.isfile(verbose['logfile']):
@@ -162,17 +165,19 @@ if target == 'kernel' or target == 'k':
 
     # copy kernel/system.map to /boot
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
+        logging.debug('>>> copying System.map')
     
-         print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
-         process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
+        process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
+        print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
     
-         print green(' * produced ')+cli['rename'],
-         process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+        logging.debug('>>> copying kernel')
+        process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+        print green(' * produced ')+cli['rename'],
 
-         if cli['initramfs'] is not '':
-             print ' with an ' + white('embedded') + ' initramfs'
-         else:
-             print
+        if cli['initramfs'] is not '':
+            print ' with an ' + white('embedded') + ' initramfs'
+        else:
+            print
     
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
@@ -221,6 +226,7 @@ if target == 'initramfs' or target == 'i':
 
     # copy initramfs to /boot
     if cli['noboot'] is False:
+        logging.debug('>>> copying initramfs')
         print green(' * produced ')+cli['rename']
         process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
     
