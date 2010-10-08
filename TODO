@@ -1,20 +1,11 @@
 0.2.3
 =====
-    --evms set
-    /lib/libc-*
-    /lib/libdl-*
-    /lib/libpthread*
-    /lib/libuuid*so*
-    /lib/libevms*so*
-    /lib/evms
-    /lib/evms/*
-    /etc/evms.conf
-    /sbin/evms_activate
+TODO: introduce raise error handling
+    see how we improve current 
+TODO: --dmraid
 
 0.2.*
 =====
-TODO: introduce raise error handling
-    but see how we improve current 
 TODO: find a way to get pkg use flag in python
     like: i want to know if strace is merged with -static-libs or not
     this is for use  when copying host binaries (they gotta be staticallty linked
