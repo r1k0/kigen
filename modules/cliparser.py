@@ -350,7 +350,7 @@ def cli_parser():
 
 #        cli['dmraid']       = False
 #        cli['iscsi']        = False
-#        cli['evms']         = False
+        cli['evms']         = False
 #        cli['mdadm']        = False
         cli['splash']       = ''
         if initramfs_conf['splash'] != '':

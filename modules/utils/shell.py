@@ -3,6 +3,7 @@ import sys
 import re
 import subprocess
 import logging
+import glob
 
 def process_pipe(cmd, verbose):
     """
@@ -82,10 +83,50 @@ def process_append(cmd, verbose):
 
     return ret, p.stdout #, p2.stderr
 
-# TODO rewrite me
-# to detect and autosplit lists: impossible to do them all, gotta split in 3 functions
+def process_star(cmd, verbose):
+    """
+    Single process launcher
+
+    @arg cmd    string
+
+    Handles a single start * :(
+    Don't use for anything else than 'cp' or 'rm'
+    """
+    if verbose['set'] is True:
+        print cmd
+
+    cmd = cmd.split()
+
+    if cmd[0] == 'cp':
+        dest = cmd[-1]
+        cmd.remove(dest)
+
+    for i in cmd:
+        # expand single *
+        if i == '*':
+            for j in glob.glob('*'):
+                cmd.append(j)
+            cmd.remove('*')
+        # expand k* *k
+        if '*' in i and i != '*':
+            for k in glob.glob(i):
+                cmd.append(k)
+            cmd.remove(i)
+   
+    if cmd[0] == 'cp':
+         cmd.append(dest)
+    logging.debug(cmd)
+    f = open(verbose['logfile'])
+    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
+
+    return p.wait() # , p.stdout #, p.stderr
+
+# FIXME rewrite me
+# to detect and autosplit lists: I don't know how 
+# to do them all in one function, gotta split in 3 functions
+
 # | > >> < 
-# sprocessors < >> > logic
+# processes < >> > logic
 # > -> stdout=open('whatever', 'wb'); >> -> stdout=open('whatever', 'ab'); < -> stdin=open('whatever', 'rb')
 def process(cmd, verbose):
     """

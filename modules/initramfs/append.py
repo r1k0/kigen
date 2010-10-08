@@ -687,43 +687,44 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
         return os.system(self.cpio())
 
-#    def evms(self):
-#        """
-#        Append evms libraries to the initramfs
-#    
-#        @return: bool
-#        """
-#        logging.debug('initramfs.append.evms')
-#        print green(' * ') + turquoise('initramfs.append.evms'),
-#    
-#        if os.path.isfile('/sbin/evms'):
-#            print 'feeding' + ' from host'
-#    
-#            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
-#            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
-#            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/bin', self.verbose)
-#            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
-#    
-#        # FIXME broken due to *
-#        # process('cp -a /lib/ld-* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libgcc_s* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libc-* /lib/libc.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libdl-* /lib/libdl.* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libpthread* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libuuid*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/libevms*so* %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/evms %s/initramfs-evms-temp/lib' % temp['work'], verbose)
-#        # process('cp -a /lib/evms/* %s/initramfs-evms-temp/lib/evms' % temp['work'], verbose)
-#        # process('cp -a /etc/evms.conf %s/initramfs-evms-temp/etc' % temp['work'], verbose)
-#        # process('cp /sbin/evms_activate %s/initramfs-evms-temp/sbin' % temp['work'], verbose)
-#        # process('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % temp['work'], verbose)
-#        else:
-#            print
-#            self.fail('sys-fs/evms must be merged')
-#    
-#        os.chdir(self.temp['work']+'/initramfs-evms-temp')
-#        return os.system(self.cpio())
-#    
+    def evms(self):
+        """
+        Append evms libraries to the initramfs
+    
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.evms')
+        print green(' * ') + turquoise('initramfs.append.evms'),
+    
+        if os.path.isfile('/sbin/evms'):
+            print 'feeding' + ' from host'
+    
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/bin', self.verbose)
+            process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/sbin', self.verbose)
+    
+            process_star('cp -a /lib/ld-*           %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libgcc_s*      %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libc.*         %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libc-*         %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libdl.*        %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libdl-*        %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libpthread*    %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libuuid*so*    %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/libevms*so*    %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process('cp -a /lib/evms                %s/initramfs-evms-temp/lib' % self.temp['work'], self.verbose)
+            process_star('cp -a /lib/evms/*         %s/initramfs-evms-temp/lib/evms' % self.temp['work'], self.verbose)
+            process('cp -a /etc/evms.conf           %s/initramfs-evms-temp/etc' % self.temp['work'], self.verbose)
+            process('cp /sbin/evms_activate         %s/initramfs-evms-temp/sbin' % self.temp['work'], self.verbose)
+            process_star('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % self.temp['work'], self.verbose)
+        else:
+            print
+            self.fail('sys-fs/evms must be merged')
+    
+        os.chdir(self.temp['work']+'/initramfs-evms-temp')
+        return os.system(self.cpio())
+    
 #    def firmware(self):
 #        """
 #        Append firmware to the initramfs

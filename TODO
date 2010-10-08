@@ -1,11 +1,15 @@
-0.2.2
+0.2.3
 =====
-TODO: beautiful the code
-    add logging, a lot
-TODO: change /etc/kigen.conf to /etc/kigen/{master.conf,modules.conf,default.conf}
-    modules holds modules config
-    default holds default option -> --screen = True and reflect it through --help
-    master holds the rest
+    --evms set
+    /lib/libc-*
+    /lib/libdl-*
+    /lib/libpthread*
+    /lib/libuuid*so*
+    /lib/libevms*so*
+    /lib/evms
+    /lib/evms/*
+    /etc/evms.conf
+    /sbin/evms_activate
 
 0.2.*
 =====

@@ -146,16 +146,20 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print '  --disklabel               ',
     print initramfs_conf['disklabel'], # bool
-    print '\t\tInclude support for UUID/LABEL'
+    print '\t\tInclude support for UUID/LABEL (host binary or sources)'
 
     print '  --luks                    ',
     print initramfs_conf['luks'], # bool 
-    print '\t\tInclude LUKS support (host binary if found)'
+    print '\t\tInclude LUKS support (host binary or sources)'
 
     print '  --lvm2                    ',
     print initramfs_conf['lvm2'], # bool
-    print '\t\tInclude LVM2 support (host binary if found)'
-#   print '  --evms                     False                   Include evms support (evms must be merged)'
+    print '\t\tInclude LVM2 support (host binary or sources)'
+
+    print yellow('  --evms                    '),
+    print initramfs_conf['evms'], # bool
+    print yellow('\t\tInclude EVMS support (host binary only)')
+
 #   print '  --dmraid                   False                   Include dmraid support'
 #   print '   --selinux                 False                    Include selinux support in --dmraid'
 #   print '  --iscsi                    False                   Include iscsi support'
@@ -163,7 +167,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print '  --dropbear                ',
     print initramfs_conf['dropbear'], # bool
-    print '\t\tInclude dropbear tools and daemon (host binaries if found)'
+    print '\t\tInclude dropbear tools and daemon (host binary or sources)'
 
     print '   --debugflag              ',
     print initramfs_conf['debugflag'], # bool
@@ -186,16 +190,16 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print '  --strace                  ',
     print initramfs_conf['strace'], # bool
-    print '\t\tInclude the strace binary tool'
+    print '\t\tInclude the strace binary tool (host binary or sources)'
 
     print '  --screen                  ',
     print initramfs_conf['screen'], # bool
-    print '\t\tInclude the screen binary tool'
+    print '\t\tInclude the screen binary tool (host binary or sources)'
 
     print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"',
     print '\t\tInclude list of user generated custom roots'
     print
-    print 'Libraries:'
+    print 'Libraries: (host only)'
     print '  --glibc                   ',
     print initramfs_conf['glibc'], # bool
     print '\t\tInclude host GNU C libraries (required for dns,dropbear)'

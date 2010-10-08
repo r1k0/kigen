@@ -107,6 +107,7 @@ class initramfs:
                         self.rootpasswd)
 
         # 1) create initial cpio and append object
+        logging.debug('>>> creating empty initramfs')
         ret, output = process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero: self.fail('cpio')
         # 2) append base
@@ -130,10 +131,10 @@ class initramfs:
 #        if self.cli['iscsi'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.iscsi() is not zero: self.fail('iscsi')
-#        # 8) append evms
-#        if self.cli['evms'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.evms() is not zero: self.fail('evms')
+        # 8) append evms
+        if self.cli['evms'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.evms() is not zero: self.fail('evms')
 #        # 9) append mdadm
 #        if self.cli['mdadm'] is True:
 #            os.chdir(self.temp['work'])
