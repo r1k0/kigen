@@ -23,9 +23,9 @@ class dmraid:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/dmraid-%s.tar.gz' % (get_portdir(self.temp), self.dmraid_ver)) is not True:
+        if os.path.isfile('%s/distfiles/dmraid-%s.tar.bz2' % (get_portdir(self.temp), self.dmraid_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/dmraid-%s.tar.gz' % (get_portdir(self.temp), self.dmraid_ver), self.verbose)
+                process('rm %s/distfiles/dmraid-%s.tar.bz2' % (get_portdir(self.temp), self.dmraid_ver), self.verbose)
                 self.fail('download')
     
         self.extract()

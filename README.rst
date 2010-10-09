@@ -54,8 +54,7 @@ Features
 - EVMS (from host)
 - splash decorator
 - customizable busybox toolbox
-  - system stack tools
-  - network stack tools
+  - system/network stack tools
   - alot more
 - SSH daemon (dropbear+debug)
 - strace binary
@@ -1048,4 +1047,4 @@ Note the autodeconnection done by the host thanks to /etc/conf.d/local.
 
     Portage community (linuxrc scripts),
 
-:Version: 0.2.2
+:Version: 0.2.3
