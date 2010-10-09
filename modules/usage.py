@@ -160,8 +160,14 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['evms'], # bool
     print yellow('\t\tInclude EVMS support (host binary only)')
 
-#   print '  --dmraid                   False                   Include dmraid support'
-#   print '   --selinux                 False                    Include selinux support in --dmraid'
+    print yellow('  --dmraid                  '),
+    print initramfs_conf['dmraid'], # bool
+    print yellow('\t\tInclude dmraid support (host binary or sources)')
+
+    print yellow('   --selinux                '),
+    print initramfs_conf['selinux'], # bool
+    print yellow('\t\t Include selinux support in --dmraid (selinux libs required)')
+
 #   print '  --iscsi                    False                   Include iscsi support'
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
 

@@ -56,7 +56,7 @@ class initramfs:
         self.splash             = cli['splash']
         self.sres               = cli['sres']
         self.sinitrd            = cli['sinitrd']
-#        self.selinux            = cli['selinux']
+        self.selinux            = cli['selinux']
         self.hostbin            = cli['hostbin']
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
@@ -100,7 +100,7 @@ class initramfs:
                         self.sres,              \
                         self.sinitrd,           \
 #                        self.firmware,          \
-#                        self.selinux,           \
+                        self.selinux,           \
                         self.dbdebugflag,       \
                         self.nocache,           \
                         self.hostbin,           \
@@ -110,98 +110,124 @@ class initramfs:
         logging.debug('>>> creating empty initramfs')
         ret, output = process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero: self.fail('cpio')
+
         # 2) append base
         aobj.base()
-        # 4) append modules
+
+        # 3) append modules
         # note that /etc/boot.conf initrd modules if set
         # overlap the ones from /etc/kigen.conf
         if aobj.modules() is not zero: self.fail('modules')
-        # 3) append busybox
+
+        # 4) append busybox
         os.chdir(self.temp['work'])
         if aobj.busybox() is not zero: self.fail('busybox')
+
         # 5) append lvm2
         if self.cli['lvm2'] is True:
             os.chdir(self.temp['work'])
             if aobj.lvm2() is not zero: self.fail('lvm2')
-#        # 6) append dmraid
-#        if self.cli['dmraid'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.dmraid() is not zero: self.fail('dmraid')
+
+        # 6) append dmraid
+        if self.cli['dmraid'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.dmraid() is not zero: self.fail('dmraid')
+
 #        # 7) append iscsi
 #        if self.cli['iscsi'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.iscsi() is not zero: self.fail('iscsi')
+
         # 8) append evms
         if self.cli['evms'] is True:
             os.chdir(self.temp['work'])
             if aobj.evms() is not zero: self.fail('evms')
+
 #        # 9) append mdadm
 #        if self.cli['mdadm'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.mdadm() is not zero: self.fail('mdadm')
+
         # 10) append luks
         if self.cli['luks'] is True:
             os.chdir(self.temp['work'])
             if aobj.luks() is not zero: self.fail('luks')
+
         # 11) append multipath
         # TODO
+
         # 12) append blkid
         if self.cli['disklabel'] is True:
             os.chdir(self.temp['work'])
             if aobj.e2fsprogs() is not zero: self.fail('e2fsprogs')
+
         # 13) append dropbear
         if self.cli['dropbear'] is True:
             os.chdir(self.temp['work'])
             if aobj.dropbear() is not zero: self.fail('dropbear')
+
         # append strace
         if self.cli['strace'] is True:
             os.chdir(self.temp['work'])
             if aobj.strace() is not zero: self.fail('strace')
+
         # append screen
         if self.cli['screen'] is True:
             os.chdir(self.temp['work'])
             if aobj.screen() is not zero: self.fail('screen')
+
 #        # 14) append unionfs_fuse
 #        if self.cli['unionfs'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.unionfs_fuse() is not zero: self.fail('unionfs-fuse')
+
 #        # 15) append aufs
 #        if self.cli['aufs'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.aufs() is not zero: self.fail('aufs')
+
         # append ttyecho
         if self.cli['ttyecho'] is True:
             os.chdir(self.temp['work'])
             if aobj.ttyecho() is not zero: self.fail('ttyecho')
+
         # 16) append splash
         if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
             os.chdir(self.temp['work'])
             if aobj.splash() is not zero: self.fail('splash')
+
         # append rootpasswd
         if self.cli['rootpasswd'] is not '':
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
+
         # append keymaps
         if self.cli['keymaps'] is True:
             os.chdir(self.temp['work'])
             if aobj.keymaps() is not zero: self.fail('keympas')
+
 #        # 17) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            if aobj.firmware() is not zero: self.fail('firmware')
+
         # TODO # 18) append overlay
+
         # 19) append glibc
         if self.cli['glibc'] is True:
             os.chdir(self.temp['work'])
             if aobj.glibc() is not zero: self.fail('glibc')
+
         # 19bis) append libncurses
         if self.cli['libncurses'] is True:
             os.chdir(self.temp['work'])
             if aobj.libncurses() is not zero: self.fail('libncurses')
+
         # 19terce) append zlib
         if self.cli['zlib'] is True:
             os.chdir(self.temp['work'])
             if aobj.zlib() is not zero: self.fail('zlib')
+
         # last) append user plugin
         if self.pluginroot is not '':
             pluginlist = self.pluginroot.split(',')

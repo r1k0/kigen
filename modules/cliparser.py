@@ -348,10 +348,22 @@ def cli_parser():
         if initramfs_conf['lvm2'] == 'True':
             cli['lvm2'] = True
 
-#        cli['dmraid']       = False
+        cli['dmraid']       = False
+        if initramfs_conf['dmraid'] == 'True':
+            cli['dmraid'] = True
+
 #        cli['iscsi']        = False
+#        if initramfs_conf['iscsi'] == 'True':
+#            cli['iscsi'] = True
+
         cli['evms']         = False
+        if initramfs_conf['dmraid'] == 'True':
+            cli['evms'] = True
+
 #        cli['mdadm']        = False
+#        if initramfs_conf['mdadm'] == 'True':
+#            cli['mdadm'] = True
+
         cli['splash']       = ''
         if initramfs_conf['splash'] != '':
             cli['splash'] = initramfs_conf['splash']
@@ -361,13 +373,19 @@ def cli_parser():
             cli['sres'] = initramfs_conf['sres']
 
         cli['sinitrd']      = '' # a custom initrd.splash file
+
 #        cli['firmware']     = ''
+
         cli['disklabel']    = False
         if initramfs_conf['disklabel'] == 'True':
             cli['disklabel'] = True
 
 #        cli['unionfs']      = False
+#        if initramfs_conf['unionfs'] == 'True':
+#           cli['unionfs'] = True
+
 #        cli['aufs']         = False
+
         cli['linuxrc']      = ''
         if initramfs_conf['linuxrc'] != '':
             cli['linuxrc'] = initramfs_conf['linuxrc']
@@ -384,7 +402,7 @@ def cli_parser():
         if initramfs_conf['noboot'] == 'True':
             cli['noboot'] = True
 
-#        cli['selinux']      = False
+        cli['selinux']      = False
 #       quiet               = '2>&1 | tee -a ' + logfile # verbose
 #       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'

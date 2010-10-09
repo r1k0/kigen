@@ -32,7 +32,7 @@ class append:
                 sres,               \
                 sinitrd,            \
 #                firmware,           \
-#                selinux,            \
+                selinux,            \
                 dbdebugflag,        \
                 nocache,            \
                 hostbin,            \
@@ -64,7 +64,7 @@ class append:
         self.sinitrd            = sinitrd
         self.nocache            = nocache
 #        self.firmware           = firmware
-#        self.selinux            = selinux
+        self.selinux            = selinux
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
         self.dbdebugflag        = dbdebugflag
@@ -756,38 +756,41 @@ class append:
 #        os.chdir(self.temp['work']+'/initramfs-mdadm-temp')
 #        return os.system(self.cpio())
 #
-#    def dmraid(self):
-#        """
-#        Append dmraid to initramfs
-#    
-#        @return: bool
-#        """
-#        logging.debug('initramfs.append.dmraid ' + self.master_conf['dmraid_ver'])
-#        print green(' * ') + turquoise('initramfs.append.dmraid ') + self.master_conf['dmraid_ver'],
-#    
-#        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
-#    
-#        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.master_conf['dmraid_ver']+'.bz2') and self.nocache is False:
-#            # use cache
-#            print 'from ' + white('cache')
-#            pass
-#        else:
-#            # compile
-#            print
-#            import dmraid
-#            dmraid.build_sequence(self.master_conf, self.selinux, self.temp, self.verbose['std'])
-#    
-#        # FIXME careful with the > 
-#        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.master_conf['dmraid_ver'], self.temp['work']))
-#        process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
-#    
-#        # FIXME ln -sf raid456.ko raid45.ko ?
-#        # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
-#        #   or should we raise an error and make the user enabling the module manually? warning?
-#    
-#        os.chdir(self.temp['work']+'/initramfs-dmraid-temp')
-#        return os.system(self.cpio())
-#
+    def dmraid(self):
+        """
+        Append dmraid to initramfs
+    
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.dmraid')
+        print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
+    
+        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
+    
+        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print 'from ' + white('cache')
+            pass
+        else:
+            # compile
+            print
+            from dmraid import dmraid
+            dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
+            dmraidobj.build()
+    
+        # FIXME careful with the > 
+#        process_redir('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']), self.verbose)
+        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+        # FIXME make symlink rather than cp
+        process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+    
+        # FIXME ln -sf raid456.ko raid45.ko ?
+        # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
+        #   or should we raise an error and make the user enabling the module manually? warning?
+    
+        os.chdir(self.temp['work']+'/initramfs-dmraid-temp')
+        return os.system(self.cpio())
+
 #    # FIXME: make sure somehow the appropriate modules get loaded when using iscsi?
 #    def iscsi(self):
 #        """
