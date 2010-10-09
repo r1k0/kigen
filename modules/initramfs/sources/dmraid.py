@@ -3,7 +3,6 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 from utils.shell import *
 from utils.misc import *
-import logging
 
 class dmraid:
 
@@ -47,14 +46,11 @@ class dmraid:
     def set_selinux(self):
         self.chgdir(self.dmraidtmp)
         if self.selinux is True:
-            logging.debug('enabling selinux')
             print green(' * ') + '... dmraid.set_selinux ' + white('enabled')
             return os.system('echo "DMRAIDLIBS += -lselinux -lsepol" >> tools/Makefile')
         else:
             print green(' * ') + '... dmraid.set_selinux ' + white('disabled')
-            logging.debug('disabling by default selinux')
             return os.system('sed -i tools/Makefile -e "s|DMRAIDLIBS += -lselinux||g"')
-
 
     def fail(self, step):
         """

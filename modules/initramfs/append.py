@@ -195,7 +195,7 @@ class append:
         else:
             print self.busyboxprogs
             # compile
-            from busybox import busybox
+            from sources.busybox import busybox
             bbobj = busybox( self.arch,             \
                         self.bbconf,                \
                         self.master_conf,           \
@@ -346,7 +346,7 @@ class append:
             else:
                 # compile and cache
                 print
-                from luks import luks
+                from sources.luks import luks
                 luksobj = luks(self.master_conf, self.version_conf, self.temp, self.verbose)
                 luksobj.build()
 
@@ -485,7 +485,7 @@ class append:
             else:
                 # compile and cache
                 print
-                from dropbear import dropbear
+                from sources.dropbear import dropbear
                 dropbearobj = dropbear(self.master_conf, self.version_conf, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
 
@@ -578,7 +578,7 @@ class append:
             else:
                 # compile
                 print
-                from e2fsprogs import e2fsprogs
+                from sources.e2fsprogs import e2fsprogs
                 e2obj = e2fsprogs(self.master_conf, self.version_conf, self.temp, self.verbose)
                 e2obj.build()
     
@@ -629,8 +629,8 @@ class append:
             self.fail('media-gfx/splashutils must be merged')
             
             # FIXME write the splash routine from scratch?
-#            from splash import splash
-#            splashobj = splash(self.master_conf, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
+#            from sources.splash import splash
+#            splashobj = splash(self.master_conf, self.version_conf, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
 #            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
@@ -673,7 +673,7 @@ class append:
             else: 
                 # compile and cache
                 print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
-                from lvm2 import lvm2
+                from sources.lvm2 import lvm2
                 lvm2obj = lvm2(self.master_conf, self.version_conf, self.temp, self.verbose)
                 lvm2obj.build()
 
@@ -774,7 +774,7 @@ class append:
         else:
             # compile
             print
-            from dmraid import dmraid
+            from sources.dmraid import dmraid
             dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
             dmraidobj.build()
     
@@ -948,7 +948,7 @@ class append:
             else:
                 # compile
                 print
-                from strace import strace
+                from sources.strace import strace
                 strobj = strace(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
 
@@ -986,7 +986,7 @@ class append:
             else:
                 # compile
                 print
-                from screen import screen
+                from sources.screen import screen
                 strobj = screen(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
 

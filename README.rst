@@ -50,6 +50,8 @@ Features
 - LUKS (cryptsetup binary)
 - LVM2 (lvm.static binary)
 - UUID (blkid binary)
+- DMRAID (dmraid binary)
+- EVMS (from host)
 - splash decorator
 - customizable busybox toolbox
   - system stack tools
