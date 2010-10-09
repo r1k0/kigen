@@ -2,13 +2,15 @@
 =====
 TODO: introduce raise error handling
     see how we improve current 
-TODO: --dmraid
+TODO: use logging as much as possible and 
+    see if verbose[] is still worth using
+TODO: dmraid from host binary
 
 0.2.*
 =====
 TODO: find a way to get pkg use flag in python
     like: i want to know if strace is merged with -static-libs or not
-    this is for use  when copying host binaries (they gotta be staticallty linked
+    this is for use  when copying host binaries (they gotta be statically linked
     OR write some smart code to detect ldd output and grab libs accordingly (sounds fun
 TODO: kigen i --screen
     see if screen can attach to /dev/console
@@ -23,8 +25,6 @@ TODO: pass $PORTDIR don't assume /usr/portage
     get an elegant python way of getting $PORTDIR
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
-TODO: kigen i --evms repair
-	process * fix
 TODO: kigen i --fixdotconfig
     checks dotconfig if required options are correctly set
     don't touch the dotconfig by default otherwise
