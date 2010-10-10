@@ -4,6 +4,7 @@ TODO: introduce raise error handling
     see how we improve current 
 TODO: use logging as much as possible
 TODO: dmraid from host binary
+TODO: disable SELinux for building static lvm2 and cryptsetup so build of luks won’t fail on SELinux profiles. (SELinux gets enabled once the policy is loaded when real_root is available. therefore having it compiled-in in in cryptsetup for initrd is not needed and also pulls-in an ugly dependency towards libdevicemapper which now apparently became a part of udev)
 
 0.2.*
 =====
