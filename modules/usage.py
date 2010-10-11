@@ -59,7 +59,7 @@ def print_examples():
 
 
 def print_usage_kernel(cli, master_conf, kernel_conf):
-    print 'Parameter:\t\t     Default value:\tDescription:'
+    print 'Parameter:\t\t     Config value:\tDescription:'
     print
     print  'Kernel:'
     print '  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"',
@@ -115,7 +115,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print '  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)'
 
 def print_usage_initramfs(cli, initramfs_conf, modules_conf):
-    print 'Parameter:\t\t     Default value:\tDescription:'
+    print 'Parameter:\t\t     Config value:\tDescription:'
     print
     print 'Linuxrc:'
     print '  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"',

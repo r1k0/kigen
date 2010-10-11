@@ -4,7 +4,14 @@ TODO: introduce raise error handling
     see how we improve current 
 TODO: use logging as much as possible
 TODO: dmraid from host binary
-TODO: disable SELinux for building static lvm2 and cryptsetup so build of luks won’t fail on SELinux profiles. (SELinux gets enabled once the policy is loaded when real_root is available. therefore having it compiled-in in in cryptsetup for initrd is not needed and also pulls-in an ugly dependency towards libdevicemapper which now apparently became a part of udev)
+TODO: disable SELinux for building static lvm2 and cryptsetup 
+    so build of luks won’t fail on SELinux profiles.
+    (SELinux gets enabled once the policy is loaded when real_root is available. 
+    therefore having it compiled-in in in cryptsetup for initrd is not needed 
+    and also pulls-in an ugly dependency towards libdevicemapper 
+    which now apparently became a part of udev)
+TODO: --disable-selinux for lvm2 option --selinux
+TODO: generic --selinux for both lvm2/dmraid?
 
 0.2.*
 =====
@@ -33,5 +40,5 @@ TODO: lvm2 may fail on gentoo/funtoo
     works all the time patchless on sabayon ;o)
     see http://bugs.gentoo.org/show_bug.cgi?id=332905
     need lvm2-2.02.72-dynamic-static-ldflags.patch?
-TODO: support xen-sources
+TODO: support xen-sources -> doublehp this one is for you ;) patience though
     http://en.gentoo-wiki.com/wiki/Xen
