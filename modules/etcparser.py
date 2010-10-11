@@ -40,8 +40,7 @@ def etc_parser_kernel():
 
     return kernel_conf
 
-# parse /etc/kigen/initramfs/modules.conf and
-# /etc/kigen/initramfs/initramfs.conf
+# parse /etc/kigen/initramfs/{modules.conf,initramfs.conf,version.conf}
 def etc_parser_initramfs():
     
     etc = { 'kigen':            '/etc/kigen',                           \

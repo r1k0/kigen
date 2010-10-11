@@ -4,14 +4,9 @@ TODO: introduce raise error handling
     see how we improve current 
 TODO: use logging as much as possible
 TODO: dmraid from host binary
-TODO: disable SELinux for building static lvm2 and cryptsetup 
-    so build of luks won’t fail on SELinux profiles.
-    (SELinux gets enabled once the policy is loaded when real_root is available. 
-    therefore having it compiled-in in in cryptsetup for initrd is not needed 
-    and also pulls-in an ugly dependency towards libdevicemapper 
-    which now apparently became a part of udev)
-TODO: --disable-selinux for lvm2 option --selinux
-TODO: generic --selinux for both lvm2/dmraid?
+TODO: hardcode --disable-selinux for lvm2, cryptsetup, dmraid
+    SELinux has nothing to do inside an initramfs according to
+    Daniel's comment in http://www.openchill.org/?p=1117#comments
 
 0.2.*
 =====
