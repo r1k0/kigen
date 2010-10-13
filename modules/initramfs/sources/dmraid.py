@@ -33,7 +33,7 @@ class dmraid:
     
         if self.configure() is not zero: self.fail('configure')
     
-        if self.set_selinux() is not zero: self.fail('selinux')
+        if self.unset_selinux() is not zero: self.fail('selinux')
 
         if self.make() is not zero: self.fail('make')
     
@@ -43,14 +43,15 @@ class dmraid:
     
         if self.cache() is not zero: self.fail('cache')
    
-    def set_selinux(self):
+    def set_config(self):
         self.chgdir(self.dmraidtmp)
-        if self.selinux is True:
-            print green(' * ') + '... dmraid.set_selinux ' + white('enabled')
-            return os.system('echo "DMRAIDLIBS += -lselinux -lsepol" >> tools/Makefile')
-        else:
-            print green(' * ') + '... dmraid.set_selinux ' + white('disabled')
-            return os.system('sed -i tools/Makefile -e "s|DMRAIDLIBS += -lselinux||g"')
+        print green(' * ') + '... dmraid.set_selinux'
+        return os.system('echo "DMRAIDLIBS += -lselinux -lsepol" >> tools/Makefile')
+
+    def unset_selinux(self):
+        self.chgdir(self.dmraidtmp)
+        print green(' * ') + '... dmraid.unset_selinux'
+        return os.system('sed -i tools/Makefile -e "s|DMRAIDLIBS += -lselinux||g"')
 
     def fail(self, step):
         """

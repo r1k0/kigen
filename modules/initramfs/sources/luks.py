@@ -94,7 +94,7 @@ class luks:
         print green(' * ') + '... luks.configure'
         self.chgdir(self.lukstmp)
     
-        return os.system('./configure --enable-static %s' % self.verbose['std'])
+        return os.system('./configure --disable-selinux --enable-static %s' % self.verbose['std'])
     
     def make(self):
         """

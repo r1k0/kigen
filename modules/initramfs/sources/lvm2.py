@@ -98,7 +98,7 @@ class lvm2:
 #    			CFLAGS=-I%s/device-mapper/include \
 #    			CPPFLAGS=-I%s/device-mapper/include \
 #    			./configure --enable-static_link --prefix=%s/lvm %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
-        return os.system('./configure --enable-static_link %s' % self.verbose['std'])
+        return os.system('./configure --disable-selinux --enable-static_link %s' % self.verbose['std'])
 
     def make(self):
     	"""
