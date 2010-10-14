@@ -1,5 +1,8 @@
 0.2.4
 =====
+TODO: kigen kernel --selinux --fixdotconfig
+    http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
+    http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
 TODO: introduce raise error handling
     see how we improve current 
 TODO: use logging as much as possible
@@ -37,3 +40,4 @@ TODO: lvm2 may fail on gentoo/funtoo
     need lvm2-2.02.72-dynamic-static-ldflags.patch?
 TODO: support xen-sources -> doublehp this one is for you ;) patience though
     http://en.gentoo-wiki.com/wiki/Xen
+    read dracut code
