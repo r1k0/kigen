@@ -95,7 +95,6 @@ class append:
     
         @return: bool
         """
-        ret = int('0')
         logging.debug('>>> entering initramfs.append.base')
         print green(' * ') + turquoise('initramfs.append.base'),
     
@@ -185,7 +184,6 @@ class append:
     
         @return: bool
         """
-        ret = zero = int('0')
         logging.debug('>>> entering initramfs.append.busybox')
         print green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version'],
     
@@ -224,8 +222,7 @@ class append:
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
     
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
-        if ret is zero:
-            return os.system(self.cpio())
+        return os.system(self.cpio())
 
     def modules(self):
         """
@@ -234,7 +231,6 @@ class append:
     
         @return: bool
         """
-        ret = int('0')
         logging.debug('>>> entering initramfs.append.modules')
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
@@ -312,7 +308,6 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.luks')
-        ret = int('0')
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
     
@@ -596,7 +591,6 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.splash')
-        ret = zero = int('0')
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
    
         process('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
@@ -643,7 +637,6 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.lvm2')
-        ret = int('0')
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
     
@@ -746,7 +739,6 @@ class append:
 #    
 #        @return: bool
 #        """
-#        ret = int('0')
 #        logging.debug('initramfs.append.mdadm')
 #        print green(' * ') + turquoise('initramfs.append.mdadm')
 #    
