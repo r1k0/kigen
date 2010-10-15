@@ -357,7 +357,7 @@ def cli_parser():
 #            cli['iscsi'] = True
 
         cli['evms']         = False
-        if initramfs_conf['dmraid'] == 'True':
+        if initramfs_conf['evms'] == 'True':
             cli['evms'] = True
 
 #        cli['mdadm']        = False
