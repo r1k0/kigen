@@ -223,9 +223,9 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['nocache'],
     print '\t\tDelete previous cached data on startup'
 
-    print '  --hostbin                 ',
+    print yellow('  --hostbin                 '),
     print initramfs_conf['hostbin'],
-    print '\t\tUse host binaries over sources when possible'
+    print yellow('\t\tUse host binaries over sources when possible')
 
     print '  --noboot                  ',
     print initramfs_conf['noboot'],

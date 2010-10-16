@@ -119,7 +119,8 @@ class e2fsprogs:
         """
         print green(' * ') + '... e2fsprogs.strip'
         self.chgdir(self.e2tmp)
-    
+        os.system('cp %s/misc/blkid %s/misc/blkid.bak' % (self.e2tmp, self.e2tmp))
+
         return os.system('strip %s/misc/blkid ' % self.e2tmp)
     
     def compress(self):
