@@ -3,7 +3,7 @@ import sys
 import logging
 import commands
 from stdout import *
-from utils.shell import *
+from utils.process import *
 from utils.misc import *
 
 class append:

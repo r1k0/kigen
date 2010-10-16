@@ -1,7 +1,7 @@
 import os
 import sys
 from stdout import green, turquoise, white, red, yellow
-from utils.shell import *
+from utils.process import *
 from utils.misc import *
 
 class busybox:

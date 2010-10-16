@@ -1,6 +1,6 @@
 import os
 import sys
-from utils.shell import *
+from utils.process import *
 from stdout import white, green, turquoise, yellow, red
 
 def getdotconfig(binary, kerneldir, verbose):

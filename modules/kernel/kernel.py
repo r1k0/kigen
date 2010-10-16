@@ -1,7 +1,7 @@
 import os
 import sys
 from stdout import white, green, turquoise, red, yellow
-from utils.shell import *
+from utils.process import *
 from utils.misc import *
 
 class kernel:

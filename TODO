@@ -16,7 +16,9 @@ TODO: hardcode --disable-selinux for lvm2, cryptsetup, dmraid
 TODO: find a way to get pkg use flag in python
     like: i want to know if strace is merged with -static-libs or not
     this is for use  when copying host binaries (they gotta be statically linked
-    OR write some smart code to detect ldd output and grab libs accordingly (sounds fun
+    OR 
+    yeah better solution for portability (debian arch)
+    write some smart code to detect ldd output and grab libs accordingly (sounds fun
 TODO: kigen i --screen
     see if screen can attach to /dev/console
     I need something clean to replace ttyecho 
