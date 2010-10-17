@@ -369,7 +369,7 @@ class append:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
             else:
-                logging.debug(cryptsetups_bin+' is statically linked nothing to do')
+                logging.debug(cryptsetup_sbin+' is statically linked nothing to do')
 
 #            if not isstatic(cryptsetup_sbin, self.verbose):
 #                # FIXME don't fail if user provides --plugin='the required libraries' 
