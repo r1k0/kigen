@@ -498,11 +498,11 @@ class append:
             if not isstatic(dropbear_sbin, self.verbose):
                 dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
 
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/libs', self.verbose)
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
                 print green(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
                 for i in dropbear_libs:
                     print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/libs'), self.verbose)
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
 
                 # FIXME don't fail if user provides --plugin='the required libraries' 
                 # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
@@ -640,11 +640,11 @@ class append:
             if not isstatic(blkid_sbin, self.verbose):
                 blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
 
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/libs', self.verbose)
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
                 print green(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
                 for i in blkid_libs:
                     print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/libs'), self.verbose)
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
             else:
                 logging.debug(blkid_sbin+' is statically linked nothing to do')
 #                # use from host
@@ -868,16 +868,33 @@ class append:
    
         # check how dmraid binary is linked 
         if os.path.isfile(dmraid_bin) and self.hostbin is True:
+            # use from host
+            logging.debug('initramfs.append.dmraid from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.dmraid ')+ dmraid_bin +' from ' + white('host')
+            process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
+
             if not isstatic(dmraid_bin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail('installed sys-fs/dmraid is not statically linked, cannot use --hostbin')
+                dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
+                for i in dmraid_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
             else:
-                # copy static binary
-                logging.debug('initramfs.append.dmraid ' + ' ' + dmraid_bin + ' statically linked from host')
-                print green(' * ') + turquoise('initramfs.append.dmraid ') + dmraid_bin + ' statically linked from ' + white('host')
-                process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
+                logging.debug(dmraid_bin+' is statically linked nothing to do')
+
+#            if not isstatic(dmraid_bin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail('installed sys-fs/dmraid is not statically linked, cannot use --hostbin')
+#            else:
+#                # copy static binary
+#                logging.debug('initramfs.append.dmraid ' + ' ' + dmraid_bin + ' statically linked from host')
+#                print green(' * ') + turquoise('initramfs.append.dmraid ') + dmraid_bin + ' statically linked from ' + white('host')
+#                process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
@@ -893,12 +910,12 @@ class append:
                 dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
                 dmraidobj.build()
     
-        # extract cache
-        # FIXME careful with the > 
-        logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
-        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
-        # FIXME make symlink rather than cp
-        process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+            # extract cache
+            # FIXME careful with the > 
+            logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+            os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+            # FIXME make symlink rather than cp
+            process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
     
         # FIXME ln -sf raid456.ko raid45.ko ?
         # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
@@ -1059,17 +1076,36 @@ class append:
         process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
 
         if os.path.isfile(strace_bin) and self.hostbin is True:
+ 
+            # use from host
+            logging.debug('initramfs.append.strace from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
+            process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+
             if not isstatic(strace_bin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail('installed dev-util/strace is not statically linked, cannot use --hostbin')
+                strace_libs = listdynamiclibs(strace_bin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
+                for i in strace_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
             else:
-                # use from host
-                logging.debug('initramfs.append.strace from %s' % white('host'))
-                print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
-                process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+                logging.debug(strace_bin+' is statically linked nothing to do')
+ 
+
+#            if not isstatic(strace_bin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail('installed dev-util/strace is not statically linked, cannot use --hostbin')
+#            else:
+#                # use from host
+#                logging.debug('initramfs.append.strace from %s' % white('host'))
+#                print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
+#                process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
+#                process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
         else:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
@@ -1106,17 +1142,35 @@ class append:
         process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
 
         if os.path.isfile(screen_bin) and self.hostbin is True:
+ 
+             # use from host
+            logging.debug('initramfs.append.screen from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host')
+            process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+
             if not isstatic(screen_bin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail('installed app-misc/screen is not statically linked, cannot use --hostbin')
+                screen_libs = listdynamiclibs(screen_bin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
+                for i in screen_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
             else:
-                # use from host
-                logging.debug('initramfs.append.screen binary from %s' % white('host'))
-                print green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host')
-                process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+                logging.debug(screen_bin+' is statically linked nothing to do')
+
+#            if not isstatic(screen_bin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail('installed app-misc/screen is not statically linked, cannot use --hostbin')
+#            else:
+#                # use from host
+#                logging.debug('initramfs.append.screen binary from %s' % white('host'))
+#                print green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host')
+#                process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
+#                process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
