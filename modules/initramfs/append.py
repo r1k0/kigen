@@ -324,30 +324,66 @@ class append:
         process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
         if os.path.isfile(cryptsetup_bin) and self.hostbin is True:
+
+            # use from host
+            logging.debug('initramfs.append.cryptsetup from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.cryptsetup ')+ cryptsetup_bin +' from ' + white('host')
+            process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+
             if not isstatic(cryptsetup_bin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail(cryptsetup_bin+' is not statically linked, cannot use --hostbin')
+                luks_libs = listdynamiclibs(cryptsetup_bin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_bin+' is dynamically linked, copying detected libraries'
+                for i in luks_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
             else:
-                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
-                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
-                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+                logging.debug(cryptsetup_bin+' is statically linked nothing to do')
+
+#            if not isstatic(cryptsetup_bin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail(cryptsetup_bin+' is not statically linked, cannot use --hostbin')
+#            else:
+#                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
+#                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
+#                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
+#                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
+#                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         elif os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
+
+            # use from host
+            logging.debug('initramfs.append.cryptsetup from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.cryptsetup ')+ cryptsetup_sbin +' from ' + white('host')
+            process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+
             if not isstatic(cryptsetup_sbin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail(cryptsetup_sbin+' is not statically linked, cannot use --hostbin')
+                luks_libs = listdynamiclibs(cryptsetup_sbin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries'
+                for i in luks_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
             else:
-                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
-                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
-                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
+                logging.debug(cryptsetups_bin+' is statically linked nothing to do')
+
+#            if not isstatic(cryptsetup_sbin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail(cryptsetup_sbin+' is not statically linked, cannot use --hostbin')
+#            else:
+#                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
+#                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
+#                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
+#                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
+#                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version'],
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
