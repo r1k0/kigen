@@ -1072,10 +1072,12 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.plugin')
         print green(' * ') + turquoise('initramfs.append.plugin ') + dir
+        print green(' * ') + '... ' + yellow('warning') +': plugin may overwrite kigen files'
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
-        os.system('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'))
+#        os.system('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'))
+        process_star('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())
