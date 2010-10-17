@@ -506,7 +506,6 @@ class append:
 
         dropbear_sbin       = '/usr/sbin/dropbear'
 
-        # FIXME: check if dropbear is merged with USE=static if not fail
         if os.path.isfile(dropbear_sbin) and self.hostbin is True:
             dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
                                                     # FIXME compilation of dropbear sources are not patched hence
@@ -518,17 +517,18 @@ class append:
             dropbearconvert_bin = '/usr/bin/dropbearconvert'
             
             print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
-            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-            process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
-            process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
-            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin'                  % (dbscp_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin'                  % (dbclient_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin'                  % (dropbearkey_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin'                  % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/sbin'                 % (dropbear_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp'         % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient'      % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey'   % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
-            process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear'     % self.temp['work'], self.verbose)
 
+            # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too?
             if not isstatic(dropbear_sbin, self.verbose):
                 dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
 
@@ -544,6 +544,9 @@ class append:
 #                self.fail(dropbear_sbin+' is not statically linked, cannot use --hostbin')
             else:
                 logging.debug('dropbear is static nothing to do')
+
+            # FIXME Mimic dsskey() and rsakey() from dropbear class
+
 #                    dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
 #                                                            # FIXME compilation of dropbear sources are not patched hence
 #                                                            # FIXME if --dropbear --hostbin
