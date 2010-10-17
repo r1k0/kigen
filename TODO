@@ -1,19 +1,16 @@
 0.2.4
 =====
-TODO: kigen kernel --selinux --fixdotconfig
-    http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
-    http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
-TODO: hardcode --disable-selinux for lvm2, cryptsetup, dmraid
-    SELinux has nothing to do inside an initramfs according to
-    Daniel's comment in http://www.openchill.org/?p=1117#comments
 TODO: dont fail when finding a dynamically linked binary
-    - raise a warning let the user the possibility to provide --plugin
+    - raise a warning f the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked  binary  and get a list of 
     libs to ship
 TODO: find a way to split append.py a bit more
     dissociate a binary class too? why not
     split append.py into append_feature.py? append_luks.py ...
     append directory?
+TODO: kigen kernel --selinux --fixdotconfig
+    http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
+    http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
 
 0.2.*
 =====
