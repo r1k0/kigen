@@ -474,32 +474,62 @@ class append:
 
         # FIXME: check if dropbear is merged with USE=static if not fail
         if os.path.isfile(dropbear_sbin) and self.hostbin is True:
+            dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
+                                                    # FIXME compilation of dropbear sources are not patched hence
+                                                    # FIXME if --dropbear --hostbin
+                                                    # FIXME then /usr/bin/scp
+                                                    # FIXME else /usr/bin/dbscp
+            dbclient_bin        = '/usr/bin/dbclient'
+            dropbearkey_bin     = '/usr/bin/dropbearkey'
+            dropbearconvert_bin = '/usr/bin/dropbearconvert'
+            
+            print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
+
             if not isstatic(dropbear_sbin, self.verbose):
+                dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/libs', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
+                for i in dropbear_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/libs'), self.verbose)
+
                 # FIXME don't fail if user provides --plugin='the required libraries' 
                 # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
                 # hint do like isstatic
-                self.fail(dropbear_sbin+' is not statically linked, cannot use --hostbin')
+#                self.fail(dropbear_sbin+' is not statically linked, cannot use --hostbin')
             else:
-                    dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
-                                                            # FIXME compilation of dropbear sources are not patched hence
-                                                            # FIXME if --dropbear --hostbin
-                                                            # FIXME then /usr/bin/scp
-                                                            # FIXME else /usr/bin/dbscp
-                    dbclient_bin        = '/usr/bin/dbclient'
-                    dropbearkey_bin     = '/usr/bin/dropbearkey'
-                    dropbearconvert_bin = '/usr/bin/dropbearconvert'
-        
-                    print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
-                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-                    process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
-                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
-                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
-                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
-                    process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
+                logging.debug('dropbear is static nothing to do')
+#                    dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
+#                                                            # FIXME compilation of dropbear sources are not patched hence
+#                                                            # FIXME if --dropbear --hostbin
+#                                                            # FIXME then /usr/bin/scp
+#                                                            # FIXME else /usr/bin/dbscp
+#                    dbclient_bin        = '/usr/bin/dbclient'
+#                    dropbearkey_bin     = '/usr/bin/dropbearkey'
+#                    dropbearconvert_bin = '/usr/bin/dropbearconvert'
+#        
+#                    print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
+#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
+#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
+#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
+#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
+#                    process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
+#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
+#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
+#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
+#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
+#                    process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version'],
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
@@ -555,9 +585,11 @@ class append:
         logging.debug('>>> entering initramfs.append.set_rootpasswd')
         print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
-        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
-        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
-        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
+#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
+#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
+#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
 
         process('cp /etc/shells %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('chown root:root %s'% self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
@@ -565,8 +597,10 @@ class append:
         # FIXME use a python API instead of openssl
         # FIXME deal with /etc/shadow eventually, then use openssl passwd -1 mypass for proper type/salt/hash $1$salt$hash
         print green(' * ') + '... ' + '/etc/passwd'
+        logging.debug('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
         os.system('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
         print green(' * ') + '... ' + '/etc/group'
+        logging.debug('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
         os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
 
 #        # HACK quick ninja chroot to set password
@@ -593,21 +627,31 @@ class append:
         logging.debug('>>> entering initramfs.append.e2fsprogs')
         blkid_sbin = '/sbin/blkid'
 
-        os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
+#        os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
 
         if os.path.isfile(blkid_sbin) and self.hostbin is True:
+            # use from host
+            logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
+            process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+
             if not isstatic(blkid_sbin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-#                listdynamiclibs(blkid_sbin, self.verbose)
-                self.fail('/sbin/blkid is not statically linked, cannot use --hostbin')
+                blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/libs', self.verbose)
+                print green(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
+                for i in blkid_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/libs'), self.verbose)
             else:
-                # use from host
-                logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
-                print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
-                process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
-                process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+                logging.debug(blkid_sbin+' is statically linked nothing to do')
+#                # use from host
+#                logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
+#                print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
+#                process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
+#                process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
 
         else:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
