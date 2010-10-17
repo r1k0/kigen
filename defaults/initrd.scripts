@@ -1102,7 +1102,7 @@ rundropbear() {
         udhcpc
 
         echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
-        dropbear -E
+        dropbear -E || dropbear || echo "Oh crap!"
 
         if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
         then
