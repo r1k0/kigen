@@ -48,7 +48,7 @@ else:
 # kigen modules are ready to be called
 from default        import temp
 from cliparser      import *
-from utils.shell    import *
+from utils.process    import *
 
 # parse command line parameters
 master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose = cli_parser()
