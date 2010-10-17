@@ -24,7 +24,6 @@ class append:
                 defconfig,          \
                 oldconfig,          \
                 menuconfig,         \
-#                mrproper,           \
                 verbose,            \
                 bbconf,             \
                 busyboxprogs,       \
@@ -55,7 +54,6 @@ class append:
         self.defconfig          = defconfig
         self.oldconfig          = oldconfig
         self.menuconfig         = menuconfig
-#        self.mrproper           = mrproper
         self.verbose            = verbose
         self.bbconf             = bbconf
         self.busyboxprogs       = busyboxprogs
