@@ -238,6 +238,7 @@ class initramfs:
 
         # compress initramfs-cpio
         print green(' * ') + turquoise('initramfs.compress')
+        logging.debug('>>> compressing final initramfs-cpio')
         if process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose) is not zero: self.fail('compress')
     
     def fail(self, step):
