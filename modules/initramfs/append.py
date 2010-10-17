@@ -6,6 +6,7 @@ from stdout import *
 from utils.process import *
 from utils.misc import *
 from utils.isstatic import isstatic
+from utils.listdynamiclibs import *
 
 class append:
 
@@ -129,7 +130,7 @@ class append:
                 process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
             else:
                 self.fail('%s does not exist.')
-            # then all possible files
+            # then all possible following files
             for i in linuxrclist[1:]:
                 if os.path.isfile(i):
                     process('cp %s %s/initramfs-base-temp/etc' % (i, self.temp['work']), self.verbose)
@@ -208,8 +209,10 @@ class append:
             bbobj.build()
 
         # append busybox to cpio
-        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/bin')
-        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/')
+#        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/bin')
+#        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-busybox-temp')
         process('tar -xjf %s/busybox-bin-%s.tar.bz2 -C %s busybox' % (self.temp['cache'], self.version_conf['busybox-version'], self.temp['work']+'/initramfs-busybox-temp/bin'), self.verbose)
@@ -235,7 +238,8 @@ class append:
         logging.debug('>>> entering initramfs.append.modules')
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
-        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV)
+#        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
     
         # FIXME: ctrl c does not work during this function
         # FIXME: rewrite (later)
@@ -277,10 +281,12 @@ class append:
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
     
         # FIXME: make variable of /lib/modules in case of FAKEROOT export
-        os.system('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ))
+#        os.system('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ))
+        process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
     
         # create etc/modules/<group>
-        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules')
+#        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
         modconfdict = get_config_modules_dict(self.modules_conf)
     
         # Genkernel official boot module design
@@ -312,8 +318,10 @@ class append:
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
     
-        os.makedirs(self.temp['work']+'/initramfs-luks-temp/lib/luks')
-        os.makedirs(self.temp['work']+'/initramfs-luks-temp/sbin')
+#        os.makedirs(self.temp['work']+'/initramfs-luks-temp/lib/luks')
+#        os.makedirs(self.temp['work']+'/initramfs-luks-temp/sbin')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
         if os.path.isfile(cryptsetup_bin) and self.hostbin is True:
             if not isstatic(cryptsetup_bin, self.verbose):
@@ -349,6 +357,7 @@ class append:
                 print 'from ' + white('cache')
 
                 # extract cache
+                logging.debug('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
                 process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
@@ -360,6 +369,8 @@ class append:
                 luksobj.build()
 
                 # extract cache
+                # FIXME careful with the >
+                logging.debug('/bin/bzip2 -dc '+self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2 > '+self.temp['work']+'/initramfs-luks-temp/sbin/cryptsetup')
                 os.system('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
                 process('chmod a+x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
@@ -373,9 +384,9 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.glibc')
-        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/')
-        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/etc')
-        os.makedirs(self.temp['work']+'/initramfs-glibc-temp/lib')
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
 
         print green(' * ') + turquoise('initramfs.append.glibc')
         # for shell
@@ -422,7 +433,8 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.libncurses')
         print green(' * ') + turquoise('initramfs.append.libncurses')
-        os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
+#        os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
 
         print green(' * ') + '... ' + '/lib/libncurses.so.5'
         process('cp /lib/libncurses.so.5     %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
@@ -438,7 +450,8 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.zlib')
         print green(' * ') + turquoise('initramfs.append.zlib')
-        os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
+#        os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
 
         print green(' * ') + '... ' + '/lib/libz.so.1'
         process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
@@ -454,7 +467,8 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.dropbear')
         for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
-            os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
+#            os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
+            process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-dropbear-temp/', i), self.verbose)
 
         dropbear_sbin       = '/usr/sbin/dropbear'
 
@@ -494,7 +508,9 @@ class append:
                 print 'from ' + white('cache')
 
                 # extract cache
-                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+#                logging.debug('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+#                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+                process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
             else:
                 # compile and cache
@@ -504,7 +520,9 @@ class append:
                 dropbearobj.build()
 
                 # extract cache
-                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+#                logging.debug('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+#                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
+                process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
         process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
         process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
@@ -540,6 +558,7 @@ class append:
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
         os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
+
         process('cp /etc/shells %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('chown root:root %s'% self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
 
@@ -581,6 +600,7 @@ class append:
                 # FIXME don't fail if user provides --plugin='the required libraries' 
                 # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
                 # hint do like isstatic
+#                listdynamiclibs(blkid_sbin, self.verbose)
                 self.fail('/sbin/blkid is not statically linked, cannot use --hostbin')
             else:
                 # use from host
@@ -602,6 +622,7 @@ class append:
                 e2obj = e2fsprogs(self.master_conf, self.version_conf, self.temp, self.verbose)
                 e2obj.build()
     
+            # extract cache
             # FIXME careful with the >
             os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
             process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
@@ -828,8 +849,9 @@ class append:
                 dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
                 dmraidobj.build()
     
+        # extract cache
         # FIXME careful with the > 
-#        process_redir('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']), self.verbose)
+        logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
         os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
         # FIXME make symlink rather than cp
         process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
@@ -945,11 +967,14 @@ class append:
         """
         Ship all keymaps within initramfs
         It's up to the user to provide the correct kernel cmdline parameter
+
+        @return bool
         """
         logging.debug('>>> entering initramfs.append.keymaps')
         print green(' * ') + turquoise('initramfs.append.keymaps')
 
-        os.makedirs(self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps')
+#        os.makedirs(self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps', self.verbose)
         process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
@@ -957,6 +982,12 @@ class append:
 
     def ttyecho(self):
         """
+        ttyecho is piece of code found on the net to copy/paste commands to /dev/console
+        it is very handy when it comes to run commands that requires current session
+        to be /dev/console
+        REQUIRED for booting remote luks system through a dropbear session
+
+        @return bool
         """
         logging.debug('>>> entering initramfs.append.ttyecho')
         print green(' * ') + turquoise('initramfs.append.ttyecho')
@@ -980,7 +1011,8 @@ class append:
         logging.debug('>>> entering initramfs.append.strace')
         strace_bin = '/usr/bin/strace'
 
-        os.makedirs(self.temp['work']+'/initramfs-strace-temp/bin')
+#        os.makedirs(self.temp['work']+'/initramfs-strace-temp/bin')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
 
         if os.path.isfile(strace_bin) and self.hostbin is True:
             if not isstatic(strace_bin, self.verbose):
@@ -1008,7 +1040,9 @@ class append:
                 strobj = strace(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
 
+            # extract cache
             # FIXME careful with the >
+            logging.debug('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
             os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
             process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
@@ -1024,7 +1058,8 @@ class append:
         logging.debug('>>> entering initramfs.append.screen')
         screen_bin = '/usr/bin/screen'
 
-        os.makedirs(self.temp['work']+'/initramfs-screen-temp/bin')
+#        os.makedirs(self.temp['work']+'/initramfs-screen-temp/bin')
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
 
         if os.path.isfile(screen_bin) and self.hostbin is True:
             if not isstatic(screen_bin, self.verbose):
@@ -1052,7 +1087,9 @@ class append:
                 strobj = screen(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
 
+            # extract cache
             # FIXME careful with the >
+            logging.debug('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
             os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 

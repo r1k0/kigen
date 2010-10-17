@@ -1,5 +1,7 @@
 0.2.4
 =====
+TODO: make --fakemod=/ in case kernel modules are copied from another chroot
+    kigen i --fakemod=/chroot can feed  from kigen k --fakeroot=/chroot
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning f the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked  binary  and get a list of 

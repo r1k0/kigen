@@ -107,7 +107,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print '\t\tCustom kernel file name'
 
     print '  --logfile=/file            "'+master_conf['logfile']+'"',
-    print '\t\tLog to file'
+    print #'\t\tLog to file'
 
     print '  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose'
     print
@@ -235,7 +235,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '\t\t\t\t\t\tCustom initramfs file name'
 
     print '  --logfile=/file            "'+master_conf['logfile']+'"',
-    print '\t\tLog to file'
+    print #'\t\tLog to file'
 
     print '  --debug, -d                "'+master_conf['debug']+'"',
     print '\t\tDebug verbose'

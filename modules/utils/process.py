@@ -53,6 +53,8 @@ def process_redir(cmd, verbose):
         f.writelines(p.stdout)
         f.close
 
+    logging.debug(p.stdout)
+
     return ret , p.stdout #, p.stderr
 
 def process_append(cmd, verbose):
