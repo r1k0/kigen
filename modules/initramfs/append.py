@@ -714,7 +714,7 @@ class append:
                 print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
-                print
+#                print
                 from sources.e2fsprogs import e2fsprogs
                 e2obj = e2fsprogs(self.master_conf, self.version_conf, self.temp, self.verbose)
                 e2obj.build()
@@ -828,7 +828,7 @@ class append:
                 process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
             else: 
                 # compile and cache
-                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
+#                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
                 from sources.lvm2 import lvm2
                 lvm2obj = lvm2(self.master_conf, self.version_conf, self.temp, self.verbose)
                 lvm2obj.build()
@@ -965,9 +965,9 @@ class append:
 #                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
             else:
-                print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
+#                print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
                 # compile
-                print
+#                print
                 from sources.dmraid import dmraid
                 dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
                 dmraidobj.build()
