@@ -1219,7 +1219,7 @@ class append:
                 screen_libs = listdynamiclibs(screen_bin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
                 for i in screen_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
