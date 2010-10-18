@@ -185,11 +185,12 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.busybox')
-        print green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version'],
+        print green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version']
     
         if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.version_conf['busybox-version']+'.tar.bz2') and self.nocache is False:
             # use cache
-            print 'from ' + white('cache')
+#            print 'from ' + white('cache')
+            print green(' * ') + '... '+'cache found: importing'
         else:
             print self.busyboxprogs
             # compile
@@ -383,12 +384,13 @@ class append:
 #                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
 #                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version'],
+            print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
                 logging.debug('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
@@ -568,11 +570,12 @@ class append:
 #                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
 #                    process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version'],
+            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
             if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
 #                logging.debug('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
@@ -692,10 +695,11 @@ class append:
 
         else:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
-            print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version'],
+            print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
             if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
                 print
@@ -797,10 +801,11 @@ class append:
 #                process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
+            print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
             if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
-                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'],
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
                 os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
@@ -934,11 +939,11 @@ class append:
 #                process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
+            print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
-                print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
                 # use cache
-                print 'from ' + white('cache')
-                pass
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
             else:
                 print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
                 # compile
@@ -1115,8 +1120,9 @@ class append:
         if os.path.isfile(strace_bin) and self.hostbin is True:
  
             # use from host
-            logging.debug('initramfs.append.strace from %s' % white('host'))
+            logging.debug('initramfs.append.strace from ' + white('host'))
             print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
+
             process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
@@ -1146,13 +1152,16 @@ class append:
 
         else:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
-            print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version'],
+            print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
+            if not os.path.isfile(strace_bin) and self.hostbin is True:
+                print green(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... ' + 'cache found: importing'
             else:
                 # compile
-                print
+#                print
                 from sources.strace import strace
                 strobj = strace(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
@@ -1211,10 +1220,11 @@ class append:
 
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
-            print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version'],
+            print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
             if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print 'from ' + white('cache')
+#                print 'from ' + white('cache')
+                print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
                 print
