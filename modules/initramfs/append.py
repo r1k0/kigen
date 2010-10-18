@@ -192,7 +192,7 @@ class append:
 #            print 'from ' + white('cache')
             print green(' * ') + '... '+'cache found: importing'
         else:
-            print self.busyboxprogs
+#            print self.busyboxprogs
             # compile
             from sources.busybox import busybox
             bbobj = busybox( self.arch,             \
@@ -384,8 +384,11 @@ class append:
 #                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
 #                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
+            print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
+
+            if not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
+                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
@@ -399,7 +402,7 @@ class append:
 
             else:
                 # compile and cache
-                print
+#                print
                 from sources.luks import luks
                 luksobj = luks(self.master_conf, self.version_conf, self.temp, self.verbose)
                 luksobj.build()
@@ -535,7 +538,7 @@ class append:
                 dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
                 for i in dropbear_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
@@ -570,8 +573,13 @@ class append:
 #                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
 #                    process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
-            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
+            print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
+
+            # FIXME check for the other binaries as well
+            if not os.path.isfile(dropbear_sbin) and self.hostbin is True:
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
@@ -584,7 +592,7 @@ class append:
 
             else:
                 # compile and cache
-                print
+#                print
                 from sources.dropbear import dropbear
                 dropbearobj = dropbear(self.master_conf, self.version_conf, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
@@ -681,7 +689,7 @@ class append:
                 blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
                 for i in blkid_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
@@ -696,6 +704,10 @@ class append:
         else:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
+
+            if not os.path.isfile(blkid_sbin) and self.hostbin is True:
+                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
@@ -802,6 +814,10 @@ class append:
         else:
             logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
+
+            if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
@@ -920,7 +936,7 @@ class append:
                 dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
                 for i in dmraid_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
@@ -940,6 +956,10 @@ class append:
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
+
+            if not os.path.isfile(dmraid_bin) and self.hostbin is True:
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
@@ -1130,7 +1150,7 @@ class append:
                 strace_libs = listdynamiclibs(strace_bin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
                 for i in strace_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
@@ -1154,7 +1174,7 @@ class append:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
             print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
             if not os.path.isfile(strace_bin) and self.hostbin is True:
-                print green(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
@@ -1221,13 +1241,17 @@ class append:
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
             print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
+
+            if not os.path.isfile(screen_bin) and self.hostbin is True:
+                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
                 # use cache
 #                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
-                print
+#                print
                 from sources.screen import screen
                 strobj = screen(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
@@ -1254,7 +1278,7 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.plugin')
         print green(' * ') + turquoise('initramfs.append.plugin ') + dir
-        print green(' * ') + '... ' + yellow('warning') +': plugin may overwrite kigen files'
+        print yellow(' * ') + '... ' + yellow('warning') +': plugin may overwrite kigen files'
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
