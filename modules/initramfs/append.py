@@ -365,7 +365,7 @@ class append:
                 luks_libs = listdynamiclibs(cryptsetup_sbin, self.verbose)
 
                 process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries'
                 for i in luks_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
@@ -388,7 +388,7 @@ class append:
             print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
 
             if not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
-                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' not found on host, compiling from sources'
+                print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
