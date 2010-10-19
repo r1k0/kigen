@@ -787,18 +787,42 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
         if os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+#===
+             # use from host
+            logging.debug('initramfs.append.lvm2 from %s' % white('host'))
+            print green(' * ') + turquoise('initramfs.append.lvm2 ')+lvm2_static_bin+' from '+white('host')
+            process('cp %s %s/initramfs-lvm2-temp/bin/lvm'          % (lvm2_static_bin, self.temp['work']), self.verbose)
+            process('cp %s %s/initramfs-lvm2-temp/bin/lvm_static'   % (lvm2_static_bin, self.temp['work']), self.verbose)
+            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm'       % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm_static'% self.temp['work'], self.verbose)
+
             if not isstatic(lvm2_static_bin, self.verbose):
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-                self.fail('installed sys-fs/lvm2 is not statically linked, cannot use --hostbin')
+                lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
+
+                process('mkdir -p %s' % self.temp['work']+'/initramfs-lvm2-temp/lib', self.verbose)
+                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
+                for i in lvm2_libs:
+                    print green(' * ') + '... ' + i
+                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
             else:
-                # FIXME see if we can use something else than import commands to get dynamically the bin version
-                # lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
-                logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' statically linked from host')
-                print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' statically linked from ' + white('host')
-                process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
-                process('cp %s %s/initramfs-lvm2-temp/bin/lvm.static' % (lvm2_static_bin, self.temp['work']), self.verbose)
+                logging.debug(lvm2_static_bin+' is statically linked nothing to do')
+
+#===
+#            if not isstatic(lvm2_static_bin, self.verbose):
+#                # FIXME don't fail if user provides --plugin='the required libraries' 
+#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
+#                # hint do like isstatic
+#                self.fail('installed sys-fs/lvm2 is not statically linked, cannot use --hostbin')
+#            else:
+#                # FIXME see if we can use something else than import commands to get dynamically the bin version
+#                # lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
+#                logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' statically linked from host')
+#                print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' statically linked from ' + white('host')
+#                process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
+#                process('cp %s %s/initramfs-lvm2-temp/bin/lvm.static' % (lvm2_static_bin, self.temp['work']), self.verbose)
+
+
+
 # FIXME if we already got lvm2.static why bother? better off by copying lvm.static to lvm
 #        elif os.path.isfile(lvm2_bin) and self.hostbin is True:
 #            if not isstatic(lvm2_bin, self.verbose):
@@ -850,10 +874,10 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.evms')
-        print green(' * ') + turquoise('initramfs.append.evms'),
+        print green(' * ') + turquoise('initramfs.append.evms')
     
         if os.path.isfile('/sbin/evms'):
-            print 'feeding' + ' from '+white('host')
+            print green('... ')+'feeding' + ' from '+white('host')
     
             process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
             process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
