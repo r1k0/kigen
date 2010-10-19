@@ -877,7 +877,7 @@ class append:
         print green(' * ') + turquoise('initramfs.append.evms')
     
         if os.path.isfile('/sbin/evms'):
-            print green('... ')+'feeding' + ' from '+white('host')
+            print green(' * ')+'...'+' feeding' + ' from '+white('host')
     
             process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/lib/evms', self.verbose)
             process('mkdir -p ' + self.temp['work']+'/initramfs-evms-temp/etc', self.verbose)
