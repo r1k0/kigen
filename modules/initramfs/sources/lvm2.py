@@ -98,6 +98,7 @@ class lvm2:
 #    			CFLAGS=-I%s/device-mapper/include \
 #    			CPPFLAGS=-I%s/device-mapper/include \
 #    			./configure --enable-static_link --prefix=%s/lvm %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
+
         return os.system('./configure --disable-selinux --enable-static_link %s' % self.verbose['std'])
 
     def make(self):
@@ -108,6 +109,7 @@ class lvm2:
     	"""
     	print green(' * ') + '... lvm2.make'
     	self.chgdir(self.lvm2_tmp)
+
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
     								self.master_config['DEFAULT_MAKEOPTS'], \
     								self.master_config['DEFAULT_UTILS_CC'], \
@@ -123,6 +125,7 @@ class lvm2:
         """
         print green(' * ') + '... lvm2.make_device_mapper'
         self.chgdir(self.lvm2_tmp)
+
         return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
                                     self.master_config['DEFAULT_MAKEOPTS'], \
                                     self.master_config['DEFAULT_UTILS_CC'], \
@@ -138,6 +141,7 @@ class lvm2:
         """
         print green(' * ') + '... lvm2.make_device_mapper_install'
         self.chgdir(self.lvm2_tmp)
+
         return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper_install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
                                     self.master_config['DEFAULT_MAKEOPTS'], \
                                     self.master_config['DEFAULT_UTILS_CC'], \
@@ -182,9 +186,7 @@ class lvm2:
     	print green(' * ') + '... lvm2.compress'
     	self.chgdir(self.lvm2_tmp)
     
-#   	return os.system('tar -cj -f %s tools/lvm.static %s' % (temp['cache']+'/lvm.static-'+self.lvm2_ver+'.tar.bz2', verbose))
         return os.system('bzip2 tools/lvm.static')
-#    	return os.system('bzip2 tools/lvm')
     
     def cache(self):
     	"""

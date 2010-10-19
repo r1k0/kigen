@@ -94,7 +94,6 @@ class e2fsprogs:
         print green(' * ') + '... e2fsprogs.configure'
         self.chgdir(self.e2tmp)
     
-#        return os.system('./configure --with-ldopts=-static %s' % self.verbose['std'])
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
     
     def make(self):

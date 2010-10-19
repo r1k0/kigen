@@ -24,6 +24,7 @@ def initramfs(temproot, extract, to, verbose):
         os.makedirs(to)
 
     process('cp %s %s/initramfs_data.cpio.gz' % (extract, to), verbose)
+
     # extract gzip archive
     process('gzip -d -f %s/initramfs_data.cpio.gz' % to, verbose)
 
@@ -31,4 +32,3 @@ def initramfs(temproot, extract, to, verbose):
     os.chdir(to)
     os.system('cpio -id < initramfs_data.cpio &>/dev/null')
     os.system('rm initramfs_data.cpio')
-

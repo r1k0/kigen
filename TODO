@@ -1,5 +1,6 @@
 0.2.4
 =====
+TODO: make 'not isstatic' fail saying we can't deal with dynamic linkage, save for later 
 DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
     - if dynamic then ship it with detected linked libraries

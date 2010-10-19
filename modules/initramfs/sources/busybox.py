@@ -193,7 +193,6 @@ class busybox:
         """
         print green(' * ') + '... busybox.oldconfig'
         self.chgdir(self.bb_tmp)
-#        return os.system('make oldconfig')
         command = self.build_command('oldconfig', '')
         if self.verbose['set'] is True:
         	print command

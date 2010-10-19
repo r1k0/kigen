@@ -181,7 +181,7 @@ class dropbear:
 
     def compress(self):
         """
-        blkid compression routine
+        dropbear compression routine
     
         @return: bool
         """
@@ -200,7 +200,7 @@ class dropbear:
     
     def cache(self):
         """
-        blkid tarball cache routine
+        dropbear tarball cache routine
     
         @return: bool
         """

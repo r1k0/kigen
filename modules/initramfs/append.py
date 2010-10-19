@@ -215,7 +215,7 @@ class append:
         process('cp %s/defaults/udhcpc.scripts %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)
 
-#       TO BE REMOVED : linuxrc's bb --install -s takes care of it
+        # TO BE REMOVED : linuxrc's bb --install -s takes care of it
         # FIXME if busybox not exist then ln the default set -> [ ash sh mount uname echo cut cat
         for i in self.busyboxprogs.split():
             process('ln -s busybox %s/initramfs-busybox-temp/bin/%s' % (self.temp['work'], i), self.verbose)
@@ -275,7 +275,6 @@ class append:
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
     
         # FIXME: make variable of /lib/modules in case of FAKEROOT export
-#        os.system('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ))
         process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
     
         # create etc/modules/<group>
@@ -455,7 +454,6 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.zlib')
         print green(' * ') + turquoise('initramfs.append.zlib')
-#        os.makedirs(self.temp['work']+'/initramfs-zlib-temp/lib')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
 
         print green(' * ') + '... ' + '/lib/libz.so.1'
@@ -472,7 +470,6 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.dropbear')
         for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
-#            os.makedirs(self.temp['work']+'/initramfs-dropbear-temp/%s' % i)
             process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-dropbear-temp/', i), self.verbose)
 
         dropbear_sbin       = '/usr/sbin/dropbear'
@@ -583,11 +580,10 @@ class append:
         logging.debug('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
         os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
 
-#        # HACK quick ninja chroot to set password - leave for history
+#        # HACK quick ninja chroot to set password - leave for history museum of horror coding - actually send the whole project ;)
 #        slash = os.open('/', os.O_RDONLY)
 #        os.chroot(self.temp['work']+'/initramfs-rootpasswd-temp/') # dive in # PROBLEM we don't have the FULL initramfs, hence no /bin/sh to chroot in
 #        os.system('echo "root:%s" | busybox chpasswd' % self.rootpasswd)
-#
 #        # HACK break out of chroot
 #        os.fchdir(slash)
 #        for i in range(100): # assume we haven't gone deeper than 100

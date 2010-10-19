@@ -38,7 +38,6 @@ class initramfs:
         self.defconfig          = cli['defconfig']
         self.oldconfig          = cli['oldconfig']
         self.menuconfig         = cli['menuconfig']
-#        self.mrproper           = cli['mrproper']
         self.nocache            = cli['nocache']
 #        self.firmware           = cli['firmware']
         self.verbosestd         = verbose['std']
@@ -48,8 +47,6 @@ class initramfs:
         self.tempcache          = temp['cache']
         self.temp               = temp
         self.dotconfig          = cli['dotconfig']
-        self.nocache            = cli['nocache']
-#        self.firmware           = cli['firmware']
         self.cli                = cli
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
@@ -90,7 +87,6 @@ class initramfs:
                         self.defconfig,         \
                         self.oldconfig,         \
                         self.menuconfig,        \
-#                        self.mrproper,          \
                         self.verbose,           \
                         self.dotconfig,         \
                         self.master_conf['busybox-progs'],  \

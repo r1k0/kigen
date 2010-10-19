@@ -106,7 +106,7 @@ class dmraid:
         print green(' * ') + '... dmraid.configure'
         self.chgdir(self.dmraidtmp)
     
-#        return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
+#        return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std']) # once upon a time in static dreamland
         return os.system('LDFLAGS=-L%s/device-mapper/lib \
                 CFLAGS=-I%s/device-mapper/include \
                 CPPFLAGS=-I%s/device-mapper/include \
@@ -136,7 +136,6 @@ class dmraid:
         print green(' * ') + '... dmraid.strip'
         self.chgdir(self.dmraidtmp)
     
-#        return os.system('strip %s/dmraid ' % self.dmraidtmp)
         return os.system('strip %s/dmraid/%s/tools/dmraid.static' % (self.temp['work'], self.dmraid_ver))
 
     
@@ -152,7 +151,6 @@ class dmraid:
         print green(' * ') + '... dmraid.compress'
         self.chgdir(self.dmraidtmp)
     
-#        return os.system('bzip2 %s/dmraid' % self.dmraidtmp)
         return os.system('bzip2 %s/dmraid/%s/tools/dmraid.static' % (self.temp['work'], self.dmraid_ver))
     
     def cache(self):
@@ -164,6 +162,5 @@ class dmraid:
         print green(' * ') + '... dmraid.cache'
         self.chgdir(self.dmraidtmp)
     
-#        return process('mv %s/dmraid.bz2 %s/dmraid-%s.bz2' % (self.dmraidtmp, self.temp['cache'], self.dmraid_ver), self.verbose)
         return process('mv %s/tools/dmraid.static.bz2 %s/dmraid.static-%s.bz2' % (self.dmraidtmp, self.temp['cache'], self.dmraid_ver), self.verbose)
 

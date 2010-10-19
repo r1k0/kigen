@@ -94,7 +94,6 @@ class strace:
         print green(' * ') + '... strace.configure'
         self.chgdir(self.stracetmp)
     
-#        return os.system('./configure --with-ldopts=-static %s' % self.verbose['std'])
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
     
     def make(self):
