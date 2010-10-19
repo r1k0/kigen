@@ -225,7 +225,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print yellow('  --hostbin                 '),
     print initramfs_conf['hostbin'],
-    print yellow('\t\tUse host binaries over sources when possible')
+    print yellow('\t\tUse host binaries over sources when possible (fail if dynamic linkage detected)')
 
     print '  --noboot                  ',
     print initramfs_conf['noboot'],
