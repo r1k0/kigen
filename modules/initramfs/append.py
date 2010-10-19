@@ -189,10 +189,8 @@ class append:
     
         if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.version_conf['busybox-version']+'.tar.bz2') and self.nocache is False:
             # use cache
-#            print 'from ' + white('cache')
             print green(' * ') + '... '+'cache found: importing'
         else:
-#            print self.busyboxprogs
             # compile
             from sources.busybox import busybox
             bbobj = busybox( self.arch,             \
@@ -208,8 +206,6 @@ class append:
             bbobj.build()
 
         # append busybox to cpio
-#        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/bin')
-#        os.makedirs(self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-busybox-temp/bin', self.verbose)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-busybox-temp/usr/share/udhcpc/', self.verbose)
 
@@ -237,7 +233,6 @@ class append:
         logging.debug('>>> entering initramfs.append.modules')
         print green(' * ') + turquoise('initramfs.append.modules ') + self.KV
     
-#        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
     
         # FIXME: ctrl c does not work during this function
@@ -284,7 +279,6 @@ class append:
         process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
     
         # create etc/modules/<group>
-#        os.makedirs(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
         modconfdict = get_config_modules_dict(self.modules_conf)
     
@@ -317,8 +311,6 @@ class append:
         cryptsetup_bin  = '/bin/cryptsetup'
         cryptsetup_sbin = '/sbin/cryptsetup'
     
-#        os.makedirs(self.temp['work']+'/initramfs-luks-temp/lib/luks')
-#        os.makedirs(self.temp['work']+'/initramfs-luks-temp/sbin')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
@@ -341,18 +333,6 @@ class append:
             else:
                 logging.debug(cryptsetup_bin+' is statically linked nothing to do')
 
-#            if not isstatic(cryptsetup_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail(cryptsetup_bin+' is not statically linked, cannot use --hostbin')
-#            else:
-#                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-#                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_bin + ' from host')
-#                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' '  + cryptsetup_bin + ' from ' + white('host')
-#                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
-#                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
-
         elif os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
 
             # use from host
@@ -372,17 +352,6 @@ class append:
             else:
                 logging.debug(cryptsetup_sbin+' is statically linked nothing to do')
 
-#            if not isstatic(cryptsetup_sbin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail(cryptsetup_sbin+' is not statically linked, cannot use --hostbin')
-#            else:
-#                luks_host_version = commands.getoutput("cryptsetup --version | cut -d' ' -f2")
-#                logging.debug('initramfs.append.luks ' + luks_host_version + ' ' + cryptsetup_sbin + ' from host')
-#                print green(' * ') + turquoise('initramfs.append.luks ') + luks_host_version + ' ' + cryptsetup_sbin + ' from ' + white('host')
-#                process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
-#                process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
         else:
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
             print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
@@ -392,7 +361,6 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
@@ -402,7 +370,6 @@ class append:
 
             else:
                 # compile and cache
-#                print
                 from sources.luks import luks
                 luksobj = luks(self.master_conf, self.version_conf, self.temp, self.verbose)
                 luksobj.build()
@@ -472,7 +439,6 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.libncurses')
         print green(' * ') + turquoise('initramfs.append.libncurses')
-#        os.makedirs(self.temp['work']+'/initramfs-libncurses-temp/lib')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-libncurses-temp/lib', self.verbose)
 
         print green(' * ') + '... ' + '/lib/libncurses.so.5'
@@ -533,7 +499,7 @@ class append:
             process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear'     % self.temp['work'], self.verbose)
 
-            # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too?
+            # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too? NO ldd says they all use the same as /usr/sbin/dropbear
             if not isstatic(dropbear_sbin, self.verbose):
                 dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
 
@@ -542,64 +508,33 @@ class append:
                 for i in dropbear_libs:
                     print green(' * ') + '... ' + i
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
-
-                # FIXME don't fail if user provides --plugin='the required libraries' 
-                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-                # hint do like isstatic
-#                self.fail(dropbear_sbin+' is not statically linked, cannot use --hostbin')
             else:
                 logging.debug('dropbear is static nothing to do')
 
             # FIXME Mimic dsskey() and rsakey() from dropbear class
 
-#                    dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
-#                                                            # FIXME compilation of dropbear sources are not patched hence
-#                                                            # FIXME if --dropbear --hostbin
-#                                                            # FIXME then /usr/bin/scp
-#                                                            # FIXME else /usr/bin/dbscp
-#                    dbclient_bin        = '/usr/bin/dbclient'
-#                    dropbearkey_bin     = '/usr/bin/dropbearkey'
-#                    dropbearconvert_bin = '/usr/bin/dropbearconvert'
-#        
-#                    print green(' * ') + turquoise('initramfs.append.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host')
-#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbscp_bin, self.temp['work']), self.verbose)
-#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dbclient_bin, self.temp['work']), self.verbose)
-#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearkey_bin, self.temp['work']), self.verbose)
-#                    process('cp %s %s/initramfs-dropbear-temp/bin' % (dropbearconvert_bin, self.temp['work']), self.verbose)
-#                    process('cp %s %s/initramfs-dropbear-temp/sbin' % (dropbear_sbin, self.temp['work']), self.verbose)
-#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbscp' % self.temp['work'], self.verbose)
-#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dbclient' % self.temp['work'], self.verbose)
-#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearkey' % self.temp['work'], self.verbose)
-#                    process('chmod +x %s/initramfs-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
-#                    process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear' % self.temp['work'], self.verbose)
         else:
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
 
-            # FIXME check for the other binaries as well
+            # FIXME check for the other binaries as well - or not?
             if not os.path.isfile(dropbear_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
-#                logging.debug('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
-#                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
                 process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
             else:
                 # compile and cache
-#                print
                 from sources.dropbear import dropbear
                 dropbearobj = dropbear(self.master_conf, self.version_conf, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
 
                 # extract cache
-#                logging.debug('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
-#                os.system('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']))
                 process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
         process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
@@ -633,9 +568,6 @@ class append:
         logging.debug('>>> entering initramfs.append.set_rootpasswd')
         print green(' * ') + turquoise('initramfs.append.rootpasswd')
 
-#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp')
-#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/etc')
-#        os.makedirs(self.temp['work']+'/initramfs-rootpasswd-temp/root')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
 
@@ -651,7 +583,7 @@ class append:
         logging.debug('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
         os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
 
-#        # HACK quick ninja chroot to set password
+#        # HACK quick ninja chroot to set password - leave for history
 #        slash = os.open('/', os.O_RDONLY)
 #        os.chroot(self.temp['work']+'/initramfs-rootpasswd-temp/') # dive in # PROBLEM we don't have the FULL initramfs, hence no /bin/sh to chroot in
 #        os.system('echo "root:%s" | busybox chpasswd' % self.rootpasswd)
@@ -675,7 +607,6 @@ class append:
         logging.debug('>>> entering initramfs.append.e2fsprogs')
         blkid_sbin = '/sbin/blkid'
 
-#        os.makedirs(self.temp['work']+'/initramfs-blkid-temp/bin')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
 
         if os.path.isfile(blkid_sbin) and self.hostbin is True:
@@ -695,12 +626,6 @@ class append:
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
             else:
                 logging.debug(blkid_sbin+' is statically linked nothing to do')
-#                # use from host
-#                logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
-#                print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
-#                process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
-#                process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
-
         else:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
@@ -710,11 +635,9 @@ class append:
 
             if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
-#                print
                 from sources.e2fsprogs import e2fsprogs
                 e2obj = e2fsprogs(self.master_conf, self.version_conf, self.temp, self.verbose)
                 e2obj.build()
@@ -787,8 +710,7 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
         if os.path.isfile(lvm2_static_bin) and self.hostbin is True:
-#===
-             # use from host
+            # use from host
             logging.debug('initramfs.append.lvm2 from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.lvm2 ')+lvm2_static_bin+' from '+white('host')
             process('cp %s %s/initramfs-lvm2-temp/bin/lvm'          % (lvm2_static_bin, self.temp['work']), self.verbose)
@@ -806,35 +728,6 @@ class append:
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
             else:
                 logging.debug(lvm2_static_bin+' is statically linked nothing to do')
-
-#===
-#            if not isstatic(lvm2_static_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail('installed sys-fs/lvm2 is not statically linked, cannot use --hostbin')
-#            else:
-#                # FIXME see if we can use something else than import commands to get dynamically the bin version
-#                # lvm2_static_version = commands.getoutput("lvm.static version | cut -d: -f2 | head -n1 | cut -d'(' -f1")
-#                logging.debug('initramfs.append.lvm2 ' + ' ' + lvm2_static_bin + ' statically linked from host')
-#                print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_static_bin + ' statically linked from ' + white('host')
-#                process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_static_bin, self.temp['work']), self.verbose)
-#                process('cp %s %s/initramfs-lvm2-temp/bin/lvm.static' % (lvm2_static_bin, self.temp['work']), self.verbose)
-
-
-
-# FIXME if we already got lvm2.static why bother? better off by copying lvm.static to lvm
-#        elif os.path.isfile(lvm2_bin) and self.hostbin is True:
-#            if not isstatic(lvm2_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail('installed sys-fs/lvm2 is not statically linked, cannot use --hostbin')
-#
-#            else:
-#                logging.debug('initramfs.append.lvm2 ' + lvm2_bin + ' statically linked from host')
-#                print green(' * ') + turquoise('initramfs.append.lvm2 ') + lvm2_bin + ' statically linked from ' + white('host')
-#                process('cp %s %s/initramfs-lvm2-temp/bin/lvm' % (lvm2_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
@@ -844,7 +737,6 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
 
                 # extract cache
@@ -852,7 +744,6 @@ class append:
                 process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
             else: 
                 # compile and cache
-#                print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
                 from sources.lvm2 import lvm2
                 lvm2obj = lvm2(self.master_conf, self.version_conf, self.temp, self.verbose)
                 lvm2obj.build()
@@ -966,17 +857,6 @@ class append:
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
             else:
                 logging.debug(dmraid_bin+' is statically linked nothing to do')
-
-#            if not isstatic(dmraid_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail('installed sys-fs/dmraid is not statically linked, cannot use --hostbin')
-#            else:
-#                # copy static binary
-#                logging.debug('initramfs.append.dmraid ' + ' ' + dmraid_bin + ' statically linked from host')
-#                print green(' * ') + turquoise('initramfs.append.dmraid ') + dmraid_bin + ' statically linked from ' + white('host')
-#                process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
@@ -986,12 +866,9 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
             else:
-#                print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'],
                 # compile
-#                print
                 from sources.dmraid import dmraid
                 dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
                 dmraidobj.build()
@@ -1120,7 +997,6 @@ class append:
         logging.debug('>>> entering initramfs.append.keymaps')
         print green(' * ') + turquoise('initramfs.append.keymaps')
 
-#        os.makedirs(self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps', self.verbose)
         process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
 
@@ -1158,7 +1034,6 @@ class append:
         logging.debug('>>> entering initramfs.append.strace')
         strace_bin = '/usr/bin/strace'
 
-#        os.makedirs(self.temp['work']+'/initramfs-strace-temp/bin')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
 
         if os.path.isfile(strace_bin) and self.hostbin is True:
@@ -1180,20 +1055,6 @@ class append:
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
             else:
                 logging.debug(strace_bin+' is statically linked nothing to do')
- 
-
-#            if not isstatic(strace_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail('installed dev-util/strace is not statically linked, cannot use --hostbin')
-#            else:
-#                # use from host
-#                logging.debug('initramfs.append.strace from %s' % white('host'))
-#                print green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host')
-#                process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
-#                process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
-
         else:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
             print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
@@ -1201,11 +1062,9 @@ class append:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... ' + 'cache found: importing'
             else:
                 # compile
-#                print
                 from sources.strace import strace
                 strobj = strace(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
@@ -1228,7 +1087,6 @@ class append:
         logging.debug('>>> entering initramfs.append.screen')
         screen_bin = '/usr/bin/screen'
 
-#        os.makedirs(self.temp['work']+'/initramfs-screen-temp/bin')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
 
         if os.path.isfile(screen_bin) and self.hostbin is True:
@@ -1249,19 +1107,6 @@ class append:
                     process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
             else:
                 logging.debug(screen_bin+' is statically linked nothing to do')
-
-#            if not isstatic(screen_bin, self.verbose):
-#                # FIXME don't fail if user provides --plugin='the required libraries' 
-#                # where 'the required libraries' = list of output parsed from ldd /usr/sbin/binary
-#                # hint do like isstatic
-#                self.fail('installed app-misc/screen is not statically linked, cannot use --hostbin')
-#            else:
-#                # use from host
-#                logging.debug('initramfs.append.screen binary from %s' % white('host'))
-#                print green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host')
-#                process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
-#                process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
-
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
             print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
@@ -1271,11 +1116,9 @@ class append:
 
             if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
                 # use cache
-#                print 'from ' + white('cache')
                 print green(' * ') + '... '+'cache found: importing'
             else:
                 # compile
-#                print
                 from sources.screen import screen
                 strobj = screen(self.master_conf, self.version_conf, self.temp, self.verbose)
                 strobj.build()
@@ -1306,7 +1149,6 @@ class append:
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
-#        os.system('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'))
         process_star('cp -a %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')

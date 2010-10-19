@@ -1,27 +1,30 @@
 0.2.4
 =====
+DONE: detect static/dynamic linkage and act accordingly
+    - if static then ship it
+    - if dynamic then ship it with detected linked libraries
 TODO: make --fakemod=/ in case kernel modules are copied from another chroot
     kigen i --fakemod=/chroot can feed  from kigen k --fakeroot=/chroot
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning f the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked  binary  and get a list of 
     libs to ship
-TODO: find a way to split append.py a bit more
-    dissociate a binary class too? why not
-    split append.py into append_feature.py? append_luks.py ...
-    append directory?
-TODO: kigen kernel --selinux --fixdotconfig
+TODO: kigen kernel --selinux --fixdotconfig or --fixdotconfig=selinux,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
 
 0.2.*
 =====
+TODO: find a way to split append.py a bit more
+    dissociate a binary class too? why not
+    split append.py into append_feature.py? append_luks.py ...
+    append directory?
 TODO: get a way to set per features source or host binary?
     then rewrite cliarg with --source-<feature>
     --source-all by default
     --source-luks --bin-lvm2...
     --bin-all --bin-luks...
-TODO: find a way to get pkg use flag in python
+DONE: find a way to get pkg use flag in python
     like: i want to know if strace is merged with -static-libs or not
     this is for use  when copying host binaries (they gotta be statically linked
     OR 
@@ -36,7 +39,7 @@ TODO: kigen i --gnupg
 TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
     i got the same on eeepc
-TODO: pass $PORTDIR don't assume /usr/portage
+DONE: pass $PORTDIR don't assume /usr/portage
     get an elegant python way of getting $PORTDIR
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
