@@ -355,6 +355,9 @@ class append:
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
             print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
 
+            if not isstatic(cryptsetup_sbin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is not static, compiling from sources'
+
             if not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' not found on host, compiling from sources'
 
@@ -514,7 +517,9 @@ class append:
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
 
-            # FIXME check for the other binaries as well - or not?
+            if not isstatic(dropbear_sbin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is not static, compiling from sources'
+
             if not os.path.isfile(dropbear_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' not found on host, compiling from sources'
 
@@ -626,6 +631,9 @@ class append:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
 
+            if not isstatic(blkid_sbin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is not static, compiling from sources'
+
             if not os.path.isfile(blkid_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources'
 
@@ -727,6 +735,9 @@ class append:
         else:
             logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
+
+            if not isstatic(lvm2_static_bin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources'
@@ -856,6 +867,9 @@ class append:
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
+
+            if not isstatic(dmraid_bin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(dmraid_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources'
@@ -1054,8 +1068,13 @@ class append:
         else:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
             print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
+
+            if not isstatic(strace_bin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources'
+
             if not os.path.isfile(strace_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
+
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
                 print green(' * ') + '... ' + 'cache found: importing'
@@ -1106,6 +1125,9 @@ class append:
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
             print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
+
+            if not isstatic(screen_bin, self.verbose):
+                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(screen_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources'
