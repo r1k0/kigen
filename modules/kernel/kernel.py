@@ -84,7 +84,7 @@ class kernel:
 #            if self.fixdotconfig is True:
 #                self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
-        # initramfs provided by config file 
+        # initramfs provided by config file only
         elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is ''):
             if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
@@ -92,9 +92,6 @@ class kernel:
         else:
             if self.fixdotconfig is True:
                 self.remove_option('CONFIG_INITRAMFS_SOURCE')
-
-
-
 
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
@@ -283,8 +280,8 @@ class kernel:
                     self.master_conf['DEFAULT_KERNEL_CC'],    \
                     self.master_conf['DEFAULT_KERNEL_LD'],    \
                     self.master_conf['DEFAULT_KERNEL_AS'],    \
-                    self.arch,                                  \
-                    target,                                     \
+                    self.arch,                                \
+                    target,                                   \
                     verbose)
 
         return command

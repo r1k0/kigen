@@ -1,6 +1,6 @@
 0.2.4
 =====
-TODO: make 'not isstatic' fail saying we can't deal with dynamic linkage, save for later 
+DONE: make 'not isstatic' fail saying we can't deal with dynamic linkage, save for later 
 DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
     - if dynamic then ship it with detected linked libraries
@@ -10,7 +10,7 @@ TODO: dont fail when finding a dynamically linked binary
     - raise a warning f the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked  binary  and get a list of 
     libs to ship
-TODO: kigen kernel --selinux --fixdotconfig or --fixdotconfig=selinux,foo,bar
+TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
 
