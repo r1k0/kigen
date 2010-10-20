@@ -83,7 +83,9 @@ logging.debug(version_conf)
 
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
+
 logging.debug('kigen target is '+target)
+
 logging.debug('dumping command line interface')
 logging.debug(cli)
 logging.debug(verbose)
@@ -115,8 +117,10 @@ if os.path.isdir(temp['work']):
 if cli['nocache'] is True:
     if os.path.isdir(temp['cache']):
         logging.debug('deleting '+temp['cache'])
+
         # delete
         shutil.rmtree(temp['cache'])
+
         # re create
         logging.debug('creating '+temp['cache'])
         os.makedirs(temp['cache'])
