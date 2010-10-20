@@ -313,7 +313,7 @@ class append:
         process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib/luks', self.verbose)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/sbin', self.verbose)
     
-        if os.path.isfile(cryptsetup_bin) and self.hostbin is True:
+        if os.path.isfile(cryptsetup_bin) and self.hostbin is True and isstatic(cryptsetup_bin, self.verbose):
 
             # use from host
             logging.debug('initramfs.append.cryptsetup from %s' % white('host'))
@@ -321,18 +321,18 @@ class append:
             process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
-            if not isstatic(cryptsetup_bin, self.verbose):
-                luks_libs = listdynamiclibs(cryptsetup_bin, self.verbose)
+#            if not isstatic(cryptsetup_bin, self.verbose):
+#                luks_libs = listdynamiclibs(cryptsetup_bin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
+#                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_bin+' is dynamically linked, copying detected libraries'
+#                for i in luks_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(cryptsetup_bin+' is statically linked nothing to do')
 
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
-                print green(' * ') + '... ' + yellow('warning')+': '+cryptsetup_bin+' is dynamically linked, copying detected libraries'
-                for i in luks_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
-            else:
-                logging.debug(cryptsetup_bin+' is statically linked nothing to do')
-
-        elif os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
+        elif os.path.isfile(cryptsetup_sbin) and self.hostbin is True and isstatic(cryptsetup_sbin, self.verbose):
 
             # use from host
             logging.debug('initramfs.append.cryptsetup from %s' % white('host'))
@@ -340,16 +340,16 @@ class append:
             process('cp %s %s/initramfs-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
-            if not isstatic(cryptsetup_sbin, self.verbose):
-                luks_libs = listdynamiclibs(cryptsetup_sbin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries'
-                for i in luks_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
-            else:
-                logging.debug(cryptsetup_sbin+' is statically linked nothing to do')
+#            if not isstatic(cryptsetup_sbin, self.verbose):
+#                luks_libs = listdynamiclibs(cryptsetup_sbin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-luks-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries'
+#                for i in luks_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-luks-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(cryptsetup_sbin+' is statically linked nothing to do')
 
         else:
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
@@ -474,7 +474,7 @@ class append:
 
         dropbear_sbin       = '/usr/sbin/dropbear'
 
-        if os.path.isfile(dropbear_sbin) and self.hostbin is True:
+        if os.path.isfile(dropbear_sbin) and self.hostbin is True and isstatic(dropbear_sbin, self.verbose):
             dbscp_bin           = '/usr/bin/dbscp'  # FIXME assumes host version is patched w/ scp->dbscp because of openssh.
                                                     # FIXME compilation of dropbear sources are not patched hence
                                                     # FIXME if --dropbear --hostbin
@@ -497,16 +497,16 @@ class append:
             process('chmod +x %s/initramfs-dropbear-temp/sbin/dropbear'     % self.temp['work'], self.verbose)
 
             # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too? NO ldd says they all use the same as /usr/sbin/dropbear
-            if not isstatic(dropbear_sbin, self.verbose):
-                dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
-                for i in dropbear_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
-            else:
-                logging.debug('dropbear is static nothing to do')
+#            if not isstatic(dropbear_sbin, self.verbose):
+#                dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
+#                for i in dropbear_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
+#            else:
+#                logging.debug('dropbear is static nothing to do')
 
             # FIXME Mimic dsskey() and rsakey() from dropbear class
 
@@ -605,23 +605,23 @@ class append:
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
 
-        if os.path.isfile(blkid_sbin) and self.hostbin is True:
+        if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
             # use from host
             logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host')
             process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
 
-            if not isstatic(blkid_sbin, self.verbose):
-                blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
-                for i in blkid_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
-            else:
-                logging.debug(blkid_sbin+' is statically linked nothing to do')
+#            if not isstatic(blkid_sbin, self.verbose):
+#                blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
+#                for i in blkid_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(blkid_sbin+' is statically linked nothing to do')
         else:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
@@ -705,7 +705,7 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
         process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
     
-        if os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+        if os.path.isfile(lvm2_static_bin) and self.hostbin is True and isstatic(lvm2_static_bin, self.verbose):
             # use from host
             logging.debug('initramfs.append.lvm2 from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.lvm2 ')+lvm2_static_bin+' from '+white('host')
@@ -714,16 +714,16 @@ class append:
             process('chmod +x %s/initramfs-lvm2-temp/bin/lvm'       % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-lvm2-temp/bin/lvm_static'% self.temp['work'], self.verbose)
 
-            if not isstatic(lvm2_static_bin, self.verbose):
-                lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-lvm2-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
-                for i in lvm2_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
-            else:
-                logging.debug(lvm2_static_bin+' is statically linked nothing to do')
+#            if not isstatic(lvm2_static_bin, self.verbose):
+#                lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-lvm2-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
+#                for i in lvm2_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(lvm2_static_bin+' is statically linked nothing to do')
         else:
             logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
             print green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version']
@@ -836,23 +836,23 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
    
         # check how dmraid binary is linked 
-        if os.path.isfile(dmraid_bin) and self.hostbin is True:
+        if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
             # use from host
             logging.debug('initramfs.append.dmraid from %s' % white('host'))
             print green(' * ') + turquoise('initramfs.append.dmraid ')+ dmraid_bin +' from ' + white('host')
             process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
 
-            if not isstatic(dmraid_bin, self.verbose):
-                dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
-                for i in dmraid_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
-            else:
-                logging.debug(dmraid_bin+' is statically linked nothing to do')
+#            if not isstatic(dmraid_bin, self.verbose):
+#                dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
+#                for i in dmraid_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(dmraid_bin+' is statically linked nothing to do')
         else:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
@@ -1032,7 +1032,7 @@ class append:
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
 
-        if os.path.isfile(strace_bin) and self.hostbin is True:
+        if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
  
             # use from host
             logging.debug('initramfs.append.strace from ' + white('host'))
@@ -1041,16 +1041,16 @@ class append:
             process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
-            if not isstatic(strace_bin, self.verbose):
-                strace_libs = listdynamiclibs(strace_bin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
-                for i in strace_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
-            else:
-                logging.debug(strace_bin+' is statically linked nothing to do')
+#            if not isstatic(strace_bin, self.verbose):
+#                strace_libs = listdynamiclibs(strace_bin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
+#                for i in strace_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(strace_bin+' is statically linked nothing to do')
         else:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
             print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
@@ -1085,7 +1085,7 @@ class append:
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
 
-        if os.path.isfile(screen_bin) and self.hostbin is True:
+        if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
  
              # use from host
             logging.debug('initramfs.append.screen from %s' % white('host'))
@@ -1093,16 +1093,16 @@ class append:
             process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
             process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
-            if not isstatic(screen_bin, self.verbose):
-                screen_libs = listdynamiclibs(screen_bin, self.verbose)
-
-                process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
-                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
-                for i in screen_libs:
-                    print green(' * ') + '... ' + i
-                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
-            else:
-                logging.debug(screen_bin+' is statically linked nothing to do')
+#            if not isstatic(screen_bin, self.verbose):
+#                screen_libs = listdynamiclibs(screen_bin, self.verbose)
+#
+#                process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
+#                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
+#                for i in screen_libs:
+#                    print green(' * ') + '... ' + i
+#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
+#            else:
+#                logging.debug(screen_bin+' is statically linked nothing to do')
         else:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
             print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
