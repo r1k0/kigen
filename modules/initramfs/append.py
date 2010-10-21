@@ -355,7 +355,7 @@ class append:
             logging.debug('initramfs.append.luks ' + self.version_conf['luks-version'])
             print green(' * ') + turquoise('initramfs.append.luks ') + self.version_conf['luks-version']
 
-            if not isstatic(cryptsetup_sbin, self.verbose):
+            if not isstatic(cryptsetup_sbin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is not static, compiling from sources'
 
             if not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
@@ -517,7 +517,7 @@ class append:
             logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
             print green(' * ') + turquoise('initramfs.append.dropbear ') + self.version_conf['dropbear-version']
 
-            if not isstatic(dropbear_sbin, self.verbose):
+            if not isstatic(dropbear_sbin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is not static, compiling from sources'
 
             if not os.path.isfile(dropbear_sbin) and self.hostbin is True:
@@ -631,7 +631,7 @@ class append:
             logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
             print green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version']
 
-            if not isstatic(blkid_sbin, self.verbose):
+            if not isstatic(blkid_sbin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is not static, compiling from sources'
 
             if not os.path.isfile(blkid_sbin) and self.hostbin is True:
@@ -868,7 +868,7 @@ class append:
             logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
             print green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version']
 
-            if not isstatic(dmraid_bin, self.verbose):
+            if not isstatic(dmraid_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(dmraid_bin) and self.hostbin is True:
@@ -1069,7 +1069,7 @@ class append:
             logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
             print green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version']
 
-            if not isstatic(strace_bin, self.verbose):
+            if not isstatic(strace_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(strace_bin) and self.hostbin is True:
@@ -1126,7 +1126,7 @@ class append:
             logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
             print green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version']
 
-            if not isstatic(screen_bin, self.verbose):
+            if not isstatic(screen_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources'
 
             if not os.path.isfile(screen_bin) and self.hostbin is True:
