@@ -1047,4 +1047,4 @@ Note the autodeconnection done by the host thanks to /etc/conf.d/local.
 
     Portage community (linuxrc scripts),
 
-:Version: 0.2.3
+:Version: 0.2.4
