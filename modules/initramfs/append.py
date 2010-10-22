@@ -1072,7 +1072,7 @@ class append:
             if not isstatic(strace_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources'
 
-            if not os.path.isfile(strace_bin) and self.hostbin is True:
+            elif not os.path.isfile(strace_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
@@ -1129,7 +1129,7 @@ class append:
             if not isstatic(screen_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources'
 
-            if not os.path.isfile(screen_bin) and self.hostbin is True:
+            elif not os.path.isfile(screen_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
