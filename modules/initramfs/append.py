@@ -358,7 +358,7 @@ class append:
             if not isstatic(cryptsetup_sbin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is not static, compiling from sources'
 
-            if not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
+            elif not os.path.isfile(cryptsetup_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
@@ -520,7 +520,7 @@ class append:
             if not isstatic(dropbear_sbin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is not static, compiling from sources'
 
-            if not os.path.isfile(dropbear_sbin) and self.hostbin is True:
+            elif not os.path.isfile(dropbear_sbin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
@@ -871,7 +871,7 @@ class append:
             if not isstatic(dmraid_bin, self.verbose) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources'
 
-            if not os.path.isfile(dmraid_bin) and self.hostbin is True:
+            elif not os.path.isfile(dmraid_bin) and self.hostbin is True:
                 print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources'
 
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
