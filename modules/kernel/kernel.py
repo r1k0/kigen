@@ -75,9 +75,16 @@ class kernel:
         fixdotconfiglist = self.fixdotconfig.split(',')
         d = dict()
         for i in fixdotconfiglist:
-            d['i'] = ''
-        print d['initramfs']
-        print d['selinux']
+            d[i] = ''
+            if 'initramfs' in d:
+#                print d['initramfs']
+                # PATCH initramfs kernel option
+                pass
+            if 'selinux' in d:
+#                print d['selinux']
+                # PATCH selinux kernel option
+                pass
+#        print d
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
