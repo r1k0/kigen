@@ -137,8 +137,17 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['menuconfig'], # bool
     print '\t\tInteractive busybox options menu'
     print
+    # fix \t display depending on length of cli[splash']
+    if cli['splash'] != '':
+        if len(cli['splash']) <= 4:
+            tab = '\t\t'
+        elif len(cli['splash']) > 4:
+            tab = '\t'
+    else:
+        tab = '\t\t'
     print 'Features:'
-    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"',
+#    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"',
+    print '  --splash=<theme>           "'cli['splash']+'"',
     print '\t\tInclude splash support (splashutils must be merged)'
 
     print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"',
@@ -179,7 +188,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['debugflag'], # bool
     print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
 
-    # fix \t display depending on length of cli['passwd']
+    # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
         if len(cli['rootpasswd']) <= 4:
             tab = '\t\t'
