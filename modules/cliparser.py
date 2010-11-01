@@ -114,7 +114,7 @@ def cli_parser():
                                     "noboot",                   \
                                     "nosaveconfig",             \
                                     "hostbin",                  \
-                                    "fixdotconfig",             \
+                                    "fixdotconfig=",             \
                                     "getdotconfig=",            \
                                     "debug"])
         except GetoptError, err:
@@ -175,9 +175,12 @@ def cli_parser():
         cli['nosaveconfig'] = False
         if kernel_conf['nosaveconfig'] == 'True':
             cli['nosaveconfig'] = True
-        cli['fixdotconfig'] = False
-        if kernel_conf['fixdotconfig'] == 'True':
-            cli['fixdotconfig'] = True
+#        cli['fixdotconfig'] = False
+#        if kernel_conf['fixdotconfig'] == 'True':
+#            cli['fixdotconfig'] = True
+        cli['fixdotconfig'] = ''
+        if kernel_conf['fixdotconfig'] != '':
+            cli['fixdotconfig'] = kernel_conf['fixdotconfig']
         cli['getdotconfig'] = ''
 
         # target options
@@ -231,7 +234,8 @@ def cli_parser():
             elif o in ("--clean"):
                 cli['clean'] = True
             elif o in ("--fixdotconfig"):
-                cli['fixdotconfig'] = True
+#                cli['fixdotconfig'] = True
+                cli['fixdotconfig'] = a
             elif o in ("--getdotconfig"):
                 cli['getdotconfig'] = a
             else:

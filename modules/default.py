@@ -71,7 +71,47 @@ modules_conf = {
         'MODULES_WAITSCAN':     ''}
 
 # default initramfs values
-initramfs_conf = {}
+# TODO: fill this otherwise if config is commented in /etc/kigen/initramfs/default.conf
+# kigen crash
+initramfs_conf = {
+        'rename': '',       \
+        'keymaps': '',      \
+        'evms': '',         \
+        'lvm2': '',         \
+        'selinux': '',      \
+        'screen': '',       \
+        'rootpasswd': '',   \
+        'defconfig': '',    \
+        'disklabel': '',    \
+        'strace': '',       \
+        'noboot': '',       \
+        'debugflag': '',    \
+        'sres': '',         \
+        'menuconfig': '',   \
+        'dmraid': '',       \
+        'nocache': '',      \
+        'plugin': '',       \
+        'linuxrc': '',      \
+        'glibc': '',        \
+        'zlib': '',         \
+        'libncurses': '',   \
+        'dotconfig': '',    \
+        'dropbear': '',     \
+        'hostbin': '',      \
+        'splash': '',       \
+        'oldconfig': '',    \
+        'ttyecho': '',      \
+        'luks': ''
+        }
 
 # default version values
-version_conf = {}
+version_conf = {
+        'strace-version': '',       \
+        'luks-version': '',         \
+        'screen-version': '',       \
+        'dropbear-version': '',     \
+        'busybox-version': '',      \
+        'dmraid-version': '',       \
+        'lvm2-version': '',         \
+        'e2fsprogs-version': ''
+        }

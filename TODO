@@ -5,10 +5,10 @@ DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
     - if dynamic then ship it with detected linked libraries
 TODO: make --fakemod=/ in case kernel modules are copied from another chroot
-    kigen i --fakemod=/chroot can feed  from kigen k --fakeroot=/chroot
+    kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
 TODO: dont fail when finding a dynamically linked binary
-    - raise a warning f the user passed --plugin maybe the user knows what hes doing
-    - let ldd parse a dynamically linked  binary  and get a list of 
+    - raise a warning if the user passed --plugin maybe the user knows what hes doing
+    - let ldd parse a dynamically linked binary and get a list of 
     libs to ship
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2

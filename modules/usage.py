@@ -68,9 +68,9 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"',
     print '\t\tEmbed initramfs into the kernel'
 
-    print yellow('   --fixdotconfig           '),
-    print kernel_conf['fixdotconfig'],
-    print yellow('\t\t Check and auto fix the kernel config file (experimental)')
+#    print yellow('   --fixdotconfig           '),
+#    print kernel_conf['fixdotconfig'],
+#    print yellow('\t\t Check and auto fix the kernel config file (experimental)')
 
     print '  --clean                   ',
     print kernel_conf['clean'],
@@ -162,7 +162,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
 
     print yellow('  --dmraid                  '),
     print initramfs_conf['dmraid'], # bool
-    print yellow('\t\tInclude dmraid support (host binary or sources)')
+    print yellow('\t\tInclude DMRAID support (host binary or sources)')
 
 #    print yellow('   --selinux                '),
 #    print initramfs_conf['selinux'], # bool
@@ -179,8 +179,16 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['debugflag'], # bool
     print '\t\t Compile dropbear with #define DEBUG_TRACE in debug.h'
 
+    # fix \t display depending on length of cli['passwd']
+    if cli['rootpasswd'] != '':
+        if len(cli['rootpasswd']) <= 4:
+            tab = '\t\t'
+        elif len(cli['rootpasswd']) > 4:
+            tab = '\t'
+    else:
+        tab = '\t\t'
     print '  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"',
-    print '\t\tCreate and set root password (required for dropbear)'
+    print tab+'Create and set root password (required for dropbear)'
 
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
@@ -202,9 +210,18 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['screen'], # bool
     print '\t\tInclude the screen binary tool (host binary or sources)'
 
-    print '  --plugin=/dir[,/dir]       "'+initramfs_conf['plugin']+'"',
-    print '\t\tInclude list of user generated custom roots'
+    # fix \t display depending on length of cli['plugin']
+    if cli['plugin'] != '': 
+        if len(cli['plugin']) <= 4:
+            tab = '\t\t'
+        elif len(cli['plugin']) > 4:
+            tab = '\t'
+    else: 
+        tab = '\t\t'
+    print '  --plugin=/dir[,/dir]       "'+cli['plugin']+'"',
+    print tab+'Include list of user generated custom roots'
     print
+
     print 'Libraries: (host only)'
     print '  --glibc                   ',
     print initramfs_conf['glibc'], # bool
@@ -231,8 +248,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['noboot'],
     print '\t\tDo not copy initramfs to /boot'
 
-    print '  --rename=/file             "'+initramfs_conf['rename']+'"'
-    print '\t\t\t\t\t\tCustom initramfs file name'
+    print '  --rename=/file             "'+initramfs_conf['rename']+'"',
+    print '\t\tCustom initramfs file name'
 
     print '  --logfile=/file            "'+master_conf['logfile']+'"',
     print #'\t\tLog to file'
@@ -243,8 +260,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Handy tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
-    print '\t\t\t\t\t\t Custom extracting directory'
+    print '\t\t\t\t\t\t\t Custom extracting directory'
 
     print '  --compress=/dir            "'+cli['compress']+'"                 Compress directory into initramfs'
     print '   --into=/file              "'+cli['into']+'"'
-    print '\t\t\t\t\t\t Custom initramfs file'
+    print '\t\t\t\t\t\t\t Custom initramfs file'
