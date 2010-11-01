@@ -147,7 +147,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
         tab = '\t\t'
     print 'Features:'
 #    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"',
-    print '  --splash=<theme>           "'cli['splash']+'"',
+    print '  --splash=<theme>           "'+cli['splash']+'"',
     print '\t\tInclude splash support (splashutils must be merged)'
 
     print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"',
