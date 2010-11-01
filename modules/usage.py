@@ -137,18 +137,20 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print initramfs_conf['menuconfig'], # bool
     print '\t\tInteractive busybox options menu'
     print
-    # fix \t display depending on length of cli[splash']
-    if cli['splash'] != '':
-        if len(cli['splash']) <= 4:
-            tab = '\t\t'
-        elif len(cli['splash']) > 4:
-            tab = '\t'
-    else:
-        tab = '\t\t'
+#    # fix \t display depending on length of cli[splash']
+#    if cli['splash'] != '':
+#        if len(cli['splash']) <= 4:
+#            tab = '\t\t'
+#        elif len(cli['splash']) > 4 and len(cli['splash']) < 8:
+#            tab = '\t'
+#        elif len(cli['splash']) > 8:
+#            tab = '\t\t'
+#    else:
+#        tab = '\t\t'
     print 'Features:'
 #    print '  --splash=<theme>           "'+initramfs_conf['splash']+'"',
     print '  --splash=<theme>           "'+cli['splash']+'"',
-    print tab+'Include splash support (splashutils must be merged)'
+    print '\t\tInclude splash support (splashutils must be merged)'
 
     print '   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"',
     print '\t\t Splash resolution, all if not set'
