@@ -70,44 +70,42 @@ class kernel:
             if self.make_mrproper() is not zero: self.fail('mrproper')
         if (self.clean is True) or (self.clean == 'True' ):
             if self.make_clean() is not zero: self.fail('clean')
-
-# self.fixdotconfig looks like : initramfs,selinux
+# =====
+        # self.fixdotconfig looks like : initramfs,selinux
         fixdotconfiglist = self.fixdotconfig.split(',')
         d = dict()
         for i in fixdotconfiglist:
             d[i] = ''
             if 'initramfs' in d:
-#                print d['initramfs']
                 # PATCH initramfs kernel option
-                pass
-            if 'selinux' in d:
-#                print d['selinux']
-                # PATCH selinux kernel option
-                pass
-#        print d
+                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
+#            if 'selinux' in d:
+#                # PATCH selinux kernel option
+#                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
+        print d
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
-#        if self.initramfs is not '':
+        if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
 #            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
 #                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
-#            self.import_user_initramfs(self.initramfs)
+            self.import_user_initramfs(self.initramfs)
         #else:
         #    # ensure previous run with --initramfs have not left INITRAMFS configs if --fixdotconfig
         #    if self.fixdotconfig is True:
         #        self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
         # initramfs provided by config file only
-#        elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is ''):
+        elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is ''):
 #            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
 #                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
-#            self.import_user_initramfs(self.kernel_conf['initramfs'])
+            self.import_user_initramfs(self.kernel_conf['initramfs'])
 #        else:
 #            if self.fixdotconfig is True:
 #                self.remove_option('CONFIG_INITRAMFS_SOURCE')
-
+# =====
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
         if (self.menuconfig is True) or (self.menuconfig == 'True'):
