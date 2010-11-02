@@ -1,6 +1,9 @@
 0.2.4
 =====
 TODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
+    actually /usr/src/linux/scripts/config is buggy
+    patch it and ship it within kigen itself
+    then when happy mail the LKML with the fix
 DONE: make 'not isstatic' fail saying we can't deal with dynamic linkage, save for later 
 DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
