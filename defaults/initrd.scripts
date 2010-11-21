@@ -1094,23 +1094,31 @@ setup_unionfs() {
 }
 
 rundropbear() {
-    if [ -n "$DROPBEAR" ]
+    # getting ip up via dhcp
+    if [ "$DROPBEAR" = "" ] || [ "$DROPBEAR" = "udhcpc" ] || [ "$DROPBEAR" = "dhcp" ] || [ "$DROPBEAR" = "DHCP" ]
     then
         good_msg 'Starting SSH stack'
-
-        echo -e "${BOLD}   ::${NORMAL} Bringing up DHCP..."
+        echo -e "${BOLD}   ::${NORMAL} Bringing up ip via udhcpc..."
         udhcpc
-
-        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
-        dropbear -E || dropbear || echo "Oh crap!"
-
-        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
-        then
-            echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
-            setsid cttyhack sh
-        fi
-
-       [ -x /bin/sh ] && /bin/sh || /bin/ash
+    else
+        # getting static ip up
+        good_msg 'Starting SSH stack'
+        echo -e "${BOLD}   ::${NORMAL} Bringing up static ip $IP..."
+        ifconfig eth0 "$IP"
+        echo -e "${BOLD}   ::${NORMAL} Creating /etc/resolv.conf..."
+        echo "nameserver $NAMESERVER" > /etc/resolv.conf
+        echo "domain $DOMAIN" >> /etc/resolv.conf
     fi
+
+    echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+    dropbear -E || dropbear || echo "Oh crap!"
+
+    if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
+    then
+        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+        setsid cttyhack sh
+    fi
+
+   [ -x /bin/sh ] && /bin/sh || /bin/ash
 }
 

@@ -230,7 +230,15 @@ do
         dodropbear)
             DROPBEAR='yes'
         ;;
-
+        ip\=*)
+            IP=`parse_opt "${x}"`
+        ;;
+        nameserver\=*)
+            NAMESERVER=`parse_opt "${x}"`
+        ;;
+        domain\=*)
+            DOMAIN=`parse_opt "${x}"`
+        ;;
 		nounionfs)
 			USE_UNIONFS_NORMAL=0
 			;;
