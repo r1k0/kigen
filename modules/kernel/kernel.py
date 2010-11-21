@@ -73,16 +73,26 @@ class kernel:
 # =====
         # self.fixdotconfig looks like : initramfs,selinux
         fixdotconfiglist = self.fixdotconfig.split(',')
-        d = dict()
+        d = {}
         for i in fixdotconfiglist:
             d[i] = ''
             if 'initramfs' in d:
                 # PATCH initramfs kernel option
+#                print 'tempinit is'+self.temp['initramfs']
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
 #            if 'selinux' in d:
 #                # PATCH selinux kernel option
-#                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
-        print d
+#                self.add_option('CONFIG_AUDIT=y')
+#                self.add_option('CONFIG_AUDITSYSCALL=y')
+#                self.add_option('CONFIG_AUDIT_TREE=y')
+#                self.add_option('CONFIG_AUDIT_GENERIC=y')
+#                self.add_option('CONFIG_SECURITY_NETWORK=y')
+#                # above required to show SElinux
+#                self.add_option('CONFIG_SECURITY_SELINUX=y')
+#            if 'pax' in d:
+#                # PATCH PaX kernel option
+#                self.add_option('CONFIG_PAX_EMUTRAP=y')
+#        print d
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
@@ -258,7 +268,9 @@ class kernel:
         """
         found, option = self.search_option(option)
         if found[1] is '':
+            # FIXME check if option is y if yes don't use "" if option arg is string use "" as is
             if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
+#            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'='+option[1] + ''+'\n'):
                 print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
 
                 return True
