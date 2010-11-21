@@ -4,6 +4,7 @@ then
     echo "$0 <root device>"
     exit
 fi
+pkill cryptsetup
 /sbin/cryptsetup luksOpen $1 root
 vgscan
 vgchange -a y

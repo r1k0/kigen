@@ -4,6 +4,7 @@ then
     echo "$0 <root device>"
     exit
 fi
+pkill cryptsetup
 /sbin/cryptsetup luksOpen $1 root
 mkdir /newroot
 /sbin/ttyecho -n /dev/console exit
