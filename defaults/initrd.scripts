@@ -1127,15 +1127,14 @@ runnetstack() {
         echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
         # starting dropbear
         dropbear -E || dropbear || echo "Oh crap!"
-    fi
 
-    if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
-    then
-        echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
-        # that's for ctrl+c
-        setsid cttyhack sh
-    fi
-
-   [ -x /bin/sh ] && /bin/sh || /bin/ash
+#        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
+#        then
+#            echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+#            # that's for ctrl+c
+#            setsid cttyhack sh
+#        fi
+#
+#       [ -x /bin/sh ] && /bin/sh || /bin/ash
+   fi
 }
-
