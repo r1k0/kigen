@@ -68,9 +68,16 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print '  --initramfs=/file          "'+kernel_conf['initramfs']+'"',
     print '\t\tEmbed initramfs into the kernel'
 
-#    print yellow('   --fixdotconfig           '),
-#    print kernel_conf['fixdotconfig'],
-#    print yellow('\t\t Check and auto fix the kernel config file (experimental)')
+    if kernel_conf['fixdotconfig'] != '':
+        if len(kernel_conf['fixdotconfig']) <= 4:
+            tab = '\t\t'
+        elif len(kernel_conf['fixdotconfig']) > 4:
+            tab = '\t'
+    else:
+        tab = '\t\t'
+    print yellow('  --fixdotconfig=<feature>  '),
+    print '"'+kernel_conf['fixdotconfig']+'"',
+    print yellow(tab+'Check and auto fix the kernel config file (experimental)')
 
     print '  --clean                   ',
     print kernel_conf['clean'],
