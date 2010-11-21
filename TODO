@@ -6,8 +6,8 @@ TODO: read /etc/fstab and see if there should be /boot mounted
         if no mountit
             copy k/i
     if no pass
-TODO: add ip=udhcpc by default
-    add ip=x.x.x.x and nameserver=x.x.x.x
+DONE: add ip=udhcpc by default
+    add ip=x.x.x.x and nameserver=x.x.x.x netmask=x.x.x.x domain=lan
     and dodropbear is using udhcpc by default if ip= not set
 NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
     actually /usr/src/linux/scripts/config is buggy
