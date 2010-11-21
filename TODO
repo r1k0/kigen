@@ -1,5 +1,11 @@
 0.2.4
 =====
+TODO: read /etc/fstab and see if there should be /boot mounted
+    if yes check it's mounted
+        if yes copy k/i
+        if no mountit
+            copy k/i
+    if no pass
 TODO: add dodropbear=udhcpc
     add dodropbear=10.10.1.1
     and dodropbear is using udhcpc by default
