@@ -6,10 +6,10 @@ TODO: read /etc/fstab and see if there should be /boot mounted
         if no mountit
             copy k/i
     if no pass
-TODO: add dodropbear=udhcpc
-    add dodropbear=10.10.1.1
-    and dodropbear is using udhcpc by default
-TODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
+TODO: add ip=udhcpc by default
+    add ip=x.x.x.x and nameserver=x.x.x.x
+    and dodropbear is using udhcpc by default if ip= not set
+NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
     actually /usr/src/linux/scripts/config is buggy
     patch it and ship it within kigen itself
     then when happy mail the LKML with the fix
