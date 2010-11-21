@@ -1094,18 +1094,27 @@ setup_unionfs() {
 }
 
 runnetstack() {
+    if [ "$IP" != "" ]
+    then
+        good_msg 'Starting SSH stack'
+    fi
+
     # getting ip up via dhcp
     if [ "$IP" = "udhcpc" ] || [ "$IP" = "dhcp" ] || [ "$IP" = "DHCP" ]
     then
-        good_msg 'Starting SSH stack'
         echo -e "${BOLD}   ::${NORMAL} Bringing up ip via udhcpc..."
         udhcpc
     elif [ "$IP" != "" ]
     then
         # getting static ip up
-        good_msg 'Starting SSH stack'
-        echo -e "${BOLD}   ::${NORMAL} Bringing up static ip $IP..."
-        ifconfig eth0 "$IP" "$NETMASK"
+        if [ -n "$NETMASK" ]
+        then
+            echo -e "${BOLD}   ::${NORMAL} Bringing up static ip $IP..."
+            ifconfig eth0 "$IP" netmask "$NETMASK"
+        else
+            echo -e "${BOLD}   ::${NORMAL} Bringing up static ip $IP..."
+            ifconfig eth0 "$IP"
+        fi
         echo -e "${BOLD}   ::${NORMAL} Creating /etc/resolv.conf..."
         if [ -n "$NAMESERVER" ]
         then
