@@ -1,5 +1,8 @@
 0.2.4
 =====
+TODO: add dodropbear=udhcpc
+    add dodropbear=10.10.1.1
+    and dodropbear is using udhcpc by default
 TODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
     actually /usr/src/linux/scripts/config is buggy
     patch it and ship it within kigen itself
