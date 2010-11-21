@@ -1123,6 +1123,7 @@ runnetstack() {
         then
             bad_msg 'ip= kernel parameter is missing value'
             bad_msg 'add to kernel line ip=x.x.x.x or ip=udhcpc'
+        fi
         echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
         # starting dropbear
         dropbear -E || dropbear || echo "Oh crap!"
