@@ -278,8 +278,8 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print 'Handy tools:'
     print '  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file'
     print '   --to=/dir                 "'+cli['to']+'"'
-    print '\t\t\t\t\t\t\t Custom extracting directory'
+    print '\t\t\t\t\t\t Custom extracting directory'
 
     print '  --compress=/dir            "'+cli['compress']+'"                 Compress directory into initramfs'
     print '   --into=/file              "'+cli['into']+'"'
-    print '\t\t\t\t\t\t\t Custom initramfs file'
+    print '\t\t\t\t\t\t Custom initramfs file'
