@@ -233,6 +233,9 @@ do
         ip\=*)
             IP=`parse_opt "${x}"`
         ;;
+        netmask\=*)
+            NETMASK=`parse_opt "${x}"`
+        ;;
         nameserver\=*)
             NAMESERVER=`parse_opt "${x}"`
         ;;
@@ -322,8 +325,11 @@ startVolumes
 
 setup_keymap
 
-# Start SSH daemon and go to shell
-rundropbear
+# Start net stack
+# by udhcpc or static ip=x.x.x.x
+# eventually dropbear and go to shell
+# waiting for user input or SSH connection
+runnetstack
 
 # Initialize LUKS root device except for livecd's
 if [ "${CDROOT}" != 1 ]

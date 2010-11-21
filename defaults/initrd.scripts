@@ -1093,29 +1093,45 @@ setup_unionfs() {
 	fi
 }
 
-rundropbear() {
+runnetstack() {
     # getting ip up via dhcp
-    if [ "$DROPBEAR" = "" ] || [ "$DROPBEAR" = "udhcpc" ] || [ "$DROPBEAR" = "dhcp" ] || [ "$DROPBEAR" = "DHCP" ]
+    if [ "$IP" = "udhcpc" ] || [ "$IP" = "dhcp" ] || [ "$IP" = "DHCP" ]
     then
         good_msg 'Starting SSH stack'
         echo -e "${BOLD}   ::${NORMAL} Bringing up ip via udhcpc..."
         udhcpc
-    else
+    elif [ "$IP" != "" ]
+    then
         # getting static ip up
         good_msg 'Starting SSH stack'
         echo -e "${BOLD}   ::${NORMAL} Bringing up static ip $IP..."
-        ifconfig eth0 "$IP"
+        ifconfig eth0 "$IP" "$NETMASK"
         echo -e "${BOLD}   ::${NORMAL} Creating /etc/resolv.conf..."
-        echo "nameserver $NAMESERVER" > /etc/resolv.conf
-        echo "domain $DOMAIN" >> /etc/resolv.conf
+        if [ -n "$NAMESERVER" ]
+        then
+            echo "nameserver $NAMESERVER" >> /etc/resolv.conf
+        fi
+        if [ -n "$DOMAIN" ]
+        then
+            echo "domain $DOMAIN" >> /etc/resolv.conf
+        fi
     fi
 
-    echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
-    dropbear -E || dropbear || echo "Oh crap!"
+    if [ -n "$DROPBEAR" ]
+    then
+        if [ -z "$IP" ]
+        then
+            bad_msg 'ip= kernel parameter is missing value'
+            bad_msg 'add to kernel line ip=x.x.x.x or ip=udhcpc'
+        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+        # starting dropbear
+        dropbear -E || dropbear || echo "Oh crap!"
+    fi
 
     if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
     then
         echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
+        # that's for ctrl+c
         setsid cttyhack sh
     fi
 
