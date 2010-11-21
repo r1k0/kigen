@@ -1096,7 +1096,7 @@ setup_unionfs() {
 runnetstack() {
     if [ "$IP" != "" ]
     then
-        good_msg 'Starting SSH stack'
+        good_msg 'Starting network stack'
     fi
 
     # getting ip up via dhcp
@@ -1133,7 +1133,7 @@ runnetstack() {
             bad_msg 'ip= kernel parameter is missing value'
             bad_msg 'add to kernel line ip=x.x.x.x or ip=udhcpc'
         fi
-        echo -e "${BOLD}   ::${NORMAL} Starting dropbear daemon..."
+        echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
         # starting dropbear
         dropbear -E || dropbear || echo "Oh crap!"
 
