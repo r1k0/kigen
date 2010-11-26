@@ -170,7 +170,7 @@ if target == 'kernel' or target == 'k':
 
     # copy kernel/system.map to /boot
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
-        if check_boot is True:
+        if check_boot_mount is True:
             logging.debug('>>> copying System.map')
     
             process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
@@ -184,6 +184,8 @@ if target == 'kernel' or target == 'k':
                 print ' with an ' + white('embedded') + ' initramfs'
             else:
                 print
+        else:
+            print yellow(' ! warning ') + '/boot is not mounted'
     
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
@@ -232,10 +234,19 @@ if target == 'initramfs' or target == 'i':
 
     # copy initramfs to /boot
     if cli['noboot'] is False:
-        if check_boot is True:
+        if check_boot_mount() is True:
             logging.debug('>>> copying initramfs')
             print green(' * produced ')+cli['rename']
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+        else:
+            print yellow(' ! warning ') + '/boot is not mounted'
+            if check_boot_fstab() is True:
+                print green(' ! warning ') + '/boot is now mounted'
+                os.system('mount /boot')
+                logging.debug('>>> copying initramfs')
+                print green(' * produced ')+cli['rename']
+                process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+
     
     # leave /boot alone but tell the user where to find his initramfs
     elif cli['noboot'] is True:

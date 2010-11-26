@@ -8,14 +8,21 @@ def fstab():
             array.append(line.split())
     return array
 
-def check_boot():
+def check_boot_fstab():
     array = fstab()
     for i in array:
-        print i
         if i[1] == '/boot':
-            if os.path.ismount('/boot') is True:
-                return True
-            else:
-                return False
-#                if os.system('mount /boot'):
-#                    True
+            return True
+    return False
+
+def check_boot_mount():
+    if os.path.ismount('/boot') is True:
+        return True
+    else:
+        return False
+
+def mount_boot():
+    if os.system('mount /boot'):
+        return True
+    else:
+        return False
