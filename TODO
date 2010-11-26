@@ -1,6 +1,8 @@
 0.2.4
 =====
-TODO: read /etc/fstab and see if there should be /boot mounted
+TODO: check version of busybox .config against version in version.conf and
+    append --oldconfig to cli if they don't match
+DONE: read /etc/fstab and see if there should be /boot mounted
     if yes check it's mounted
         if yes copy k/i
         if no mountit
