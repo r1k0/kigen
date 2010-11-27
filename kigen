@@ -188,20 +188,23 @@ if target == 'kernel' or target == 'k':
             print yellow(' ! warning ') + '/boot is not mounted'
             if check_boot_fstab() is True:
                 print green(' * ') + '/boot is now mounted'
-                os.system('mount /boot')
-                logging.debug('>>> copying System.map')
-    
-                process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
-                print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
-    
-                logging.debug('>>> copying kernel')
-                process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-                print green(' * produced ')+cli['rename'],
-    
-                if cli['initramfs'] is not '':
-                    print ' with an ' + white('embedded') + ' initramfs'
-                else:
-                    print
+                try:
+                    mount_boot()
+                except:
+                    print red('!!!') + 'cannot mount /boot'
+                    sys.exit(1)
+
+            logging.debug('>>> copying System.map')
+            process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
+            print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
+            logging.debug('>>> copying kernel')
+            process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+            print green(' * produced ')+cli['rename'],
+
+            if cli['initramfs'] is not '':
+                print ' with an ' + white('embedded') + ' initramfs'
+            else:
+                print
 
  
     # leave /boot alone but tell the user where to find his kernel/system.map
@@ -258,11 +261,15 @@ if target == 'initramfs' or target == 'i':
         else:
             print yellow(' ! warning ') + '/boot is not mounted'
             if check_boot_fstab() is True:
-                print green(' * ') + '/boot is now mounted'
-                os.system('mount /boot')
-                logging.debug('>>> copying initramfs')
-                print green(' * produced ')+cli['rename']
-                process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+                try:
+                    mount_boot()
+                    print green(' * ') + '/boot is now mounted'
+                except:
+                    print red('!!!') + 'cannot mount /boot'
+                    sys.exit(1)
+            logging.debug('>>> copying initramfs')
+            print green(' * produced ')+cli['rename']
+            process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
     
     # leave /boot alone but tell the user where to find his initramfs
