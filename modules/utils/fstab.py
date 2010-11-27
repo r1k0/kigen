@@ -11,8 +11,11 @@ def fstab():
 def check_boot_fstab():
     array = fstab()
     for i in array:
-        if i[1] == '/boot':
-            return True
+        try:
+            if i[1] == '/boot':
+                return True
+        except:
+            pass
     return False
 
 def check_boot_mount():
