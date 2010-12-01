@@ -106,16 +106,8 @@ class dmraid:
         print green(' * ') + '... dmraid.configure'
         self.chgdir(self.dmraidtmp)
     
-#        return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std']) # once upon a time in static dreamland
-
-#        return os.system('LDFLAGS=-L%s/device-mapper/lib \
-#        return os.system('LDFLAGS="-L%s/LVM2.2.02.77/include/ -Wl,-O1 -Wl,--as-needed -static" \
-#                CFLAGS=-I%s/device-mapper/include \
-#                CPPFLAGS=-I%s/device-mapper/include \
-#                ./configure --enable-static_link --prefix=%s/dmraid %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
         return os.system('LIBS=-ldevmapper ./configure --enable-static_link')
 
-    
     def make(self):
         """
         dmraid Makefile interface to make

@@ -1,8 +1,5 @@
 0.2.4
 =====
-TODO: FIX DMRAID ASAP
-    -L/var/tmp/kigen/work/device-mapper/lib needs to be fed for dmraid-1.0.0.rc16-3
-    damn upstream!
 TODO: add some checks for source archive download site
     the idea is to tell the user that the URL might not be reachable
     * initramfs.append.lvm2 2.02.76 /sbin/lvm.static
