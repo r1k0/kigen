@@ -19,8 +19,8 @@ class busybox:
                 verbose):
 
         self.arch       = arch
-        self.dotconfig     = dotconfig
-        self.master_conf = master_conf
+        self.dotconfig  = dotconfig
+        self.master_conf= master_conf
         self.libdir     = libdir
         self.temp       = temp
         self.defconfig  = defconfig
@@ -44,7 +44,11 @@ class busybox:
                 self.fail('download')
     
         if self.extract() is not zero: self.fail('extract')
-    
+
+        print str(self.bb_version)
+        bb_dotconfig = bbdotconfigversion()
+        print bb_dotconfig
+
         if self.copy_config() is not zero: self.fail('copy_config')
 
         if self.defconfig is True:

@@ -1,5 +1,14 @@
 0.2.4
 =====
+TODO: add some checks for source archive download site
+    the idea is to tell the user that the URL might not be reachable
+    * initramfs.append.lvm2 2.02.76 /sbin/lvm.static
+     * ... lvm2.extract
+    gzip: stdin: unexpected end of file
+    tar: Child returned status 1
+    tar: Error is not recoverable: exiting now
+     * ... lvm2.configure
+    error: cannot change dir to /var/tmp/kigen/work/LVM2.2.02.76
 TODO: check version of busybox .config against version in version.conf and
     append --oldconfig to cli if they don't match
 DONE: read /etc/fstab and see if there should be /boot mounted
