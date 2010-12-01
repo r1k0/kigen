@@ -12,7 +12,7 @@ class dmraid:
         self.temp           = temp
         self.verbose        = verbose
         self.dmraid_ver     = version_conf['dmraid-version']
-        self.dmraidtmp      = temp['work'] + '/dmraid/' + self.dmraid_ver
+        self.dmraidtmp      = temp['work'] + '/dmraid/' + self.dmraid_ver + '/dmraid'
         self.selinux        = selinux
         
     def build(self):
