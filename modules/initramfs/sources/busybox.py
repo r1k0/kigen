@@ -45,9 +45,10 @@ class busybox:
     
         if self.extract() is not zero: self.fail('extract')
 
-        print str(self.bb_version)
-        bb_dotconfig = bbdotconfigversion()
-        print bb_dotconfig
+# FIXME compare bb .config version and the one from version.Conf
+#        print str(self.bb_version)
+#        bb_dotconfig = bbdotconfigversion()
+#        print bb_dotconfig
 
         if self.copy_config() is not zero: self.fail('copy_config')
 
