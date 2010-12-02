@@ -33,7 +33,7 @@ class dmraid:
     
         if self.configure() is not zero: self.fail('configure')
     
-        if self.unset_selinux() is not zero: self.fail('selinux')
+#        if self.unset_selinux() is not zero: self.fail('selinux')
 
         if self.make() is not zero: self.fail('make')
     
@@ -43,15 +43,15 @@ class dmraid:
     
         if self.cache() is not zero: self.fail('cache')
    
-    def set_config(self):
-        self.chgdir(self.dmraidtmp)
-        print green(' * ') + '... dmraid.set_selinux'
-        return os.system('echo "DMRAIDLIBS += -lselinux -lsepol" >> tools/Makefile')
+#    def set_config(self):
+#        self.chgdir(self.dmraidtmp)
+#        print green(' * ') + '... dmraid.set_selinux'
+#        return os.system('echo "DMRAIDLIBS += -lselinux -lsepol" >> tools/Makefile')
 
-    def unset_selinux(self):
-        self.chgdir(self.dmraidtmp)
-        print green(' * ') + '... dmraid.unset_selinux'
-        return os.system('sed -i tools/Makefile -e "s|DMRAIDLIBS += -lselinux||g"')
+#    def unset_selinux(self):
+#        self.chgdir(self.dmraidtmp)
+#        print green(' * ') + '... dmraid.unset_selinux'
+#        return os.system('sed -i tools/Makefile -e "s|DMRAIDLIBS += -lselinux||g"')
 
     def fail(self, step):
         """
@@ -106,7 +106,7 @@ class dmraid:
         print green(' * ') + '... dmraid.configure'
         self.chgdir(self.dmraidtmp)
     
-        return os.system('LIBS=-ldevmapper ./configure --enable-static_link')
+        return os.system('LIBS=-ldevmapper ./configure --enable-static_link %s' % self.verbose['std'])
 
     def make(self):
         """
