@@ -125,7 +125,7 @@ def get_kernel_utsrelease(kerneldir):
     if os.path.isfile(kerneldir + '/include/config/kernel.release'):
         source = kerneldir + '/include/config/kernel.release'
     else:
-        return 'none'
+        return get_kernel_version(kerneldir)
 
     with open(source) as file:
         utsrelease = file.next().rstrip()

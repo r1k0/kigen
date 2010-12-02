@@ -170,6 +170,9 @@ if target == 'kernel' or target == 'k':
                 verbose)
     kobj.build()
 
+    # re-read config cli_parser
+    cli_parser()
+    
     # copy kernel/system.map to /boot
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
         if check_boot_mount() is True:
@@ -262,6 +265,9 @@ if target == 'initramfs' or target == 'i':
                 bootupdateinitrd,       \
                 verbose)
     iobj.build()
+
+    # re-read config cli_parser
+    cli_parser()
 
     # copy initramfs to /boot
     if cli['noboot'] is False:
