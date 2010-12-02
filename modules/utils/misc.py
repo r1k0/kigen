@@ -123,7 +123,7 @@ def get_kernel_utsrelease(kerneldir):
     """
     
     if os.path.isfile(kerneldir + '/include/config/kernel.release'):
-        source = kern + '/include/config/kernel.release'
+        source = kerneldir + '/include/config/kernel.release'
     else:
         return 'none'
 
