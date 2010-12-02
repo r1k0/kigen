@@ -22,9 +22,9 @@ class screen:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/screen-%s.tar.gz' % (get_portdir(self.temp), self.screen_ver)) is not True:
+        if os.path.isfile('%s/screen-%s.tar.gz' % (get_distdir(self.temp), self.screen_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/screen-%s.tar.gz' % (get_portdir(self.temp), self.screen_ver), self.verbose)
+                process('rm %s/screen-%s.tar.gz' % (get_distdir(self.temp), self.screen_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -72,7 +72,7 @@ class screen:
         screen_url = 'http://ftpmirror.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
-        return os.system('/usr/bin/wget %s -O %s/distfiles/screen-%s.tar.gz %s' % (screen_url, get_portdir(self.temp), str(self.screen_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/screen-%s.tar.gz %s' % (screen_url, get_distdir(self.temp), str(self.screen_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -82,7 +82,7 @@ class screen:
         """
         print green(' * ') + '... screen.extract'
     
-        os.system('tar xvfz %s/distfiles/screen-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfz %s/screen-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
         """

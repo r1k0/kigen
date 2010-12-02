@@ -22,9 +22,9 @@ class lvm2:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver)) is not True:
+        if os.path.isfile('%s/LVM2.%s.tgz' % (get_distdir(self.temp), self.lvm2_ver)) is not True:
             if self.download() is not zero:
-                process('rm -v %s/distfiles/LVM2.%s.tgz' % (get_portdir(self.temp), self.lvm2_ver), self.verbose)
+                process('rm -v %s/LVM2.%s.tgz' % (get_distdir(self.temp), self.lvm2_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -76,7 +76,7 @@ class lvm2:
         lvm2_url = 'ftp://sourceware.org/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
     	
         # FIXME utils.shell.process does not remove the output!!!!
-    	return os.system('/usr/bin/wget %s -O %s/distfiles/LVM2.%s.tgz %s' % (lvm2_url, get_portdir(self.temp), self.lvm2_ver, self.verbose['std']))
+    	return os.system('/usr/bin/wget %s -O %s/LVM2.%s.tgz %s' % (lvm2_url, get_distdir(self.temp), self.lvm2_ver, self.verbose['std']))
     
     def extract(self):
     	"""
@@ -86,7 +86,7 @@ class lvm2:
     	"""
     	print green(' * ') + '... lvm2.extract'
 
-    	os.system('tar xvfz %s/distfiles/LVM2.%s.tgz -C %s %s' % (get_portdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
+    	os.system('tar xvfz %s/LVM2.%s.tgz -C %s %s' % (get_distdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
     
     def configure(self):
     	"""

@@ -124,23 +124,24 @@ def is_static(binary_path):
 
     return os.system('LANG="C" LC_ALL="C" objdump -T $1 2>&1 | grep "not a dynamic object" >/dev/null')
 
-def get_portdir(temp):
+def get_distdir(temp):
     """
-    Get portage PORTDIR env var content
+    Get portage DISTDIR env var content
     will create /var/tmp/kigen/distfiles on non portage systems
-
+    
     @arg: none
     @return: string
     """
     if os.path.isfile('/usr/bin/portageq'):
-        portdir = os.popen('portageq envvar PORTDIR').read().strip()
-        if not os.path.isdir(portdir+'/distfiles'):
-            os.mkdir(portdir+'/distfiles')
+        distfiles = os.popen('portageq distdir').read().strip()
+        if not os.path.isdir(distfiles):
+            os.mkdir(distfiles)
     else:
         # non Portage system
-        portdir = temp['root']
+        distfiles = temp['distfiles']
 
-    return portdir
+    return distfiles
+    
 
 def get_sys_modules_list(KV):
     """
