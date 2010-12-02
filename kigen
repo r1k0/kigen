@@ -170,8 +170,8 @@ if target == 'kernel' or target == 'k':
                 verbose)
     kobj.build()
 
-    # re-read config cli_parser
-    cli_parser()
+    # re-read kernel version
+    cli['KV'] = get_kernel_utsrelease(cli['kerneldir'])
     
     # copy kernel/system.map to /boot
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
@@ -266,8 +266,8 @@ if target == 'initramfs' or target == 'i':
                 verbose)
     iobj.build()
 
-    # re-read config cli_parser
-    cli_parser()
+    # re-read kernel version
+    cli['KV'] = get_kernel_utsrelease(cli['kerneldir'])
 
     # copy initramfs to /boot
     if cli['noboot'] is False:
