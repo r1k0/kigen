@@ -128,7 +128,7 @@ def get_kernel_utsrelease(kerneldir):
         return 'none'
 
     with open(source) as file:
-        utsrelease = file.net().rstrip()
+        utsrelease = file.next().rstrip()
 
     return utsrelease
 
