@@ -114,6 +114,24 @@ def get_kernel_version(kerneldir):
 
     return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION']
 
+def get_kernel_utsrelease(kerneldir):
+    """
+    Get the kernel release number
+    
+    @arg: string
+    @return: string
+    """
+    
+    if os.path.isfile(kerneldir + '/include/config/kernel.release'):
+        source = kern + '/include/config/kernel.release'
+    else:
+        return 'none'
+
+    with open(source) as file:
+        utsrelease = file.net().rstrip()
+
+    return utsrelease
+
 def is_static(binary_path):
     """
     Check if binary is statis or not
