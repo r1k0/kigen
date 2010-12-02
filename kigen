@@ -148,6 +148,8 @@ try:
 except Exception:
     logging.debug(temp['distfiles'] + ' already exists!')
 
+is_mount_boot = True
+
 # run the kernel target
 if target == 'kernel' or target == 'k':
 
@@ -187,9 +189,10 @@ if target == 'kernel' or target == 'k':
         else:
             print yellow(' ! warning ') + '/boot is not mounted'
             if check_boot_fstab() is True:
-                print green(' * ') + '/boot is now mounted'
                 try:
                     mount_boot()
+                    is_mount_boot = False
+                    print green(' * ') + '/boot is now mounted'
                 except:
                     print red('!!!') + 'cannot mount /boot'
                     sys.exit(1)
@@ -206,6 +209,14 @@ if target == 'kernel' or target == 'k':
             else:
                 print
 
+            if is_mount_boot is False:
+                print green(' * ') + '/boot is now mounted'
+                try:
+                    umount_boot()
+                    print green(' * ') + '/boot is now unmounted'
+                except:
+                    print red('!!!') + 'cannot umount /boot'
+                    sys.exit(1)
  
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
@@ -263,6 +274,7 @@ if target == 'initramfs' or target == 'i':
             if check_boot_fstab() is True:
                 try:
                     mount_boot()
+                    is_mount_boot = False
                     print green(' * ') + '/boot is now mounted'
                 except:
                     print red('!!!') + 'cannot mount /boot'
@@ -271,7 +283,15 @@ if target == 'initramfs' or target == 'i':
             print green(' * produced ')+cli['rename']
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
-    
+        if is_mount_boot is False:
+            print green(' * ') + '/boot is now mounted'
+            try:
+                umount_boot()
+                print green(' * ') + '/boot is now unmounted'
+            except:
+                print red('!!!') + 'cannot umount /boot'
+                sys.exit(1)
+ 
     # leave /boot alone but tell the user where to find his initramfs
     elif cli['noboot'] is True:
         logging.debug(temp['cache']+'/initramfs-cpio.gz')
