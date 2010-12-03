@@ -229,7 +229,7 @@ def get_config_modules_dict(master_conf):
             'MODULES_USB': master_conf['MODULES_USB'],        \
             'MODULES_FS': master_conf['MODULES_FS'],        \
             'MODULES_CRYPT': master_conf['MODULES_CRYPT'],	\
-            'MODULES_CRYPT': master_conf['MODULES_MISC'],	\
-            'MODULES_MISC': master_conf['MODULES_VIDEO'] }
+            'MODULES_MISC': master_conf['MODULES_MISC'],	\
+            'MODULES_VIDEO': master_conf['MODULES_VIDEO'] }
 
     return modules_config
