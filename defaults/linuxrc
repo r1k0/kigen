@@ -764,6 +764,10 @@ fi
 cd "${CHROOT}"
 mkdir "${CHROOT}/proc" "${CHROOT}/sys" 2>/dev/null
 echo -ne "${BOLD}.${NORMAL}"
+
+# dropbear kill
+[ -d /dev/pts ] && umount /dev/pts && killall dropbear
+
 umount /sys || echo '*: Failed to unmount the ramdisk /sys!'
 umount /proc || echo '*: Failed to unmount the ramdisk /proc!'
 echo -e "${BOLD}.${NORMAL}"

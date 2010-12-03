@@ -705,22 +705,22 @@ openLUKS() {
             LEBEL\=*|UUID\=*)
                 retval=1
                 if [ "${retval}" -ne '0' ]; then
-                    LUKS_DEV=`findfs ${LUKS_DEV}" 2>/dev/null`
+                    DEV=`findfs "${LUKS_DEV}" 2>/dev/null`
                     retval=$?
                 fi
                 if [ "${retval}" -ne '0' ]; then
-                    LUKS_DEV=`busybox findfs "${LUKS_DEV}" 2>/dev/null`
+                    DEV=`busybox findfs "${LUKS_DEV}" 2>/dev/null`
                     retval=$?
                 fi
                 if [ "${retval}" -ne '0' ]; then
-                    LUKS_DEV=`blkid -t "${LUKS_DEV}" | cut -d ":" -f 1 2>/dev/null`
+                    DEV=`blkid -t "${LUKS_DEV}" | cut -d ":" -f 1 2>/dev/null`
                     retval=$?
                 fi
-                if [ "${retval}" = '0' ] && [ -n "${LUKS_DEV}" ]; then
-                    good_msg "Detected crypt_root/crypt_swap=${LUKS_DEV}"
+                if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
+                    good_msg "Detected crypt_${TYPE}=${LUKS_DEV}"
                 fi
         esac
-        LUKS_DEVICE=${LUKS_DEV}
+        LUKS_DEVICE=${DEV}
 	eval local LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
 
 	local DEV_ERROR=0 KEY_ERROR=0 KEYDEV_ERROR=0
