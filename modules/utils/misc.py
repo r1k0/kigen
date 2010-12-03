@@ -200,7 +200,7 @@ def get_config_modules_list(modules_conf):
             +' '+modules_conf['MODULES_PCMCIA']    \
             +' '+modules_conf['MODULES_USB']   \
             +' '+modules_conf['MODULES_FS']   \
-            +' '+modules_conf['MODULES_CRYPT'] \ 
+            +' '+modules_conf['MODULES_CRYPT']   \
             +' '+modules_conf['MODULES_MISC']  
 
     return modules_config
