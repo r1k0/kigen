@@ -70,7 +70,8 @@ modules_conf = {
         'MODULES_USB':          '',             \
         'MODULES_WAITSCAN':     '',		\
         'MODULES_CRYPT':     '',		\
-        'MODULES_MISC':     ''}
+        'MODULES_MISC':     '',		\
+        'MODULES_VIDEO':     ''}
 
 # default initramfs values
 # TODO: fill this otherwise if config is commented in /etc/kigen/initramfs/default.conf

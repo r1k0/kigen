@@ -201,7 +201,8 @@ def get_config_modules_list(modules_conf):
             +' '+modules_conf['MODULES_USB']   \
             +' '+modules_conf['MODULES_FS']   \
             +' '+modules_conf['MODULES_CRYPT']   \
-            +' '+modules_conf['MODULES_MISC']  
+            +' '+modules_conf['MODULES_MISC']   \
+            +' '+modules_conf['MODULES_VIDEO']  
 
     return modules_config
 
@@ -228,6 +229,7 @@ def get_config_modules_dict(master_conf):
             'MODULES_USB': master_conf['MODULES_USB'],        \
             'MODULES_FS': master_conf['MODULES_FS'],        \
             'MODULES_CRYPT': master_conf['MODULES_CRYPT'],	\
-            'MODULES_MISC': master_conf['MODULES_MISC'] }
+            'MODULES_CRYPT': master_conf['MODULES_MISC'],	\
+            'MODULES_MISC': master_conf['MODULES_VIDEO'] }
 
     return modules_config
