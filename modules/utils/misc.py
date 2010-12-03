@@ -199,7 +199,8 @@ def get_config_modules_list(modules_conf):
             +' '+modules_conf['MODULES_FIREWIRE']  \
             +' '+modules_conf['MODULES_PCMCIA']    \
             +' '+modules_conf['MODULES_USB']   \
-            +' '+modules_conf['MODULES_FS']
+            +' '+modules_conf['MODULES_FS']   \
+            +' '+modules_conf['MODULES_CRYPT']  
 
     return modules_config
 
@@ -224,6 +225,7 @@ def get_config_modules_dict(master_conf):
             'MODULES_FIREWIRE': master_conf['MODULES_FIREWIRE'],  \
             'MODULES_PCMCIA': master_conf['MODULES_PCMCIA'],  \
             'MODULES_USB': master_conf['MODULES_USB'],        \
-            'MODULES_FS': master_conf['MODULES_FS'] }
+            'MODULES_FS': master_conf['MODULES_FS'],        \
+            'MODULES_CRYPT': master_conf['MODULES_CRYPT'] }
 
     return modules_config
