@@ -718,8 +718,8 @@ openLUKS() {
                 fi
                 if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
                     good_msg "Detected crypt_${TYPE}=${LUKS_DEV}"
+		    LUKS_DEVICE=${DEV}
                 fi
-                LUKS_DEVICE=${DEV}
                 ;;
         esac
 	eval local LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
