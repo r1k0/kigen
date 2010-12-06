@@ -93,7 +93,8 @@ class screen:
         print green(' * ') + '... screen.configure'
         self.chgdir(self.screentmp)
     
-        return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
+        # @@ return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
+        return os.system('./configure %s' % self.verbose['std'])
     
     def make(self):
         """
