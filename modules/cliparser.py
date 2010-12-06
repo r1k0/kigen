@@ -581,6 +581,8 @@ def cli_parser():
                 cli['strace'] = True
             elif o in ("--screen"):
                 cli['screen'] = True
+                cli['glibc'] = True         # screen needs glibc
+                cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
 
