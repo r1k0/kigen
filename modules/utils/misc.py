@@ -127,7 +127,7 @@ def get_kernel_utsrelease(kerneldir):
     else:
         return get_kernel_version(kerneldir)
 
-    utsrelease = os.popen(kerneldir + '/include/config/kernel.release').read().strip()
+    utsrelease = os.popen('cat ' + kerneldir + '/include/config/kernel.release').read().strip()
 
     return utsrelease
 
