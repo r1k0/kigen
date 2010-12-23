@@ -38,9 +38,9 @@ class busybox:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.bb_version))) is not True:
+        if os.path.isfile('%s/busybox-%s.tar.bz2' % (get_distdir(self.temp), str(self.bb_version))) is not True:
             if self.download() is not zero: 
-                process('rm -v %s/distfiles/busybox-%s.tar.bz2' % (get_portdir(self.temp), str(self.bb_version)), self.verbose)
+                process('rm -v %s/busybox-%s.tar.bz2' % (get_distdir(self.temp), str(self.bb_version)), self.verbose)
                 self.fail('download')
     
         if self.extract() is not zero: self.fail('extract')
@@ -100,7 +100,7 @@ class busybox:
         bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget %s -O %s/distfiles/busybox-%s.tar.bz2 %s' % (bb_url, get_portdir(self.temp), str(self.bb_version), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/busybox-%s.tar.bz2 %s' % (bb_url, get_distdir(self.temp), str(self.bb_version), self.verbose['std']))
     
     def extract(self):
         """
@@ -110,7 +110,7 @@ class busybox:
         """
         print green(' * ') + '... busybox.extract'
 
-        return os.system('tar xvfj %s/distfiles/busybox-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
+        return os.system('tar xvfj %s/busybox-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
     
     def copy_config(self):
         """

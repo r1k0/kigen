@@ -698,7 +698,32 @@ openLUKS() {
 			;;
 	esac
 
-	eval local LUKS_DEVICE='"${CRYPT_'${TYPE}'}"' LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
+	# @@ eval local LUKS_DEVICE='"${CRYPT_'${TYPE}'}"' LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
+        # support LABEL/UUID in crypt_root and crypt_swap init's option.
+        eval local LUKS_DEV='"${CRYPT_'${TYPE}'}"'
+        case "${LUKS_DEV}" in
+            LEBEL\=*|UUID\=*)
+                retval=1
+                if [ "${retval}" -ne '0' ]; then
+                    DEV=`findfs "${LUKS_DEV}" 2>/dev/null`
+                    retval=$?
+                fi
+                if [ "${retval}" -ne '0' ]; then
+                    DEV=`busybox findfs "${LUKS_DEV}" 2>/dev/null`
+                    retval=$?
+                fi
+                if [ "${retval}" -ne '0' ]; then
+                    DEV=`blkid -t "${LUKS_DEV}" | cut -d ":" -f 1 2>/dev/null`
+                    retval=$?
+                fi
+                if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
+                    good_msg "Detected crypt_${TYPE}=${LUKS_DEV}"
+		    LUKS_DEVICE=${DEV}
+                fi
+                ;;
+        esac
+	eval local LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
+
 	local DEV_ERROR=0 KEY_ERROR=0 KEYDEV_ERROR=0
 	local mntkey="/mnt/key/" cryptsetup_options=''
 
@@ -1128,14 +1153,27 @@ runnetstack() {
 
     if [ -n "$DROPBEAR" ]
     then
-        if [ -z "$IP" ]
+        if [ -e /dev/pty0 ]; then # CONFIG_LEGACY_PTYS=n
+            ret=1
+        else
+            good_msg "Trying devpts."
+            [ -d /dev/pts ] || mkdir -p /dev/pts
+            if mount -t devpts /dev/pts /dev/pts 2>/dev/null; then # CONFIG_UNIX98_PTYS=n
+                ret=1
+            else
+                rm -fr /dev/pts
+            fi
+        fi
+
+        if [ "$ret" = '1' ] && [ -z "$IP" ]
         then
             bad_msg 'ip= kernel parameter is missing value'
             bad_msg 'add to kernel line ip=x.x.x.x or ip=udhcpc'
+        else
+            echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
+            # starting dropbear
+            dropbear -E || dropbear || echo "Oh crap!"
         fi
-        echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
-        # starting dropbear
-        dropbear -E || dropbear || echo "Oh crap!"
 
 #        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
 #        then

@@ -114,6 +114,23 @@ def get_kernel_version(kerneldir):
 
     return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION']
 
+def get_kernel_utsrelease(kerneldir):
+    """
+    Get the kernel release number
+    
+    @arg: string
+    @return: string
+    """
+    
+    if os.path.isfile(kerneldir + '/include/config/kernel.release'):
+        source = kerneldir + '/include/config/kernel.release'
+    else:
+        return get_kernel_version(kerneldir)
+
+    utsrelease = os.popen('cat ' + kerneldir + '/include/config/kernel.release').read().strip()
+
+    return utsrelease
+
 def is_static(binary_path):
     """
     Check if binary is statis or not
@@ -124,23 +141,24 @@ def is_static(binary_path):
 
     return os.system('LANG="C" LC_ALL="C" objdump -T $1 2>&1 | grep "not a dynamic object" >/dev/null')
 
-def get_portdir(temp):
+def get_distdir(temp):
     """
-    Get portage PORTDIR env var content
+    Get portage DISTDIR env var content
     will create /var/tmp/kigen/distfiles on non portage systems
-
+    
     @arg: none
     @return: string
     """
     if os.path.isfile('/usr/bin/portageq'):
-        portdir = os.popen('portageq envvar PORTDIR').read().strip()
-        if not os.path.isdir(portdir+'/distfiles'):
-            os.mkdir(portdir+'/distfiles')
+        distfiles = os.popen('portageq distdir').read().strip()
+        if not os.path.isdir(distfiles):
+            os.mkdir(distfiles)
     else:
         # non Portage system
-        portdir = temp['root']
+        distfiles = temp['distfiles']
 
-    return portdir
+    return distfiles
+    
 
 def get_sys_modules_list(KV):
     """
@@ -180,7 +198,10 @@ def get_config_modules_list(modules_conf):
             +' '+modules_conf['MODULES_FIREWIRE']  \
             +' '+modules_conf['MODULES_PCMCIA']    \
             +' '+modules_conf['MODULES_USB']   \
-            +' '+modules_conf['MODULES_FS']
+            +' '+modules_conf['MODULES_FS']   \
+            +' '+modules_conf['MODULES_CRYPT']   \
+            +' '+modules_conf['MODULES_MISC']   \
+            +' '+modules_conf['MODULES_VIDEO']  
 
     return modules_config
 
@@ -205,6 +226,9 @@ def get_config_modules_dict(master_conf):
             'MODULES_FIREWIRE': master_conf['MODULES_FIREWIRE'],  \
             'MODULES_PCMCIA': master_conf['MODULES_PCMCIA'],  \
             'MODULES_USB': master_conf['MODULES_USB'],        \
-            'MODULES_FS': master_conf['MODULES_FS'] }
+            'MODULES_FS': master_conf['MODULES_FS'],        \
+            'MODULES_CRYPT': master_conf['MODULES_CRYPT'],	\
+            'MODULES_MISC': master_conf['MODULES_MISC'],	\
+            'MODULES_VIDEO': master_conf['MODULES_VIDEO'] }
 
     return modules_config

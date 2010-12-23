@@ -15,7 +15,7 @@ def download(fuse_ver, temp, verbose):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	fuse_url = 'http://sourceforge.net/projects/fuse/files/fuse-2.X/'+str(fuse_ver)+'/fuse-'+str(fuse_ver)+'.tar.gz/download'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/fuse-%s.tar.gz %s' % (fuse_url, utils.get_portdir(temp), str(fuse_ver), verbose['std']))
+	return os.system('/usr/bin/wget %s -O %s/fuse-%s.tar.gz %s' % (fuse_url, utils.get_distdir(temp), str(fuse_ver), verbose['std']))
 
 def extract(fuse_ver, temp, verbose):
 	"""
@@ -27,7 +27,7 @@ def extract(fuse_ver, temp, verbose):
 	@return: bool
 	"""
 	print green(' * ') + '... fuse.extract'
-	os.system('tar xvfz %s/distfiles/fuse-%s.tar.gz -C %s %s' % (utils.get_portdir(temp), str(fuse_ver), temp['work'], verbose['std']))
+	os.system('tar xvfz %s/fuse-%s.tar.gz -C %s %s' % (utils.get_distdir(temp), str(fuse_ver), temp['work'], verbose['std']))
 
 # fuse building functions
 def configure(fusetmp, master_config, temp, verbose):
@@ -141,7 +141,7 @@ def build_sequence(master_config, temp, verbose):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/fuse-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['fuse_ver']))) is not True:
+	if os.path.isfile('%s/fuse-%s.tar.gz' % (utils.get_distdir(temp), str(master_config['fuse_ver']))) is not True:
 		ret = download(master_config['fuse_ver'], temp, verbose)
 		if ret is not zero:
 			print red('error: ')+'initramfs.fuse.download() failed'

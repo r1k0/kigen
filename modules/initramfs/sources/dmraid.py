@@ -23,9 +23,9 @@ class dmraid:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/dmraid-%s.tar.bz2' % (get_portdir(self.temp), self.dmraid_ver)) is not True:
+        if os.path.isfile('%s/dmraid-%s.tar.bz2' % (get_distdir(self.temp), self.dmraid_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/dmraid-%s.tar.bz2' % (get_portdir(self.temp), self.dmraid_ver), self.verbose)
+                process('rm %s/dmraid-%s.tar.bz2' % (get_distdir(self.temp), self.dmraid_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -85,7 +85,7 @@ class dmraid:
         dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output
-        return os.system('/usr/bin/wget %s -O %s/distfiles/dmraid-%s.tar.bz2 %s' % (dmraid_url, get_portdir(self.temp), str(self.dmraid_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/dmraid-%s.tar.bz2 %s' % (dmraid_url, get_distdir(self.temp), str(self.dmraid_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -95,7 +95,7 @@ class dmraid:
         """
         print green(' * ') + '... dmraid.extract'
     
-        os.system('tar xvfj %s/distfiles/dmraid-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.dmraid_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfj %s/dmraid-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.dmraid_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
         """

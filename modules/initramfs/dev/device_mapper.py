@@ -25,10 +25,10 @@ class device_mapper:
         zero = int('0')
         ret = True
     
-        if os.path.isfile('%s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(self.temp), self.dm_ver)) is not True:
+        if os.path.isfile('%s/device-mapper.%s.tgz' % (utils.get_distdir(self.temp), self.dm_ver)) is not True:
             ret = self.download()
             if ret is not zero:
-                os.system('rm %s/distfiles/device-mapper.%s.tgz' % (utils.get_portdir(self.temp), self.dm_ver))
+                os.system('rm %s/device-mapper.%s.tgz' % (utils.get_distdir(self.temp), self.dm_ver))
                 self.fail('download')
     
         self.extract()
@@ -89,7 +89,7 @@ class device_mapper:
     	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
     	device_mapper_url = 'http://ftp.snt.utwente.nl/pub/os/linux/gentoo/distfiles/device-mapper.' + self.dm_ver + '.tgz'
     
-    	return os.system('/usr/bin/wget %s -O %s/distfiles/device-mapper.%s.tgz %s' % (device_mapper_url, utils.get_portdir(self.temp), self.dm_ver, self.verbose['std']))
+    	return os.system('/usr/bin/wget %s -O %s/device-mapper.%s.tgz %s' % (device_mapper_url, utils.get_distdir(self.temp), self.dm_ver, self.verbose['std']))
     
     def extract(self):
     	"""
@@ -99,7 +99,7 @@ class device_mapper:
     	"""
     	print green(' * ') + '... device_mapper.extract'
 
-    	os.system('tar xvfz %s/distfiles/device-mapper.%s.tgz -C %s %s' % (utils.get_portdir(self.temp), self.dm_ver, self.temp['work'], self.verbose['std']))
+    	os.system('tar xvfz %s/device-mapper.%s.tgz -C %s %s' % (utils.get_distdir(self.temp), self.dm_ver, self.temp['work'], self.verbose['std']))
     
     def configure(self):
     	"""

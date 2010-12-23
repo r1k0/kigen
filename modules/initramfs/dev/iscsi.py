@@ -15,7 +15,7 @@ def download(iscsi_ver, temp, quiet):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	iscsi_url = 'http://www.open-iscsi.org/bits/open-iscsi-' + str(iscsi_ver) + '.tar.gz'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/open-iscsi-%s.tar.gz %s' % (iscsi_url, utils.get_portdir(temp), str(iscsi_ver), quiet))
+	return os.system('/usr/bin/wget %s -O %s/open-iscsi-%s.tar.gz %s' % (iscsi_url, utils.get_distdir(temp), str(iscsi_ver), quiet))
 
 def extract(iscsi_ver, temp, quiet):
 	"""
@@ -27,7 +27,7 @@ def extract(iscsi_ver, temp, quiet):
 	@return: none because of tar
 	"""
 	print green(' * ') + '... iscsi.extract'
-	os.system('tar xvfz %s/distfiles/open-iscsi-%s.tar.gz -C %s %s' % (utils.get_portdir(temp), str(iscsi_ver), temp['work'], quiet))
+	os.system('tar xvfz %s/open-iscsi-%s.tar.gz -C %s %s' % (utils.get_distdir(temp), str(iscsi_ver), temp['work'], quiet))
 
 # iscsi building functions
 def compile(iscsitmp, master_config, quiet):
@@ -103,7 +103,7 @@ def build_sequence(master_config, temp, quiet):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/open-iscsi-%s.tar.gz' % (utils.get_portdir(temp), str(master_config['iscsi_ver']))) is not True:
+	if os.path.isfile('%s/open-iscsi-%s.tar.gz' % (utils.get_distdir(temp), str(master_config['iscsi_ver']))) is not True:
 		ret = download(master_config['iscsi_ver'], temp, quiet)
 		if ret is not zero:
 			print red('error: ')+'initramfs.iscsi.download() failed'

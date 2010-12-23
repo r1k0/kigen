@@ -22,9 +22,9 @@ class strace:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/strace-%s.tar.bz2' % (get_portdir(self.temp), self.strace_ver)) is not True:
+        if os.path.isfile('%s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/strace-%s.tar.bz2' % (get_portdir(self.temp), self.strace_ver), self.verbose)
+                process('rm %s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -72,7 +72,7 @@ class strace:
         strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget %s -O %s/distfiles/strace-%s.tar.bz2 %s' % (strace_url, get_portdir(self.temp), str(self.strace_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/strace-%s.tar.bz2 %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -82,7 +82,7 @@ class strace:
         """
         print green(' * ') + '... strace.extract'
     
-        os.system('tar xvfj %s/distfiles/strace-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfj %s/strace-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
     
     # strace building functions
     def configure(self):

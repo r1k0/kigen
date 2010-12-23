@@ -29,3 +29,9 @@ def mount_boot():
         return True
     else:
         return False
+
+def umount_boot():
+    if os.system('umount /boot'):
+        return True
+    else:
+        return False

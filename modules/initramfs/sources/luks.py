@@ -22,9 +22,9 @@ class luks:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/distfiles/cryptsetup-%s.tar.bz2' % (get_portdir(self.temp), self.luks_ver)) is not True:
+        if os.path.isfile('%s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver)) is not True:
             if self.download() is not zero: 
-                process('rm -v %s/distfiles/cryptsetup-%s.tar.bz2' % (get_portdir(self.temp), self.luks_ver), self.verbose)
+                process('rm -v %s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -73,7 +73,7 @@ class luks:
         luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
-        return os.system('/usr/bin/wget %s -v -O %s/distfiles/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_portdir(self.temp), str(self.luks_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -v -O %s/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_distdir(self.temp), str(self.luks_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -83,7 +83,7 @@ class luks:
         """
         print green(' * ') + '... luks.extract'
     
-        os.system('tar xvfj %s/distfiles/cryptsetup-%s.tar.bz2 -C %s %s' % (get_portdir(self.temp), str(self.luks_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfj %s/cryptsetup-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.luks_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
         """

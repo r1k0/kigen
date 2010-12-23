@@ -22,9 +22,9 @@ class e2fsprogs:
         """
         ret = zero = int('0')
     
-        if os.path.isfile('%s/distfiles/e2fsprogs-%s.tar.gz' % (get_portdir(self.temp), self.e2fsprogs_ver)) is not True:
+        if os.path.isfile('%s/e2fsprogs-%s.tar.gz' % (get_distdir(self.temp), self.e2fsprogs_ver)) is not True:
             if self.download() is not zero:
-                process('rm %s/distfiles/e2fsprogs-%s.tar.gz' % (get_portdir(self.temp), self.e2fsprogs_ver), self.verbose)
+                process('rm %s/e2fsprogs-%s.tar.gz' % (get_distdir(self.temp), self.e2fsprogs_ver), self.verbose)
                 self.fail('download')
     
         self.extract()
@@ -72,7 +72,7 @@ class e2fsprogs:
         e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output!
-        return os.system('/usr/bin/wget %s -O %s/distfiles/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, get_portdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, get_distdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -82,7 +82,7 @@ class e2fsprogs:
         """
         print green(' * ') + '... e2fsprogs.extract'
     
-        os.system('tar xvfz %s/distfiles/e2fsprogs-%s.tar.gz -C %s %s' % (get_portdir(self.temp), str(self.e2fsprogs_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfz %s/e2fsprogs-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.e2fsprogs_ver), self.temp['work'], self.verbose['std']))
     
     # e2fsprogrs building functions
     def configure(self):

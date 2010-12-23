@@ -46,7 +46,8 @@ def cli_parser():
         cli['kerneldir'] = master_conf['kernel-sources']
     # else: exit
 
-    cli['KV'] = get_kernel_version(cli['kerneldir'])
+    # @@ cli['KV'] = get_kernel_version(cli['kerneldir'])
+    cli['KV'] = get_kernel_utsrelease(cli['kerneldir'])
 
     # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):
@@ -580,6 +581,8 @@ def cli_parser():
                 cli['strace'] = True
             elif o in ("--screen"):
                 cli['screen'] = True
+                cli['glibc'] = True         # screen needs glibc
+                cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
 

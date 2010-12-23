@@ -16,7 +16,7 @@ def download(unionfs_fuse_ver, temp, verbose):
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	unionfs_fuse_url = 'http://podgorny.cz/unionfs-fuse/releases/unionfs-fuse-' + str(unionfs_fuse_ver) + '.tar.bz2'
 
-	return os.system('/usr/bin/wget %s -O %s/distfiles/unionfs-fuse-%s.tar.bz2 %s' % (unionfs_fuse_url, utils.get_portdir(temp), str(unionfs_fuse_ver), verbose['std']))
+	return os.system('/usr/bin/wget %s -O %s/unionfs-fuse-%s.tar.bz2 %s' % (unionfs_fuse_url, utils.get_distdir(temp), str(unionfs_fuse_ver), verbose['std']))
 
 def extract(unionfs_fuse_ver, temp, verbose):
 	"""
@@ -29,7 +29,7 @@ def extract(unionfs_fuse_ver, temp, verbose):
 	@return: bool
 	"""
 	print green(' * ') + '... unionfs_fuse.extract'
-	os.system('tar xvfj %s/distfiles/unionfs-fuse-%s.tar.bz2 -C %s %s' % (utils.get_portdir(temp), str(unionfs_fuse_ver), temp['work'], verbose['std']))
+	os.system('tar xvfj %s/unionfs-fuse-%s.tar.bz2 -C %s %s' % (utils.get_distdir(temp), str(unionfs_fuse_ver), temp['work'], verbose['std']))
 
 # unionfs_fuse building functions
 #def configure(unionfs_fuse_tmp, master_config, temp, verbose):
@@ -131,7 +131,7 @@ def build_sequence(master_config, temp, verbose):
 	zero = int('0')
 	ret = True
 
-	if os.path.isfile('%s/distfiles/unionfs-fuse-%s.tar.bz2' % (utils.get_portdir(temp), str(master_config['unionfs_fuse_ver']))) is not True:
+	if os.path.isfile('%s/unionfs-fuse-%s.tar.bz2' % (utils.get_distdir(temp), str(master_config['unionfs_fuse_ver']))) is not True:
 		ret = download(master_config['unionfs_fuse_ver'], temp, verbose)
 		if ret is not zero:
 			print red('error: ')+'initramfs.unionfs_fuse.download() failed'
