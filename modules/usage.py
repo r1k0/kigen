@@ -272,7 +272,7 @@ def print_usage_initramfs(cli, initramfs_conf, modules_conf):
     print '  --logfile=/file            "'+master_conf['logfile']+'"',
     print #'\t\tLog to file'
 
-    print '  --debug, -d                "'+master_conf['debug']+'"',
+    print '  --debug, -d                 '+master_conf['debug']+'',
     print '\t\tDebug verbose'
     print
     print 'Handy tools:'
