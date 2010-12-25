@@ -122,14 +122,13 @@ def get_kernel_utsrelease(kerneldir):
     @return: string
     """
     
-    if os.path.isfile(kerneldir + '/include/config/kernel.release'):
-        source = kerneldir + '/include/config/kernel.release'
+    source = kerneldir + '/include/config/kernel.release'
+
+    if os.path.isfile(source):
+    	utsrelease = os.popen('cat ' + source).read().strip()
+    	return utsrelease
     else:
         return get_kernel_version(kerneldir)
-
-    utsrelease = os.popen('cat ' + kerneldir + '/include/config/kernel.release').read().strip()
-
-    return utsrelease
 
 def is_static(binary_path):
     """
