@@ -186,7 +186,8 @@ if target == 'kernel' or target == 'k':
     
             logging.debug('>>> copying kernel')
             process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-            print(green(' * produced ')+cli['rename'],end=" ")
+#            print(green(' * produced ')+cli['rename'],end=" ")
+            print green(' * produced ')+cli['rename'],
 
             if cli['initramfs'] is not '':
                 print(' with an ' + white('embedded') + ' initramfs')
