@@ -51,28 +51,28 @@ def cli_parser():
 
     # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):
-        print red('error') + ': ' + cli['kerneldir'] + ' does not exist.'
+        print(red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
         sys.exit(2)
     # exit if kernel version is not found
     if cli['KV'] is 'none':
-        print red('error') + ': ' + cli['kerneldir']+'/Makefile not found'
+        print(red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
     # prevent multiple targets from running
     if 'k' in cliopts and 'i' in cliopts:
-        print red('error: ') + 'kigen cannot run multiple targets at once'
+        print(red('error: ') + 'kigen cannot run multiple targets at once')
         print_usage()
         sys.exit(2)
     elif 'initramfs' in cliopts and 'kernel' in cliopts:
-        print red('error: ') + 'kigen cannot run multiple targets at once'
+        print(red('error: ') + 'kigen cannot run multiple targets at once')
         print_usage()
         sys.exit(2)
     elif 'k' in cliopts and 'initramfs' in cliopts:
-        print red('error: ') + 'kigen cannot run multiple targets at once'
+        print(red('error: ') + 'kigen cannot run multiple targets at once')
         print_usage()
         sys.exit(2)
     elif 'i' in cliopts and 'kernel' in cliopts:
-        print red('error: ') + 'kigen cannot run multiple targets at once'
+        print(red('error: ') + 'kigen cannot run multiple targets at once')
         print_usage()
         sys.exit(2)
 
@@ -528,7 +528,7 @@ def cli_parser():
                 if os.path.isdir(a):
                     cli['firmware'] = a
                 else:
-                    print "%s is not a directory" % a
+                    print("%s is not a directory" % a)
                     sys.exit(2)
             elif o in ("--unionfs-fuse"):
                 cli['unionfs'] = True

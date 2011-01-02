@@ -6,7 +6,7 @@ import logging
 import subprocess
 
 if os.getuid() != 0:
-    print "Get root pal!"
+    print("Get root pal!")
     sys.exit(2)
 
 # get run path
@@ -106,7 +106,7 @@ flavor = identify_flavor()
 logging.debug(flavor)
 
 # show flavor
-print green(' * ') + white(flavor) + ' on ' + white(cli['arch'])
+print(green(' * ') + white(flavor) + ' on ' + white(cli['arch']))
 
 # ensure temp['work'] is clean
 import shutil
@@ -182,58 +182,58 @@ if target == 'kernel' or target == 'k':
             logging.debug('>>> copying System.map')
     
             process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
-            print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
+            print(green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
     
             logging.debug('>>> copying kernel')
             process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-            print green(' * produced ')+cli['rename'],
+            print(green(' * produced ')+cli['rename'],end=" ")
 
             if cli['initramfs'] is not '':
-                print ' with an ' + white('embedded') + ' initramfs'
+                print(' with an ' + white('embedded') + ' initramfs')
             else:
-                print
+                print()
         else:
-            print yellow(' ! warning ') + '/boot is not mounted'
+            print(yellow(' ! warning ') + '/boot is not mounted')
             if check_boot_fstab() is True:
                 try:
                     mount_boot()
                     is_mount_boot = False
-                    print green(' * ') + '/boot is now mounted'
+                    print(green(' * ') + '/boot is now mounted')
                 except:
-                    print red('!!!') + 'cannot mount /boot'
+                    print(red('!!!') + 'cannot mount /boot')
                     sys.exit(1)
 
             logging.debug('>>> copying System.map')
             process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
-            print green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']
+            print(green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
             logging.debug('>>> copying kernel')
             process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-            print green(' * produced ')+cli['rename'],
+            print(green(' * produced ')+cli['rename'], end=" ")
 
             if cli['initramfs'] is not '':
-                print ' with an ' + white('embedded') + ' initramfs'
+                print(' with an ' + white('embedded') + ' initramfs')
             else:
-                print
+                print()
 
             if is_mount_boot is False:
                 try:
                     umount_boot()
-                    print green(' * ') + '/boot is now unmounted'
+                    print(green(' * ') + '/boot is now unmounted')
                 except:
-                    print red('!!!') + 'cannot umount /boot'
+                    print(red('!!!') + 'cannot umount /boot')
                     sys.exit(1)
  
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
         logging.debug(cli['kerneldir']+'/System.map')
-        print green(' * produced ') + cli['kerneldir']+'/System.map'
+        print(green(' * produced ') + cli['kerneldir']+'/System.map')
     
         logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
-        print green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage',
+        print(green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end=" ")
         if cli['initramfs'] is not '':
-            print 'with an ' + white('embedded') + ' initramfs'
+            print('with an ' + white('embedded') + ' initramfs')
         else:
-            print
+            print()
 
     sys.exit(0)
 
@@ -272,34 +272,34 @@ if target == 'initramfs' or target == 'i':
     if cli['noboot'] is False:
         if check_boot_mount() is True:
             logging.debug('>>> copying initramfs')
-            print green(' * produced ')+cli['rename']
+            print(green(' * produced ')+cli['rename'])
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
         else:
-            print yellow(' ! warning ') + '/boot is not mounted'
+            print(yellow(' ! warning ') + '/boot is not mounted')
             if check_boot_fstab() is True:
                 try:
                     mount_boot()
                     is_mount_boot = False
-                    print green(' * ') + '/boot is now mounted'
+                    print(green(' * ') + '/boot is now mounted')
                 except:
-                    print red('!!!') + 'cannot mount /boot'
+                    print(red('!!!') + 'cannot mount /boot')
                     sys.exit(1)
             logging.debug('>>> copying initramfs')
-            print green(' * produced ')+cli['rename']
+            print(green(' * produced ')+cli['rename'])
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
         if is_mount_boot is False:
             try:
                 umount_boot()
-                print green(' * ') + '/boot is now unmounted'
+                print(green(' * ') + '/boot is now unmounted')
             except:
-                print red('!!!') + 'cannot umount /boot'
+                print(red('!!!') + 'cannot umount /boot')
                 sys.exit(1)
  
     # leave /boot alone but tell the user where to find his initramfs
     elif cli['noboot'] is True:
         logging.debug(temp['cache']+'/initramfs-cpio.gz')
-        print green(' * produced ') + temp['cache']+'/initramfs-cpio.gz'
+        print(green(' * produced ') + temp['cache']+'/initramfs-cpio.gz')
 
     sys.exit(0)
 
