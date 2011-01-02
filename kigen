@@ -231,7 +231,8 @@ if target == 'kernel' or target == 'k':
         print(green(' * produced ') + cli['kerneldir']+'/System.map')
     
         logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
-        print(green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end=" ")
+#        print(green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end=" ")
+        print green(' * produced ') + cli['kerneldir']+'/arch/x86/boot/bzImage',
         if cli['initramfs'] is not '':
             print('with an ' + white('embedded') + ' initramfs')
         else:
