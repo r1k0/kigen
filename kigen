@@ -19,7 +19,7 @@ if binpath == '/usr/sbin/kigen':
     # kigen is installed (likely by portage)
     libdir = '/usr/share/kigen'
     # FIXME: find another way to get the pyv, this won't work on debian
-    pyv = os.popen('eselect python show --python2').read().strip()
+    pyv = os.popen('eselect python show --python3').read().strip()
     sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen/modules")
 else:
     # assume we run from current dir
