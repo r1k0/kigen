@@ -46,7 +46,7 @@ class screen:
 
         @return     exit
         """
-        print red('error')+': initramfs.screen.'+step+'() failed'
+        print(red('error')+': initramfs.screen.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -57,7 +57,7 @@ class screen:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -68,7 +68,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.download'
+        print(green(' * ') + '... screen.download')
         screen_url = 'http://ftpmirror.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
@@ -80,7 +80,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.extract'
+        print(green(' * ') + '... screen.extract')
     
         os.system('tar xvfz %s/screen-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
     
@@ -90,7 +90,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.configure'
+        print(green(' * ') + '... screen.configure')
         self.chgdir(self.screentmp)
     
         # @@ return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
@@ -102,7 +102,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.make'
+        print(green(' * ') + '... screen.make')
         self.chgdir(self.screentmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -116,7 +116,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.strip'
+        print(green(' * ') + '... screen.strip')
         self.chgdir(self.screentmp)
     
         return os.system('strip %s/screen ' % self.screentmp)
@@ -130,7 +130,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.compress'
+        print(green(' * ') + '... screen.compress')
         self.chgdir(self.screentmp)
     
         return os.system('bzip2 %s/screen' % self.screentmp)
@@ -141,7 +141,7 @@ class screen:
     
         @return: bool
         """
-        print green(' * ') + '... screen.cache'
+        print(green(' * ') + '... screen.cache')
         self.chgdir(self.screentmp)
     
         return process('mv %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.screen_ver), self.verbose)

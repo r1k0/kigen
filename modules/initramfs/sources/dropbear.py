@@ -54,7 +54,7 @@ class dropbear:
         @arg step   string
         @return     exit
         """
-        print red('error')+': initramfs.dropbear.'+step+'() failed'
+        print(red('error')+': initramfs.dropbear.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -65,7 +65,7 @@ class dropbear:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -76,7 +76,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.download'
+        print(green(' * ') + '... dropbear.download')
         dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
 
 #       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
@@ -88,7 +88,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.extract'
+        print(green(' * ') + '... dropbear.extract')
         self.chgdir(self.temp['work'])
 
         os.system('tar xvfz %s/dropbear-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
@@ -117,7 +117,7 @@ class dropbear:
         Patch debug.h by adding
         #define DEBUG_TRACE
         """
-        print green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE'
+        print(green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE')
         self.chgdir(self.dropbeartmp)
 
         return os.system('mv debug.h debug.h.tmp && echo "#define DEBUG_TRACE" > debug.h && cat debug.h.tmp >> debug.h && rm debug.h.tmp')
@@ -128,7 +128,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.configure'
+        print(green(' * ') + '... dropbear.configure')
         self.chgdir(self.dropbeartmp)
     
         return os.system('CFLAGS="-Os -static -Wall" LDFLAGS="-static" ./configure --disable-zlib %s' % self.verbose['std'])
@@ -139,7 +139,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.make'
+        print(green(' * ') + '... dropbear.make')
         self.chgdir(self.dropbeartmp)
     
         return os.system('STATIC=1 PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" %s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -150,7 +150,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.strip'
+        print(green(' * ') + '... dropbear.strip')
         self.chgdir(self.dropbeartmp)
     
         os.system('strip %s/dbclient'           % self.dropbeartmp)
@@ -163,7 +163,7 @@ class dropbear:
         """
         dropbear dsskey creation
         """
-        print green(' * ') + '... dropbear.dsskey'
+        print(green(' * ') + '... dropbear.dsskey')
         self.chgdir(self.dropbeartmp)
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
 
@@ -173,7 +173,7 @@ class dropbear:
         """
         dropbear rsakey creation
         """
-        print green(' * ') + '... dropbear.rsakey'
+        print(green(' * ') + '... dropbear.rsakey')
         self.chgdir(self.dropbeartmp)
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
 
@@ -185,7 +185,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.compress'
+        print(green(' * ') + '... dropbear.compress')
     
         self.chgdir(self.dropbeartmp)
         # create temp bin and sbin
@@ -204,7 +204,7 @@ class dropbear:
     
         @return: bool
         """
-        print green(' * ') + '... dropbear.cache'
+        print(green(' * ') + '... dropbear.cache')
         self.chgdir(self.dropbeartmp)
     
         return process('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.dropbear_ver), self.verbose)

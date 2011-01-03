@@ -11,7 +11,7 @@ def download(iscsi_ver, temp, quiet):
 	@arg: string
 	@return: bool
 	"""
-	print green(' * ') + '... iscsi.download'
+	print(green(' * ') + '... iscsi.download')
 	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
 	iscsi_url = 'http://www.open-iscsi.org/bits/open-iscsi-' + str(iscsi_ver) + '.tar.gz'
 
@@ -26,7 +26,7 @@ def extract(iscsi_ver, temp, quiet):
 	@arg: string
 	@return: none because of tar
 	"""
-	print green(' * ') + '... iscsi.extract'
+	print(green(' * ') + '... iscsi.extract')
 	os.system('tar xvfz %s/open-iscsi-%s.tar.gz -C %s %s' % (utils.get_distdir(temp), str(iscsi_ver), temp['work'], quiet))
 
 # iscsi building functions
@@ -39,7 +39,7 @@ def compile(iscsitmp, master_config, quiet):
 	@arg: string
 	@return: bool
 	"""
-	print green(' * ') + '... iscsi.compile'
+	print(green(' * ') + '... iscsi.compile')
 	utils.chgdir(iscsitmp)
 
 	return os.system('%s user %s' % (master_config['DEFAULT_UTILS_MAKE'], \
@@ -53,7 +53,7 @@ def strip(master_config, temp):
 	@arg: dict
 	@return: bool
 	"""
-	print green(' * ') + '... iscsi.strip'
+	print(green(' * ') + '... iscsi.strip')
 	utils.chgdir(temp['work'])
 
 	return os.system('strip %s/open-iscsi-%s/usr/iscsistart' % (temp['work'], master_config['iscsi_ver']))
@@ -67,7 +67,7 @@ def compress(master_config, temp, quiet):
 	@arg: string
 	@return: bool
 	"""
-	print green(' * ') + '... iscsi.compress'
+	print(green(' * ') + '... iscsi.compress')
 	utils.chgdir(temp['work'])
 
 	return os.system('bzip2 %s/open-iscsi-%s/usr/iscsistart' % (temp['work'], master_config['iscsi_ver']))
@@ -82,7 +82,7 @@ def cache(iscsitmp, master_config, temp, quiet): # TODO pass arch? should we add
 	@arg: string
 	@return: bool
 	"""
-	print green(' * ') + '... iscsi.cache'
+	print(green(' * ') + '... iscsi.cache')
 	utils.chgdir(iscsitmp)
 	mvv = ''
 	if quiet is '': mvv = '-v'
@@ -106,7 +106,7 @@ def build_sequence(master_config, temp, quiet):
 	if os.path.isfile('%s/open-iscsi-%s.tar.gz' % (utils.get_distdir(temp), str(master_config['iscsi_ver']))) is not True:
 		ret = download(master_config['iscsi_ver'], temp, quiet)
 		if ret is not zero:
-			print red('error: ')+'initramfs.iscsi.download() failed'
+			print(red('error: ')+'initramfs.iscsi.download() failed')
 			sys.exit(2)
 
 	ret = extract(master_config['iscsi_ver'], temp, quiet)
@@ -114,24 +114,24 @@ def build_sequence(master_config, temp, quiet):
 
 	ret = compile(temp['work'] + '/open-iscsi-' + master_config['iscsi_ver'], master_config, quiet)
 	if ret is not zero:
-		print red('error: ')+'initramfs.iscsi.compile() failed'
+		print(red('error: ')+'initramfs.iscsi.compile() failed')
 		sys.exit(2)
 
 # TODO remove manpage rm -rf %s/iscsi/man % temp['work']
 
 	ret = strip(master_config, temp)
 	if ret is not zero:
-		print red('error: ')+'initramfs.iscsi.strip() failed'
+		print(red('error: ')+'initramfs.iscsi.strip() failed')
 		sys.exit(2)
 
 	ret = compress(master_config, temp, quiet)
 	if ret is not zero: 
-		print red('error: ')+'initramfs.iscsi.compress() failed'
+		print(red('error: ')+'initramfs.iscsi.compress() failed')
 		sys.exit(2)
 
 	ret = cache(temp['work'] + '/open-iscsi-' + master_config['iscsi_ver'], master_config, temp, quiet)
 	if ret is not zero: 
-		print red('error: ')+'initramfs.iscsi.compress() failed'
+		print(red('error: ')+'initramfs.iscsi.compress() failed')
 		sys.exit(2)
 
 	return ret

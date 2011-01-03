@@ -55,6 +55,6 @@ class splash:
 
         @return     exit
         """
-        print red('error')+': initramfs.splash.'+step+'() failed'
+        print(red('error')+': initramfs.splash.'+step+'() failed')
         sys.exit(2)
 

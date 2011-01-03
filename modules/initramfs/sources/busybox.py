@@ -75,7 +75,7 @@ class busybox:
 
         @return     exit
         """
-        print red('error')+': initramfs.busybox.'+step+'() failed'
+        print(red('error')+': initramfs.busybox.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -86,7 +86,7 @@ class busybox:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -96,7 +96,7 @@ class busybox:
         Busybox tarball download command
         
         """
-        print green(' * ') + '... busybox.download'
+        print(green(' * ') + '... busybox.download')
         bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
@@ -108,7 +108,7 @@ class busybox:
         
         @return         boot
         """
-        print green(' * ') + '... busybox.extract'
+        print(green(' * ') + '... busybox.extract')
 
         return os.system('tar xvfj %s/busybox-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
     
@@ -118,7 +118,7 @@ class busybox:
         
         @return         bool
         """
-        print green(' * ') + '... busybox.copy_config '+self.dotconfig
+        print(green(' * ') + '... busybox.copy_config '+self.dotconfig)
         cpv = ''
         if self.verbose['set'] is True: cpv = '-v'
         if self.dotconfig:
@@ -132,7 +132,7 @@ class busybox:
         """
         Busybox binary strip routine
         """
-        print green(' * ') + '... busybox.strip'
+        print(green(' * ') + '... busybox.strip')
         self.chgdir(self.bb_tmp)
 
         return os.system('strip %s/busybox ' % (self.bb_tmp))
@@ -143,7 +143,7 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.compress'
+        print(green(' * ') + '... busybox.compress')
         self.chgdir(self.bb_tmp)
 
         return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.bb_version))
@@ -154,7 +154,7 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.cache'
+        print(green(' * ') + '... busybox.cache')
 
         return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.bb_version, self.temp['cache'], self.bb_version))
     
@@ -182,11 +182,11 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.defconfig'
+        print(green(' * ') + '... busybox.defconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('defconfig', self.verbose['std'])
         if self.verbose['set'] is True:
-            print command
+            print(command)
 
         return os.system(command)
 
@@ -196,11 +196,11 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.oldconfig'
+        print(green(' * ') + '... busybox.oldconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('oldconfig', '')
         if self.verbose['set'] is True:
-        	print command
+        	print(command)
 
         return os.system(command)
     
@@ -210,11 +210,11 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.menuconfig'
+        print(green(' * ') + '... busybox.menuconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('menuconfig', '')
         if self.verbose['set'] is True:
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -224,11 +224,11 @@ class busybox:
         
         @return: bool
         """
-        print green(' * ') + '... busybox.make'
+        print(green(' * ') + '... busybox.make')
         self.chgdir(self.bb_tmp)
         command = self.build_command('all', self.verbose['std'])
         if self.verbose['set'] is True:
-            print command
+            print(command)
         
         return os.system(command)
         

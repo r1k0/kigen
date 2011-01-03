@@ -1,12 +1,12 @@
 import sys
 import os
 from getopt import getopt, GetoptError
-from stdout import white, green, turquoise, yellow, red
-from credits import author, productname, version, description, contributor
-from default import *
-from utils.misc import *
-from usage import *
-from etcparser import *
+import stdout
+import credits
+import default
+import utils.misc
+import usage
+import etcparser
 
 # WARN don't import logging here as it's not already declared in kigen
 
@@ -16,28 +16,29 @@ def cli_parser():
 
     cli = { 'nocache':      '',                 \
             'oldconfig':    True,               \
-            'kerneldir':    kerneldir,          \
-            'arch':         identify_arch()}
+            # typically kernel sources are found here
+            'kerneldir':    '/usr/src/linux',   \
+            'arch':         utils.misc.identify_arch()}
 
     verbose = { 'std':      '',     \
                 'set':      False,  \
                 'logfile':  '/var/log/kigen.log'}
 
-    master_conf = {}
-    kernel_conf = {}
-    modules_conf = {}
-    initramfs_conf = {}
-    version_conf = {}
+    master_conf     = {}
+    kernel_conf     = {}
+    modules_conf    = {}
+    initramfs_conf  = {}
+    version_conf    = {}
 
     # copy command line arguments
     cliopts = sys.argv
 
     # parse /etc/kigen/master.conf
-    master_conf = etc_parser_master()
+    master_conf = etcparser.etc_parser_master()
 
     # if not enough parameters exit with usage
     if len(sys.argv) < 2:
-        print_usage()
+        usage.print_usage()
         sys.exit(2)
 
     # set default kernel sources
@@ -46,34 +47,34 @@ def cli_parser():
         cli['kerneldir'] = master_conf['kernel-sources']
     # else: exit
 
-    # @@ cli['KV'] = get_kernel_version(cli['kerneldir'])
-    cli['KV'] = get_kernel_utsrelease(cli['kerneldir'])
+    # cli['KV'] = utils.misc.get_kernel_version(cli['kerneldir'])
+    cli['KV'] = utils.misc.get_kernel_utsrelease(cli['kerneldir'])
 
     # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):
-        print(red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
+        print(stdout.red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
         sys.exit(2)
     # exit if kernel version is not found
     if cli['KV'] is 'none':
-        print(red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
+        print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
     # prevent multiple targets from running
     if 'k' in cliopts and 'i' in cliopts:
-        print(red('error: ') + 'kigen cannot run multiple targets at once')
-        print_usage()
+        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
+        usage.print_usage()
         sys.exit(2)
     elif 'initramfs' in cliopts and 'kernel' in cliopts:
-        print(red('error: ') + 'kigen cannot run multiple targets at once')
-        print_usage()
+        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
+        usage.print_usage()
         sys.exit(2)
     elif 'k' in cliopts and 'initramfs' in cliopts:
-        print(red('error: ') + 'kigen cannot run multiple targets at once')
-        print_usage()
+        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
+        usage.print_usage()
         sys.exit(2)
     elif 'i' in cliopts and 'kernel' in cliopts:
-        print(red('error: ') + 'kigen cannot run multiple targets at once')
-        print_usage()
+        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
+        usage.print_usage()
         sys.exit(2)
 
     # === parsing for the kernel target ===
@@ -88,7 +89,7 @@ def cli_parser():
             cliopts.remove('k')
 
         # parse 
-        kernel_conf = etc_parser_kernel()
+        kernel_conf = etcparser.etc_parser_kernel()
 
         try:
             # parse command line
@@ -118,8 +119,8 @@ def cli_parser():
                                     "fixdotconfig=",             \
                                     "getdotconfig=",            \
                                     "debug"])
-        except GetoptError, err:
-            print str(err) # "option -a not recognized"
+        except GetoptError as err:
+            print(str(err)) # "option -a not recognized"
             print_usage()
             sys.exit(2)
 
@@ -187,13 +188,13 @@ def cli_parser():
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_kernel(cli, master_conf, kernel_conf)
+                usage.print_usage_kernel(cli, master_conf, kernel_conf)
                 sys.exit(0)
             elif o in ("--credits"):
-                print_credits()
+                usage.print_credits()
                 sys.exit(0)
             elif o in ("--version"):
-                print_version()
+                usage.print_version()
                 sys.exit(0)
             # have to declare logfile here too
             elif o in ("--logfile="):
@@ -255,7 +256,7 @@ def cli_parser():
 
         # parse /etc/kigen/initramfs/modules.conf and 
         # /etc/kigen/initramfs/initramfs.conf
-        initramfs_conf, modules_conf, version_conf = etc_parser_initramfs()
+        initramfs_conf, modules_conf, version_conf = etcparser.etc_parser_initramfs()
 
         try:
             # parse command line
@@ -308,8 +309,8 @@ def cli_parser():
                                     "screen",       \
                                     "debugflag",    \
                                     "debug"])
-        except GetoptError, err:
-            print str(err) # "option -a not recognized"
+        except GetoptError as err:
+            print(str(err)) # "option -a not recognized"
             print_usage()
             sys.exit(2)
     
@@ -431,6 +432,8 @@ def cli_parser():
         if initramfs_conf['zlib'] == 'True':
             cli['zlib'] = True
 
+        print(cli['arch'])
+        print(cli['KV'])
         cli['rename']       = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         if initramfs_conf['rename'] != '':
             cli['rename'] = initramfs_conf['rename']
@@ -477,13 +480,13 @@ def cli_parser():
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage_initramfs(cli, initramfs_conf, modules_conf)
+                usage.print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf)
                 sys.exit(0)
             elif o in ("--credits"):
-                print_credits()
+                usage.print_credits()
                 sys.exit(0)
             elif o in ("--version"):
-                print_version()
+                usage.print_version()
                 sys.exit(0)
             # have to declare logfile here too
             elif o in ("--logfile="):
@@ -528,7 +531,7 @@ def cli_parser():
                 if os.path.isdir(a):
                     cli['firmware'] = a
                 else:
-                    print("%s is not a directory" % a)
+                    print(("%s is not a directory" % a))
                     sys.exit(2)
             elif o in ("--unionfs-fuse"):
                 cli['unionfs'] = True
@@ -596,22 +599,22 @@ def cli_parser():
                                 "help",             \
                                 "version",          \
                                 "credits"])
-        except GetoptError, err:
-            print str(err) # "option -a not recognized"
-            print_usage()
+        except GetoptError as err:
+            print(str(err)) # "option -a not recognized"
+            usage.print_usage()
             sys.exit(2)
 
         # single options
         for o, a in opts:
             if o in ("-h", "--help"):
-                print_usage()
-                print_examples()
+                usage.print_usage()
+                usage.print_examples()
                 sys.exit(0)
             elif o in ("--version"):
-                print_version()
+                usage.print_version()
                 sys.exit(0)
             elif o in ("--credits"):
-                print_credits()
+                usage.print_credits()
                 sys.exit(0)
             else:
                 assert False, "uncaught option"

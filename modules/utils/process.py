@@ -15,7 +15,7 @@ def process_pipe(cmd, verbose):
     @return: ret, output #, err
     """
     if verbose['set'] is True:
-        print cmd
+        print(cmd)
     cmd = cmd.split("|")
     logging.debug(cmd)
 
@@ -37,7 +37,7 @@ def process_redir(cmd, verbose):
     @return: ret, output #, err
     """
     if verbose['set'] is True:
-        print cmd
+        print(cmd)
     cmd = cmd.split(">")
     logging.debug(cmd)
 
@@ -49,7 +49,7 @@ def process_redir(cmd, verbose):
     # FIXME single pass
     # does not loop else you passd multiple files
     for k in cmdlines[1]:
-        f = open(k,'w')
+        f = open(k,'wb')
         f.writelines(p.stdout)
         f.close
 
@@ -67,7 +67,7 @@ def process_append(cmd, verbose):
     @return: ret, output #, err
     """
     if verbose['set'] is True:
-        print cmd
+        print(cmd)
     cmd = cmd.split(">>")
     logging.debug(cmd)
 
@@ -79,7 +79,7 @@ def process_append(cmd, verbose):
     # FIXME single pass
     # does not loop else you passd multiple files
     for k in cmdlines[1]:
-        f = open(k,'a')
+        f = open(k,'ab')
         f.writelines(p.stdout)
         f.close
 
@@ -95,7 +95,7 @@ def process_star(cmd, verbose):
     Don't use for anything else than 'cp' or 'rm'
     """
     if verbose['set'] is True:
-        print cmd
+        print(cmd)
 
     cmd = cmd.split()
 
@@ -139,7 +139,7 @@ def process(cmd, verbose):
     @return: ret, output #, err
     """
     if verbose['set'] is True:
-        print cmd
+        print(cmd)
     cmd = cmd.split()
     logging.debug(cmd)
 

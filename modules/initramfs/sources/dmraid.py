@@ -59,7 +59,7 @@ class dmraid:
 
         @return     exit
         """
-        print red('error')+': initramfs.dmraid.'+step+'() failed'
+        print(red('error')+': initramfs.dmraid.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -70,7 +70,7 @@ class dmraid:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -81,7 +81,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.download'
+        print(green(' * ') + '... dmraid.download')
         dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output
@@ -93,7 +93,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.extract'
+        print(green(' * ') + '... dmraid.extract')
     
         os.system('tar xvfj %s/dmraid-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.dmraid_ver), self.temp['work'], self.verbose['std']))
     
@@ -103,7 +103,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.configure'
+        print(green(' * ') + '... dmraid.configure')
         self.chgdir(self.dmraidtmp)
     
         return os.system('LIBS=-ldevmapper ./configure --enable-static_link %s' % self.verbose['std'])
@@ -114,7 +114,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.make'
+        print(green(' * ') + '... dmraid.make')
         self.chgdir(self.dmraidtmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -128,7 +128,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.strip'
+        print(green(' * ') + '... dmraid.strip')
         self.chgdir(self.dmraidtmp)
     
         return os.system('strip %s/tools/dmraid' % self.dmraidtmp)
@@ -143,7 +143,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.compress'
+        print(green(' * ') + '... dmraid.compress')
         self.chgdir(self.dmraidtmp)
     
         return os.system('bzip2 %s/tools/dmraid' % self.dmraidtmp)
@@ -154,7 +154,7 @@ class dmraid:
     
         @return: bool
         """
-        print green(' * ') + '... dmraid.cache'
+        print(green(' * ') + '... dmraid.cache')
         self.chgdir(self.dmraidtmp)
     
         return process('mv %s/tools/dmraid.bz2 %s/dmraid.static-%s.bz2' % (self.dmraidtmp, self.temp['cache'], self.dmraid_ver), self.verbose)

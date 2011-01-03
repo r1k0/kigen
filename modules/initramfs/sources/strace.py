@@ -46,7 +46,7 @@ class strace:
 
         @return     exit
         """
-        print red('error')+': initramfs.strace.'+step+'() failed'
+        print(red('error')+': initramfs.strace.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -57,7 +57,7 @@ class strace:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -68,7 +68,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.download'
+        print(green(' * ') + '... strace.download')
         strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
@@ -80,7 +80,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.extract'
+        print(green(' * ') + '... strace.extract')
     
         os.system('tar xvfj %s/strace-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
     
@@ -91,7 +91,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.configure'
+        print(green(' * ') + '... strace.configure')
         self.chgdir(self.stracetmp)
     
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
@@ -102,7 +102,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.make'
+        print(green(' * ') + '... strace.make')
         self.chgdir(self.stracetmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -116,7 +116,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.strip'
+        print(green(' * ') + '... strace.strip')
         self.chgdir(self.stracetmp)
     
         return os.system('strip %s/strace ' % self.stracetmp)
@@ -130,7 +130,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.compress'
+        print(green(' * ') + '... strace.compress')
         self.chgdir(self.stracetmp)
     
         return os.system('bzip2 %s/strace' % self.stracetmp)
@@ -141,7 +141,7 @@ class strace:
     
         @return: bool
         """
-        print green(' * ') + '... strace.cache'
+        print(green(' * ') + '... strace.cache')
         self.chgdir(self.stracetmp)
     
         return process('mv %s/strace.bz2 %s/strace-%s.bz2' % (self.stracetmp, self.temp['cache'], self.strace_ver), self.verbose)

@@ -1,11 +1,11 @@
 import os
 import sys
 import logging
-import commands
+import subprocess
 from stdout import *
 from utils.process import *
 from utils.misc import *
-from append import append
+from .append import append
 
 class initramfs:
 
@@ -233,7 +233,7 @@ class initramfs:
                     if aobj.plugin(j) is not zero: self.fail('plugin')
 
         # compress initramfs-cpio
-        print green(' * ') + turquoise('initramfs.compress')
+        print(green(' * ') + turquoise('initramfs.compress'))
         logging.debug('>>> compressing final initramfs-cpio')
         if process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose) is not zero: self.fail('compress')
     
@@ -243,6 +243,6 @@ class initramfs:
 
         @return     exit
         """
-        print red('error')+': initramfs.append.'+step+'() failed'
+        print(red('error')+': initramfs.append.'+step+'() failed')
         sys.exit(2)
  

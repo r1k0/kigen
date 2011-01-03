@@ -1,12 +1,12 @@
 import os
 import sys
 import re
-import commands
+import subprocess
 
 # WARN don't import logging here as it's not already declared in kigen
 
 def failed(string):
-    print string
+    print(string)
     sys.exit(2)
 
 def parse_config_file(filename):
@@ -45,7 +45,7 @@ def identify_arch():
     """
     # TODO test and improve identify_arch()
     # FIXME x86 for 32 and 64 or x86_64?
-    uname = commands.getoutput('uname -m | sed -e "s:i[3-6]86:x86:"') #-e "s:x86_64:amd64:" -e "s:parisc:hppa:"')
+    uname = subprocess.getoutput('uname -m | sed -e "s:i[3-6]86:x86:"') #-e "s:x86_64:amd64:" -e "s:parisc:hppa:"')
 
     return uname
 
@@ -95,6 +95,7 @@ def copy_file(source, dest, quiet):
 
     return os.system('cp %s %s %s' % (cpv, source, dest))
 
+# FIXME broke due to python3
 def get_kernel_version(kerneldir):
     """
     Get the kernel version number
@@ -107,9 +108,9 @@ def get_kernel_version(kerneldir):
         return 'none'
     with open(kerneldir+'/Makefile') as file:
         # get first 4lines
-        head = [file.next().replace(" ","") for x in range(4)]
+        head = [file.next().replace(" ","") for x in range(4)]   # <-- FIXME
     import  string
-    head = map(string.strip, head)
+    head = list(map(string.strip, head))
     head = dict(item.split("=") for item in head )
 
     return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION']
@@ -125,8 +126,8 @@ def get_kernel_utsrelease(kerneldir):
     source = kerneldir + '/include/config/kernel.release'
 
     if os.path.isfile(source):
-    	utsrelease = os.popen('cat ' + source).read().strip()
-    	return utsrelease
+        utsrelease = os.popen('cat '+source).read().strip()
+        return utsrelease
     else:
         return get_kernel_version(kerneldir)
 

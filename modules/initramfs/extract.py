@@ -11,7 +11,7 @@ def initramfs(temproot, extract, to, verbose):
     @return: bool
     """
     # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-    print green(' * ') + turquoise('initramfs.extract.initramfs ') + 'to ' + to
+    print(green(' * ') + turquoise('initramfs.extract.initramfs ') + 'to ' + to)
 
     # clean previous root
     if os.path.isdir(to):

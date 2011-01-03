@@ -10,7 +10,7 @@ def initramfs(temproot, compress, into, verbose):
 
     @return: bool
     """
-    print green(' * ')+turquoise('initramfs.compress.initramfs ')+'from '+compress+' into '+into
+    print(green(' * ')+turquoise('initramfs.compress.initramfs ')+'from '+compress+' into '+into)
 
     if os.path.isfile(into):
         from time import strftime

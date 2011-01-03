@@ -63,7 +63,7 @@ class device_mapper:
 
         @return     exit
         """
-        print red('error')+': initramfs.device_mapper.'+step+'() failed'
+        print(red('error')+': initramfs.device_mapper.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -74,7 +74,7 @@ class device_mapper:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -85,7 +85,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.download'
+    	print(green(' * ') + '... device_mapper.download')
     	# TODO: get GENTOO_MIRRORS from portageq (better if I could import a portage module)
     	device_mapper_url = 'http://ftp.snt.utwente.nl/pub/os/linux/gentoo/distfiles/device-mapper.' + self.dm_ver + '.tgz'
     
@@ -97,7 +97,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.extract'
+    	print(green(' * ') + '... device_mapper.extract')
 
     	os.system('tar xvfz %s/device-mapper.%s.tgz -C %s %s' % (utils.get_distdir(self.temp), self.dm_ver, self.temp['work'], self.verbose['std']))
     
@@ -107,7 +107,7 @@ class device_mapper:
 
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.configure'
+    	print(green(' * ') + '... device_mapper.configure')
     	self.chgdir(self.dm_tmp)
     
     	return os.system('./configure --prefix=%s/device-mapper --enable-static_link --disable-selinux %s' % (self.temp['work'], self.verbose['std']))
@@ -118,7 +118,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.make'
+    	print(green(' * ') + '... device_mapper.make')
     	self.chgdir(self.dm_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
@@ -134,7 +134,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.install'
+    	print(green(' * ') + '... device_mapper.install')
     	self.chgdir(self.dm_tmp)
     
     	return os.system('%s %s CC="%s" LD="%s" AS="%s" install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
@@ -150,7 +150,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.strip'
+    	print(green(' * ') + '... device_mapper.strip')
     	self.chgdir(self.temp['work'])
     
     	return os.system('strip %s/device-mapper/sbin/dmsetup' % (self.temp['work']))
@@ -161,7 +161,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.compress'
+    	print(green(' * ') + '... device_mapper.compress')
     	self.chgdir(self.temp['work'])
     
     	return os.system('tar -jcf %s device-mapper %s' % (self.temp['cache']+'/dmsetup-device-mapper-'+self.dm_ver+'.tar.bz2', self.verbose['std']))
@@ -172,7 +172,7 @@ class device_mapper:
     
     	@return: bool
     	"""
-    	print green(' * ') + '... device_mapper.cache'
+    	print(green(' * ') + '... device_mapper.cache')
     	self.chgdir(self.dm_tmp)
     	mvv = ''
     	if self.verbose['set'] is '': mvv = '-v'

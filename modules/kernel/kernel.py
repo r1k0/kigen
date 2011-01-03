@@ -145,7 +145,7 @@ class kernel:
             else:
                 process('mkdir /etc/kernels', self.verbose)
                 process('cp %s %s' % (self.kerneldir+'/.config', '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV), self.verbose)
-            print green(' * saved ') + '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV
+            print(green(' * saved ') + '/etc/kernels/dotconfig-kigen-'+self.arch+'-'+self.KV)
 
     def fail(self, step):
         """
@@ -153,7 +153,7 @@ class kernel:
 
         @return     exit
         """
-        print red('error')+': kernel.'+step+'() failed'
+        print(red('error')+': kernel.'+step+'() failed')
         sys.exit(2)
 
     def chgdir(self, dir):
@@ -164,7 +164,7 @@ class kernel:
         @return: none
         """
         if not os.path.isdir(dir):
-            print red('error') + ': ' + 'cannot change dir to ' + dir
+            print(red('error') + ': ' + 'cannot change dir to ' + dir)
             sys.exit(2)
         if not os.getcwd() == dir:
             os.chdir(dir)
@@ -180,16 +180,16 @@ class kernel:
         """
         cpv = ''
         if self.quiet is '': cpv = '-v'
-        print green(' * ') + turquoise('kernel.copy_config') + ' ' + source + ' -> ' + dest
+        print(green(' * ') + turquoise('kernel.copy_config') + ' ' + source + ' -> ' + dest)
         if os.path.isfile(source):
             return os.system('cp %s %s %s' % (cpv, source, dest))
         else:
-            print red('error: ') + source + " doesn't exist."
+            print(red('error: ') + source + " doesn't exist.")
             sys.exit(2)
 
     # emmbedded initramfs function
     def remove_dotconfig_initramfs(self):
-        print green(' * ') + turquoise('kernel.remove_dotconfig_initramfs ') + 'INITRAMFS'
+        print(green(' * ') + turquoise('kernel.remove_dotconfig_initramfs ') + 'INITRAMFS')
         # FIXME this one bugs
 #        process_redir('grep -v INITRAMFS %s > %s'% (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'), self.verbose)
         os.system('grep -v CONFIG_INITRAMFS_SOURCE %s > %s' % (self.kerneldir + '/.config', self.kerneldir + '/.config.kigen.temp'))
@@ -197,7 +197,7 @@ class kernel:
 
     def enable_dotconfig_initramfs(self):
         kinitramfsdir = self.temp['initramfs']
-        print green(' * ') + turquoise('kernel.enable_dotconfig_initramfs ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"'
+        print(green(' * ') + turquoise('kernel.enable_dotconfig_initramfs ') + 'CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"')
         # FIXME or not? actually let make oldconfig deal with it
         # this sets possible twice CONFIG_INITRAMFS_SOURCE= which oldconfig can cleanup
         file(self.kerneldir + '/.config', 'a').writelines('CONFIG_INITRAMFS_SOURCE="'+kinitramfsdir+'"\n')
@@ -211,7 +211,7 @@ class kernel:
         kinitramfsdir = self.temp['initramfs']
 
         # copy initramfs to /usr/src/linux/usr/initramfs_data.cpio.gz, should we care?
-        print green(' * ') + turquoise('kernel.import_user_initramfs ') + initramfs_from_cli_or_config
+        print(green(' * ') + turquoise('kernel.import_user_initramfs ') + initramfs_from_cli_or_config)
         process('cp %s %s/usr/initramfs_data.cpio.gz' % (initramfs_from_cli_or_config, self.kerneldir), self.verbose)
 
         # extract gzip archive
@@ -271,11 +271,11 @@ class kernel:
             # FIXME check if option is y if yes don't use "" if option arg is string use "" as is
             if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
 #            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'='+option[1] + ''+'\n'):
-                print green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config'
+                print(green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config')
 
                 return True
    
-        print green(' * ') + turquoise('kernel.add_option ') + option[0] + ' already set'
+        print(green(' * ') + turquoise('kernel.add_option ') + option[0] + ' already set')
 
         return False
 
@@ -285,7 +285,7 @@ class kernel:
 
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.remove_option ') + option + ' from ' + self.kerneldir + '/.config'
+        print(green(' * ') + turquoise('kernel.remove_option ') + option + ' from ' + self.kerneldir + '/.config')
         os.system('grep -v %s %s > %s' % (option, self.kerneldir+'/.config', self.kerneldir+'/.config.kigen.temp'))
 
         return os.system('mv %s %s' % (self.kerneldir+'/.config.kigen.temp', self.kerneldir+'/.config'))
@@ -317,11 +317,11 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.mrproper ') + self.KV
+        print(green(' * ') + turquoise('kernel.mrproper ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('mrproper', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -331,11 +331,11 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.clean ') + self.KV
+        print(green(' * ') + turquoise('kernel.clean ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('clean', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -346,11 +346,12 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.oldconfig ') + self.KV
+        print(green(' * ') + turquoise('kernel.oldconfig ') + self.KV)
+        print(self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('oldconfig', '')
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -360,7 +361,7 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.menuconfig ') + self.KV
+        print(green(' * ') + turquoise('kernel.menuconfig ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('menuconfig', '')
 
@@ -372,11 +373,11 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.prepare ') + self.KV
+        print(green(' * ') + turquoise('kernel.prepare ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('prepare', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -386,11 +387,11 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.bzImage ') + self.KV
+        print(green(' * ') + turquoise('kernel.bzImage ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('bzImage', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -400,11 +401,11 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.modules ') + self.KV
+        print(green(' * ') + turquoise('kernel.modules ') + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('modules', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)
     
@@ -414,7 +415,7 @@ class kernel:
         
         @return: bool
         """
-        print green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/' + self.KV
+        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/' + self.KV)
         self.chgdir(self.kerneldir)
         
         # export INSTALL_MOD_PATH 
@@ -422,6 +423,6 @@ class kernel:
     
         command = self.build_command('modules_install', self.quiet)
         if self.quiet is '':
-            print command
+            print(command)
 
         return os.system(command)

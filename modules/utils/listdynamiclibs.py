@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import logging
-import commands
+import subprocess
 
 def listdynamiclibs(binary, verbose):
     """
@@ -13,7 +13,7 @@ def listdynamiclibs(binary, verbose):
     @return:    dynlibs     list
     """
     if verbose['set'] is True:
-        print binary
+        print(binary)
     cmd = []
     cmd.append('ldd')
     logging.debug(binary)
@@ -22,7 +22,7 @@ def listdynamiclibs(binary, verbose):
 
     # subprocess.check_output only support on python-2.7
     # p = subprocess.check_output(cmd)#, stdout=subprocess.PIPE) #, stderr=f) #, shell = True) # , close_fds=True)
-    p = commands.getoutput(' '.join(cmd))
+    p = subprocess.getoutput(' '.join(cmd))
    
     logging.debug(p)
 
