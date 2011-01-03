@@ -347,7 +347,6 @@ class kernel:
         @return: bool
         """
         print(green(' * ') + turquoise('kernel.oldconfig ') + self.KV)
-        print(self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('oldconfig', '')
         if self.quiet is '':

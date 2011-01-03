@@ -432,8 +432,6 @@ def cli_parser():
         if initramfs_conf['zlib'] == 'True':
             cli['zlib'] = True
 
-        print(cli['arch'])
-        print(cli['KV'])
         cli['rename']       = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         if initramfs_conf['rename'] != '':
             cli['rename'] = initramfs_conf['rename']
