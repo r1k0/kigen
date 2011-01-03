@@ -96,6 +96,7 @@ def copy_file(source, dest, quiet):
     return os.system('cp %s %s %s' % (cpv, source, dest))
 
 # FIXME broke due to python3
+# http://stackoverflow.com/questions/1767513/read-first-n-lines-of-a-file-in-python
 def get_kernel_version(kerneldir):
     """
     Get the kernel version number
