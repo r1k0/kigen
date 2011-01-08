@@ -149,7 +149,7 @@ try:
 except Exception:
     logging.debug(temp['distfiles'] + ' already exists!')
 
-from utils.misc import get_kernel_utsrelease
+#from utils.misc import get_kernel_utsrelease
 
 boot_mounted = False
 
@@ -174,7 +174,7 @@ if target == 'kernel' or target == 'k':
     kobj.build()
 
     # re-read kernel version
-    cli['KV'] = get_kernel_utsrelease(cli['kerneldir'])
+    cli['KV'] = get_kernel_version(cli['kerneldir'])
     cli['rename'] = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
     
     # copy kernel/system.map to /boot
