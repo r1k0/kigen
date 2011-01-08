@@ -91,7 +91,7 @@ KIGen is not meant (for now) to be installed on non Portage systems but will in 
 Portage systems kernel boot options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
+KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash).
 Some GRUB examples of kernel command line boot options.
 ::
  - LUKS
@@ -104,7 +104,7 @@ Some GRUB examples of kernel command line boot options.
 
   GRUB 0.97 style
 
-  title KIGEN Gentoo Linux 2.6.36-gentoo-r5
+  title KIGen Gentoo Linux 2.6.36-gentoo-r5
   root (hd0,0)
   kernel /boot/kernel-kigen-x86_64-2.6.36-gentoo-r5 root=/dev/ram0 real_root=/dev/mapper/root crypt_root=/dev/sda2 docrypt dokeymap keymap=be vga=791
   initrd /boot/initramfs-kigen-x86_64-2.6.36-gentoo-r5
