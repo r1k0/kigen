@@ -95,11 +95,9 @@ def copy_file(source, dest, quiet):
 
     return os.system('cp %s %s %s' % (cpv, source, dest))
 
-# FIXME broke due to python3
-# http://stackoverflow.com/questions/1767513/read-first-n-lines-of-a-file-in-python
 def get_kernel_version(kerneldir):
     """
-    Get the kernel version number
+    Get the kernel version number and nickname
 
     @arg: string
     @return: string
@@ -118,24 +116,6 @@ def get_kernel_version(kerneldir):
     head = dict(item.split("=") for item in head )
 
     return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION'], head['NAME']
-
-# DEPRECATED: I don't see a case where get_kernel_version() would break
-# and we have the kernel nickname aka 'Flesh-Eating Bats with Fangs' for 2.6.37
-#def get_kernel_utsrelease(kerneldir):
-#    """
-#    Get the kernel release number
-#    
-#    @arg: string
-#    @return: string
-#    """
-#    
-#    source = kerneldir + '/include/config/kernel.release'
-#
-#    if os.path.isfile(source):
-#        utsrelease = os.popen('cat '+source).read().strip()
-#        return utsrelease
-#    else:
-#        return get_kernel_version(kerneldir)
 
 def is_static(binary_path):
     """

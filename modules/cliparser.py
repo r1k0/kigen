@@ -48,7 +48,6 @@ def cli_parser():
     # else: exit
 
     cli['KV'], cli['KNAME'] = utils.misc.get_kernel_version(cli['kerneldir'])
-#    cli['KV'] = utils.misc.get_kernel_utsrelease(cli['kerneldir'])
 
     # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):

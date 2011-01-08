@@ -107,7 +107,10 @@ flavor = utils.misc.identify_flavor()
 logging.debug(flavor)
 
 # show flavor
-print(green(' * ') + white(flavor) + ' on ' + white(cli['arch']))
+print(green(' * ')+white(flavor)+' on '+white(cli['arch']))
+
+# 
+print(green(' * ')+'Detected kernel sources Makefile version: '+white(cli['KV']+' '+cli['KNAME']))
 
 # ensure temp['work'] is clean
 import shutil
@@ -149,10 +152,7 @@ try:
 except Exception:
     logging.debug(temp['distfiles'] + ' already exists!')
 
-#from utils.misc import get_kernel_utsrelease
-
 boot_mounted = False
-
 # run the kernel target
 if target == 'kernel' or target == 'k':
 
@@ -173,10 +173,6 @@ if target == 'kernel' or target == 'k':
                 verbose)
     kobj.build()
 
-    # re-read kernel version
-    cli['KV'] = get_kernel_version(cli['kerneldir'])
-    cli['rename'] = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
-    
     # copy kernel/system.map to /boot
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
         if check_boot_mount() is True:
