@@ -108,9 +108,7 @@ logging.debug(flavor)
 
 # show flavor
 print(green(' * ')+white(flavor)+' on '+white(cli['arch']))
-
-# 
-print(green(' * ')+'Detected kernel sources Makefile version: '+white(cli['KV']+' '+cli['KNAME']))
+#print(green(' * ')+'Kernel sources Makefile version '+white(cli['KV']+' '+cli['KNAME']))
 
 # ensure temp['work'] is clean
 import shutil

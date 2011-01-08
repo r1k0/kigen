@@ -35,6 +35,7 @@ class kernel:
         self.initramfs      = cli['initramfs']
         self.fixdotconfig   = cli['fixdotconfig']
         self.temp           = temp
+        self.kname          = cli['KNAME']
         self.temp['initramfs'] = self.temp['root'] + '/imported-initramfs'
 
     def build(self):
@@ -42,6 +43,8 @@ class kernel:
         Build kernel
         """
         zero = int('0')
+
+        print(green(' * ')+'Kernel sources Makefile version '+white(self.KV)+' aka '+white(self.kname))
 
         # dotconfig provided by config file
         if self.kernel_conf['dotconfig']:
@@ -317,7 +320,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.mrproper ') + self.KV)
+        print(green(' * ') + turquoise('kernel.mrproper ')) # + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('mrproper', self.quiet)
         if self.quiet is '':
@@ -331,7 +334,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.clean ') + self.KV)
+        print(green(' * ') + turquoise('kernel.clean ')) # + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('clean', self.quiet)
         if self.quiet is '':
@@ -346,7 +349,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.oldconfig ') + self.KV)
+        print(green(' * ') + turquoise('kernel.oldconfig ')) # + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('oldconfig', '')
         if self.quiet is '':
@@ -360,7 +363,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.menuconfig ') + self.KV)
+        print(green(' * ') + turquoise('kernel.menuconfig '))# + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('menuconfig', '')
 
@@ -372,7 +375,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.prepare ') + self.KV)
+        print(green(' * ') + turquoise('kernel.prepare '))# + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('prepare', self.quiet)
         if self.quiet is '':
@@ -386,7 +389,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.bzImage ') + self.KV)
+        print(green(' * ') + turquoise('kernel.bzImage '))# + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('bzImage', self.quiet)
         if self.quiet is '':
@@ -400,7 +403,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.modules ') + self.KV)
+        print(green(' * ') + turquoise('kernel.modules '))# + self.KV)
         self.chgdir(self.kerneldir)
         command = self.build_command('modules', self.quiet)
         if self.quiet is '':
@@ -414,7 +417,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/' + self.KV)
+        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/')# + self.KV)
         self.chgdir(self.kerneldir)
         
         # export INSTALL_MOD_PATH 

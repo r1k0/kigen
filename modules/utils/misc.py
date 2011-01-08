@@ -5,10 +5,6 @@ import subprocess
 
 # WARN don't import logging here as it's not already declared in kigen
 
-def failed(string):
-    print(string)
-    sys.exit(2)
-
 def parse_config_file(filename):
     """
     Parse config file
@@ -155,7 +151,7 @@ def get_sys_modules_list(KV):
     """
     modlist = []
     moddir  = '/lib/modules/'+KV
-    
+   
     for root, subfolders, files in os.walk(moddir):
         for file in files:
             if re.search(".ko", file):

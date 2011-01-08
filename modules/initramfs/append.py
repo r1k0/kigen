@@ -242,11 +242,16 @@ class append:
         #
         # is it really a big deal? I don't think so
     
-        # identify and copy kernel modules
+        # identify and copy host kernel modules
+        if not os.path.isdir('/lib/modules/'+self.KV):
+            self.fail('/lib/modules/'+self.KV+" doesn't exist: have you run 'kigen kernel'?")
         modsyslist  = get_sys_modules_list(self.KV)
+        if not modsyslist:
+            self.fail('Host modules list is empty: have you run "kigen kernel"?')
+        # identify and copy config kernel modules
         modconflist = get_config_modules_list(self.modules_conf) #.split()
         # FIXME: add support for the 'probe' key
-    
+
         # for each module in the list modconflist
         for i in modconflist.split():
             for j in modsyslist:
