@@ -12,7 +12,7 @@ import etcparser
 
 def cli_parser():
 
-    target = 'none'
+    target = []
 
     cli = { 'nocache':      '',                 \
             'oldconfig':    True,               \
@@ -58,33 +58,15 @@ def cli_parser():
         print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
-    # prevent multiple targets from running
-    if 'k' in cliopts and 'i' in cliopts:
-        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
-        usage.print_usage()
-        sys.exit(2)
-    elif 'initramfs' in cliopts and 'kernel' in cliopts:
-        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
-        usage.print_usage()
-        sys.exit(2)
-    elif 'k' in cliopts and 'initramfs' in cliopts:
-        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
-        usage.print_usage()
-        sys.exit(2)
-    elif 'i' in cliopts and 'kernel' in cliopts:
-        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once')
-        usage.print_usage()
-        sys.exit(2)
-
     # === parsing for the kernel target ===
     if 'kernel' in sys.argv or 'k' in sys.argv:
         # we found the kernel target
         # parse accordingly
         if 'kernel' in sys.argv:
-            target = 'kernel'
+            target.append('kernel')
             cliopts.remove('kernel')
         if 'k' in sys.argv:
-            target = 'kernel'
+            target.append('kernel')   
             cliopts.remove('k')
 
         # parse 
@@ -243,14 +225,14 @@ def cli_parser():
                 assert False, "uncaught option"
 
     # === parsing for the initramfs target ===
-    elif 'initramfs' in sys.argv or 'i' in sys.argv:
+    if 'initramfs' in sys.argv or 'i' in sys.argv:
         # we found the initramfs target
         # parse accordingly
         if 'initramfs' in sys.argv:
-            target = 'initramfs'
+            target.append('initramfs')
             cliopts.remove('initramfs')
         if 'i' in sys.argv:
-            target = 'initramfs'
+            target.append('initramfs')
             cliopts.remove('i')
 
         # parse /etc/kigen/initramfs/modules.conf and 
