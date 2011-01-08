@@ -1166,7 +1166,7 @@ It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 APT (Debian/Ubuntu)
 ~~~~~~~~~~~~~~~~~~~
 
-TODO
+TODO?
 
 ==========================================
 Howto boot LUKS/LVM through SSH (dropbear)
