@@ -149,9 +149,9 @@ try:
 except Exception:
     logging.debug(temp['distfiles'] + ' already exists!')
 
-
 from utils.misc import get_kernel_utsrelease
-is_mount_boot = True
+
+boot_mounted = False
 
 # run the kernel target
 if target == 'kernel' or target == 'k':
@@ -194,19 +194,20 @@ if target == 'kernel' or target == 'k':
             else:
                 print()
         else:
-            print(yellow(' ! warning ') + '/boot is not mounted')
             if check_boot_fstab() is True:
                 try:
                     mount_boot()
-                    is_mount_boot = False
-                    print(green(' * ') + '/boot is now mounted')
+                    boot_mounted = True
+                    print(green(' * ') + turquoise('boot.mounted'))
                 except:
                     print(red('!!!') + 'cannot mount /boot')
+                    # FIXME: fallback to cli['noboot'] is True and don't fail
                     sys.exit(1)
 
             logging.debug('>>> copying System.map')
             process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
             print(green(' * produced ') + '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
+
             logging.debug('>>> copying kernel')
             process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
             print(green(' * produced ')+cli['rename'], end='')
@@ -216,10 +217,10 @@ if target == 'kernel' or target == 'k':
             else:
                 print()
 
-            if is_mount_boot is False:
+            if boot_mounted is True:
                 try:
                     umount_boot()
-                    print(green(' * ') + '/boot is now unmounted')
+                    print(green(' * ') + turquoise('boot.umounted'))
                 except:
                     print(red('!!!') + 'cannot umount /boot')
                     sys.exit(1)
@@ -235,8 +236,6 @@ if target == 'kernel' or target == 'k':
             print('with an ' + white('embedded') + ' initramfs')
         else:
             print()
-
-    sys.exit(0)
 
 # run the initramfs target
 if target == 'initramfs' or target == 'i':
@@ -276,23 +275,24 @@ if target == 'initramfs' or target == 'i':
             print(green(' * produced ')+cli['rename'])
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
         else:
-            print(yellow(' ! warning ') + '/boot is not mounted')
             if check_boot_fstab() is True:
                 try:
                     mount_boot()
-                    is_mount_boot = False
-                    print(green(' * ') + '/boot is now mounted')
+                    boot_mounted = True
+                    print(green(' * ') + turquoise('boot.mounted'))
                 except:
                     print(red('!!!') + 'cannot mount /boot')
+                    # FIXME: fallback to cli['noboot'] is True and don't fail
                     sys.exit(1)
+            
             logging.debug('>>> copying initramfs')
             print(green(' * produced ')+cli['rename'])
             process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
 
-        if is_mount_boot is False:
+        if boot_mounted is True:
             try:
                 umount_boot()
-                print(green(' * ') + '/boot is now unmounted')
+                print(green(' * ') + turquoise('boot.umounted'))
             except:
                 print(red('!!!') + 'cannot umount /boot')
                 sys.exit(1)
@@ -301,8 +301,6 @@ if target == 'initramfs' or target == 'i':
     elif cli['noboot'] is True:
         logging.debug(temp['cache']+'/initramfs-cpio.gz')
         print(green(' * produced ') + temp['cache']+'/initramfs-cpio.gz')
-
-    sys.exit(0)
 
 # FIXME unset os.environ['KIGEN_STDOUT']?
 
