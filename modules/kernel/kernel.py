@@ -51,7 +51,7 @@ class kernel:
             # backup the previous .config if found
             if os.path.isfile(self.kernel_conf['dotconfig']):
                 from time import strftime
-                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(strftime("%Y-%m-%d-%H-%M-%S")))
+                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config-' + str(strftime("%Y-%m-%d-%H-%M-%S")))
 
             # copy the custom .config if they are not the same
             if self.kernel_conf['dotconfig'] != self.kerneldir + '/.config':
@@ -62,7 +62,7 @@ class kernel:
             # backup the previous .config if found
             if os.path.isfile(self.kerneldir + '/.config'):
                 from time import strftime
-                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config.' + str(strftime("%Y-%m-%d-%H-%M-%S")))
+                self.copy_config(self.kerneldir + '/.config', self.kerneldir + '/.config-' + str(strftime("%Y-%m-%d-%H-%M-%S")))
 
             # copy the custom .config if they are not the same
             if self.dotconfig != self.kerneldir + '/.config':
