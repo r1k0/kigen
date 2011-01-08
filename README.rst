@@ -93,7 +93,7 @@ Portage systems kernel boot options
 
 KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash)
 Some GRUB examples of kernel command line boot options.
-
+::
  - LUKS
 
  - LUKS + DROPBEAR
