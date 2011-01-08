@@ -1,4 +1,4 @@
-0.2.4
+0.3.0
 =====
 TODO: add some checks for source archive download site
     the idea is to tell the user that the URL might not be reachable
@@ -37,8 +37,9 @@ TODO: dont fail when finding a dynamically linked binary
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
+DONE: make multiple targets callable
 
-0.2.*
+0.3.*
 =====
 TODO: find a way to split append.py a bit more
     dissociate a binary class too? why not
