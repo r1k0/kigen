@@ -47,8 +47,8 @@ def cli_parser():
         cli['kerneldir'] = master_conf['kernel-sources']
     # else: exit
 
-    # cli['KV'] = utils.misc.get_kernel_version(cli['kerneldir'])
-    cli['KV'] = utils.misc.get_kernel_utsrelease(cli['kerneldir'])
+    cli['KV'], cli['KNAME'] = utils.misc.get_kernel_version(cli['kerneldir'])
+#    cli['KV'] = utils.misc.get_kernel_utsrelease(cli['kerneldir'])
 
     # exit if kernel dir doesn't exist
     if not os.path.isdir(cli['kerneldir']):

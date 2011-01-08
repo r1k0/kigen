@@ -107,30 +107,35 @@ def get_kernel_version(kerneldir):
     # best way *here* is to get KV from the sources, not the running KV
     if not os.path.isfile(kerneldir+'/Makefile'):
         return 'none'
-    with open(kerneldir+'/Makefile') as file:
-        # get first 4lines
-        head = [file.next().replace(" ","") for x in range(4)]   # <-- FIXME
-    import  string
-    head = list(map(string.strip, head))
+    head = []
+    nlines = 0
+    for line in open(kerneldir+'/Makefile'):
+        line = line.replace(' ','')
+        head.append(line.rstrip())
+        nlines += 1
+        if nlines >= 5:
+            break
     head = dict(item.split("=") for item in head )
 
-    return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION']
+    return head['VERSION']+"."+head['PATCHLEVEL']+"."+head['SUBLEVEL']+head['EXTRAVERSION'], head['NAME']
 
-def get_kernel_utsrelease(kerneldir):
-    """
-    Get the kernel release number
-    
-    @arg: string
-    @return: string
-    """
-    
-    source = kerneldir + '/include/config/kernel.release'
-
-    if os.path.isfile(source):
-        utsrelease = os.popen('cat '+source).read().strip()
-        return utsrelease
-    else:
-        return get_kernel_version(kerneldir)
+# DEPRECATED: I don't see a case where get_kernel_version() would break
+# and we have the kernel nickname aka 'Flesh-Eating Bats with Fangs' for 2.6.37
+#def get_kernel_utsrelease(kerneldir):
+#    """
+#    Get the kernel release number
+#    
+#    @arg: string
+#    @return: string
+#    """
+#    
+#    source = kerneldir + '/include/config/kernel.release'
+#
+#    if os.path.isfile(source):
+#        utsrelease = os.popen('cat '+source).read().strip()
+#        return utsrelease
+#    else:
+#        return get_kernel_version(kerneldir)
 
 def is_static(binary_path):
     """
