@@ -45,12 +45,24 @@ class busybox:
     
         if self.extract() is not zero: self.fail('extract')
 
-# FIXME compare bb .config version and the one from version.Conf
-#        print str(self.bb_version)
-#        bb_dotconfig = bbdotconfigversion()
-#        print bb_dotconfig
-
         if self.copy_config() is not zero: self.fail('copy_config')
+
+        # compare bb .config version and the one from version.conf
+        # if no match call oldconfig
+        head = []
+        nlines = 0
+        for line in open(self.bb_tmp+'/.config'):
+            line = line.replace(' ','')
+            head.append(line.rstrip())
+            nlines += 1
+            if nlines >= 3:
+                break
+        lhead = head.pop()
+        version = lhead.rsplit(':')
+        version = version.pop()
+        if version != self.bb_version:
+            print(yellow(' * ')+'busybox .config version doesnt match the sources version, calling --oldconfig')
+            self.oldconfig = True
 
         if self.defconfig is True:
             if self.make_defconfig() is not zero: self.fail('defconfig')
