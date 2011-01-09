@@ -102,7 +102,7 @@ def cli_parser():
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
-            print_usage()
+            usage.print_usage()
             sys.exit(2)
 
         # this has to be taken care before quiet is initialized
@@ -292,7 +292,7 @@ def cli_parser():
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
-            print_usage()
+            usage.print_usage()
             sys.exit(2)
     
         # this has to be taken care before quiet is initialized
