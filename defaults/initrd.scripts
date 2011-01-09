@@ -479,7 +479,7 @@ setup_keymap() {
         then
             chooseKeymap
         else
-            warn_msg "/lib/keymaps/${keymap}.map requested but none found: defaulting to en..."
+            warn_msg "/lib/keymaps/${keymap}.map requested but none found: defaulting to us..."
         fi
 
 		[ "${DEVBIND}" = '1' ] && umount /dev
