@@ -475,7 +475,12 @@ setup_keymap() {
 		fi
 		[ ! -e /dev/tty0 ] && ln -s /dev/tty1 /dev/tty0
 
-		[ -f /lib/keymaps/keymapList ] && chooseKeymap
+		if [ -f /lib/keymaps/keymapList ]
+        then
+            chooseKeymap
+        else
+            warn_msg "/lib/keymaps/${keymap}.map requested but none found: defaulting to en..."
+        fi
 
 		[ "${DEVBIND}" = '1' ] && umount /dev
 		
