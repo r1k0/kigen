@@ -9,7 +9,7 @@ TODO: add some checks for source archive download site
     tar: Error is not recoverable: exiting now
      * ... lvm2.configure
     error: cannot change dir to /var/tmp/kigen/work/LVM2.2.02.76
-TODO: check version of busybox .config against version in version.conf and
+DONE: check version of busybox .config against version in version.conf and
     append --oldconfig to cli if they don't match
 DONE: read /etc/fstab and see if there should be /boot mounted
     if yes check it's mounted
@@ -17,8 +17,7 @@ DONE: read /etc/fstab and see if there should be /boot mounted
         if no mountit
             copy k/i
     if no pass
-DONE: add ip=udhcpc by default
-    add ip=x.x.x.x and nameserver=x.x.x.x netmask=x.x.x.x domain=lan
+DONE: add ip=x.x.x.x and nameserver=x.x.x.x netmask=x.x.x.x domain=lan
     and dodropbear is using udhcpc by default if ip= not set
 NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
     actually /usr/src/linux/scripts/config is buggy
@@ -28,6 +27,7 @@ DONE: make 'not isstatic' fail saying we can't deal with dynamic linkage, save f
 DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
     - if dynamic then ship it with detected linked libraries
+    comment this, it's more complex than thought
 TODO: make --fakemod=/ in case kernel modules are copied from another chroot
     kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
 TODO: dont fail when finding a dynamically linked binary
