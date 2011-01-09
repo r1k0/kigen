@@ -699,29 +699,29 @@ openLUKS() {
 	esac
 
 	# @@ eval local LUKS_DEVICE='"${CRYPT_'${TYPE}'}"' LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
-        # support LABEL/UUID in crypt_root and crypt_swap init's option.
-        eval local LUKS_DEV='"${CRYPT_'${TYPE}'}"'
-        case "${LUKS_DEV}" in
-            LEBEL\=*|UUID\=*)
-                retval=1
-                if [ "${retval}" -ne '0' ]; then
-                    DEV=`findfs "${LUKS_DEV}" 2>/dev/null`
-                    retval=$?
-                fi
-                if [ "${retval}" -ne '0' ]; then
-                    DEV=`busybox findfs "${LUKS_DEV}" 2>/dev/null`
-                    retval=$?
-                fi
-                if [ "${retval}" -ne '0' ]; then
-                    DEV=`blkid -t "${LUKS_DEV}" | cut -d ":" -f 1 2>/dev/null`
-                    retval=$?
-                fi
-                if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
-                    good_msg "Detected crypt_${TYPE}=${LUKS_DEV}"
-		    LUKS_DEVICE=${DEV}
-                fi
-                ;;
-        esac
+    # support LABEL/UUID in crypt_root and crypt_swap init's option.
+    eval local LUKS_DEVICE='"${CRYPT_'${TYPE}'}"'
+    case "${LUKS_DEVICE}" in
+        LABEL\=*|UUID\=*)
+            retval=1
+            if [ "${retval}" -ne '0' ]; then
+                DEV=`findfs "${LUKS_DEVICE}" 2>/dev/null`
+                retval=$?
+            fi
+            if [ "${retval}" -ne '0' ]; then
+                DEV=`busybox findfs "${LUKS_DEVICE}" 2>/dev/null`
+                retval=$?
+            fi
+            if [ "${retval}" -ne '0' ]; then
+                DEV=`blkid -t "${LUKS_DEVICE}" | cut -d ":" -f 1 2>/dev/null`
+                retval=$?
+            fi
+            if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
+                good_msg "Detected crypt_${TYPE}=${LUKS_DEVICE}"
+	    LUKS_DEVICE=${DEV}
+            fi
+            ;;
+    esac
 	eval local LUKS_NAME="$1" LUKS_KEY='"${CRYPT_'${TYPE}'_KEY}"' LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
 
 	local DEV_ERROR=0 KEY_ERROR=0 KEYDEV_ERROR=0
