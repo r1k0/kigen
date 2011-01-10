@@ -300,6 +300,9 @@ for t in target:
             logging.debug(temp['cache']+'/initramfs-cpio.gz')
             print(green(' * produced ') + temp['cache']+'/initramfs-cpio.gz')
 
+if not 'kernel' in target and not 'k' in target and not 'initramfs' in target and not 'i' in target:
+    print(red(' * ')+'no known target found.')
+
 # FIXME unset os.environ['KIGEN_STDOUT']?
 
 sys.exit(0)
