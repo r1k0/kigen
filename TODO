@@ -28,7 +28,7 @@ DONE: detect static/dynamic linkage and act accordingly
     - if static then ship it
     - if dynamic then ship it with detected linked libraries
     comment this, it's more complex than thought
-TODO: make --fakemod=/ in case kernel modules are copied from another chroot
+NODO: make --fakemod=/ in case kernel modules are copied from another chroot
     kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe the user knows what hes doing
