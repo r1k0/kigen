@@ -1,4 +1,13 @@
-0.3.0
+NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
+    actually /usr/src/linux/scripts/config is buggy
+    patch it and ship it within kigen itself
+    then when happy mail the LKML with the fix
+NODO: make --fakemod=/ in case kernel modules are copied from another chroot
+    kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
+NODO: make multiple targets callable
+    do kigen k && kigen i instead
+
+0.3.1
 =====
 TODO: add some checks for source archive download site
     the idea is to tell the user that the URL might not be reachable
@@ -9,27 +18,7 @@ TODO: add some checks for source archive download site
     tar: Error is not recoverable: exiting now
      * ... lvm2.configure
     error: cannot change dir to /var/tmp/kigen/work/LVM2.2.02.76
-DONE: check version of busybox .config against version in version.conf and
-    append --oldconfig to cli if they don't match
-DONE: read /etc/fstab and see if there should be /boot mounted
-    if yes check it's mounted
-        if yes copy k/i
-        if no mountit
-            copy k/i
-    if no pass
-DONE: add ip=x.x.x.x and nameserver=x.x.x.x netmask=x.x.x.x domain=lan
-    and dodropbear is using udhcpc by default if ip= not set
-NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
-    actually /usr/src/linux/scripts/config is buggy
-    patch it and ship it within kigen itself
-    then when happy mail the LKML with the fix
-DONE: make 'not isstatic' fail saying we can't deal with dynamic linkage, save for later 
-DONE: detect static/dynamic linkage and act accordingly
-    - if static then ship it
-    - if dynamic then ship it with detected linked libraries
-    comment this, it's more complex than thought
-NODO: make --fakemod=/ in case kernel modules are copied from another chroot
-    kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
+    -  create /etc/kigen/initramfs/url.conf? and pass it archive url?
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked binary and get a list of 
@@ -37,7 +26,6 @@ TODO: dont fail when finding a dynamically linked binary
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
-DONE: make multiple targets callable
 
 0.3.*
 =====
@@ -50,12 +38,6 @@ TODO: get a way to set per features source or host binary?
     --source-all by default
     --source-luks --bin-lvm2...
     --bin-all --bin-luks...
-DONE: find a way to get pkg use flag in python
-    like: i want to know if strace is merged with -static-libs or not
-    this is for use  when copying host binaries (they gotta be statically linked
-    OR 
-    yeah better solution for portability (debian arch)
-    write some smart code to detect ldd output and grab libs accordingly (sounds fun
 TODO: kigen i --screen
     see if screen can attach to /dev/console
     I need something clean to replace ttyecho 
@@ -65,8 +47,6 @@ TODO: kigen i --gnupg
 TODO: kigen --static option (see genkernel --static)
 TODO: fix /dev/tty1 bug when using splash -> shaye
     i got the same on eeepc
-DONE: pass $PORTDIR don't assume /usr/portage
-    get an elegant python way of getting $PORTDIR
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
 TODO: kigen i --fixdotconfig
