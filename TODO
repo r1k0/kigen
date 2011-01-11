@@ -1,24 +1,26 @@
 NODO: rewrite add_options method in kernel to use kernel script /usr/src/linux/scripts/config
-    actually /usr/src/linux/scripts/config is buggy
-    patch it and ship it within kigen itself
-    then when happy mail the LKML with the fix
+    why not? now that I have that patched in LKML
 NODO: make --fakemod=/ in case kernel modules are copied from another chroot
     kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
-NODO: make multiple targets callable
+NODO: make multiple targets callable (left for the next new whole rewrite of cliparser.py)
     do kigen k && kigen i instead
 
-0.3.1
+0.3.0
 =====
-TODO: add some checks for source archive download site
-    the idea is to tell the user that the URL might not be reachable
-    * initramfs.append.lvm2 2.02.76 /sbin/lvm.static
-     * ... lvm2.extract
-    gzip: stdin: unexpected end of file
-    tar: Child returned status 1
-    tar: Error is not recoverable: exiting now
-     * ... lvm2.configure
-    error: cannot change dir to /var/tmp/kigen/work/LVM2.2.02.76
-    -  create /etc/kigen/initramfs/url.conf? and pass it archive url?
+TODO: make live patches of:
+    linuxrc-genkernel-3.4.10.908
+    initrd.scripts-genkernel-3.4.10.908
+    initrd.defaults-genkernel-3.4.10.908
+    inside initramfs.append.base
+TODO: get dynamic list of keymap files rather than hardcoded as it is
+TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
+TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
+       add --nohash option (as in Misc:)
+TODO: review code of --evms against genkernel
+TODO: review code of --dmraid against genkernel
+
+0.3.*
+=====
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked binary and get a list of 
@@ -26,11 +28,8 @@ TODO: dont fail when finding a dynamically linked binary
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
-
-0.3.*
-=====
 TODO: find a way to split append.py a bit more
-    dissociate a binary class too? why not
+    dissociate a binary class too? why not?
     split append.py into append_feature.py? append_luks.py ...
     append directory?
 TODO: get a way to set per features source or host binary?
@@ -44,19 +43,8 @@ TODO: kigen i --screen
 TODO: kigen i --gnupg
     gnupg-version = 2.0.15
     cp ~/key.gpg /usr/src/initramfs/root/
-TODO: kigen --static option (see genkernel --static)
-TODO: fix /dev/tty1 bug when using splash -> shaye
-    i got the same on eeepc
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
-TODO: kigen i --fixdotconfig
-    checks dotconfig if required options are correctly set
-    don't touch the dotconfig by default otherwise
-    auto add/remove config if passed --fixdotconfig
-TODO: lvm2 may fail on gentoo/funtoo
-    works all the time patchless on sabayon ;o)
-    see http://bugs.gentoo.org/show_bug.cgi?id=332905
-    need lvm2-2.02.72-dynamic-static-ldflags.patch?
 TODO: support xen-sources -> doublehp this one is for you ;) patience though
     http://en.gentoo-wiki.com/wiki/Xen
     read dracut code
