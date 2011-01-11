@@ -53,7 +53,6 @@ from utils.fstab    import *
 import utils
 
 # parse command line parameters
-# target is a list
 master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose = cli_parser()
 
 # FIXME because we get verbose['logfile'] from cli_parser()
@@ -87,8 +86,7 @@ logging.debug(version_conf)
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
 
-for i in target:
-    logging.debug('kigen target is '+i)
+logging.debug('kigen target is '+target)
 
 logging.debug('dumping command line interface')
 logging.debug(cli)
@@ -154,9 +152,9 @@ except Exception:
 
 boot_mounted = False
 # run the kernel target
-for t in target:
-    if t == 'kernel':
-
+#for t in target:
+#    if t == 'kernel':
+if target == 'kernel' or target == 'k':
         # --getdotconfig
         if cli['getdotconfig'] is not '':
             from kernel.extract import getdotconfig
@@ -235,8 +233,9 @@ for t in target:
                 print()
 
 # run the initramfs target
-for t in target:
-    if t == 'initramfs':
+#for t in target:
+#    if t == 'initramfs':
+if target == 'initramfs' or target == 'i':
 
         # --extract
         if cli['extract']:

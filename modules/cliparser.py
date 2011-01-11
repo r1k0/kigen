@@ -12,8 +12,6 @@ import etcparser
 
 def cli_parser():
 
-    target = []
-
     cli = { 'nocache':      '',                 \
             'oldconfig':    True,               \
             # typically kernel sources are found here
@@ -63,10 +61,12 @@ def cli_parser():
         # we found the kernel target
         # parse accordingly
         if 'kernel' in sys.argv:
-            target.append('kernel')
+#            target.append('kernel')
+            target = 'kernel'
             cliopts.remove('kernel')
         if 'k' in sys.argv:
-            target.append('kernel')   
+#            target.append('kernel')   
+            target = 'k'
             cliopts.remove('k')
 
         # parse 
@@ -225,14 +225,16 @@ def cli_parser():
                 assert False, "uncaught option"
 
     # === parsing for the initramfs target ===
-    if 'initramfs' in sys.argv or 'i' in sys.argv:
+    elif 'initramfs' in sys.argv or 'i' in sys.argv:
         # we found the initramfs target
         # parse accordingly
         if 'initramfs' in sys.argv:
-            target.append('initramfs')
+#            target.append('initramfs')
+            target = 'initramfs'
             cliopts.remove('initramfs')
         if 'i' in sys.argv:
-            target.append('initramfs')
+#            target.append('initramfs')
+            target = 'i'
             cliopts.remove('i')
 
         # parse /etc/kigen/initramfs/modules.conf and 
