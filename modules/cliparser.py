@@ -56,6 +56,14 @@ def cli_parser():
         print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
+    # prevent multiple targets from running
+    if ('k' in cliopts and 'i' in cliopts)               or \
+        ('initramfs' in cliopts and 'kernel' in cliopts) or \
+        ('k' in cliopts and 'initramfs' in cliopts)      or \
+        ('i' in cliopts and 'kernel' in cliopts):
+        print(stdout.red('error: ') + 'kigen cannot run multiple targets at once.')
+        sys.exit(2)
+
     # === parsing for the kernel target ===
     if 'kernel' in sys.argv or 'k' in sys.argv:
         # we found the kernel target

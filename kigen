@@ -108,7 +108,6 @@ logging.debug(flavor)
 
 # show flavor
 print(green(' * ')+white(flavor)+' on '+white(cli['arch']))
-#print(green(' * ')+'Kernel sources Makefile version '+white(cli['KV']+' '+cli['KNAME']))
 
 # ensure temp['work'] is clean
 import shutil
@@ -152,8 +151,6 @@ except Exception:
 
 boot_mounted = False
 # run the kernel target
-#for t in target:
-#    if t == 'kernel':
 if target == 'kernel' or target == 'k':
         # --getdotconfig
         if cli['getdotconfig'] is not '':
@@ -233,8 +230,6 @@ if target == 'kernel' or target == 'k':
                 print()
 
 # run the initramfs target
-#for t in target:
-#    if t == 'initramfs':
 if target == 'initramfs' or target == 'i':
 
         # --extract
@@ -298,9 +293,6 @@ if target == 'initramfs' or target == 'i':
         elif cli['noboot'] is True:
             logging.debug(temp['cache']+'/initramfs-cpio.gz')
             print(green(' * produced ') + temp['cache']+'/initramfs-cpio.gz')
-
-if not 'kernel' in target and not 'k' in target and not 'initramfs' in target and not 'i' in target:
-    print(red(' * ')+'no known target found.')
 
 # FIXME unset os.environ['KIGEN_STDOUT']?
 
