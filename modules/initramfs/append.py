@@ -1004,6 +1004,15 @@ class append:
 
         @return bool
         """
+# use this to display dynamic keymaps
+# it's not really necessary but it's cleaner
+# 
+#        import os
+#        f=os.popen("ls /var/tmp/kigen/work/initramfs-keymaps-temp/lib/keymaps/")
+#        for i in f.readlines():
+# add regex to filter off: if i contains integers don't display it
+#                 print(i)
+
         logging.debug('>>> entering initramfs.append.keymaps be bg br-a br-l by cf croat cz de dk dvorak es et fi fr gr hu il is it jp la lt mk nl no pl pt ro ru se sg sk-y sk-z slovene trf trq ua uk us wangbe')
         print(green(' * ') + turquoise('initramfs.append.keymaps ')+ 'be bg br-a br-l by cf croat cz de dk dvorak es et fi fr gr hu il is it jp la lt mk nl no pl pt ro ru se sg sk-y sk-z slovene trf trq ua uk us wangbe')
 
