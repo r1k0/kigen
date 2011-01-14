@@ -12,7 +12,6 @@ TODO: make live patches of:
     initrd.scripts-genkernel-3.4.10.908
     initrd.defaults-genkernel-3.4.10.908
     inside initramfs.append.base
-TODO: get dynamic list of keymap files rather than hardcoded as it is
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
        add --nohash option (as in Misc:)
