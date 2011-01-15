@@ -73,29 +73,43 @@ class kernel:
             if self.make_mrproper() is not zero: self.fail('mrproper')
         if (self.clean is True) or (self.clean == 'True' ):
             if self.make_clean() is not zero: self.fail('clean')
-# =====
-        # self.fixdotconfig looks like : initramfs,selinux
+
+        # self.fixdotconfig is a list like : initramfs,selinux,splash,pax
         fixdotconfiglist = self.fixdotconfig.split(',')
         d = {}
         for i in fixdotconfiglist:
             d[i] = ''
             if 'initramfs' in d:
                 # PATCH initramfs kernel option
-#                print 'tempinit is'+self.temp['initramfs']
                 self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
-#            if 'selinux' in d:
-#                # PATCH selinux kernel option
-#                self.add_option('CONFIG_AUDIT=y')
-#                self.add_option('CONFIG_AUDITSYSCALL=y')
-#                self.add_option('CONFIG_AUDIT_TREE=y')
-#                self.add_option('CONFIG_AUDIT_GENERIC=y')
-#                self.add_option('CONFIG_SECURITY_NETWORK=y')
-#                # above required to show SElinux
-#                self.add_option('CONFIG_SECURITY_SELINUX=y')
-#            if 'pax' in d:
-#                # PATCH PaX kernel option
-#                self.add_option('CONFIG_PAX_EMUTRAP=y')
-#        print d
+            if 'selinux' in d:
+                # PATCH selinux kernel option
+                self.add_option('CONFIG_AUDIT=y')
+                self.add_option('CONFIG_AUDITSYSCALL=y')
+                self.add_option('CONFIG_AUDIT_TREE=y')
+                self.add_option('CONFIG_AUDIT_GENERIC=y')
+                self.add_option('CONFIG_SECURITY_NETWORK=y')
+                # above required to show SElinux
+                self.add_option('CONFIG_SECURITY_SELINUX=y')
+            if 'pax' in d:
+                # PATCH PaX kernel option
+                self.add_option('CONFIG_PAX_EMUTRAP=y')
+            if 'splash' in d:
+                # PATCH splash support
+                self.add_option('CONFIG_FB=y')
+                self.add_option('CONFIG_CONNECTOR=y')
+                self.add_option('CONFIG_FB_UVESA=y')
+                self.add_option('CONFIG_BLK_DEV=y')
+                self.add_option('CONFIG_BLK_DEV_RAM=y')
+                self.add_option('CONFIG_BLK_DEV_INITRD=y')
+                self.add_option('CONFIG_FB_MODE_HELPERS=y')
+                self.add_option('CONFIG_FB_TILEBLITTING=n')
+                self.add_option('CONFIG_FRAMEBUFFER_CONSOLE=y')
+                self.add_option('CONFIG_FB_CON_DECOR=y')
+                self.add_option('CONFIG_INPUT_EVDEV=y')
+                self.add_option('CONFIG_EXT2_FS=y')
+                # FIXME this needs sys-apps/v86d
+#                self.add_option('/usr/share/v86d/initramfs')
 
         # by default don't alter dotconfig
         # only if --fixdotconfig is passed
@@ -118,7 +132,7 @@ class kernel:
 #        else:
 #            if self.fixdotconfig is True:
 #                self.remove_option('CONFIG_INITRAMFS_SOURCE')
-# =====
+
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
         if (self.menuconfig is True) or (self.menuconfig == 'True'):
@@ -272,11 +286,16 @@ class kernel:
         found, option = self.search_option(option)
         if found[1] is '':
             # FIXME check if option is y if yes don't use "" if option arg is string use "" as is
-            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
+#            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'="'+option[1] + '"'+'\n'):
 #            if file(self.kerneldir+'/.config', 'a').writelines(option[0]+'='+option[1] + ''+'\n'):
-                print(green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config')
-
-                return True
+#                print(green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config')
+            with open(self.kerneldir+'/.config', mode='a') as cfile:
+                try:
+                    cfile.write(option[0]+'='+option[1]+'\n')
+                    print(green(' * ') + turquoise('kernel.add_option ') + option + ' to ' + self.kerneldir + '/.config')
+                except:
+                    pass
+            return True
    
         print(green(' * ') + turquoise('kernel.add_option ') + option[0] + ' already set')
 

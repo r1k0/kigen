@@ -45,7 +45,7 @@ def print_usage():
 def print_examples():
     print()
     print(stdout.white('Examples')+':')
-    print(' '+os.path.basename(sys.argv[0])+' kernel')
+    print(' '+os.path.basename(sys.argv[0])+' kernel --fixdotconfig=splash')
     print(' '+os.path.basename(sys.argv[0])+' --clean --menuconfig k')
     print(' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile')
     print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon')
@@ -69,13 +69,18 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     if kernel_conf['fixdotconfig'] != '':
         if len(kernel_conf['fixdotconfig']) <= 4:
             tab = '\t\t'
-        elif len(kernel_conf['fixdotconfig']) > 4:
+        elif len(kernel_conf['fixdotconfig']) > 4 and len(kernel_conf['fixdotconfig']) < 7:
+            tab = '\t\t'
+        elif len(kernel_conf['fixdotconfig']) > 7 and len(kernel_conf['fixdotconfig']) < 12:
             tab = '\t'
+        elif len(kernel_conf['fixdotconfig']) > 12:
+            tab = ''
     else:
         tab = '\t\t'
     print(stdout.yellow('  --fixdotconfig=<feature>  '), end=' ')
     print('"'+kernel_conf['fixdotconfig']+'"', end=' ')
     print(stdout.yellow(tab+'Check and auto fix the kernel config file (experimental)'))
+    print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (set .config options)')
 
     print('  --clean                   ', end=' ')
     print(kernel_conf['clean'], end=' ')
