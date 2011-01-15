@@ -7,16 +7,17 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.0
 =====
-TODO: make live patches of:
-    linuxrc-genkernel-3.4.10.908
-    initrd.scripts-genkernel-3.4.10.908
-    initrd.defaults-genkernel-3.4.10.908
-    inside initramfs.append.base
+TODO: check why genkernel-99999 needs gd graphviz asciidoc
+TODO: make --keymaps=all and --keymaps=be to trim down size if needed
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
-       add --nohash option (as in Misc:)
+    add --nohash option (as in Misc:)
 TODO: review code of --evms against genkernel
 TODO: review code of --dmraid against genkernel
+TODO: --fixdotconfig=splash
+    http://fr.gentoo-wiki.com/wiki/Framebuffer
+TODO: --splash should detect if splashutils is compiled with +fbcondecord
+    if not make a big warning that splash will not work
 
 0.3.*
 =====

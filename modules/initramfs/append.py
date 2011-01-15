@@ -96,7 +96,7 @@ class append:
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.base')
-        print(green(' * ') + turquoise('initramfs.append.base'), end=' ')
+        print(green(' * ') + turquoise('initramfs.append.base'))
     
         # create the baselayout
         for i in ['dev', 'bin', 'etc', 'home', 'usr', 'proc', 'tmp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
@@ -113,7 +113,7 @@ class append:
         #       os.system('cp %s/arch/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']))
         # elif arch is 'amd64':
         #       blablabla
-            print('Gentoo linuxrc 3.4.10.907-r2')
+            print(green(' * ')+'... Gentoo linuxrc'+ white(' 3.4.10.908') + ' patched')
             # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
             process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
