@@ -1367,6 +1367,7 @@ Kill dropbear daemon and restart openssh (DEPRECATED)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **The linuxrc should kill dropbear automagically.**
+
 Make sure existing connections with initramfs are killed and openssh binds to :22 correctly.
 Add on the following to /etc/conf.d/local.
 ::
