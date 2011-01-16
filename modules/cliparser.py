@@ -491,6 +491,7 @@ def cli_parser():
                 cli['disklabel'] = True
             elif o in ("--luks"):
                 cli['luks'] = True
+                cli['keymaps'] = True # due to the password prompt
             elif o in ("--lvm2"):
                 cli['lvm2'] = True
             elif o in ("--dmraid"):
