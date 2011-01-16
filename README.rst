@@ -335,8 +335,7 @@ Kigen has 3 sets of config files:
  - /etc/kigen/initramfs/{default.conf,modules.conf,version.conf}
 
 They are heavily commented, their options should be self explanatory.
-
-**remember that command line parameters will always overwrite the config files.**
+**Remember that command line parameters will always overwrite the config files.**
 
 - Main help menu
 
@@ -1362,11 +1361,12 @@ Set kernel command option
 To boot in SSH mode, pass the 'dodropbear' option in the kernel command line.
 Edit /boot/grub/grub.cfg to have the kernel command line look like.
 ::
-  linux /kernel-kigen-x86_64-2.6.37-gentoo ro single init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 **docrypt dokeymap keymap=be dodropbear**
+  linux /kernel-kigen-x86_64-2.6.37-gentoo ro single init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear
 
-Kill dropbear daemon and restart openssh
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Kill dropbear daemon and restart openssh (DEPRECATED)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+** The linuxrc should kill dropbear automically. **
 Make sure existing connections with initramfs are killed and openssh binds to :22 correctly.
 Add on the following to /etc/conf.d/local.
 ::
