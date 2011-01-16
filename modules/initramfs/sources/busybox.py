@@ -61,7 +61,7 @@ class busybox:
         version = lhead.rsplit(':')
         version = version.pop()
         if version != self.bb_version:
-            print(yellow(' * ')+'busybox .config version doesnt match the sources version, calling --oldconfig')
+            print(yellow(' * busybox .config version doesnt match the sources version, calling --oldconfig'))
             self.oldconfig = True
 
         if self.defconfig is True:
