@@ -799,7 +799,6 @@ class append:
             process('cp /sbin/evms_activate         %s/initramfs-evms-temp/sbin' % self.temp['work'], self.verbose)
             process_star('rm %s/initramfs-evms-temp/lib/evms/*/swap*.so' % self.temp['work'], self.verbose)
         else:
-            print()
             self.fail('sys-fs/evms must be merged')
     
         os.chdir(self.temp['work']+'/initramfs-evms-temp')
