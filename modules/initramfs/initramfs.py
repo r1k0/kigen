@@ -58,6 +58,7 @@ class initramfs:
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
         self.dbdebugflag        = cli['debugflag']
+        self.keymaplist         = cli['keymaps']
 
     def build(self):
         """
@@ -98,6 +99,7 @@ class initramfs:
 #                        self.firmware,          \
                         self.selinux,           \
                         self.dbdebugflag,       \
+                        self.keymaplist,        \
                         self.nocache,           \
                         self.hostbin,           \
                         self.rootpasswd)
@@ -197,10 +199,15 @@ class initramfs:
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
 
+#        # append keymaps
+#        if self.cli['keymaps'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.keymaps() is not zero: self.fail('keympas')
+
         # append keymaps
-        if self.cli['keymaps'] is True:
+        if self.cli['keymaps'] is not '':
             os.chdir(self.temp['work'])
-            if aobj.keymaps() is not zero: self.fail('keympas')
+            if aobj.keymaps() is not zero: self.fail('keymaps')
 
 #        # 17) append firmware
 #        if os.path.isdir(self.firmware):

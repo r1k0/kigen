@@ -35,6 +35,7 @@ class append:
 #                firmware,           \
                 selinux,            \
                 dbdebugflag,        \
+                keymaplist,         \
                 nocache,            \
                 hostbin,            \
                 rootpasswd):
@@ -68,6 +69,7 @@ class append:
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
         self.dbdebugflag        = dbdebugflag
+        self.keymaplist         = keymaplist
 
     def cpio(self):
         """
@@ -1004,16 +1006,17 @@ class append:
         @return bool
         """
         logging.debug('>>> entering initramfs.append.keymaps')
-        print(green(' * ') + turquoise('initramfs.append.keymaps '))
+        print(green(' * ') + turquoise('initramfs.append.keymaps ')+self.keymaplist)
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps', self.verbose)
-        process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
 
-        f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
-        for i in f.readlines():
-            # filter out item with numbers
-            if re.match("^[a-z]", i):
-                print(green(' * ') + '... ' +i, end='')
+        if 'all' in self.keymaplist:
+            process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+            f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
+            for i in f.readlines():
+                # filter out item with numbers
+                if re.match("^[a-z]", i):
+                    print(green(' * ') + '... ' +i, end='')
 
         os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
         return os.system(self.cpio())

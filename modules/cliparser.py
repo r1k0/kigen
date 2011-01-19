@@ -294,7 +294,7 @@ def cli_parser():
                                     "to=",          \
                                     "compress=",    \
                                     "into=",        \
-                                    "keymaps",      \
+                                    "keymaps=",     \
                                     "ttyecho",      \
                                     "strace",       \
                                     "screen",       \
@@ -314,88 +314,88 @@ def cli_parser():
             if o in ("--logfile"):
                 cli['logfile'] = a
 
-        cli['oldconfig']    = False # too much verbose
+        cli['oldconfig'] = False # too much verbose
         if initramfs_conf['oldconfig'] == 'True':
             cli['oldconfig'] = True
 
         # default
-        cli['dotconfig']    = ''
+        cli['dotconfig'] = ''
         if initramfs_conf['dotconfig'] != '':
             cli['dotconfig'] = initramfs_conf['dotconfig']
             cli['oldconfig'] = True # make sure .config is ok
 
-#        cli['info']         = False
-#        cli['mrproper']     = False
+#        cli['info'] = False
+#        cli['mrproper'] = False
 #        if initramfs_conf['mrproper'] == 'True':
 #            cli['mrproper'] = True
 
-        cli['menuconfig']   = False
+        cli['menuconfig'] = False
         if initramfs_conf['menuconfig'] == 'True':
             cli['menuconfig'] = True
 
-        cli['defconfig']    = False
+        cli['defconfig'] = False
         if initramfs_conf['defconfig'] == 'True':
             cli['defconfig'] = True
 
-        cli['luks']         = False
+        cli['luks'] = False
         if initramfs_conf['luks'] == 'True':
             cli['luks'] = True
 
-        cli['lvm2']         = False
+        cli['lvm2'] = False
         if initramfs_conf['lvm2'] == 'True':
             cli['lvm2'] = True
 
-        cli['dmraid']       = False
+        cli['dmraid'] = False
         if initramfs_conf['dmraid'] == 'True':
             cli['dmraid'] = True
 
-#        cli['iscsi']        = False
+#        cli['iscsi'] = False
 #        if initramfs_conf['iscsi'] == 'True':
 #            cli['iscsi'] = True
 
-        cli['evms']         = False
+        cli['evms'] = False
         if initramfs_conf['evms'] == 'True':
             cli['evms'] = True
 
-#        cli['mdadm']        = False
+#        cli['mdadm'] = False
 #        if initramfs_conf['mdadm'] == 'True':
 #            cli['mdadm'] = True
 
-        cli['splash']       = ''
+        cli['splash'] = ''
         if initramfs_conf['splash'] != '':
             cli['splash'] = initramfs_conf['splash']
 
-        cli['sres']         = '' # 1024x768
+        cli['sres'] = '' # 1024x768
         if initramfs_conf['sres'] != '':
             cli['sres'] = initramfs_conf['sres']
 
-        cli['sinitrd']      = '' # a custom initrd.splash file
+        cli['sinitrd'] = '' # a custom initrd.splash file
 
-#        cli['firmware']     = ''
+#        cli['firmware'] = ''
 
-        cli['disklabel']    = False
+        cli['disklabel'] = False
         if initramfs_conf['disklabel'] == 'True':
             cli['disklabel'] = True
 
-#        cli['unionfs']      = False
+#        cli['unionfs'] = False
 #        if initramfs_conf['unionfs'] == 'True':
 #           cli['unionfs'] = True
 
-#        cli['aufs']         = False
+#        cli['aufs'] = False
 
-        cli['linuxrc']      = ''
+        cli['linuxrc'] = ''
         if initramfs_conf['linuxrc'] != '':
             cli['linuxrc'] = initramfs_conf['linuxrc']
 
-        cli['dropbear']     = False
+        cli['dropbear'] = False
         if initramfs_conf['dropbear'] == 'True':
             cli['dropbear'] = True
 
-        cli['nocache']      = False
+        cli['nocache'] = False
         if initramfs_conf['nocache'] == 'True':
             cli['nocache'] = True
 
-        cli['noboot']       = False
+        cli['noboot'] = False
         if initramfs_conf['noboot'] == 'True':
             cli['noboot'] = True
 
@@ -411,27 +411,27 @@ def cli_parser():
         if initramfs_conf['hostbin'] == 'True':
             cli['hostbin'] = True
 
-        cli['glibc']        = False
+        cli['glibc'] = False
         if initramfs_conf['glibc'] == 'True':
             cli['glibc'] = True
 
-        cli['libncurses']   = False
+        cli['libncurses'] = False
         if initramfs_conf['libncurses'] == 'True':
             cli['libncurses'] = True
 
-        cli['zlib']         = False
+        cli['zlib'] = False
         if initramfs_conf['zlib'] == 'True':
             cli['zlib'] = True
 
-        cli['rename']       = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
+        cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         if initramfs_conf['rename'] != '':
             cli['rename'] = initramfs_conf['rename']
 
-        cli['plugin']       = ''
+        cli['plugin'] = ''
         if initramfs_conf['plugin'] != '':
             cli['plugin'] = initramfs_conf['plugin']
 
-        cli['rootpasswd'] = ''
+        cli['rootpasswd']  = ''
         if initramfs_conf['rootpasswd'] != '':
             cli['rootpasswd'] = initramfs_conf['rootpasswd']
 
@@ -439,21 +439,21 @@ def cli_parser():
         if initramfs_conf['ttyecho'] == 'True':
             cli['ttyecho'] = True
 
-        cli['keymaps']      = False
-        if initramfs_conf['keymaps'] == 'True':
-            cli['keymaps'] = True
+        cli['keymaps'] = 'all'
+        if initramfs_conf['keymaps'] != '':
+            cli['keymaps'] = initramfs_conf['keymaps']
 
-        cli['strace']       = False
+        cli['strace'] = False
         if initramfs_conf['strace'] == 'True':
             cli['strace'] = True
 
-        cli['screen']       = False
+        cli['screen'] = False
         if initramfs_conf['screen'] == 'True':
             cli['screen'] = True
 
-        cli['debugflag']    = False
+        cli['debugflag'] = False
         if initramfs_conf['debugflag'] == 'True':
-            cli['debugflag'] = True
+            cli['debugflag']= True
 
         cli['extract']      = ''
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
@@ -491,7 +491,7 @@ def cli_parser():
                 cli['disklabel'] = True
             elif o in ("--luks"):
                 cli['luks'] = True
-                cli['keymaps'] = True # due to the password prompt
+# FIXME trigger --keymap=all?
             elif o in ("--lvm2"):
                 cli['lvm2'] = True
             elif o in ("--dmraid"):
@@ -569,7 +569,8 @@ def cli_parser():
             elif o in ("--ttyecho"):
                 cli['ttyecho'] = True
             elif o in ("--keymaps"):
-                cli['keymaps'] = True
+#                cli['keymaps'] = True
+                cli['keymaps'] = a
             elif o in ("--strace"):
                 cli['strace'] = True
             elif o in ("--screen"):
