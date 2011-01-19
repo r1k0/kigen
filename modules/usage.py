@@ -79,7 +79,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
         tab = '\t\t'
     print(stdout.yellow('  --fixdotconfig=<feature>  '), end=' ')
     print('"'+kernel_conf['fixdotconfig']+'"', end=' ')
-    print(stdout.yellow(tab+'Check and auto fix the kernel config file (experimental)'))
+    print(tab+'Check and auto fix the kernel config file (experimental)')
     print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (set .config options)')
 
     print('  --clean                   ', end=' ')
