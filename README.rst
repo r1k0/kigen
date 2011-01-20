@@ -1,13 +1,13 @@
-============
-Introduction
-============
+=======
+General
+=======
 
 .. sectnum::
 
 .. contents:: Table of contents
 
-Definition
-~~~~~~~~~~
+Introduction
+~~~~~~~~~~~~
 
 **KIGen now only supports Python3**
 
@@ -335,6 +335,7 @@ Kigen has 3 sets of config files:
  - /etc/kigen/initramfs/{default.conf,modules.conf,version.conf}
 
 They are heavily commented, their options should be self explanatory.
+
 **Remember that command line parameters will always overwrite the config files.**
 
 - Main help menu
