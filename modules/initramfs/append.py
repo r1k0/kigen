@@ -1009,14 +1009,27 @@ class append:
         print(green(' * ') + turquoise('initramfs.append.keymaps ')+self.keymaplist)
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/keymaplist', self.verbose) # temp keymap dir
+
+        # make keymaplist a real list
+        self.keymaplist = self.keymaplist.split(',')
 
         if 'all' in self.keymaplist:
-            process('tar -zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
             f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
             for i in f.readlines():
                 # filter out item with numbers
                 if re.match("^[a-z]", i):
                     print(green(' * ') + '... ' +i, end='')
+        else:
+            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/keymaplist' % (self.libdir, self.temp['work']), self.verbose)
+            for i in self.keymaplist:
+                if os.path.isfile('%s/keymaplist/%s.map'%(self.temp['work'],i)):
+                    if re.match("^[a-z]", i):
+                        process('cp %s/keymaplist/%s.map %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], i, self.temp['work']), self.verbose)
+                        print(green(' * ') + '... ' +i+'.map', end='\n')
+            # still copy keymapList: linuxrc expects it
+            process('cp %s/keymaplist/keymapList %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], self.temp['work']), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
         return os.system(self.cpio())
