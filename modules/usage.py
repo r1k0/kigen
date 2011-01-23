@@ -80,7 +80,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print(stdout.yellow('  --fixdotconfig=<feature>  '), end=' ')
     print('"'+kernel_conf['fixdotconfig']+'"', end=' ')
     print(tab+'Check and auto fix the kernel config file (experimental)')
-    print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (set .config options)')
+    print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
 
     print('  --clean                   ', end=' ')
     print(kernel_conf['clean'], end=' ')
@@ -178,11 +178,11 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 
     print(stdout.yellow('  --evms                    '), end=' ')
     print(initramfs_conf['evms'], end=' ') # bool
-    print(stdout.yellow('\t\tInclude EVMS support (host binary only)'))
+    print('\t\tInclude EVMS support (host binary only)')
 
     print(stdout.yellow('  --dmraid                  '), end=' ')
     print(initramfs_conf['dmraid'], end=' ') # bool
-    print(stdout.yellow('\t\tInclude DMRAID support (host binary or sources)'))
+    print('\t\tInclude DMRAID support (host binary or sources)')
 
 #    print stdout.yellow('   --selinux                '),
 #    print initramfs_conf['selinux'], # bool
@@ -262,7 +262,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 
     print(stdout.yellow('  --hostbin                 '), end=' ')
     print(initramfs_conf['hostbin'], end=' ')
-    print(stdout.yellow('\t\tUse host binaries (fall back to sources if dynamic linkage detected)'))
+    print('\t\tUse host binaries (fall back to sources if dynamic linkage detected)')
 
     print('  --noboot                  ', end=' ')
     print(initramfs_conf['noboot'], end=' ')
