@@ -7,12 +7,6 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.*
 =====
-TODO: fix boot message from linuxrc
-    sh: bad number
-    the strange thing is that I fixed that before by changing the '-eq' statements by '='
-    bad? black magic?
-    I should check why/how gentoo native busybox handles that (lazy...) 
-    I'll just probably put those '=' back
 TODO: --splash should detect if splashutils is compiled with +fbcondecor
     if not make a big warning that splash will not work
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
