@@ -1028,6 +1028,9 @@ class append:
                     if re.match("^[a-z]", i):
                         process('cp %s/keymaplist/%s.map %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], i, self.temp['work']), self.verbose)
                         print(green(' * ') + '... ' +i+'.map', end='\n')
+                else:
+                    print(yellow(' * ') + '... ' + yellow('warning')+' %s.map does not exist, skipping'%i)
+
             # still copy keymapList: linuxrc expects it
             process('cp %s/keymaplist/keymapList %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], self.temp['work']), self.verbose)
 
