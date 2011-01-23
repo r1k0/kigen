@@ -166,23 +166,23 @@ def get_config_modules_list(modules_conf):
     @arg: dict
     @return: list
     """
-    modules_config = modules_conf['MODULES_ATARAID']   \
-            +' '+modules_conf['MODULES_DMRAID']    \
-            +' '+modules_conf['MODULES_EVMS']  \
-            +' '+modules_conf['MODULES_LVM']   \
-            +' '+modules_conf['MODULES_MDADM']     \
-            +' '+modules_conf['MODULES_PATA']  \
-            +' '+modules_conf['MODULES_SATA']  \
-            +' '+modules_conf['MODULES_SCSI']  \
-            +' '+modules_conf['MODULES_WAITSCAN']  \
-            +' '+modules_conf['MODULES_NET']   \
-            +' '+modules_conf['MODULES_ISCSI']     \
-            +' '+modules_conf['MODULES_FIREWIRE']  \
-            +' '+modules_conf['MODULES_PCMCIA']    \
-            +' '+modules_conf['MODULES_USB']   \
-            +' '+modules_conf['MODULES_FS']   \
-            +' '+modules_conf['MODULES_CRYPT']   \
-            +' '+modules_conf['MODULES_MISC']   \
+    modules_config = modules_conf['MODULES_ATARAID']    \
+            +' '+modules_conf['MODULES_DMRAID']         \
+            +' '+modules_conf['MODULES_EVMS']           \
+            +' '+modules_conf['MODULES_LVM']            \
+            +' '+modules_conf['MODULES_MDADM']          \
+            +' '+modules_conf['MODULES_PATA']           \
+            +' '+modules_conf['MODULES_SATA']           \
+            +' '+modules_conf['MODULES_SCSI']           \
+            +' '+modules_conf['MODULES_WAITSCAN']       \
+            +' '+modules_conf['MODULES_NET']            \
+            +' '+modules_conf['MODULES_ISCSI']          \
+            +' '+modules_conf['MODULES_FIREWIRE']       \
+            +' '+modules_conf['MODULES_PCMCIA']         \
+            +' '+modules_conf['MODULES_USB']            \
+            +' '+modules_conf['MODULES_FS']             \
+            +' '+modules_conf['MODULES_CRYPT']          \
+            +' '+modules_conf['MODULES_MISC']           \
             +' '+modules_conf['MODULES_VIDEO']  
 
     return modules_config
@@ -194,23 +194,23 @@ def get_config_modules_dict(master_conf):
     @arg: dict
     @return: dict
     """
-    modules_config = { 'MODULES_ATARAID': master_conf['MODULES_ATARAID'], \
-            'MODULES_DMRAID': master_conf['MODULES_DMRAID'],  \
-            'MODULES_EVMS': master_conf['MODULES_EVMS'],      \
-            'MODULES_LVM': master_conf['MODULES_LVM'],        \
-            'MODULES_MDADM': master_conf['MODULES_MDADM'],    \
-            'MODULES_PATA': master_conf['MODULES_PATA'],      \
-            'MODULES_SATA': master_conf['MODULES_SATA'],      \
-            'MODULES_SCSI': master_conf['MODULES_SCSI'],      \
-            'MODULES_WAITSCAN': master_conf['MODULES_WAITSCAN'],  \
-            'MODULES_NET': master_conf['MODULES_NET'],        \
-            'MODULES_ISCSI': master_conf['MODULES_ISCSI'],    \
-            'MODULES_FIREWIRE': master_conf['MODULES_FIREWIRE'],  \
-            'MODULES_PCMCIA': master_conf['MODULES_PCMCIA'],  \
-            'MODULES_USB': master_conf['MODULES_USB'],        \
-            'MODULES_FS': master_conf['MODULES_FS'],        \
-            'MODULES_CRYPT': master_conf['MODULES_CRYPT'],	\
-            'MODULES_MISC': master_conf['MODULES_MISC'],	\
+    modules_config = { 'MODULES_ATARAID': master_conf['MODULES_ATARAID'],   \
+            'MODULES_DMRAID': master_conf['MODULES_DMRAID'],                \
+            'MODULES_EVMS': master_conf['MODULES_EVMS'],                    \
+            'MODULES_LVM': master_conf['MODULES_LVM'],                      \
+            'MODULES_MDADM': master_conf['MODULES_MDADM'],                  \
+            'MODULES_PATA': master_conf['MODULES_PATA'],                    \
+            'MODULES_SATA': master_conf['MODULES_SATA'],                    \
+            'MODULES_SCSI': master_conf['MODULES_SCSI'],                    \
+            'MODULES_WAITSCAN': master_conf['MODULES_WAITSCAN'],            \
+            'MODULES_NET': master_conf['MODULES_NET'],                      \
+            'MODULES_ISCSI': master_conf['MODULES_ISCSI'],                  \
+            'MODULES_FIREWIRE': master_conf['MODULES_FIREWIRE'],            \
+            'MODULES_PCMCIA': master_conf['MODULES_PCMCIA'],                \
+            'MODULES_USB': master_conf['MODULES_USB'],                      \
+            'MODULES_FS': master_conf['MODULES_FS'],                        \
+            'MODULES_CRYPT': master_conf['MODULES_CRYPT'],	                \
+            'MODULES_MISC': master_conf['MODULES_MISC'],	                \
             'MODULES_VIDEO': master_conf['MODULES_VIDEO'] }
 
     return modules_config
