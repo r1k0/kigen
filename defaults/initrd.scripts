@@ -503,7 +503,7 @@ setup_keymap() {
 		fi
 		[ ! -e /dev/tty0 ] && ln -s /dev/tty1 /dev/tty0
 
-        if [ -f /lib/keymaps/keymapList ]
+        if [ -f /lib/keymaps/${keymap}.map ]
         then
             chooseKeymap
         else
