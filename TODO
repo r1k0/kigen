@@ -5,18 +5,19 @@ NODO: make --fakemod=/ in case kernel modules are copied from another chroot
 NODO: make multiple targets callable (left for the next new whole rewrite of cliparser.py)
     do kigen k && kigen i instead
 
-0.3.0
+0.3.*
 =====
+TODO: fix boot message from linuxrc
+    sh: bad number
+    the strange thing is that I fixed that before by changing the '-eq' statements by '='
+    bad? black magic?
+    I should check why/how gentoo native busybox handles that (lazy...) 
+    I'll just probably put those '=' back
+TODO: --splash should detect if splashutils is compiled with +fbcondecor
+    if not make a big warning that splash will not work
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
-TODO: review code of --evms against genkernel
-TODO: review code of --dmraid against genkernel
-TODO: --splash should detect if splashutils is compiled with +fbcondecor
-    if not make a big warning that splash will not work
-
-0.3.*
-=====
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe the user knows what hes doing
