@@ -85,7 +85,7 @@ You can simply ignore either one or the other or both configuration files.
 Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
-KIgen could intheory work on non Portage Linux systems but does not.
+KIgen could in theory work on non Portage Linux systems but does not.
 Here is the list of items that depend on Portage.
 ::
  - Python3 version depends on 
@@ -93,6 +93,7 @@ Here is the list of items that depend on Portage.
  sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen/modules")
  - --splash uses media-gfx/splashutils
  - --evms uses sys-fs/evms
+ - /usr/bin/portageq used in modules/utils/misc.py def get_distdir(temp):
 
 Portage systems kernel boot options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
