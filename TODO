@@ -7,19 +7,17 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.0
 =====
-TODO: make --keymaps=all and --keymaps=be to trim down size if needed
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: review code of --evms against genkernel
 TODO: review code of --dmraid against genkernel
-TODO: --fixdotconfig=splash
-    http://fr.gentoo-wiki.com/wiki/Framebuffer
 TODO: --splash should detect if splashutils is compiled with +fbcondecor
     if not make a big warning that splash will not work
 
 0.3.*
 =====
+TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe the user knows what hes doing
     - let ldd parse a dynamically linked binary and get a list of 
