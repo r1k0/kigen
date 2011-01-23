@@ -9,7 +9,7 @@ General
 Introduction
 ~~~~~~~~~~~~
 
-**KIGen now only supports Python3**
+**KIGen now only supports Python3.**
 
 **KIGen uses Genkernel linuxrc and provides the same boot interface as Genkernel does.**
 
