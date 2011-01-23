@@ -86,12 +86,13 @@ Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
 KIgen could intheory work on non Portage Linux systems but does not.
-Here is the list of items that depend on Portage:
-- Python3 version depends on 
+Here is the list of items that depend on Portage.
+::
+ - Python3 version depends on 
  pyv = os.popen('eselect python show --python3').read().strip()
  sys.path.append("/usr/lib/"+pyv+"/site-packages/kigen/modules")
-- --splash uses media-gfx/splashutils
-- --evms uses sys-fs/evms
+ - --splash uses media-gfx/splashutils
+ - --evms uses sys-fs/evms
 
 Portage systems kernel boot options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
