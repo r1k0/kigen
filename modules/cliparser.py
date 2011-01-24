@@ -56,7 +56,7 @@ def cli_parser():
         print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
-    if not 'k' in cliopts or not 'kernel' in cliopts or not 'i' in cliopts or not 'initramfs' in cliopts:
+    if not 'k' in cliopts and not 'kernel' in cliopts and not 'i' in cliopts and not 'initramfs' in cliopts:
         print(stdout.red('error') + ': target not known.')
         sys.exit(2)
 
