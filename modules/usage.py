@@ -214,9 +214,19 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #   print '  --aufs                     False                   Include aufs support'
 #   print '  --firmware=/dir            ""                      Include custom firmware support'
 
+    # fix \t display depending on length of cli[splash']
+    if cli['keymaps'] != '':
+        if len(cli['keymaps']) <= 4:
+            tab = '\t\t'
+        elif len(cli['keymaps']) > 4 and len(cli['keymaps']) < 8:
+            tab = '\t'
+        elif len(cli['keymaps']) > 8:
+            tab = '\t'
+    else:
+        tab = '\t\t'
     print('  --keymaps                 ', end=' ')
     print(initramfs_conf['keymaps'], end=' ') # bool
-    print('\t\tInclude all keymaps')
+    print(tab+'Include all keymaps')
 
     print('  --ttyecho                 ', end=' ')
     print(initramfs_conf['ttyecho'], end=' ') # bool
