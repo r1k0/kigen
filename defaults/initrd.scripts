@@ -212,7 +212,7 @@ cache_cd_contents() {
 mount_sysfs() {
 	mount -t sysfs /sys /sys >/dev/null 2>&1
 	ret=$?
-	[ "$ret" = '0' ] || bad_msg "Failed to mount /sys!"
+	[ ${ret} -eq 0 ] || bad_msg "Failed to mount /sys!"
 }
 
 findnfsmount() {
@@ -351,7 +351,7 @@ warn_msg() {
 }
 
 crypt_filter() {
-	if [ ${CRYPT_SILENT} -eq 1 ]
+	if [ "${CRYPT_SILENT}" = '1' ]
 	then
 		eval $1 >/dev/null 2>/dev/null
 	else
@@ -398,11 +398,6 @@ whereis(){
 	esac
 }
 
-bind_mount_dev() {
-	# bind-mount /dev/ so that loop devices can be found
-	mount -o bind ${NEW_ROOT}/dev /dev
-}
-
 setup_hotplug() {
 	if [ "${KV_2_6_OR_GREATER}" ]
 	then
@@ -410,11 +405,23 @@ setup_hotplug() {
 	fi
 }
 
-check_slowusb() {
-	[ "${DO_slowusb}" ] || \
-	for dir in /sys/bus/usb/drivers/usb-storage/*
+setup_slowusb() {
+	# slowusb already set?
+	if [ "${DO_slowusb}" = "1" ]
+	then
+		return
+	fi
+
+	local usb_storage_dir="/sys/bus/usb/drivers/usb-storage"
+	if [ ! -d "${usb_storage_dir}" ]
+	then
+		# no automated slowusb required. no usb-storage devices attached.
+		return
+	fi
+	for x in "${usb_storage_dir}"/*
 	do
-		[ -d "${dir}" ] && FORCE_slowusb="1"
+		[ -d "${x}" ]  && [ "${x}" != "${usb_storage_dir}/module" ] \
+			&& { DO_slowusb="1" ; break ; }
 	done
 }
 
@@ -422,13 +429,8 @@ start_dev_mgr() {
 	if [ "${KV_2_6_OR_GREATER}" ]
 	then
 		cd /sys
-		[ "${DO_slowusb}" ] && sdelay
-		check_slowusb
-		[ "${FORCE_slowusb}" ] && sdelay
 		good_msg 'Activating mdev'
 		runmdev
-		[ "${DO_slowusb}" ] || \
-		[ "${FORCE_slowusb}" ] && sdelay
 		cd /
 	fi
 }
@@ -451,7 +453,7 @@ cmdline_hwopts() {
 			fi
 			if [ "$(echo ${y} | cut -b -7)" = "keymap=" ]
 			then
-				MY_HWOPTS="${MY_HWOPTS} dokeymap keymap"
+				MY_HWOPTS="${MY_HWOPTS} dokeymap"
 			fi
 		done
 	done
@@ -578,7 +580,7 @@ chooseKeymap() {
 		loadkmap < /lib/keymaps/${keymap}.map
 #		xkeymap=${keymap}
 #		echo ${keymap} | egrep -e "[0-9]+" >/dev/null 2>&1
-#		if [ "$?" = '0'  ]
+#		if [ $? -eq 0 ]
 #		then
 #			xkeymap=`tail -n 7 /lib/keymaps/keymapList | grep ${keymap} | sed -r "s/.*\s+${keymap}\s+([a-z-]+).*/\1/g" | egrep -v 1`
 #		fi
@@ -613,9 +615,10 @@ startVolumes() {
 	then
 		if [ ! -e '/etc/mdadm.conf' ]
 		then
-			/sbin/mdadm --examine > /etc/mdadm.conf
+			echo "DEVICE /dev/sd[a-z]* /dev/hd[a-z]*" >/etc/mdadm.conf
+			/sbin/mdadm --examine --scan >>/etc/mdadm.conf
 		fi
-		/sbin/mdadm --assemble
+		/sbin/mdadm --assemble --scan
 	fi
 
 	if [ "${USE_DMRAID_NORMAL}" = '1' ]
@@ -643,7 +646,6 @@ startVolumes() {
 
 			good_msg "Scanning for Volume Groups"
 			/bin/vgscan --ignorelockingfailure --mknodes 2>/dev/null
-			sleep 2
 			good_msg "Activating Volume Groups"
 			/bin/vgchange -ay --ignorelockingfailure 2>/dev/null
 
@@ -714,6 +716,9 @@ startiscsi() {
 		fi
 
 		iscsistart -i "${ISCSI_INITIATORNAME}" -t "${ISCSI_TARGET}" -a "${ISCSI_ADDRESS}" ${ADDITIONAL}
+
+		# let iscsid settle - otherwise mounting the iSCSI-disk will fail (very rarely, though)
+		sleep 1
 	fi
 }
 
@@ -753,7 +758,7 @@ openLUKS() {
             fi
             if [ "${retval}" = '0' ] && [ -n "${DEV}" ]; then
                 good_msg "Detected crypt_${TYPE}=${LUKS_DEVICE}"
-        LUKS_DEVICE=${DEV}
+                LUKS_DEVICE=${DEV}
             fi
             ;;
     esac
@@ -765,6 +770,7 @@ openLUKS() {
 	[ ! -e /sbin/cryptsetup ] && bad_msg "The ramdisk does not support LUKS" && exit 1
 	while [ 1 ]
 	do
+		local gpg_cmd=""
 		# if crypt_silent=1 and some error occurs, enter shell quietly
 		if [ \( ${CRYPT_SILENT} -eq 1 \) -a \( \( \( ${DEV_ERROR} -eq 1 \) -o \( ${KEY_ERROR} -eq 1 \) \) -o \( ${KEYDEV_ERROR} -eq 1 \) \) ]
 		then
@@ -782,9 +788,36 @@ openLUKS() {
 			whereis "LUKS_KEYDEV" "${LUKS_NAME} key device"
 			KEYDEV_ERROR=0
 		else
+			case "${LUKS_DEVICE}" in
+				UUID\=*|LABEL\=*)
+					local REAL_LUKS=""
+					local retval=1
+
+					if [ "${retval}" -ne 0 ]; then
+						REAL_LUKS=`findfs "${LUKS_DEVICE}" 2>/dev/null`
+						retval=$?
+					fi
+
+					if [ "$retval" -ne 0 ]; then
+						REAL_LUKS=`busybox findfs "${LUKS_DEVICE}" 2>/dev/null`
+						retval=$?
+					fi
+
+					if [ "${retval}" -ne 0 ]; then
+						REAL_LUKS=`blkid -l -t "${LUKS_DEVICE}" | cut -d ":" -f 1 2>/dev/null`
+						retval=$?
+					fi
+
+					if [ "${retval}" -eq 0 ] && [ -n "${REAL_LUKS}" ]; then
+						good_msg "Detected device ${REAL_LUKS}"
+						LUKS_DEVICE="${REAL_LUKS}"
+					fi
+				;;
+			esac
+
 			setup_md_device ${LUKS_DEVICE}
 			cryptsetup isLuks ${LUKS_DEVICE}
-			if [ ! "$?" = '0' ]
+			if [ $? -ne 0 ]
 			then
 				bad_msg "The LUKS device ${LUKS_DEVICE} does not contain a LUKS header" ${CRYPT_SILENT}
 				DEV_ERROR=1
@@ -849,10 +882,17 @@ openLUKS() {
 					fi
 					# At this point a candidate key exists (either mounted before or not)
 					good_msg "${LUKS_KEY} on device ${LUKS_KEYDEV} found" ${CRYPT_SILENT}
-					cryptsetup_options="-d ${mntkey}${LUKS_KEY}"
+					if [ $(echo ${LUKS_KEY} | grep -o '.gpg$') = ".gpg" ] && [ -e /sbin/gpg ] ; then
+						[ -e /dev/tty ] && mv /dev/tty /dev/tty.org
+						mknod /dev/tty c 5 1
+						cryptsetup_options="-d -"
+						gpg_cmd="/sbin/gpg --logger-file /dev/null --quiet --decrypt ${mntkey}${LUKS_KEY} |"
+					else
+						cryptsetup_options="-d ${mntkey}${LUKS_KEY}"
+					fi
 				fi
 				# At this point, keyfile or not, we're ready!
-				crypt_filter "cryptsetup ${cryptsetup_options} luksOpen ${LUKS_DEVICE} ${LUKS_NAME}"
+				crypt_filter "${gpg_cmd}cryptsetup ${cryptsetup_options} luksOpen ${LUKS_DEVICE} ${LUKS_NAME}"
 				if [ $? -eq 0 ]
 				then
 					good_msg "LUKS device ${LUKS_DEVICE} opened" ${CRYPT_SILENT}
@@ -903,13 +943,13 @@ startLUKS() {
 }
 
 sdelay() {
-	# Sleep a specific number of seconds if SDELAY is set otherwise only sleep
-	# 1 second
-	if [ -n "${SDELAY}" ]
+	# Sleep a specific number of seconds if SDELAY is set
+	if [ "${SDELAY}" ]
 	then
+		good_msg 'Waiting ${SDELAY} seconds...'
 		sleep ${SDELAY}
 	else
-		sleep 1
+		good_msg 'Hint: Use parameter scandelay[=seconds] if you need waiting here'
 	fi
 }
 
@@ -942,6 +982,11 @@ cdupdate() {
 	fi
 }
 
+setup_btrfsctl() {
+	# start BTRFS volume detection, if available
+	[ -x /sbin/btrfsctl ] && /sbin/btrfsctl -a
+}
+
 setup_md_device() {
 	local device
 
@@ -955,7 +1000,7 @@ setup_md_device() {
 		if [ ! -e /dev/md${MD_NUMBER} ]
 		then
 			mknod /dev/md${MD_NUMBER} b 9 ${MD_NUMBER} >/dev/null 2>&1
-			[ "$?" -ne 0 ] && bad_msg "Creation of /dev/md${MD_NUMBER} failed..."
+			[ $? -ne 0 ] && bad_msg "Creation of /dev/md${MD_NUMBER} failed..."
 		fi
 		mdstart ${MDPART} /dev/md${MD_NUMBER}
 	fi
@@ -1088,12 +1133,12 @@ setup_unionfs() {
 #                         # mount tmpfs only in the case when changes= boot parameter was 	 
 #                         # empty or we were not able to mount the storage device 	 
 #                         ret=$? 	 
-#                         if [ "${ret}" -ne 0 ] 	 
+#                         if [ ${ret} -ne 0 ]
 #                         then 	 
 #                                 bad_msg "mount of $CHANGESDEV failed falling back to ramdisk based unionfs" 	 
 #                                 mount -t tmpfs tmpfs $MEMORY 	 
 #                         fi 	 
-#                         if [ "${CDROOT}" = '1' -a ! -f ${MEMORY}/livecd.unionfs  ] 	 
+#                         if [ "${CDROOT}" -eq '1' -a ! -f ${MEMORY}/livecd.unionfs  ] 	 
 #                         then 	 
 #                                 umount $MEMORY 	 
 #                                 bad_msg "failed to find livecd.unionfs file on $CHANGESDEV" 	 
@@ -1113,7 +1158,7 @@ setup_unionfs() {
 		good_msg "Creating union mount"
 		unionfs -o allow_other,cow,noinitgroups,suid,dev,default_permissions,use_ino ${rw_dir}=RW:${ro_dir}=RO ${UNION} 2>/dev/null
 		ret=$?
-		if [ "${ret}" -ne 0 ]
+		if [ ${ret} -ne 0 ]
 		then
 			bad_msg "Can't setup union mount!"
 			USE_UNIONFS_NORMAL=0
@@ -1190,5 +1235,3 @@ runnetstack() {
 #       [ -x /bin/sh ] && /bin/sh || /bin/ash
    fi
 }
-
-
