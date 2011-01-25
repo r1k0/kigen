@@ -254,6 +254,11 @@ class append:
         modconflist = get_config_modules_list(self.modules_conf) #.split()
         # FIXME: add support for the 'probe' key
 
+        # FIXME: rather than looping twice
+        # merge modconflist.split() + self.bootupdateinitrd['load-modules'].split() and loop once
+        # but then 
+        #  - if "load-modules" in self.bootupdateinitrd:
+        # if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
         # for each module in the list modconflist
         for i in modconflist.split():
             for j in modsyslist:

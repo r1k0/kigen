@@ -224,7 +224,8 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t'
     else:
         tab = '\t\t'
-    print('  --keymaps                 ', end=' ')
+#    print('  --keymaps                 ', end=' ')
+    print('  --keymaps=xx[,xx]|all     ', end=' ')
     print(initramfs_conf['keymaps'], end=' ') # bool
     print(tab+'Include all keymaps')
 

@@ -111,8 +111,8 @@ class kernel:
                 # FIXME this needs sys-apps/v86d
 #                self.add_option('/usr/share/v86d/initramfs')
 
-        # by default don't alter dotconfig
-        # only if --fixdotconfig is passed
+        # !!! by default don't alter dotconfig
+        # !!! only if --fixdotconfig=<feat> is passed
         if self.initramfs is not '':
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
@@ -339,7 +339,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.mrproper ')) # + self.KV)
+        print(green(' * ') + turquoise('kernel.mrproper '))
         self.chgdir(self.kerneldir)
         command = self.build_command('mrproper', self.quiet)
         if self.quiet is '':
@@ -353,7 +353,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.clean ')) # + self.KV)
+        print(green(' * ') + turquoise('kernel.clean '))
         self.chgdir(self.kerneldir)
         command = self.build_command('clean', self.quiet)
         if self.quiet is '':
@@ -361,14 +361,14 @@ class kernel:
 
         return os.system(command)
     
-    # FIXME: should we add a sort of yes '' | make oldconfig?
+    # FIXME: shouldn't we add a sort of yes '' | make oldconfig?
     def make_oldconfig(self):
         """
         Kernel command interface for oldconfig
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.oldconfig ')) # + self.KV)
+        print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
         command = self.build_command('oldconfig', '')
         if self.quiet is '':
@@ -382,7 +382,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.menuconfig '))# + self.KV)
+        print(green(' * ') + turquoise('kernel.menuconfig '))
         self.chgdir(self.kerneldir)
         command = self.build_command('menuconfig', '')
 
@@ -394,7 +394,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.prepare '))# + self.KV)
+        print(green(' * ') + turquoise('kernel.prepare '))
         self.chgdir(self.kerneldir)
         command = self.build_command('prepare', self.quiet)
         if self.quiet is '':
@@ -408,7 +408,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.bzImage '))# + self.KV)
+        print(green(' * ') + turquoise('kernel.bzImage '))
         self.chgdir(self.kerneldir)
         command = self.build_command('bzImage', self.quiet)
         if self.quiet is '':
@@ -422,7 +422,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.modules '))# + self.KV)
+        print(green(' * ') + turquoise('kernel.modules '))
         self.chgdir(self.kerneldir)
         command = self.build_command('modules', self.quiet)
         if self.quiet is '':
@@ -436,7 +436,7 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/')# + self.KV)
+        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/')
         self.chgdir(self.kerneldir)
         
         # export INSTALL_MOD_PATH 

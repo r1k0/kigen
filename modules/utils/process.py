@@ -5,6 +5,10 @@ import subprocess
 import logging
 import glob
 
+# FIXME rewrite me
+# to detect and autosplit lists: I don't know how 
+# to do them all in one function, gotta split in 3 functions
+
 def process_pipe(cmd, verbose):
     """
     SINGLE Piped process launcher
@@ -122,10 +126,6 @@ def process_star(cmd, verbose):
     p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
 
     return p.wait() # , p.stdout #, p.stderr
-
-# FIXME rewrite me
-# to detect and autosplit lists: I don't know how 
-# to do them all in one function, gotta split in 3 functions
 
 # | > >> < 
 # processes < >> > logic

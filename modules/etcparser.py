@@ -1,8 +1,5 @@
 import sys
 import os
-#from .default import *
-#from .utils.misc import *
-#from .stdout import white, green, turquoise, yellow, red
 import default
 import utils.misc
 import stdout
