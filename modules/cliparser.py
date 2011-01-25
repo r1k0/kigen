@@ -56,10 +56,6 @@ def cli_parser():
         print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
         sys.exit(2)
 
-    if not 'k' in cliopts and not 'kernel' in cliopts and not 'i' in cliopts and not 'initramfs' in cliopts:
-        print(stdout.red('error') + ': target not known.')
-        sys.exit(2)
-
     # prevent multiple targets from running
     if ('k' in cliopts and 'i' in cliopts)               or \
         ('initramfs' in cliopts and 'kernel' in cliopts) or \
@@ -613,5 +609,9 @@ def cli_parser():
                 sys.exit(0)
             else:
                 assert False, "uncaught option"
+
+    if not 'k' in cliopts and not 'kernel' in cliopts and not 'i' in cliopts and not 'initramfs' in cliopts:
+        print(stdout.red('error') + ': target not known.')
+        sys.exit(2)
 
     return master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose
