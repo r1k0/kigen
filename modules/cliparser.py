@@ -12,6 +12,8 @@ import etcparser
 
 def cli_parser():
 
+    target = ''
+
     cli = { 'nocache':      '',                 \
             'oldconfig':    True,               \
             # typically kernel sources are found here
@@ -69,11 +71,9 @@ def cli_parser():
         # we found the kernel target
         # parse accordingly
         if 'kernel' in sys.argv:
-#            target.append('kernel')
             target = 'kernel'
             cliopts.remove('kernel')
         if 'k' in sys.argv:
-#            target.append('kernel')   
             target = 'k'
             cliopts.remove('k')
 
@@ -166,9 +166,6 @@ def cli_parser():
         cli['nosaveconfig'] = False
         if kernel_conf['nosaveconfig'] == 'True':
             cli['nosaveconfig'] = True
-#        cli['fixdotconfig'] = False
-#        if kernel_conf['fixdotconfig'] == 'True':
-#            cli['fixdotconfig'] = True
         cli['fixdotconfig'] = ''
         if kernel_conf['fixdotconfig'] != '':
             cli['fixdotconfig'] = kernel_conf['fixdotconfig']
@@ -225,7 +222,6 @@ def cli_parser():
             elif o in ("--clean"):
                 cli['clean'] = True
             elif o in ("--fixdotconfig"):
-#                cli['fixdotconfig'] = True
                 cli['fixdotconfig'] = a
             elif o in ("--getdotconfig"):
                 cli['getdotconfig'] = a
@@ -237,11 +233,9 @@ def cli_parser():
         # we found the initramfs target
         # parse accordingly
         if 'initramfs' in sys.argv:
-#            target.append('initramfs')
             target = 'initramfs'
             cliopts.remove('initramfs')
         if 'i' in sys.argv:
-#            target.append('initramfs')
             target = 'i'
             cliopts.remove('i')
 
@@ -569,7 +563,6 @@ def cli_parser():
             elif o in ("--ttyecho"):
                 cli['ttyecho'] = True
             elif o in ("--keymaps"):
-#                cli['keymaps'] = True
                 cli['keymaps'] = a
             elif o in ("--strace"):
                 cli['strace'] = True
@@ -610,7 +603,7 @@ def cli_parser():
             else:
                 assert False, "uncaught option"
 
-    if not 'k' in cliopts and not 'kernel' in cliopts and not 'i' in cliopts and not 'initramfs' in cliopts:
+    if target == '':
         print(stdout.red('error') + ': target not known.')
         sys.exit(2)
 
