@@ -748,7 +748,7 @@ mkdir "${CHROOT}/proc" "${CHROOT}/sys" 2>/dev/null
 echo -ne "${BOLD}.${NORMAL}"
 
 # kill dropbear
-[ -d /dev/pts ] && killall dropbear && umount /dev/pts
+[ -d /dev/pts ] && killall dropbear 2>/dev/null ; umount /dev/pts 2>/dev/null
 
 umount /sys || echo '*: Failed to unmount the ramdisk /sys!'
 umount /proc || echo '*: Failed to unmount the ramdisk /proc!'
