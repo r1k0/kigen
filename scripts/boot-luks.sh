@@ -7,11 +7,8 @@ then
     echo "i.e. # ./boot-luks-lvm.sh /dev/sda2"
     exit
 fi
-/sbin/ttyecho -n /dev/console ^D 
-sleep 3                          
+pkill cryptsetup
+sleep 2
 /sbin/cryptsetup luksOpen $1 root
-sleep 1
+sleep 2
 /sbin/ttyecho -n /dev/console $1
-sleep 1                           
-exit                              
-
