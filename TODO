@@ -7,6 +7,7 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.*
 =====
+TODO: shouldn't we bg udhcpc from linuxrc?
 TODO: --splash should detect if splashutils is compiled with +fbcondecor
     if not make a big warning that splash will not work
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
