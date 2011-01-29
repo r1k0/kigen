@@ -4,11 +4,11 @@ if  [ "$1" = "-h" ]     || \
     [ "$1" = "" ]
 then
     echo "$0 <root device>"
-    echo "i.e. # ./boot-luks-lvm.sh /dev/sda2"
+    echo "i.e. # ./boot-luks.sh /dev/sda2"
     exit
 fi
 pkill cryptsetup
 sleep 2
 /sbin/cryptsetup luksOpen $1 root
 sleep 2
-/sbin/ttyecho -n /dev/console $1
+/sbin/ttyecho -n /dev/console /dev/mapper/root
