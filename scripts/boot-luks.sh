@@ -1,6 +1,6 @@
 #!/bin/sh
 if  [ "$1" = "-h" ]     || \
-    [ "$1" = "--help"]  || \
+    [ "$1" = "--help" ] || \
     [ "$1" = "" ]
 then
     echo "$0 <root device>"
