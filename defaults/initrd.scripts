@@ -1178,7 +1178,7 @@ runnetstack() {
     if [ "$IP" = "udhcpc" ] || [ "$IP" = "dhcp" ] || [ "$IP" = "DHCP" ]
     then
         echo -e "${BOLD}   ::${NORMAL} Bringing up IP via udhcpc..."
-        udhcpc
+        udhcpc &
     elif [ "$IP" != "" ]
     then
         # getting static ip up
