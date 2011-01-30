@@ -747,6 +747,8 @@ cd "${CHROOT}"
 mkdir "${CHROOT}/proc" "${CHROOT}/sys" 2>/dev/null
 echo -ne "${BOLD}.${NORMAL}"
 
+# kill udhcpc client
+pkill dhcp 2>/dev/null
 # kill dropbear
 [ -d /dev/pts ] && killall dropbear 2>/dev/null ; umount /dev/pts 2>/dev/null
 
