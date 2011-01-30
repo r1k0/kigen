@@ -21,7 +21,7 @@ class luks:
         @return: bool
         """
         zero = int('0')
-    
+
         if os.path.isfile('%s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver)) is not True:
             if self.download() is not zero: 
                 process('rm -v %s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver), self.verbose)
