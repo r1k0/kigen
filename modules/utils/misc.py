@@ -100,7 +100,8 @@ def get_kernel_version(kerneldir):
     """
     # best way *here* is to get KV from the sources, not the running KV
     if not os.path.isfile(kerneldir+'/Makefile'):
-        return 'none'
+        # if no /Makefile, that sux big time
+        return 'NONE', 'NONE'
     head = []
     nlines = 0
     for line in open(kerneldir+'/Makefile'):
