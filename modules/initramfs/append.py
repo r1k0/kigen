@@ -115,7 +115,7 @@ class append:
         #       os.system('cp %s/arch/linuxrc %s/initramfs-base-temp/init' % (libdir, temp['work']))
         # elif arch is 'amd64':
         #       blablabla
-            print(green(' * ')+'... Gentoo linuxrc'+ white(' 3.4.12.1') + ' patched')
+            print(green(' * ')+'... Gentoo linuxrc'+ white(' 3.4.12.5') + ' patched')
             # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
             process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
