@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import subprocess
+from stdout import green, turquoise, white, red, yellow
 
 # WARN don't import logging here as it's not already declared in kigen
 
@@ -101,7 +102,8 @@ def get_kernel_version(kerneldir):
     # best way *here* is to get KV from the sources, not the running KV
     if not os.path.isfile(kerneldir+'/Makefile'):
         # if no /Makefile, that sux big time
-        return 'NONE', 'NONE'
+        print(red('error')+': no kernel Makefile found')
+        sys.exit(2)
     head = []
     nlines = 0
     for line in open(kerneldir+'/Makefile'):
