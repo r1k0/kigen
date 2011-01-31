@@ -22,6 +22,11 @@ class luks:
         """
         zero = int('0')
 
+        # make sure dev-libs/libgcrypt has static-libs use flag enabled
+        if not pkg_has_useflag('dev-libs', 'libgcrypt', 'static-libs'):
+            print(red('error')+': utils.pkg_has_useflag("dev-libs", "libgcrypt", "static-libs") failed, remerge libgcrypt with +static-libs')
+            sys.exit(2)
+
         if os.path.isfile('%s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver)) is not True:
             if self.download() is not zero: 
                 process('rm -v %s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver), self.verbose)

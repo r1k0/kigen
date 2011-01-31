@@ -675,6 +675,7 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
     
         if os.path.isfile(splash_geninitramfs_bin):
+
             # if splashutils is merged
             if self.stheme is not '':
                 if os.path.isfile('/etc/conf.d/splash'):
@@ -684,6 +685,11 @@ class append:
     
             logging.debug('initramfs.append.splash ' + self.stheme + ' ' + self.sres)
             print(green(' * ') + turquoise('initramfs.append.splash ') + self.stheme + ' ' + self.sres)
+
+            # make sure media-gfx/splashutils has fbcondecor use flag enabled
+            if not pkg_has_useflag('media-gfx', 'splashutils', 'fbcondecor'):
+                print(red('error')+': utils.pkg_has_useflag("media-gfx", "splashutils", "fbcondecor") failed, remerge splashutils with +fbcondecor')
+                sys.exit(2)
 
             # because splash_geninitramfs fails and exits with success when you provide a broken theme path
             # we need to check if the dir exists first, can't hurt

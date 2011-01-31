@@ -214,3 +214,36 @@ def get_config_modules_dict(master_conf):
             'MODULES_VIDEO': master_conf['MODULES_VIDEO'] }
 
     return modules_config
+
+def pkg_has_useflag(pkgcat, pkgname, uf):
+    """
+    Check if pkg has useflag enabled
+
+    @arg: string
+    @arg: string
+    @arg: string
+
+    @return: bool
+    """
+    path = '/var/db/pkg/'+pkgcat
+    if os.path.isdir(path):
+        dirlist = os.listdir(path)
+        for i in dirlist:
+            if i.startswith(pkgname):
+                # make sure pkgname dir exists
+                if os.path.isdir(path+'/'+i):
+                    iusefile = path+'/'+i+'/USE'
+                    if os.path.isfile(iusefile):
+                        f = open(iusefile, "r")
+                        useflags = f.read()
+                        if uf in useflags: # and '-'+uf not in useflags:
+                            # useflag found
+                            return True
+                            break
+                        else:
+                            # useflag not found, keep on looking
+                            pass
+    else:
+        print('splashutils is not installed')
+    
+    return False

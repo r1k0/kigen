@@ -5,15 +5,6 @@ NODO: make --fakemod=/ in case kernel modules are copied from another chroot
 NODO: make multiple targets callable (left for the next new whole rewrite of cliparser.py)
     do kigen k && kigen i instead
 
-0.3.0
-=====
-TODO: make sure dev-libs/libgcrypt static-libs
-    else cryptsetup may fail to link
-    dump /var/db/pkg/dev-libs/libgcrypt-1.4.6/IUSE and check for static-libs
-TODO: --splash should detect if splashutils is compiled with +fbcondecor
-    if not make a big warning that splash will not work
-    dump /var/db/pkg/media-gfx/splashutils/IUSE and check for fbcondecor
-
 0.3.*
 =====
 TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
