@@ -20,7 +20,7 @@ then
 	exit 1
 fi
 
-mount -t proc proc /proc >/dev/null 2>&1
+mount -t proc -o noexec,nosuid,nodev proc /proc >/dev/null 2>&1
 mount -o remount,rw / >/dev/null 2>&1
 
 # Set up symlinks
@@ -29,12 +29,6 @@ mount -o remount,rw / >/dev/null 2>&1
 if [ "$0" = '/init' ]
 then
 	[ -e /linuxrc ] && rm /linuxrc
-fi
-
-if [ -e /bin/lvm ]
-then
-	[ -e /bin/vgscan   ] || ln -s /bin/lvm /bin/vgscan
-	[ -e /bin/vgchange ] || ln -s /bin/lvm /bin/vgchange
 fi
 
 quiet_kmsg
@@ -184,6 +178,9 @@ do
 		iscsi_debug\=*)
 			ISCSI_DEBUG=`parse_opt "${x}"`
 		;;
+		iscsi_noibft)
+			ISCSI_NOIBFT=1
+		;;
 		# Crypto
 		crypt_root\=*)
 			CRYPT_ROOT=`parse_opt "${x}"`
@@ -312,7 +309,10 @@ start_dev_mgr
 [ "${DO_slowusb}" ] && sleep 10
 
 # Start iSCSI
-startiscsi
+if [ -e /bin/iscsistart ]
+then
+	startiscsi
+fi
 
 # Setup btrfs, see bug 303529
 setup_btrfsctl
@@ -325,8 +325,7 @@ startVolumes
 
 setup_keymap
 
-# Run the net stack
-# ip=x.x.x.x or ip=dhcp
+# Run the net stack ip=x.x.x.x or ip=dhcp
 runnetstack
 
 # Initialize LUKS root device except for livecd's
@@ -747,13 +746,23 @@ cd "${CHROOT}"
 mkdir "${CHROOT}/proc" "${CHROOT}/sys" 2>/dev/null
 echo -ne "${BOLD}.${NORMAL}"
 
-# kill udhcpc client
+# kill udhcpc client and dropbear
 pkill dhcp 2>/dev/null
-# kill dropbear
 [ -d /dev/pts ] && killall dropbear 2>/dev/null ; umount /dev/pts 2>/dev/null
 
-umount /sys || echo '*: Failed to unmount the ramdisk /sys!'
-umount /proc || echo '*: Failed to unmount the ramdisk /proc!'
+# If devtmpfs is mounted, try move it to the new root
+# If that fails, try to unmount all possible mounts of devtmpfs as stuff breaks otherwise
+for fs in /dev /sys /proc
+do
+	if grep -qs "$fs" /proc/mounts
+	then
+		if ! mount --move $fs "${CHROOT}"$fs
+		then
+			umount $fs || echo '*: Failed to move and unmount the ramdisk $fs!'
+		fi
+	fi
+done
+
 echo -e "${BOLD}.${NORMAL}"
 
 exec /sbin/switch_root -c "/dev/console" "${CHROOT}" "${REAL_INIT:-/sbin/init}" "${INIT_OPTS}"

@@ -79,6 +79,5 @@ DEFAULT_NFSOPTIONS="ro,nolock,rsize=1024,wsize=1024"
 
 # Only sections that are in by default or those that
 # are not module groups need to be defined here...
-HWOPTS='keymap cache modules pata sata scsi usb firewire waitscan slowusb evms lvm dmraid mdadm fs net bootupdate' # bootupdate not really needed but better set
-MY_HWOPTS='modules pata sata scsi usb firewire waitscan dmraid mdadm fs net iscsi bootupdate video crypt'
-
+HWOPTS='keymap cache modules pata sata scsi usb firewire waitscan slowusb evms lvm dmraid mdadm fs net bootupdate' # IIRC bootupdate not needed but not tested without
+MY_HWOPTS='modules pata sata scsi slowusb usb firewire waitscan dmraid mdadm fs net iscsi'
