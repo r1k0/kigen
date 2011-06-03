@@ -25,8 +25,8 @@ def process_pipe(cmd, verbose):
 
     cmdlines = [process.split() for process in cmd]
 
-    p1 = subprocess.Popen(cmdlines[0], stdout=subprocess.PIPE)#, close_fds=True)
-    p2 = subprocess.Popen(cmdlines[1], stdin=p1.stdout, stderr=p1.stdout)#, close_fds=True)
+    p1 = subprocess.Popen(cmdlines[0], stdout=subprocess.PIPE)  #, close_fds=True)
+    p2 = subprocess.Popen(cmdlines[1], stdin=p1.stdout)         #, stderr=p1.stdout)#, close_fds=True)
     ret2 = p2.wait()
 
     return ret2 , p2.stdout #, p2.stderr
