@@ -106,7 +106,7 @@ class initramfs:
 
         # 1) create initial cpio and append object
         logging.debug('>>> creating empty initramfs')
-        ret, output = process_pipe('echo | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
+        ret, output = process_pipe('echo -n | cpio --quiet -o -H newc -F %s/initramfs-cpio' % self.tempcache, self.verbose)
         if ret is not zero: self.fail('cpio')
 
         # 2) append base
