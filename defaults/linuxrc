@@ -224,6 +224,9 @@ do
 		nameserver\=*)
 			NAMESERVER=`parse_opt "${x}"`
 		;;
+		defaultgw\=*)
+			DEFAULTGW=`parse_opt "${x}"`
+		;;
 		domain\=*)
 			DOMAIN=`parse_opt "${x}"`
 		;;
