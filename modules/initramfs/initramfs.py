@@ -18,6 +18,7 @@ class initramfs:
                 modules_conf,       \
                 initramfs_conf,     \
                 version_conf,       \
+                url_conf,           \
                 cli,                \
                 temp,               \
                 bootupdateset,      \
@@ -34,6 +35,7 @@ class initramfs:
         self.modules_conf       = modules_conf
         self.initramfs_conf     = initramfs_conf
         self.version_conf       = version_conf
+        self.url_conf           = url_conf
         self.linuxrc            = cli['linuxrc'] # list
         self.defconfig          = cli['defconfig']
         self.oldconfig          = cli['oldconfig']
@@ -84,6 +86,7 @@ class initramfs:
                         self.modules_conf,      \
                         self.initramfs_conf,    \
                         self.version_conf,      \
+                        self.url_conf,          \
                         self.libdir,            \
                         self.defconfig,         \
                         self.oldconfig,         \

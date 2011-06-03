@@ -6,12 +6,13 @@ from utils.misc import *
 
 class dropbear:
 
-    def __init__(self, master_config, version_conf, debugflag, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, debugflag, temp, verbose):
         
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.dropbear_ver   = version_conf['dropbear-version']
+        self.url            = url_conf['dropbear']
         self.dropbeartmp    = temp['work'] + '/dropbear-' + self.dropbear_ver
         self.debugflag      = debugflag
 
@@ -77,7 +78,8 @@ class dropbear:
         @return: bool
         """
         print(green(' * ') + '... dropbear.download')
-        dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
+#        dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
+        dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
 
 #       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
         return os.system('/usr/bin/wget %s -O %s/dropbear-%s.tar.gz %s' % (dropbear_url, get_distdir(self.temp), str(self.dropbear_ver), self.verbose['std']))

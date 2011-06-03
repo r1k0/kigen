@@ -20,6 +20,7 @@ class append:
                 modules_conf,       \
                 initramfs_conf,     \
                 version_conf,       \
+                url_conf,           \
                 libdir,             \
                 defconfig,          \
                 oldconfig,          \
@@ -51,6 +52,7 @@ class append:
         self.modules_conf       = modules_conf
         self.initramfs_conf     = initramfs_conf
         self.version_conf       = version_conf
+        self.url_conf           = url_conf
         self.libdir             = libdir
         self.defconfig          = defconfig
         self.oldconfig          = oldconfig
@@ -199,6 +201,7 @@ class append:
                         self.bbconf,                \
                         self.master_conf,           \
                         self.version_conf,          \
+                        self.url_conf,              \
                         self.libdir,                \
                         self.temp,                  \
                         self.defconfig,             \
@@ -384,7 +387,7 @@ class append:
             else:
                 # compile and cache
                 from .sources.luks import luks
-                luksobj = luks(self.master_conf, self.version_conf, self.temp, self.verbose)
+                luksobj = luks(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
                 luksobj.build()
 
                 # extract cache
@@ -543,7 +546,7 @@ class append:
             else:
                 # compile and cache
                 from .sources.dropbear import dropbear
-                dropbearobj = dropbear(self.master_conf, self.version_conf, self.dbdebugflag, self.temp, self.verbose)
+                dropbearobj = dropbear(self.master_conf, self.version_conf, self.url_conf, self.dbdebugflag, self.temp, self.verbose)
                 dropbearobj.build()
 
                 # extract cache
@@ -652,7 +655,7 @@ class append:
             else:
                 # compile
                 from .sources.e2fsprogs import e2fsprogs
-                e2obj = e2fsprogs(self.master_conf, self.version_conf, self.temp, self.verbose)
+                e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
                 e2obj.build()
     
             # extract cache
@@ -709,7 +712,7 @@ class append:
             
             # FIXME write the splash routine from scratch?
 #            from sources.splash import splash
-#            splashobj = splash(self.master_conf, self.version_conf, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
+#            splashobj = splash(self.master_conf, self.version_conf, self.url, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
 #            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
@@ -766,7 +769,7 @@ class append:
             else: 
                 # compile and cache
                 from .sources.lvm2 import lvm2
-                lvm2obj = lvm2(self.master_conf, self.version_conf, self.temp, self.verbose)
+                lvm2obj = lvm2(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
                 lvm2obj.build()
 
                 # extract cache
@@ -1115,7 +1118,7 @@ class append:
             else:
                 # compile
                 from .sources.strace import strace
-                strobj = strace(self.master_conf, self.version_conf, self.temp, self.verbose)
+                strobj = strace(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
                 strobj.build()
 
             # extract cache
@@ -1171,7 +1174,7 @@ class append:
             else:
                 # compile
                 from .sources.screen import screen
-                strobj = screen(self.master_conf, self.version_conf, self.temp, self.verbose)
+                strobj = screen(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
                 strobj.build()
 
             # extract cache

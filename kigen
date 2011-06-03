@@ -53,13 +53,21 @@ from utils.fstab    import *
 import utils
 
 # parse command line parameters
-master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose = cli_parser()
+master_conf,    \
+kernel_conf,    \
+modules_conf,   \
+initramfs_conf, \
+version_conf,   \
+url_conf,       \
+target,         \
+cli,            \
+verbose = cli_parser()
 
 # FIXME because we get verbose['logfile'] from cli_parser()
 # we can only start logging after here, that sucks ass big time
 # NOFIX but then if fixed, means we can log the parsers
 # useful? we already log the content of 
-# master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose
+# master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, url_conf target, cli, verbose
 
 # remove previous logfile
 if os.path.isfile(verbose['logfile']):
@@ -82,6 +90,9 @@ logging.debug(initramfs_conf)
 
 logging.debug('dumping /etc/kigen/initramfs/version.conf')
 logging.debug(version_conf)
+
+logging.debug('dumping /etc/kigen/initramfs/url.conf')
+logging.debug(url_conf)
 
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
@@ -253,6 +264,7 @@ if target == 'initramfs' or target == 'i':
                     modules_conf,           \
                     initramfs_conf,         \
                     version_conf,           \
+                    url_conf,               \
                     cli,                    \
                     temp,                   \
                     bootupdateset,          \

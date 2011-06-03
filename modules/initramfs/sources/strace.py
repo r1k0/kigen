@@ -6,12 +6,13 @@ from utils.misc import *
 
 class strace:
 
-    def __init__(self, master_config, version_conf, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.strace_ver     = version_conf['strace-version']
+        self.url            = url_conf['strace']
         self.stracetmp      = temp['work'] + '/strace-' + self.strace_ver
         
     def build(self):
@@ -69,7 +70,8 @@ class strace:
         @return: bool
         """
         print(green(' * ') + '... strace.download')
-        strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
+#        strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
+        strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
         return os.system('/usr/bin/wget %s -O %s/strace-%s.tar.bz2 %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))

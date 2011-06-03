@@ -6,12 +6,13 @@ from utils.misc import *
 
 class lvm2:
 
-    def __init__(self, master_config, version_conf, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.lvm2_ver       = str(version_conf['lvm2-version'])
+        self.url            = url_conf['lvm2']
         self.lvm2_tmp       = temp['work']+'/LVM2.'+self.lvm2_ver
 
     def build(self):
@@ -73,7 +74,8 @@ class lvm2:
         print(green(' * ') + '... lvm2.download')
 #       lvm2_url = 'ftp://sources.redhat.com/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
         # new redhat sources URL
-        lvm2_url = 'ftp://sourceware.org/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
+#        lvm2_url = 'ftp://sourceware.org/pub/lvm2/LVM2.' + self.lvm2_ver + '.tgz'
+        lvm2_url = self.url+'/LVM2.' + self.lvm2_ver + '.tgz'
 
         # FIXME utils.shell.process does not remove the output!!!!
         return os.system('/usr/bin/wget %s -O %s/LVM2.%s.tgz %s' % (lvm2_url, get_distdir(self.temp), self.lvm2_ver, self.verbose['std']))

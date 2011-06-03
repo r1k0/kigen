@@ -8,7 +8,6 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 0.3.*
 =====
 TODO: add USE=mdoule-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
-TODO: add <pkg>_url= to /etc/kigen/initramfs/url.conf
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)

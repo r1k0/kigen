@@ -6,12 +6,13 @@ from utils.misc import *
 
 class e2fsprogs:
 
-    def __init__(self, master_config, version_conf, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.e2fsprogs_ver  = version_conf['e2fsprogs-version']
+        self.url            = url_conf['e2fsprogs']
         self.e2tmp          = temp['work'] + '/e2fsprogs-' + self.e2fsprogs_ver
         
     def build(self):
@@ -69,7 +70,8 @@ class e2fsprogs:
         @return: bool
         """
         print(green(' * ') + '... e2fsprogs.download')
-        e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
+#        e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
+        e2fsprogs_url = self.url+'/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output!
         return os.system('/usr/bin/wget %s -O %s/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, get_distdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))

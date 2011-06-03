@@ -6,11 +6,12 @@ from utils.misc import *
 
 class luks:
 
-    def __init__(self, master_config, version_conf, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
+        self.url            = url_conf['luks']
         self.luks_ver       = version_conf['luks-version']
         self.lukstmp        = temp['work'] + '/cryptsetup-' + self.luks_ver
 
@@ -75,7 +76,8 @@ class luks:
         @return: bool
         """
         print(green(' * ') + '... luks.download')
-        luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
+#        luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
+        luks_url = self.url +'/cryptsetup-'+ self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
         return os.system('/usr/bin/wget %s -v -O %s/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_distdir(self.temp), str(self.luks_ver), self.verbose['std']))

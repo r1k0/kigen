@@ -29,6 +29,7 @@ def cli_parser():
     modules_conf    = {}
     initramfs_conf  = {}
     version_conf    = {}
+    url_conf        = {}
 
     # copy command line arguments
     cliopts = sys.argv
@@ -241,7 +242,7 @@ def cli_parser():
 
         # parse /etc/kigen/initramfs/modules.conf and 
         # /etc/kigen/initramfs/initramfs.conf
-        initramfs_conf, modules_conf, version_conf = etcparser.etc_parser_initramfs()
+        initramfs_conf, modules_conf, version_conf, url_conf = etcparser.etc_parser_initramfs()
 
         try:
             # parse command line
@@ -607,4 +608,12 @@ def cli_parser():
         print(stdout.red('error') + ': target not known.')
         sys.exit(2)
 
-    return master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, target, cli, verbose
+    return  master_conf,    \
+            kernel_conf,    \
+            modules_conf,   \
+            initramfs_conf, \
+            version_conf,   \
+            url_conf,       \
+            target,         \
+            cli,            \
+            verbose

@@ -6,12 +6,13 @@ from utils.misc import *
 
 class screen:
 
-    def __init__(self, master_config, version_conf, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.screen_ver     = version_conf['screen-version']
+        self.url            = url_conf['screen']
         self.screentmp      = temp['work'] + '/screen-' + self.screen_ver
         
     def build(self):
@@ -69,7 +70,8 @@ class screen:
         @return: bool
         """
         print(green(' * ') + '... screen.download')
-        screen_url = 'http://ftp.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
+#        screen_url = 'http://ftp.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
+        screen_url = self.url + '/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
         return os.system('/usr/bin/wget %s -O %s/screen-%s.tar.gz %s' % (screen_url, get_distdir(self.temp), str(self.screen_ver), self.verbose['std']))

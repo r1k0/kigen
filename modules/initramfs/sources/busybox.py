@@ -11,6 +11,7 @@ class busybox:
                 dotconfig,      \
                 master_conf,    \
                 version_conf,   \
+                url_conf,       \
                 libdir,         \
                 temp,           \
                 defconfig,      \
@@ -28,6 +29,7 @@ class busybox:
         self.menuconfig = menuconfig
         self.verbose    = verbose
         self.bb_version = version_conf['busybox-version']
+        self.url        = url_conf['busybox']
         self.bb_tmp     = temp['work'] + '/busybox-' + self.bb_version
  
     def build(self):
@@ -109,7 +111,8 @@ class busybox:
         
         """
         print(green(' * ') + '... busybox.download')
-        bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
+        bb_url = self.url + '/busybox-' + str(self.bb_version) + '.tar.bz2'
+#        bb_url = 'http://www.busybox.net/downloads/busybox-' + str(self.bb_version) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
         return os.system('/usr/bin/wget %s -O %s/busybox-%s.tar.bz2 %s' % (bb_url, get_distdir(self.temp), str(self.bb_version), self.verbose['std']))

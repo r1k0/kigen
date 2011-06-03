@@ -6,12 +6,13 @@ from utils.misc import *
 
 class dmraid:
 
-    def __init__(self, master_config, version_conf, selinux, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, selinux, temp, verbose):
 
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.dmraid_ver     = version_conf['dmraid-version']
+        self.url            = url_conf['dmraid']
         self.dmraidtmp      = temp['work'] + '/dmraid/' + self.dmraid_ver + '/dmraid'
         self.selinux        = selinux
         
@@ -82,7 +83,8 @@ class dmraid:
         @return: bool
         """
         print(green(' * ') + '... dmraid.download')
-        dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
+#        dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
+        dmraid_url = self.url + '/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output
         return os.system('/usr/bin/wget %s -O %s/dmraid-%s.tar.bz2 %s' % (dmraid_url, get_distdir(self.temp), str(self.dmraid_ver), self.verbose['std']))

@@ -116,3 +116,17 @@ version_conf = {
         'dmraid-version'    : '',   \
         'lvm2-version'      : '',   \
         'e2fsprogs-version':''}
+
+url_conf = {
+        'device_mapper' : '',   \
+        'fuse'          : '',   \
+        'iscsi'         : '',   \
+        'unionfs_fuse'  : '',   \
+        'busybox'       : '',   \
+        'dmraid'        : '',   \
+        'dropbear'      : '',   \
+        'e2fsprogs'     : '',   \
+        'luks'          : '',   \
+        'lvm2'          : '',   \
+        'strace'        : '',   \
+        'screen'        : '',}
