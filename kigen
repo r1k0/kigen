@@ -276,7 +276,7 @@ if target == 'initramfs' or target == 'i':
         if cli['noboot'] is False:
             if check_boot_mount() is True:
                 logging.debug('>>> copying initramfs')
-                print(green(' * produced ')+cli['rename'])
+                print(green(' * produced ')+cli['rename'] +'  '+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+' Mb')
                 process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
             else:
                 if check_boot_fstab() is True:
@@ -290,7 +290,7 @@ if target == 'initramfs' or target == 'i':
                         sys.exit(1)
                 
                 logging.debug('>>> copying initramfs')
-                print(green(' * produced ')+cli['rename'])
+                print(green(' * produced ')+cli['rename'] +'  '+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+' Mb')
                 process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
     
             if boot_mounted is True:
