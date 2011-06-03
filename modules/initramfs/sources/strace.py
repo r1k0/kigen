@@ -70,7 +70,6 @@ class strace:
         @return: bool
         """
         print(green(' * ') + '... strace.download')
-#        strace_url = 'http://downloads.sourceforge.net/project/strace/strace/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
         strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!

@@ -78,7 +78,6 @@ class dropbear:
         @return: bool
         """
         print(green(' * ') + '... dropbear.download')
-#        dropbear_url = 'http://matt.ucc.asn.au/dropbear/releases/' + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
         dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
 
 #       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)

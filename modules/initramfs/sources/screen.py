@@ -70,7 +70,6 @@ class screen:
         @return: bool
         """
         print(green(' * ') + '... screen.download')
-#        screen_url = 'http://ftp.gnu.org/screen/screen-' + str(self.screen_ver) + '.tar.gz'
         screen_url = self.url + '/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output

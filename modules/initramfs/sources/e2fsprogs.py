@@ -70,7 +70,6 @@ class e2fsprogs:
         @return: bool
         """
         print(green(' * ') + '... e2fsprogs.download')
-#        e2fsprogs_url = 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
         e2fsprogs_url = self.url+'/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output!

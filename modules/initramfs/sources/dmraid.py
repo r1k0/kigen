@@ -83,7 +83,6 @@ class dmraid:
         @return: bool
         """
         print(green(' * ') + '... dmraid.download')
-#        dmraid_url = 'http://people.redhat.com/~heinzm/sw/dmraid/src/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
         dmraid_url = self.url + '/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output

@@ -76,7 +76,6 @@ class luks:
         @return: bool
         """
         print(green(' * ') + '... luks.download')
-#        luks_url = 'http://gentoo.osuosl.org/distfiles/cryptsetup-' + self.luks_ver + '.tar.bz2'
         luks_url = self.url +'/cryptsetup-'+ self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
