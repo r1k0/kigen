@@ -215,18 +215,18 @@ do
 		keymap\=*)
 			keymap=`parse_opt "${x}"`
 		;;
-        dodropbear)
-            DROPBEAR='yes'
-        ;;
-        netmask\=*)
-            NETMASK=`parse_opt "${x}"`
-        ;;
-        nameserver\=*)
-            NAMESERVER=`parse_opt "${x}"`
-        ;;
-        domain\=*)
-            DOMAIN=`parse_opt "${x}"`
-        ;;
+		dodropbear)
+			DROPBEAR='yes'
+		;;
+		netmask\=*)
+			NETMASK=`parse_opt "${x}"`
+		;;
+		nameserver\=*)
+			NAMESERVER=`parse_opt "${x}"`
+		;;
+		domain\=*)
+			DOMAIN=`parse_opt "${x}"`
+		;;
 		unionfs)
 			if [ ! -x /sbin/unionfs ]
 			then
