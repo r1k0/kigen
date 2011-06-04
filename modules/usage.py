@@ -104,6 +104,12 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print(kernel_conf['nomodinstall'], end=' ')
     print('\t\tDo not install modules')
     print()
+
+    print('  --nomodules            ', end=' ')
+    print(kernel_conf['nomodules'], end=' ')
+    print('\t\tDo not compile or install modules')
+    print()
+
     print('Misc:')
     print('  --nosaveconfig            ', end=' ')
     print(kernel_conf['nosaveconfig'], end=' ')
