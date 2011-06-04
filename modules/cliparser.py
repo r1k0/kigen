@@ -304,6 +304,7 @@ def cli_parser():
                                     "dropbear",     \
                                     "linuxrc=",     \
                                     "nocache",      \
+                                    "nomodules",    \
                                     "noboot",       \
                                     "selinux",      \
                                     "help",         \
@@ -428,6 +429,10 @@ def cli_parser():
         cli['dropbear'] = False
         if initramfs_conf['dropbear'] == 'True':
             cli['dropbear'] = True
+
+        cli['nomodules'] = False
+        if initramfs_conf['nomodules'] == 'True':
+            cli['nomodules'] = True
 
         cli['nocache'] = False
         if initramfs_conf['nocache'] == 'True':
