@@ -436,7 +436,10 @@ class kernel:
         
         @return: bool
         """
-        print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules/')
+        if self.fakeroot[len(self.fakeroot)-1] == '/':
+            print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + 'lib/modules')
+        else:
+            print(green(' * ') + turquoise('kernel.modules_install ') + self.fakeroot + '/lib/modules')
         self.chgdir(self.kerneldir)
         
         # export INSTALL_MOD_PATH 
