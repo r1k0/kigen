@@ -7,7 +7,7 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.*
 =====
-TODO: add USE=mdoule-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
+TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
@@ -22,11 +22,6 @@ TODO: find a way to split append.py a bit more
     dissociate a binary class too? why not?
     split append.py into append_feature.py? append_luks.py ...
     append directory?
-TODO: get a way to set per features source or host binary?
-    then rewrite cliarg with --source-<feature>
-    --source-all by default
-    --source-luks --bin-lvm2...
-    --bin-all --bin-luks...
 TODO: kigen i --screen
     see if screen can attach to /dev/console
     I need something clean to replace ttyecho 

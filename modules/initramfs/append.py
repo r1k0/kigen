@@ -717,70 +717,159 @@ class append:
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
-     
-    def lvm2(self):
+
+    def bin_lvm2(self):
         """
-        Append lvm2 static binary first to the initramfs
+        Append lvm2 static binary from host to the initramfs
+    
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.bin_lvm2')
+        lvm2_static_bin = '/sbin/lvm.static'
+        lvm2_bin        = '/sbin/lvm'
+
+        process('mkdir -p ' + self.temp['work']+'/initramfs-bin-lvm2-temp/etc/lvm', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-bin-lvm2-temp/bin', self.verbose)
+
+        # copy binary from host
+        logging.debug('initramfs.append.bin_lvm2 from %s' % white('host'))
+        print(green(' * ') + turquoise('initramfs.append.bin_lvm2 ')+lvm2_static_bin+' from '+white('host'))
+
+        process('cp %s      %s/initramfs-bin-lvm2-temp/bin/lvm'         % (lvm2_static_bin, self.temp['work']), self.verbose)
+        process('cp %s      %s/initramfs-bin-lvm2-temp/bin/lvm_static'  % (lvm2_static_bin, self.temp['work']), self.verbose)
+        process('chmod +x   %s/initramfs-bin-lvm2-temp/bin/lvm'         % self.temp['work'], self.verbose)
+        process('chmod +x   %s/initramfs-bin-lvm2-temp/bin/lvm_static'  % self.temp['work'], self.verbose)
+
+#        if not isstatic(lvm2_static_bin, self.verbose):
+#            lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
+#
+#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-lvm2-temp/lib', self.verbose)
+#            print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
+#            for i in lvm2_libs:
+#                print green(' * ') + '... ' + i
+#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-lvm2-temp/lib'), self.verbose)
+#        else:
+#            logging.debug(lvm2_static_bin+' is statically linked nothing to do')
+
+        # FIXME print something to the user about it so he knows and can tweak it before
+        if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
+            process('cp /etc/lvm/lvm.conf %s/initramfs-bin-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-bin-lvm2-temp')
+        return os.system(self.cpio())
+
+    def source_lvm2(self):
+        """
+        Append lvm2 compiled binary to the initramfs
     
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.lvm2')
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
-    
-        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
-        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
-    
-        if os.path.isfile(lvm2_static_bin) and self.hostbin is True and isstatic(lvm2_static_bin, self.verbose):
-            # use from host
-            logging.debug('initramfs.append.lvm2 from %s' % white('host'))
-            print(green(' * ') + turquoise('initramfs.append.lvm2 ')+lvm2_static_bin+' from '+white('host'))
-            process('cp %s %s/initramfs-lvm2-temp/bin/lvm'          % (lvm2_static_bin, self.temp['work']), self.verbose)
-            process('cp %s %s/initramfs-lvm2-temp/bin/lvm_static'   % (lvm2_static_bin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm'       % self.temp['work'], self.verbose)
-            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm_static'% self.temp['work'], self.verbose)
 
-#            if not isstatic(lvm2_static_bin, self.verbose):
-#                lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
-#
-#                process('mkdir -p %s' % self.temp['work']+'/initramfs-lvm2-temp/lib', self.verbose)
-#                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
-#                for i in lvm2_libs:
-#                    print green(' * ') + '... ' + i
-#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
-#            else:
-#                logging.debug(lvm2_static_bin+' is statically linked nothing to do')
+        process('mkdir -p ' + self.temp['work']+'/initramfs-source-lvm2-temp/etc/lvm', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-source-lvm2-temp/bin', self.verbose)
+
+        logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
+        print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
+
+        if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources')
+        elif not isstatic(lvm2_static_bin, self.verbose):
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources')
+
+        if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'cache found: importing')
+
+            # extract cache
+            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
         else:
-            logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
-            print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
+            # compile and cache
+            from .sources.lvm2 import lvm2
+            lvm2obj = lvm2(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            lvm2obj.build()
 
-            if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources')
-            elif not isstatic(lvm2_static_bin, self.verbose):
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources')
+            # extract cache
+            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
 
-            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
-                # use cache
-                print(green(' * ') + '... '+'cache found: importing')
-
-                # extract cache
-                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
-                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
-            else: 
-                # compile and cache
-                from .sources.lvm2 import lvm2
-                lvm2obj = lvm2(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
-                lvm2obj.build()
-
-                # extract cache
-                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
-                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
-
+        # FIXME print something to the user about it so he knows and can tweak it before
         if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
-            process('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
-    
-        os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
+            process('cp /etc/lvm/lvm.conf %s/initramfs-source-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-source-lvm2-temp')
         return os.system(self.cpio())
+
+#    def lvm2(self):
+#        """
+#        Append lvm2 static binary first to the initramfs
+#    
+#        @return: bool
+#        """
+#        logging.debug('>>> entering initramfs.append.lvm2')
+#        lvm2_static_bin = '/sbin/lvm.static'
+#        lvm2_bin        = '/sbin/lvm'
+#    
+#        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/etc/lvm', self.verbose)
+#        process('mkdir -p ' + self.temp['work']+'/initramfs-lvm2-temp/bin', self.verbose)
+#   
+#        # copy binary from host
+#        if os.path.isfile(lvm2_static_bin) and self.hostbin is True and isstatic(lvm2_static_bin, self.verbose):
+#            # use from host
+#            logging.debug('initramfs.append.lvm2 from %s' % white('host'))
+#            print(green(' * ') + turquoise('initramfs.append.lvm2 ')+lvm2_static_bin+' from '+white('host'))
+#            process('cp %s %s/initramfs-lvm2-temp/bin/lvm'          % (lvm2_static_bin, self.temp['work']), self.verbose)
+#            process('cp %s %s/initramfs-lvm2-temp/bin/lvm_static'   % (lvm2_static_bin, self.temp['work']), self.verbose)
+#            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm'       % self.temp['work'], self.verbose)
+#            process('chmod +x %s/initramfs-lvm2-temp/bin/lvm_static'% self.temp['work'], self.verbose)
+#
+##            if not isstatic(lvm2_static_bin, self.verbose):
+##                lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
+##
+##                process('mkdir -p %s' % self.temp['work']+'/initramfs-lvm2-temp/lib', self.verbose)
+##                print yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries'
+##                for i in lvm2_libs:
+##                    print green(' * ') + '... ' + i
+##                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-lvm2-temp/lib'), self.verbose)
+##            else:
+##                logging.debug(lvm2_static_bin+' is statically linked nothing to do')
+#
+#        # or build it
+#        else:
+#            logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
+#            print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
+#
+#            if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources')
+#            elif not isstatic(lvm2_static_bin, self.verbose):
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources')
+#
+#            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
+#                # use cache
+#                print(green(' * ') + '... '+'cache found: importing')
+#
+#                # extract cache
+#                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+#                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+#            else: 
+#                # compile and cache
+#                from .sources.lvm2 import lvm2
+#                lvm2obj = lvm2(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+#                lvm2obj.build()
+#
+#                # extract cache
+#                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+#                process('chmod a+x %s/initramfs-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+#
+#        # FIXME print something to the user about it so he knows and can tweak it before
+#        if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
+#            process('cp /etc/lvm/lvm.conf %s/initramfs-lvm2-temp/etc/lvm/' % self.temp['work'], self.verbose)
+#    
+#        os.chdir(self.temp['work']+'/initramfs-lvm2-temp')
+#        return os.system(self.cpio())
 
     def evms(self):
         """

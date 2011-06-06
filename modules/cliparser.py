@@ -122,54 +122,76 @@ def cli_parser():
         for o, a in opts:
             if o in ("--logfile"):
                 cli['logfile'] = a
+
         # default
         cli['dotconfig']    = master_conf['kernel-sources']+'/.config'
         if kernel_conf['dotconfig'] != '':
             cli['dotconfig'] = kernel_conf['dotconfig']
+
         cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
         if kernel_conf['rename'] != '':
             cli['rename'] = kernel_conf['rename']
+
         cli['initramfs']    = ''
+
         cli['info']         = False
+
         cli['mrproper']     = False
         if kernel_conf['mrproper'] == 'True':
             cli['mrproper'] = True
+
         cli['menuconfig']   = False
         if kernel_conf['menuconfig'] == 'True':
             cli['menuconfig'] = True
+
         cli['clean']        = False
         if kernel_conf['clean'] == 'True':
             cli['clean'] = True
+
         cli['allyesconfig'] = False
+
         cli['allnoconfig']  = False
+
         cli['oldconfig']    = False
         if kernel_conf['nooldconfig'] == 'False':
             cli['oldconfig'] = True
+
         cli['nomodinstall'] = False
         if kernel_conf['nomodinstall'] == 'True':
             cli['nomodinstall'] = True
+
         cli['fakeroot']     = '/'
         if kernel_conf['fakeroot'] != '':
             cli['fakeroot'] = kernel_conf['fakeroot']
+
         cli['nocache']      = False
+
         cli['noboot']       = False
         if kernel_conf['noboot'] == 'True':
             cli['noboot'] = True
+
 #       quiet               = '2>&1 | tee -a ' + logfile # verbose
 #       quiet               = '>>' + logfile + ' 2>&1' # quiet + logfile
+
         verbose['std']      = '>>' + cli['logfile'] + ' 2>&1'
         verbose['set']      = False
+
         if master_conf['debug'] == 'True':
             verbose['set'] = True
             verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
             verbose['logfile'] = cli['logfile']
+
         cli['color']        = True
+
         cli['nosaveconfig'] = False
+
         if kernel_conf['nosaveconfig'] == 'True':
             cli['nosaveconfig'] = True
+
         cli['fixdotconfig'] = ''
         if kernel_conf['fixdotconfig'] != '':
             cli['fixdotconfig'] = kernel_conf['fixdotconfig']
+            
         cli['getdotconfig'] = ''
 
         # target options
@@ -256,6 +278,8 @@ def cli_parser():
                                     "oldconfig",    \
                                     "luks",         \
                                     "lvm2",         \
+                                    "source-lvm2",  \
+                                    "bin-lvm2",     \
                                     "dmraid",       \
                                     "iscsi",        \
                                     "logfile=",     \
@@ -339,6 +363,14 @@ def cli_parser():
         cli['lvm2'] = False
         if initramfs_conf['lvm2'] == 'True':
             cli['lvm2'] = True
+
+        cli['source-lvm2'] = False
+        if initramfs_conf['source-lvm2'] == 'True':
+            cli['source-lvm2'] = True
+
+        cli['bin-lvm2'] = False
+        if initramfs_conf['bin-lvm2'] == 'True':
+            cli['bin-lvm2'] = True
 
         cli['dmraid'] = False
         if initramfs_conf['dmraid'] == 'True':
@@ -489,6 +521,12 @@ def cli_parser():
 # FIXME trigger --keymap=all?
             elif o in ("--lvm2"):
                 cli['lvm2'] = True
+            elif o in ("--source-lvm2"):
+                cli['source-lvm2'] = True
+                cli['bin-lvm2'] = False
+            elif o in ("--bin-lvm2"):
+                cli['bin-lvm2'] = True
+                cli['source-lvm2'] = False
             elif o in ("--dmraid"):
                 cli['dmraid'] = True
             elif o in ("--dotconfig"):

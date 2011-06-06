@@ -5,6 +5,7 @@ import subprocess
 from stdout import *
 from utils.process import *
 from utils.misc import *
+from utils.isstatic import isstatic
 from .append import append
 
 class initramfs:
@@ -125,9 +126,17 @@ class initramfs:
         if aobj.busybox() is not zero: self.fail('busybox')
 
         # 5) append lvm2
-        if self.cli['lvm2'] is True:
+#        if self.cli['lvm2'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.lvm2() is not zero: self.fail('lvm2')
+        if self.cli['bin-lvm2'] is True:
             os.chdir(self.temp['work'])
-            if aobj.lvm2() is not zero: self.fail('lvm2')
+#            if os.path.isfile('/sbin/lvm.static') and self.hostbin is True and isstatic('/sbin/lvm.static', self.verbose):
+            if os.path.isfile('/sbin/lvm.static') and isstatic('/sbin/lvm.static', self.verbose):
+                if aobj.bin_lvm2() is not zero: self.fail('bin-lvm2')
+        if self.cli['source-lvm2'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.source_lvm2() is not zero: self.fail('source-lvm2')
 
         # 6) append dmraid
         if self.cli['dmraid'] is True:

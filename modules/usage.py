@@ -172,9 +172,13 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(initramfs_conf['luks'], end=' ') # bool 
     print('\t\tInclude LUKS support (host binary or sources)')
 
-    print('  --lvm2                    ', end=' ')
-    print(initramfs_conf['lvm2'], end=' ') # bool
-    print('\t\tInclude LVM2 support (host binary or sources)')
+    print('  --bin-lvm2                ', end=' ')
+    print(initramfs_conf['bin-lvm2'], end=' ') # bool
+    print('\t\tInclude LVM2 support from host binaries')
+
+    print('  --source-lvm2             ', end=' ')
+    print(initramfs_conf['source-lvm2'], end=' ') # bool
+    print('\t\tInclude LVM2 support from sources')
 
     print(stdout.yellow('  --evms                    '), end=' ')
     print(initramfs_conf['evms'], end=' ') # bool
