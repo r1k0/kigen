@@ -249,7 +249,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(initramfs_conf['bin-screen'], end=' ') # bool
     print('\t\tInclude the screen binary tool from host')
 
-    print('  --source-screen              ', end=' ')
+    print('  --source-screen           ', end=' ')
     print(initramfs_conf['source-screen'], end=' ') # bool
     print('\t\tInclude the screen binary tool from sources')
 
