@@ -263,13 +263,21 @@ class append:
         #  - if "load-modules" in self.bootupdateinitrd:
         # if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
         # for each module in the list modconflist
+        print(green(' * ') + '... ', end="")
+        z = int('0')
         for i in modconflist.split():
             for j in modsyslist:
                 k = i +'.ko'
                 # check for a match
                 if k == j:
                     logging.debug('shipping ' + i)
-                    print(green(' * ') + '... ' + i)
+#                    print(green(' * ') + '... ' + i)
+                    print(i, end=" ")
+                    z = z+1
+                 #   print(z)
+                    if (z % 4 == 0):
+                        print()
+                        print(green(' * ') + '... ', end="")
                     # if the module is found copy it
                     module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
                     module_dirname = os.path.dirname(module)
@@ -288,7 +296,8 @@ class append:
                         module_dirname = os.path.dirname(module)
                         process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
-    
+   
+        print()
         # FIXME: make variable of /lib/modules in case of FAKEROOT export
         process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
     
@@ -1154,7 +1163,8 @@ class append:
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-ttyecho-temp/sbin', self.verbose)
 
-        print(green(' * ') + '... ' + 'gcc -static %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'))
+        print(green(' * ') + '... ' + 'gcc -static %s/tools/ttyecho.c\n \
+          -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'))
         process('gcc -static %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'), self.verbose)
         process('chmod +x %s' % self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho', self.verbose)
 
