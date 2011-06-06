@@ -360,9 +360,9 @@ def cli_parser():
         if initramfs_conf['luks'] == 'True':
             cli['luks'] = True
 
-        cli['lvm2'] = False
-        if initramfs_conf['lvm2'] == 'True':
-            cli['lvm2'] = True
+#        cli['lvm2'] = False
+#        if initramfs_conf['lvm2'] == 'True':
+#            cli['lvm2'] = True
 
         cli['source-lvm2'] = False
         if initramfs_conf['source-lvm2'] == 'True':
