@@ -182,9 +182,18 @@ class initramfs:
             if aobj.strace() is not zero: self.fail('strace')
 
         # append screen
-        if self.cli['screen'] is True:
+#        if self.cli['screen'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.screen() is not zero: self.fail('screen')
+        if self.cli['bin-screen'] is True:
             os.chdir(self.temp['work'])
-            if aobj.screen() is not zero: self.fail('screen')
+#            if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
+            if os.path.isfile('/usr/bin/screen') and self.hostbin is True and isstatic('/usr/bin/screen', self.verbose):
+                if aobj.bin_screen() is not zero: self.fail('bin-screen')
+
+        if self.cli['source-screen'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.source_screen() is not zero: self.fail('source-screen')
 
 #        # 14) append unionfs_fuse
 #        if self.cli['unionfs'] is True:

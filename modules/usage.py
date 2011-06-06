@@ -241,9 +241,17 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(initramfs_conf['strace'], end=' ') # bool
     print('\t\tInclude the strace binary tool (host binary or sources)')
 
-    print('  --screen                  ', end=' ')
-    print(initramfs_conf['screen'], end=' ') # bool
-    print('\t\tInclude the screen binary tool (host binary or sources)')
+#    print('  --screen                  ', end=' ')
+#    print(initramfs_conf['screen'], end=' ') # bool
+#    print('\t\tInclude the screen binary tool (host binary or sources)')
+
+    print('  --bin-screen              ', end=' ')
+    print(initramfs_conf['bin-screen'], end=' ') # bool
+    print('\t\tInclude the screen binary tool from host')
+
+    print('  --source-screen              ', end=' ')
+    print(initramfs_conf['source-screen'], end=' ') # bool
+    print('\t\tInclude the screen binary tool from sources')
 
     # fix \t display depending on length of cli['plugin']
     if cli['plugin'] != '': 

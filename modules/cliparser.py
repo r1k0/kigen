@@ -317,6 +317,8 @@ def cli_parser():
                                     "ttyecho",      \
                                     "strace",       \
                                     "screen",       \
+                                    "bin-screen",   \
+                                    "source-screen", \
                                     "debugflag",    \
                                     "debug"])
         except GetoptError as err:
@@ -360,9 +362,9 @@ def cli_parser():
         if initramfs_conf['luks'] == 'True':
             cli['luks'] = True
 
-#        cli['lvm2'] = False
-#        if initramfs_conf['lvm2'] == 'True':
-#            cli['lvm2'] = True
+        cli['lvm2'] = False
+        if initramfs_conf['lvm2'] == 'True':
+            cli['lvm2'] = True
 
         cli['source-lvm2'] = False
         if initramfs_conf['source-lvm2'] == 'True':
@@ -477,6 +479,14 @@ def cli_parser():
         cli['screen'] = False
         if initramfs_conf['screen'] == 'True':
             cli['screen'] = True
+
+        cli['bin-screen'] = False
+        if initramfs_conf['bin-screen'] == 'True':
+            cli['bin-screen'] = True
+
+        cli['source-screen'] = False
+        if initramfs_conf['source-screen'] == 'True':
+            cli['source-screen'] = True
 
         cli['debugflag'] = False
         if initramfs_conf['debugflag'] == 'True':
@@ -607,6 +617,14 @@ def cli_parser():
                 cli['strace'] = True
             elif o in ("--screen"):
                 cli['screen'] = True
+                cli['glibc'] = True         # screen needs glibc
+                cli['libncurses'] = True    # screen needs libncurses
+            elif o in ("--bin-screen"):
+                cli['bin-screen'] = True
+                cli['glibc'] = True         # screen needs glibc
+                cli['libncurses'] = True    # screen needs libncurses
+            elif o in ("--source-screen"):
+                cli['source-screen'] = True
                 cli['glibc'] = True         # screen needs glibc
                 cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):

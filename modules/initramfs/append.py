@@ -1219,66 +1219,144 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-strace-temp')
         return os.system(self.cpio())
 
-    def screen(self):
+    def bin_screen(self):
         """
         Append screen binary to the initramfs
         
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.screen')
+        logging.debug('>>> entering initramfs.append.bin_screen')
         screen_bin = '/usr/bin/screen'
 
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-screen-temp/bin', self.verbose)
 
-        if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
- 
-             # use from host
-            logging.debug('initramfs.append.screen from %s' % white('host'))
-            print(green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host'))
-            process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+         # use from host
+        logging.debug('initramfs.append.bin_screen from %s' % white('host'))
+        print(green(' * ') + turquoise('initramfs.append.bin_screen ')+ screen_bin +' from ' + white('host'))
+        process('cp %s %s/initramfs-bin-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
+        process('chmod +x %s/initramfs-bin-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
-#            if not isstatic(screen_bin, self.verbose):
-#                screen_libs = listdynamiclibs(screen_bin, self.verbose)
+#        if not isstatic(screen_bin, self.verbose):
+#            screen_libs = listdynamiclibs(screen_bin, self.verbose)
 #
-#                process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
-#                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
-#                for i in screen_libs:
-#                    print green(' * ') + '... ' + i
-#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
-#            else:
-#                logging.debug(screen_bin+' is statically linked nothing to do')
+#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-screen-temp/lib', self.verbose)
+#            print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
+#            for i in screen_libs:
+#                print green(' * ') + '... ' + i
+#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-screen-temp/lib'), self.verbose)
+#        else:
+#            logging.debug(screen_bin+' is statically linked nothing to do')
+        # add required /usr/share/terminfo/l/linux for screen
+        # FIXME: to support other arch copy accordingly
+        os.makedirs(self.temp['work']+'/initramfs-bin-screen-temp/usr/share/terminfo/l')
+        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs--bin-screen-temp/usr/share/terminfo/l', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-bin-screen-temp')
+        return os.system(self.cpio())
+
+    def source_screen(self):
+        """
+        Append screen binary to the initramfs
+        
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.source_screen')
+        screen_bin = '/usr/bin/screen'
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-source-screen-temp/bin', self.verbose)
+
+        logging.debug('initramfs.append.source_screen ' + self.version_conf['screen-version'])
+        print(green(' * ') + turquoise('initramfs.append.source_screen ') + self.version_conf['screen-version'])
+
+        if not os.path.isfile(screen_bin) and self.hostbin is True:
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources')
+        elif not isstatic(screen_bin, self.verbose) and self.hostbin is True:
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources')
+
+        if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'cache found: importing')
         else:
-            logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
-            print(green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version'])
+            # compile
+            from .sources.screen import screen
+            strobj = screen(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            strobj.build()
 
-            if not os.path.isfile(screen_bin) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources')
-            elif not isstatic(screen_bin, self.verbose) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources')
-
-            if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
-                # use cache
-                print(green(' * ') + '... '+'cache found: importing')
-            else:
-                # compile
-                from .sources.screen import screen
-                strobj = screen(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
-                strobj.build()
-
-            # extract cache
-            # FIXME careful with the >
-            logging.debug('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
-            os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
-            process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+        # extract cache
+        # FIXME careful with the >
+        logging.debug('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-source-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
+        os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-source-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
+        process('chmod +x %s/initramfs-source-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
         # add required /usr/share/terminfo/l/linux for screen
         # FIXME: to support other arch copy accordingly
-        os.makedirs(self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
-        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l', self.verbose)
+        os.makedirs(self.temp['work']+'/initramfs-source-screen-temp/usr/share/terminfo/l')
+        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-source-screen-temp/usr/share/terminfo/l', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-screen-temp')
+        os.chdir(self.temp['work']+'/initramfs-source-screen-temp')
         return os.system(self.cpio())
+
+
+#    def screen(self):
+#        """
+#        Append screen binary to the initramfs
+#        
+#        @return: bool
+#        """
+#        logging.debug('>>> entering initramfs.append.screen')
+#        screen_bin = '/usr/bin/screen'
+#
+#        process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/bin', self.verbose)
+#
+#        if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
+# 
+#             # use from host
+#            logging.debug('initramfs.append.screen from %s' % white('host'))
+#            print(green(' * ') + turquoise('initramfs.append.screen ')+ screen_bin +' from ' + white('host'))
+#            process('cp %s %s/initramfs-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
+#            process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+#
+##            if not isstatic(screen_bin, self.verbose):
+##                screen_libs = listdynamiclibs(screen_bin, self.verbose)
+##
+##                process('mkdir -p %s' % self.temp['work']+'/initramfs-screen-temp/lib', self.verbose)
+##                print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
+##                for i in screen_libs:
+##                    print green(' * ') + '... ' + i
+##                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-screen-temp/lib'), self.verbose)
+##            else:
+##                logging.debug(screen_bin+' is statically linked nothing to do')
+#        else:
+#            logging.debug('initramfs.append.screen ' + self.version_conf['screen-version'])
+#            print(green(' * ') + turquoise('initramfs.append.screen ') + self.version_conf['screen-version'])
+#
+#            if not os.path.isfile(screen_bin) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources')
+#            elif not isstatic(screen_bin, self.verbose) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources')
+#
+#            if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
+#                # use cache
+#                print(green(' * ') + '... '+'cache found: importing')
+#            else:
+#                # compile
+#                from .sources.screen import screen
+#                strobj = screen(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+#                strobj.build()
+#
+#            # extract cache
+#            # FIXME careful with the >
+#            logging.debug('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
+#            os.system('/bin/bzip2 -dc %s/screen-%s.bz2 > %s/initramfs-screen-temp/bin/screen' % (self.temp['cache'], self.version_conf['screen-version'], self.temp['work']))
+#            process('chmod +x %s/initramfs-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+#
+#        # add required /usr/share/terminfo/l/linux for screen
+#        # FIXME: to support other arch copy accordingly
+#        os.makedirs(self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l')
+#        process('cp /usr/share/terminfo/l/linux %s' % self.temp['work']+'/initramfs-screen-temp/usr/share/terminfo/l', self.verbose)
+#
+#        os.chdir(self.temp['work']+'/initramfs-screen-temp')
+#        return os.system(self.cpio())
 
     def plugin(self, dir):
         """
