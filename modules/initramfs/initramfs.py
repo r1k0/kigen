@@ -136,7 +136,7 @@ class initramfs:
                 if aobj.bin_lvm2() is not zero: self.fail('bin-lvm2')
         if self.cli['source-lvm2'] is True:
             os.chdir(self.temp['work'])
-            if aobj.source_lvm2() is not zero: self.fail('source-lvm2')
+            if aobj.source_lvm2() is not zero: self.fail('source_lvm2')
 
         # 6) append dmraid
         if self.cli['dmraid'] is True:
@@ -159,9 +159,19 @@ class initramfs:
 #            if aobj.mdadm() is not zero: self.fail('mdadm')
 
         # 10) append luks
-        if self.cli['luks'] is True:
+#        if self.cli['luks'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.luks() is not zero: self.fail('luks')
+        if self.cli['bin-luks'] is True:
+            # the check is done within bin_luks itself
+#            if os.path.isfile(cryptsetup_bin) and self.hostbin is True and isstatic(cryptsetup_bin, self.verbose):
+#            if os.path.isfile('/bin/cryptsetup') and isstatic('/bin/cryptsetup', self.verbose):
             os.chdir(self.temp['work'])
-            if aobj.luks() is not zero: self.fail('luks')
+            if aobj.bin_luks() is not zero: self.fail('bin-luks')
+
+        if self.cli['source-luks'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.source_luks() is not zero: self.fail('source_luks')
 
         # 11) append multipath
         # TODO
@@ -188,12 +198,12 @@ class initramfs:
         if self.cli['bin-screen'] is True:
             os.chdir(self.temp['work'])
 #            if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
-            if os.path.isfile('/usr/bin/screen') and self.hostbin is True and isstatic('/usr/bin/screen', self.verbose):
+            if os.path.isfile('/usr/bin/screen') and isstatic('/usr/bin/screen', self.verbose):
                 if aobj.bin_screen() is not zero: self.fail('bin-screen')
 
         if self.cli['source-screen'] is True:
             os.chdir(self.temp['work'])
-            if aobj.source_screen() is not zero: self.fail('source-screen')
+            if aobj.source_screen() is not zero: self.fail('source_screen')
 
 #        # 14) append unionfs_fuse
 #        if self.cli['unionfs'] is True:

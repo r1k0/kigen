@@ -277,6 +277,8 @@ def cli_parser():
                                     "defconfig",    \
                                     "oldconfig",    \
                                     "luks",         \
+                                    "bin-luks",     \
+                                    "source-luks",  \
                                     "lvm2",         \
                                     "source-lvm2",  \
                                     "bin-lvm2",     \
@@ -361,6 +363,16 @@ def cli_parser():
         cli['luks'] = False
         if initramfs_conf['luks'] == 'True':
             cli['luks'] = True
+
+        cli['bin-luks'] = False
+        if initramfs_conf['bin-luks'] == 'True':
+            cli['bin-luks'] = True
+            cli['source-luks'] = False
+
+        cli['source-luks'] = False
+        if initramfs_conf['source-luks'] == 'True':
+            cli['source-luks'] = True
+            cli['bin-luks'] = False
 
         cli['lvm2'] = False
         if initramfs_conf['lvm2'] == 'True':
@@ -529,6 +541,12 @@ def cli_parser():
             elif o in ("--luks"):
                 cli['luks'] = True
 # FIXME trigger --keymap=all?
+            elif o in ("--bin-luks"):
+                cli['bin-luks'] = True
+                cli['source-luks'] = False
+            elif o in ("--source-luks"):
+                cli['source-luks'] = True
+                cli['bin-luks'] = False
             elif o in ("--lvm2"):
                 cli['lvm2'] = True
             elif o in ("--source-lvm2"):
