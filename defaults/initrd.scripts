@@ -1224,6 +1224,12 @@ runnetstack() {
         fi
     fi
 
+    if [ -n "$DEFAULTGW" ]
+    then
+        echo -e "${BOLD}   ::${NORMAL} Setting default gateway ..."
+        route add default gw $DEFAULTGW
+    fi
+
     if [ -n "$DROPBEAR" ]
     then
         if [ -e /dev/pty0 ]; then # CONFIG_LEGACY_PTYS=n

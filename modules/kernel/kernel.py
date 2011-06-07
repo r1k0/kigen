@@ -29,6 +29,7 @@ class kernel:
         self.oldconfig      = cli['oldconfig']
         self.quiet          = verbose['std']
         self.nomodinstall   = cli['nomodinstall']
+        self.nomodules      = cli['nomodules'] 
         self.fakeroot       = cli['fakeroot']
         self.nosaveconfig   = cli['nosaveconfig']
         self.clean          = cli['clean']
@@ -150,7 +151,8 @@ class kernel:
     
         # modules
         # if --allnoconfig is passed, then modules are disabled
-        if self.allnoconfig is not True:
+        # same with --nomodules
+        if self.allnoconfig is not True and self.nomodules is not True:
             if self.make_modules() is not zero: self.fail('modules')
             if (self.nomodinstall is False) or (self.nomodinstall == 'False'):
                 # modules_install

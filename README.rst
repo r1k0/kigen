@@ -388,6 +388,7 @@ Help menu.
     --fakeroot=/dir            "/"                Append modules to /dir/lib/modules
     --nooldconfig              False              Do not ask for new kernel/initramfs options
     --nomodinstall             False              Do not install modules
+    --nomodules                False              Do not compile or install modules
   
   Misc:
     --nosaveconfig             False              Do not save kernel config in /etc/kernels

@@ -97,6 +97,7 @@ def cli_parser():
                                     "clean",                    \
                                     "menuconfig",               \
                                     "allyesconfig",             \
+                                    "nomodules",                \
                                     "nomodinstall",             \
                                     "fakeroot=",                \
                                     "allnoconfig",              \
@@ -159,6 +160,12 @@ def cli_parser():
         cli['nomodinstall'] = False
         if kernel_conf['nomodinstall'] == 'True':
             cli['nomodinstall'] = True
+
+        cli['nomodules'] = False
+        if kernel_conf['nomodules'] == 'True':
+            cli['nomodules'] = True
+            # No module support implies not installing modules
+            cli['nomodinstall'] = True 
 
         cli['fakeroot']     = '/'
         if kernel_conf['fakeroot'] != '':
@@ -232,6 +239,8 @@ def cli_parser():
                 cli['oldconfig'] = True
             elif o in ("--nomodinstall"):
                 cli['nomodinstall'] = True
+            elif o in ("--nomodules"):
+                cli['nomodules'] = True
             elif o in ("--fakeroot"):
 #                if os.path.isdir(a):
                  cli['fakeroot'] = a

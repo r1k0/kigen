@@ -48,6 +48,7 @@ kernel_conf = {
          'fakeroot'    : '',    \
          'nooldconfig' : '',    \
          'nomodinstall': '',    \
+         'nomodules'   : '',    \
          'nosaveconfig': '',    \
          'noboot'      : '',    \
          'rename'      : ''}
