@@ -151,13 +151,16 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('+ built from host binaries')
     print('| --bin-luks                ', end=' ')
     print(initramfs_conf['bin-luks'], end=' ') # bool 
-    print('\t\tInclude LUKS support from host binary')
+    print('\t\tInclude LUKS support from host')
     print('| --bin-lvm2                ', end=' ')
     print(initramfs_conf['bin-lvm2'], end=' ') # bool
-    print('\t\tInclude LVM2 support from host binaries')
+    print('\t\tInclude LVM2 support from host')
     print('| --bin-screen              ', end=' ')
     print(initramfs_conf['bin-screen'], end=' ') # bool
     print('\t\tInclude the screen binary tool from host')
+    print('| --bin-disklabel           ', end=' ')
+    print(initramfs_conf['bin-disklabel'], end=' ') # bool
+    print('\t\tInclude support for UUID/LABEL from host')
     print()
 
     print('+ built from source code')
@@ -170,7 +173,11 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-screen           ', end=' ')
     print(initramfs_conf['source-screen'], end=' ') # bool
     print('\t\tInclude the screen binary tool from sources')
+    print('| --source-disklabel        ', end=' ')
+    print(initramfs_conf['source-disklabel'], end=' ') # bool
+    print('\t\tInclude support for UUID/LABEL from sources')
     print()
+
     # fix \t display depending on length of cli[splash']
     if cli['splash'] != '':
         if len(cli['splash']) <= 4:
@@ -185,9 +192,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(tab+'Include splash support (splashutils must be merged)')
     print('   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"', end=' ')
     print('\t\t Splash resolution, all if not set')
-    print('  --disklabel               ', end=' ')
-    print(initramfs_conf['disklabel'], end=' ') # bool
-    print('\t\tInclude support for UUID/LABEL (host binary or sources)')
+#    print('  --disklabel               ', end=' ')
+#    print(initramfs_conf['disklabel'], end=' ') # bool
+#    print('\t\tInclude support for UUID/LABEL (host binary or sources)')
 #    print('  --luks                    ', end=' ')
 #    print(initramfs_conf['luks'], end=' ') # bool 
 #    print('\t\tInclude LUKS support (host binary or sources)')

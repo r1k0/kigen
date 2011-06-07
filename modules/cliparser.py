@@ -292,6 +292,8 @@ def cli_parser():
                                     "sinitrd=",     \
                                     "firmware=",    \
                                     "disklabel",    \
+                                    "bin-disklabel",\
+                                    "source-disklabel",\
                                     "unionfs-fuse", \
                                     "aufs",         \
                                     "dropbear",     \
@@ -418,6 +420,14 @@ def cli_parser():
         if initramfs_conf['disklabel'] == 'True':
             cli['disklabel'] = True
 
+        cli['bin-disklabel'] = False
+        if initramfs_conf['bin-disklabel'] == 'True':
+            cli['bin-disklabel'] = True
+
+        cli['source-disklabel'] = False
+        if initramfs_conf['source-disklabel'] == 'True':
+            cli['source-disklabel'] = True
+
 #        cli['unionfs'] = False
 #        if initramfs_conf['unionfs'] == 'True':
 #           cli['unionfs'] = True
@@ -538,6 +548,12 @@ def cli_parser():
                 verbose['logfile'] = cli['logfile']
             elif o in ("--disklabel"):
                 cli['disklabel'] = True
+            elif o in ("--bin-disklabel"):
+                cli['bin-disklabel'] = True
+                cli['source-disklabel'] = False
+            elif o in ("--source-disklabel"):
+                cli['bin-disklabel'] = False
+                cli['source-disklabel'] = True
             elif o in ("--luks"):
                 cli['luks'] = True
 # FIXME trigger --keymap=all?

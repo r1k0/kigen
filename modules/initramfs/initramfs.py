@@ -177,9 +177,24 @@ class initramfs:
         # TODO
 
         # 12) append blkid
-        if self.cli['disklabel'] is True:
+#        if self.cli['disklabel'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.e2fsprogs() is not zero: self.fail('e2fsprogs')
+        if self.cli['bin-disklabel'] is True:
             os.chdir(self.temp['work'])
-            if aobj.e2fsprogs() is not zero: self.fail('e2fsprogs')
+#            if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
+            if os.path.isfile('/sbin/blkid') and isstatic('/sbin/blkid', self.verbose):
+                if aobj.bin_disklabel() is not zero: self.fail('bin_disklabel')
+            else:
+                if not os.path.isfile('/sbin/blkid'):
+                    print(yellow(' * ') + yellow('warning')+': /bin/blkid not found on host, compiling from sources')
+                elif not isstatic('/sbin/blkid', self.verbose):
+                    print(yellow(' * ') + yellow('warning')+': /sbin/blkid is not static, compiling from sources')
+                if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
+ 
+        if self.cli['source-disklabel'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
 
         # 13) append dropbear
         if self.cli['dropbear'] is True:

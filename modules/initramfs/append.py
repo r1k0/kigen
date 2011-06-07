@@ -721,60 +721,129 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
         return os.system(self.cpio())
 
-    def e2fsprogs(self):
+    def bin_disklabel(self):
+        """
+        Append blkid binary from the host
+        
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.bin_disklabel')
+        blkid_sbin = '/sbin/blkid'
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-disklabel-temp/bin', self.verbose)
+
+#        if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
+
+        # use from host
+        logging.debug('initramfs.append.bin_disklabelfrom %s' % white('host'))
+        print(green(' * ') + turquoise('initramfs.append.bin_disklabel ')+ blkid_sbin +' from ' + white('host'))
+        process('cp %s %s/initramfs-bin-disklabel-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
+        process('chmod +x %s/initramfs-bin-disklabel-temp/bin/blkid' % self.temp['work'], self.verbose)
+
+#        if not isstatic(blkid_sbin, self.verbose):
+#            blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
+#
+#            process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
+#            print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
+#            for i in blkid_libs:
+#                print green(' * ') + '... ' + i
+#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
+#        else:
+#            logging.debug(blkid_sbin+' is statically linked nothing to do')
+        os.chdir(self.temp['work']+'/initramfs-bin-disklabel-temp')
+        return os.system(self.cpio())
+
+    def source_disklabel(self):
         """
         Append blkid binary to the initramfs
         after compiling e2fsprogs
         
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.e2fsprogs')
+        logging.debug('>>> entering initramfs.append.source_disklabel')
         blkid_sbin = '/sbin/blkid'
 
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-source-disklabel-temp/bin', self.verbose)
 
-        if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
-            # use from host
-            logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
-            print(green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host'))
-            process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+        logging.debug('initramfs.append.source_disklabel ' + self.version_conf['e2fsprogs-version'])
+        print(green(' * ') + turquoise('initramfs.append.source_disklabel ') + self.version_conf['e2fsprogs-version'])
 
-#            if not isstatic(blkid_sbin, self.verbose):
-#                blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
-#
-#                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
-#                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
-#                for i in blkid_libs:
-#                    print green(' * ') + '... ' + i
-#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
-#            else:
-#                logging.debug(blkid_sbin+' is statically linked nothing to do')
+#        if not os.path.isfile(blkid_sbin) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources')
+#        elif not isstatic(blkid_sbin, self.verbose) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is not static, compiling from sources')
+
+        if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'cache found: importing')
         else:
-            logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
-            print(green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version'])
+            # compile
+            from .sources.e2fsprogs import e2fsprogs
+            e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            e2obj.build()
 
-            if not os.path.isfile(blkid_sbin) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources')
-            elif not isstatic(blkid_sbin, self.verbose) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is not static, compiling from sources')
+        # extract cache
+        # FIXME careful with the >
+        os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-source-disklabel-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
+        process('chmod +x %s/initramfs-source-disklabel-temp/bin/blkid' % self.temp['work'], self.verbose)
 
-            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
-                # use cache
-                print(green(' * ') + '... '+'cache found: importing')
-            else:
-                # compile
-                from .sources.e2fsprogs import e2fsprogs
-                e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
-                e2obj.build()
-    
-            # extract cache
-            # FIXME careful with the >
-            os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
-            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
-    
-        os.chdir(self.temp['work']+'/initramfs-blkid-temp')
+        os.chdir(self.temp['work']+'/initramfs-source-disklabel-temp')
         return os.system(self.cpio())
+
+#    def e2fsprogs(self):
+#        """
+#        Append blkid binary to the initramfs
+#        after compiling e2fsprogs
+#        
+#        @return: bool
+#        """
+#        logging.debug('>>> entering initramfs.append.e2fsprogs')
+#        blkid_sbin = '/sbin/blkid'
+#
+#        process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/bin', self.verbose)
+#
+#        if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
+#            # use from host
+#            logging.debug('initramfs.append.e2fsprogs from %s' % white('host'))
+#            print(green(' * ') + turquoise('initramfs.append.e2fsprogs ')+ blkid_sbin +' from ' + white('host'))
+#            process('cp %s %s/initramfs-blkid-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
+#            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+#
+##            if not isstatic(blkid_sbin, self.verbose):
+##                blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
+##
+##                process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
+##                print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
+##                for i in blkid_libs:
+##                    print green(' * ') + '... ' + i
+##                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
+##            else:
+##                logging.debug(blkid_sbin+' is statically linked nothing to do')
+#        else:
+#            logging.debug('initramfs.append.e2fsprogs ' + self.version_conf['e2fsprogs-version'])
+#            print(green(' * ') + turquoise('initramfs.append.e2fsprogs ') + self.version_conf['e2fsprogs-version'])
+#
+#            if not os.path.isfile(blkid_sbin) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources')
+#            elif not isstatic(blkid_sbin, self.verbose) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is not static, compiling from sources')
+#
+#            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
+#                # use cache
+#                print(green(' * ') + '... '+'cache found: importing')
+#            else:
+#                # compile
+#                from .sources.e2fsprogs import e2fsprogs
+#                e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+#                e2obj.build()
+#    
+#            # extract cache
+#            # FIXME careful with the >
+#            os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-blkid-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
+#            process('chmod +x %s/initramfs-blkid-temp/bin/blkid' % self.temp['work'], self.verbose)
+#    
+#        os.chdir(self.temp['work']+'/initramfs-blkid-temp')
+#        return os.system(self.cpio())
 
     def splash(self):
         """
