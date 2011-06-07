@@ -57,7 +57,7 @@ def print_examples():
 
 
 def print_usage_kernel(cli, master_conf, kernel_conf):
-    print('Parameter:\t\t     Config value:\tDescription:')
+    print('Parameter:\t\t    Config value:\tDescription:')
     print()
     print('Kernel:')
     print('  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"', end='')
@@ -131,11 +131,11 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print('  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
 
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
-    print('Parameter:\t\t     Config value:\tDescription:')
+    print('Parameter:\t\t    Config value:\tDescription:')
     print()
 
     print('Linuxrc:')
-    print('  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"', end='')
+    print('  --linuxrc=/linuxrc[,/file]"'+initramfs_conf['linuxrc']+'"', end='')
     print('\t\t\tInclude custom linuxrc (files copied over to etc)')
     print()
 
@@ -196,11 +196,11 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     # fix \t display depending on length of cli[splash']
     if cli['splash'] != '':
         if len(cli['splash']) <= 4:
-            tab = '\t\t'
+            tab = '\t\t\t'
         elif len(cli['splash']) > 4 and len(cli['splash']) < 8:
-            tab = '\t'
+            tab = '\t\t'
         elif len(cli['splash']) > 8:
-            tab = '\t'
+            tab = '\t\t'
     else:
         tab = '\t\t'
     print('  --splash=<theme>          "'+initramfs_conf['splash']+'"', end='')
