@@ -732,8 +732,6 @@ class append:
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-disklabel-temp/bin', self.verbose)
 
-#        if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
-
         # use from host
         logging.debug('initramfs.append.bin_disklabelfrom %s' % white('host'))
         print(green(' * ') + turquoise('initramfs.append.bin_disklabel ')+ blkid_sbin +' from ' + white('host'))
@@ -768,6 +766,7 @@ class append:
         logging.debug('initramfs.append.source_disklabel ' + self.version_conf['e2fsprogs-version'])
         print(green(' * ') + turquoise('initramfs.append.source_disklabel ') + self.version_conf['e2fsprogs-version'])
 
+# FIXME move this to initramfs.py instead
 #        if not os.path.isfile(blkid_sbin) and self.hostbin is True:
 #            print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' not found on host, compiling from sources')
 #        elif not isstatic(blkid_sbin, self.verbose) and self.hostbin is True:
@@ -953,27 +952,28 @@ class append:
         logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
         print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
 
-        if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
-            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources')
-        elif not isstatic(lvm2_static_bin, self.verbose):
-            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources')
+# FIXME move this to initramfs.py instead
+#        if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' not found on host, compiling from sources')
+#        elif not isstatic(lvm2_static_bin, self.verbose):
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_static_bin+' is not static, compiling from sources')
 
         if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
             # use cache
             print(green(' * ') + '... '+'source cache found: importing')
 
             # extract cache
-            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
-            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+#            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+#            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
         else:
             # compile and cache
             from .sources.lvm2 import lvm2
             lvm2obj = lvm2(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
             lvm2obj.build()
 
-            # extract cache
-            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
-            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
+        # extract cache
+        os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
+        process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
 
         # FIXME print something to the user about it so he knows and can tweak it before
         if os.path.isfile(lvm2_static_bin) or os.path.isfile(lvm2_bin):
@@ -1319,7 +1319,7 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
         return os.system(self.cpio())
 
-    def ttyecho(self):
+    def source_ttyecho(self):
         """
         ttyecho is piece of code found on the net to copy/paste commands to /dev/console
         it is very handy when it comes to run commands that requires current session
@@ -1328,77 +1328,149 @@ class append:
 
         @return bool
         """
-        logging.debug('>>> entering initramfs.append.ttyecho')
-        print(green(' * ') + turquoise('initramfs.append.ttyecho'))
+        logging.debug('>>> entering initramfs.append.source_ttyecho')
+        print(green(' * ') + turquoise('initramfs.append.source_ttyecho'))
 
-        process('mkdir -p ' + self.temp['work']+'/initramfs-ttyecho-temp/sbin', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-source-ttyecho-temp/sbin', self.verbose)
 
-#        print(green(' * ') + '... ' + 'gcc -static %s/tools/ttyecho.c\n \
-#          -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'))
-        print(green(' * ') + '... ' + 'gcc -static ttyecho.c -o ttyecho')
-        process('gcc -static %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-ttyecho-temp/sbin/ttyecho', self.verbose)
+        print(green(' * ') + '... ' + 'gcc -static %s/tools/ttyecho.c' % self.libdir)
+        print(green(' * ') + '...     -o %s' % (self.temp['work']+'/initramfs-source-ttyecho-temp/sbin/ttyecho'))
+        process('gcc -static %s/tools/ttyecho.c -o %s' % (self.libdir, self.temp['work']+'/initramfs-source-ttyecho-temp/sbin/ttyecho'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-source-ttyecho-temp/sbin/ttyecho', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-ttyecho-temp')
+        os.chdir(self.temp['work']+'/initramfs-source-ttyecho-temp')
         return os.system(self.cpio())
 
-    def strace(self):
+    def bin_strace(self):
         """
-        Append srace binary to the initramfs
+        Append strace host binary to the initramfs
         for debugging purposes
         
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.strace')
+        logging.debug('>>> entering initramfs.append.bin_strace')
         strace_bin = '/usr/bin/strace'
 
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-strace-temp/bin', self.verbose)
 
-        if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
- 
-            # use from host
-            logging.debug('initramfs.append.strace from ' + white('host'))
-            print(green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host'))
+#        if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
 
-            process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+        # use from host
+        logging.debug('initramfs.append.bin_strace from ' + white('host'))
+        print(green(' * ') + turquoise('initramfs.append.bin_strace ')+ strace_bin +' from ' + white('host'))
 
-#            if not isstatic(strace_bin, self.verbose):
-#                strace_libs = listdynamiclibs(strace_bin, self.verbose)
+        process('cp %s %s/initramfs-bin-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
+        process('chmod +x %s/initramfs-bin-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+
+#        if not isstatic(strace_bin, self.verbose):
+#            strace_libs = listdynamiclibs(strace_bin, self.verbose)
 #
-#                process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
-#                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
-#                for i in strace_libs:
-#                    print green(' * ') + '... ' + i
-#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
-#            else:
-#                logging.debug(strace_bin+' is statically linked nothing to do')
-        else:
-            logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
-            print(green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version'])
-
-            if not os.path.isfile(strace_bin) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources')
-            elif not isstatic(strace_bin, self.verbose) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources')
-
-            if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
-                # use cache
-                print(green(' * ') + '... ' + 'source cache found: importing')
-            else:
-                # compile
-                from .sources.strace import strace
-                strobj = strace(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
-                strobj.build()
-
-            # extract cache
-            # FIXME careful with the >
-            logging.debug('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
-            os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
-            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
-
-        os.chdir(self.temp['work']+'/initramfs-strace-temp')
+#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-strace-temp/lib', self.verbose)
+#            print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
+#            for i in strace_libs:
+#                print green(' * ') + '... ' + i
+#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-strace-temp/lib'), self.verbose)
+#        else:
+#            logging.debug(strace_bin+' is statically linked nothing to do')
+        os.chdir(self.temp['work']+'/initramfs-bin-strace-temp')
         return os.system(self.cpio())
+
+    def source_strace(self):
+        """
+        Append strace from sources to the initramfs
+        for debugging purposes
+        
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.source_strace')
+        strace_bin = '/usr/bin/strace'
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-source-strace-temp/bin', self.verbose)
+
+        logging.debug('initramfs.append.source_strace ' + self.version_conf['strace-version'])
+        print(green(' * ') + turquoise('initramfs.append.source_strace ') + self.version_conf['strace-version'])
+
+# FIXME move this to initramfs.py instead
+#        if not os.path.isfile(strace_bin) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources')
+#        elif not isstatic(strace_bin, self.verbose) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources')
+
+        if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... ' + 'source cache found: importing')
+        else:
+            # compile
+            from .sources.strace import strace
+            strobj = strace(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            strobj.build()
+
+        # extract cache
+        # FIXME careful with the >
+        logging.debug('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-source-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
+        os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-source-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
+        process('chmod +x %s/initramfs-source-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-source-strace-temp')
+        return os.system(self.cpio())
+
+#    def strace(self):
+#        """
+#        Append srace binary to the initramfs
+#        for debugging purposes
+#        
+#        @return: bool
+#        """
+#        logging.debug('>>> entering initramfs.append.strace')
+#        strace_bin = '/usr/bin/strace'
+#
+#        process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/bin', self.verbose)
+#
+#        if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
+# 
+#            # use from host
+#            logging.debug('initramfs.append.strace from ' + white('host'))
+#            print(green(' * ') + turquoise('initramfs.append.strace ')+ strace_bin +' from ' + white('host'))
+#
+#            process('cp %s %s/initramfs-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
+#            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+#
+##            if not isstatic(strace_bin, self.verbose):
+##                strace_libs = listdynamiclibs(strace_bin, self.verbose)
+##
+##                process('mkdir -p %s' % self.temp['work']+'/initramfs-strace-temp/lib', self.verbose)
+##                print yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries'
+##                for i in strace_libs:
+##                    print green(' * ') + '... ' + i
+##                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-strace-temp/lib'), self.verbose)
+##            else:
+##                logging.debug(strace_bin+' is statically linked nothing to do')
+#        else:
+#            logging.debug('initramfs.append.strace ' + self.version_conf['strace-version'])
+#            print(green(' * ') + turquoise('initramfs.append.strace ') + self.version_conf['strace-version'])
+#
+#            if not os.path.isfile(strace_bin) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' not found on host, compiling from sources')
+#            elif not isstatic(strace_bin, self.verbose) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is not static, compiling from sources')
+#
+#            if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
+#                # use cache
+#                print(green(' * ') + '... ' + 'source cache found: importing')
+#            else:
+#                # compile
+#                from .sources.strace import strace
+#                strobj = strace(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+#                strobj.build()
+#
+#            # extract cache
+#            # FIXME careful with the >
+#            logging.debug('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
+#            os.system('/bin/bzip2 -dc %s/strace-%s.bz2 > %s/initramfs-strace-temp/bin/strace' % (self.temp['cache'], self.version_conf['strace-version'], self.temp['work']))
+#            process('chmod +x %s/initramfs-strace-temp/bin/strace' % self.temp['work'], self.verbose)
+#
+#        os.chdir(self.temp['work']+'/initramfs-strace-temp')
+#        return os.system(self.cpio())
 
     def bin_screen(self):
         """
@@ -1449,10 +1521,11 @@ class append:
         logging.debug('initramfs.append.source_screen ' + self.version_conf['screen-version'])
         print(green(' * ') + turquoise('initramfs.append.source_screen ') + self.version_conf['screen-version'])
 
-        if not os.path.isfile(screen_bin) and self.hostbin is True:
-            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources')
-        elif not isstatic(screen_bin, self.verbose) and self.hostbin is True:
-            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources')
+# FIXME move this to initramfs.py instead
+#        if not os.path.isfile(screen_bin) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' not found on host, compiling from sources')
+#        elif not isstatic(screen_bin, self.verbose) and self.hostbin is True:
+#            print(yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is not static, compiling from sources')
 
         if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
             # use cache

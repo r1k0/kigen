@@ -328,7 +328,10 @@ def cli_parser():
                                     "into=",        \
                                     "keymaps=",     \
                                     "ttyecho",      \
+                                    "source-ttyecho",\
                                     "strace",       \
+                                    "bin-strace",   \
+                                    "source-strace",\
                                     "screen",       \
                                     "bin-screen",   \
                                     "source-screen", \
@@ -499,6 +502,10 @@ def cli_parser():
         if initramfs_conf['ttyecho'] == 'True':
             cli['ttyecho'] = True
 
+        cli['source-ttyecho'] = False
+        if initramfs_conf['source-ttyecho'] == 'True':
+            cli['source-ttyecho'] = True
+
         cli['keymaps'] = 'all'
         if initramfs_conf['keymaps'] != '':
             cli['keymaps'] = initramfs_conf['keymaps']
@@ -506,6 +513,14 @@ def cli_parser():
         cli['strace'] = False
         if initramfs_conf['strace'] == 'True':
             cli['strace'] = True
+
+        cli['bin-strace'] = False
+        if initramfs_conf['bin-strace'] == 'True':
+            cli['bin-strace'] = True
+
+        cli['source-strace'] = False
+        if initramfs_conf['source-strace'] == 'True':
+            cli['source-strace'] =True
 
         cli['screen'] = False
         if initramfs_conf['screen'] == 'True':
@@ -654,10 +669,18 @@ def cli_parser():
                 cli['into'] = a
             elif o in ("--ttyecho"):
                 cli['ttyecho'] = True
+            elif o in("--source-ttyecho"):
+                cli['source-ttyecho'] = True
             elif o in ("--keymaps"):
                 cli['keymaps'] = a
             elif o in ("--strace"):
                 cli['strace'] = True
+            elif o in ("--bin-strace"):
+                cli['bin-strace'] = True
+                cli['source-strace'] = False
+            elif o in ("--source-strace"):
+                cli['source-strace'] = True
+                cli['bin-strace'] = False
             elif o in ("--screen"):
                 cli['screen'] = True
                 cli['glibc'] = True         # screen needs glibc

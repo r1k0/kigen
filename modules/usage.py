@@ -60,10 +60,10 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print('Parameter:\t\t     Config value:\tDescription:')
     print()
     print('Kernel:')
-    print('  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"', end=' ')
+    print('  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"', end='')
     print('\t\tCustom kernel .config file')
 
-    print('  --initramfs=/file          "'+kernel_conf['initramfs']+'"', end=' ')
+    print('  --initramfs=/file          "'+kernel_conf['initramfs']+'"', end='')
     print('\t\tEmbed initramfs into the kernel')
 
     if kernel_conf['fixdotconfig'] != '':
@@ -77,52 +77,52 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
             tab = ''
     else:
         tab = '\t\t'
-    print(stdout.yellow('  --fixdotconfig=<feature>  '), end=' ')
-    print('"'+kernel_conf['fixdotconfig']+'"', end=' ')
+    print(stdout.yellow('  --fixdotconfig=<feature>  '), end='')
+    print('"'+kernel_conf['fixdotconfig']+'"', end='')
     print(tab+'Check and auto fix the kernel config file (experimental)')
     print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
 
-    print('  --clean                   ', end=' ')
-    print(kernel_conf['clean'], end=' ')
+    print('  --clean                   ', end='')
+    print(kernel_conf['clean'], end='')
     print('\t\tClean precompiled objects only')
 
-    print('  --mrproper                ', end=' ')
-    print(kernel_conf['mrproper'], end=' ')
+    print('  --mrproper                ', end='')
+    print(kernel_conf['mrproper'], end='')
     print('\t\tClean precompiled objects and remove config file')
 
-    print('  --menuconfig              ', end=' ')
-    print(kernel_conf['menuconfig'], end=' ')
+    print('  --menuconfig              ', end='')
+    print(kernel_conf['menuconfig'], end='')
     print('\t\tInteractive kernel options menu')
 
     print('  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules')
 
-    print('  --nooldconfig             ', end=' ')
-    print(kernel_conf['nooldconfig'], end=' ')
+    print('  --nooldconfig             ', end='')
+    print(kernel_conf['nooldconfig'], end='')
     print('\t\tDo not ask for new kernel/initramfs options')
 
-    print('  --nomodinstall            ', end=' ')
-    print(kernel_conf['nomodinstall'], end=' ')
+    print('  --nomodinstall            ', end='')
+    print(kernel_conf['nomodinstall'], end='')
     print('\t\tDo not install modules')
     print()
 
-    print('  --nomodules            ', end=' ')
-    print(kernel_conf['nomodules'], end=' ')
+    print('  --nomodules            ', end='')
+    print(kernel_conf['nomodules'], end='')
     print('\t\tDo not compile or install modules')
     print()
 
     print('Misc:')
-    print('  --nosaveconfig            ', end=' ')
-    print(kernel_conf['nosaveconfig'], end=' ')
+    print('  --nosaveconfig            ', end='')
+    print(kernel_conf['nosaveconfig'], end='')
     print('\t\tDo not save kernel config in /etc/kernels')
 
-    print('  --noboot                  ', end=' ')
-    print(kernel_conf['noboot'], end=' ')
+    print('  --noboot                  ', end='')
+    print(kernel_conf['noboot'], end='')
     print('\t\tDo not copy kernel to /boot')
 
-    print('  --rename=/file             "'+kernel_conf['rename']+'"', end=' ')
+    print('  --rename=/file             "'+kernel_conf['rename']+'"', end='')
     print('\t\tCustom kernel file name')
 
-    print('  --logfile=/file            "'+master_conf['logfile']+'"', end=' ')
+    print('  --logfile=/file            "'+master_conf['logfile']+'"', end='')
     print() #'\t\tLog to file'
 
     print('  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose')
@@ -135,53 +135,62 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print()
 
     print('Linuxrc:')
-    print('  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"', end=' ')
-    print('\t\tInclude custom linuxrc (files copied over to etc)')
+    print('  --linuxrc=/linuxrc[,/file] "'+initramfs_conf['linuxrc']+'"', end='')
+    print('\t\t\tInclude custom linuxrc (files copied over to etc)')
     print()
 
     print('Busybox:')
-    print('  --dotconfig=/file          "'+initramfs_conf['dotconfig']+'"', end=' ')
-    print('\t\tCustom busybox config file')
-    print('  --defconfig               ', end=' ')
-    print(initramfs_conf['defconfig'], end=' ') # bool
+    print('  --dotconfig=/file         "'+initramfs_conf['dotconfig']+'"', end='')
+    print('\t\t\tCustom busybox config file')
+    print('  --defconfig               ', end='')
+    print(initramfs_conf['defconfig'], end='') # bool
     print('\t\tSet .config to largest generic options')
-    print('  --oldconfig               ', end=' ')
-    print(initramfs_conf['oldconfig'], end=' ') # bool
+    print('  --oldconfig               ', end='')
+    print(initramfs_conf['oldconfig'], end='') # bool
     print('\t\tAsk for new busybox options if any')
-    print('  --menuconfig              ', end=' ')
-    print(initramfs_conf['menuconfig'], end=' ') # bool
+    print('  --menuconfig              ', end='')
+    print(initramfs_conf['menuconfig'], end='') # bool
     print('\t\tInteractive busybox options menu')
     print()
 
     print('Features:') # built from host binaries:')
     print('+ built from host binaries')
-    print('| --bin-luks                ', end=' ')
-    print(initramfs_conf['bin-luks'], end=' ') # bool 
+    print('| --bin-luks                ', end='')
+    print(initramfs_conf['bin-luks'], end='') # bool 
     print('\t\tInclude LUKS support from host')
-    print('| --bin-lvm2                ', end=' ')
-    print(initramfs_conf['bin-lvm2'], end=' ') # bool
+    print('| --bin-lvm2                ', end='')
+    print(initramfs_conf['bin-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from host')
-    print('| --bin-screen              ', end=' ')
-    print(initramfs_conf['bin-screen'], end=' ') # bool
+    print('| --bin-screen              ', end='')
+    print(initramfs_conf['bin-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from host')
-    print('| --bin-disklabel           ', end=' ')
-    print(initramfs_conf['bin-disklabel'], end=' ') # bool
+    print('| --bin-disklabel           ', end='')
+    print(initramfs_conf['bin-disklabel'], end='') # bool
     print('\t\tInclude support for UUID/LABEL from host')
+    print('| --bin-strace              ', end='')
+    print(initramfs_conf['bin-strace'], end='') # bool
+    print('\t\tInclude the strace binary tool from host')
     print()
 
     print('+ built from source code')
-    print('| --source-luks             ', end=' ')
-    print(initramfs_conf['source-luks'], end=' ') # bool 
+    print('| --source-luks             ', end='')
+    print(initramfs_conf['source-luks'], end='') # bool 
     print('\t\tInclude LUKS support from sources')
-    print('| --source-lvm2             ', end=' ')
-    print(initramfs_conf['source-lvm2'], end=' ') # bool
+    print('| --source-lvm2             ', end='')
+    print(initramfs_conf['source-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from sources')
-    print('| --source-screen           ', end=' ')
-    print(initramfs_conf['source-screen'], end=' ') # bool
+    print('| --source-screen           ', end='')
+    print(initramfs_conf['source-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from sources')
-    print('| --source-disklabel        ', end=' ')
-    print(initramfs_conf['source-disklabel'], end=' ') # bool
+    print('| --source-disklabel        ', end='')
+    print(initramfs_conf['source-disklabel'], end='') # bool
     print('\t\tInclude support for UUID/LABEL from sources')
+    print('| --source-ttyecho          ', end='')
+    print(initramfs_conf['ttyecho'], end='') # bool
+    print('\t\tCompile and include the handy ttyecho.c tool')
+    print('| --source-strace           ', end='')
+    print(initramfs_conf['source-strace'], end='') # bool
+    print('\t\tCompile and include the strace binary tool from sources')
     print()
 
     # fix \t display depending on length of cli[splash']
@@ -194,42 +203,42 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t'
     else:
         tab = '\t\t'
-    print('  --splash=<theme>           "'+initramfs_conf['splash']+'"', end=' ')
+    print('  --splash=<theme>          "'+initramfs_conf['splash']+'"', end='')
     print(tab+'Include splash support (splashutils must be merged)')
-    print('   --sres=YxZ[,YxZ]          "'+initramfs_conf['sres']+'"', end=' ')
-    print('\t\t Splash resolution, all if not set')
-#    print('  --disklabel               ', end=' ')
-#    print(initramfs_conf['disklabel'], end=' ') # bool
+    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres']+'"', end='')
+    print('\t\t\t Splash resolution, all if not set')
+#    print('  --disklabel               ', end='')
+#    print(initramfs_conf['disklabel'], end='') # bool
 #    print('\t\tInclude support for UUID/LABEL (host binary or sources)')
-#    print('  --luks                    ', end=' ')
-#    print(initramfs_conf['luks'], end=' ') # bool 
+#    print('  --luks                    ', end='')
+#    print(initramfs_conf['luks'], end='') # bool 
 #    print('\t\tInclude LUKS support (host binary or sources)')
-    print(stdout.yellow('  --evms                    '), end=' ')
-    print(initramfs_conf['evms'], end=' ') # bool
+    print(stdout.yellow('  --evms                    '), end='')
+    print(initramfs_conf['evms'], end='') # bool
     print('\t\tInclude EVMS support (host binary only)')
-    print(stdout.yellow('  --dmraid                  '), end=' ')
-    print(initramfs_conf['dmraid'], end=' ') # bool
+    print(stdout.yellow('  --dmraid                  '), end='')
+    print(initramfs_conf['dmraid'], end='') # bool
     print('\t\tInclude DMRAID support (host binary or sources)')
 #    print stdout.yellow('   --selinux                '),
 #    print initramfs_conf['selinux'], # bool
 #    print stdout.yellow('\t\t Include selinux support in --dmraid (selinux libs required)')
 #   print '  --iscsi                    False                   Include iscsi support'
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
-    print('  --dropbear                ', end=' ')
-    print(initramfs_conf['dropbear'], end=' ') # bool
+    print('  --dropbear                ', end='')
+    print(initramfs_conf['dropbear'], end='') # bool
     print('\t\tInclude dropbear tools and daemon (host binary or sources)')
-    print('   --debugflag              ', end=' ')
-    print(initramfs_conf['debugflag'], end=' ') # bool
+    print('   --debugflag              ', end='')
+    print(initramfs_conf['debugflag'], end='') # bool
     print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
     # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
         if len(cli['rootpasswd']) <= 4:
             tab = '\t\t'
         elif len(cli['rootpasswd']) > 4:
-            tab = '\t'
+            tab = '\t\t'
     else:
         tab = '\t\t'
-    print('  --rootpasswd=<passwd>      "'+cli['rootpasswd']+'"', end=' ')
+    print('  --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"', end='')
     print(tab+'Create and set root password (required for dropbear)')
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
@@ -244,65 +253,65 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t'
     else:
         tab = '\t\t'
-#    print('  --keymaps                 ', end=' ')
-    print('  --keymaps=xx[,xx]|all     ', end=' ')
-    print(initramfs_conf['keymaps'], end=' ') # bool
+#    print('  --keymaps                 ', end='')
+    print('  --keymaps=xx[,xx]|all     ', end='')
+    print(initramfs_conf['keymaps'], end='') # bool
     print(tab+'Include all keymaps')
-    print('  --ttyecho                 ', end=' ')
-    print(initramfs_conf['ttyecho'], end=' ') # bool
-    print('\t\tInclude the handy ttyecho.c tool')
-    print('  --strace                  ', end=' ')
-    print(initramfs_conf['strace'], end=' ') # bool
-    print('\t\tInclude the strace binary tool (host binary or sources)')
-#    print('  --screen                  ', end=' ')
-#    print(initramfs_conf['screen'], end=' ') # bool
+#    print('  --ttyecho                 ', end='')
+#    print(initramfs_conf['ttyecho'], end='') # bool
+#    print('\t\tInclude the handy ttyecho.c tool')
+#    print('  --strace                  ', end='')
+#    print(initramfs_conf['strace'], end='') # bool
+#    print('\t\tInclude the strace binary tool (host binary or sources)')
+#    print('  --screen                  ', end='')
+#    print(initramfs_conf['screen'], end='') # bool
 #    print('\t\tInclude the screen binary tool (host binary or sources)')
     # fix \t display depending on length of cli['plugin']
     if cli['plugin'] != '': 
         if len(cli['plugin']) <= 4:
-            tab = '\t\t'
+            tab = '\t\t\t'
         elif len(cli['plugin']) > 4:
-            tab = '\t'
+            tab = '\t\t'
     else: 
-        tab = '\t\t'
-    print('  --plugin=/dir[,/dir]       "'+cli['plugin']+'"', end=' ')
+        tab = '\t\t\t'
+    print('  --plugin=/dir[,/dir]      "'+cli['plugin']+'"', end='')
     print(tab+'Include list of user generated custom roots')
     print()
 
     print('Libraries: (host only)')
-    print('  --glibc                   ', end=' ')
-    print(initramfs_conf['glibc'], end=' ') # bool
+    print('  --glibc                   ', end='')
+    print(initramfs_conf['glibc'], end='') # bool
     print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-    print('  --libncurses              ', end=' ')
-    print(initramfs_conf['libncurses'], end=' ') # bool
+    print('  --libncurses              ', end='')
+    print(initramfs_conf['libncurses'], end='') # bool
     print('\t\tInclude host libncurses (required for dropbear)')
-    print('  --zlib                    ', end=' ')
-    print(initramfs_conf['zlib'], end=' ') # bool
+    print('  --zlib                    ', end='')
+    print(initramfs_conf['zlib'], end='') # bool
     print('\t\tInclude host zlib (required for dropbear)')
     print()
 
     print('Misc:')
-    print('  --nocache                 ', end=' ')
-    print(initramfs_conf['nocache'], end=' ')
+    print('  --nocache                 ', end='')
+    print(initramfs_conf['nocache'], end='')
     print('\t\tDelete previous cached data on startup')
-    print(stdout.yellow('  --hostbin                 '), end=' ')
-    print(initramfs_conf['hostbin'], end=' ')
+    print(stdout.yellow('  --hostbin                 '), end='')
+    print(initramfs_conf['hostbin'], end='')
     print('\t\tUse host binaries (fall back to sources if dynamic linkage detected)')
-    print('  --noboot                  ', end=' ')
-    print(initramfs_conf['noboot'], end=' ')
+    print('  --noboot                  ', end='')
+    print(initramfs_conf['noboot'], end='')
     print('\t\tDo not copy initramfs to /boot')
-    print('  --rename=/file             "'+initramfs_conf['rename']+'"', end=' ')
-    print('\t\tCustom initramfs file name')
-    print('  --logfile=/file            "'+master_conf['logfile']+'"', end=' ')
+    print('  --rename=/file            "'+initramfs_conf['rename']+'"', end='')
+    print('\t\t\tCustom initramfs file name')
+    print('  --logfile=/file           "'+master_conf['logfile']+'"', end='')
     print() #'\t\tLog to file'
-    print('  --debug, -d                '+master_conf['debug']+'', end=' ')
+    print('  --debug, -d               '+master_conf['debug']+'', end='')
     print('\t\tDebug verbose')
     print()
 
     print('Handy tools:')
-    print('  --extract=/file            "'+cli['extract']+'"                 Extract initramfs file')
-    print('   --to=/dir                 "'+cli['to']+'"')
+    print('  --extract=/file           "'+cli['extract']+'"                  Extract initramfs file')
+    print('   --to=/dir                "'+cli['to']+'"')
     print('\t\t\t\t\t\t Custom extracting directory')
-    print('  --compress=/dir            "'+cli['compress']+'"                 Compress directory into initramfs')
-    print('   --into=/file              "'+cli['into']+'"')
+    print('  --compress=/dir           "'+cli['compress']+'"                  Compress directory into initramfs')
+    print('   --into=/file             "'+cli['into']+'"')
     print('\t\t\t\t\t\t Custom initramfs file')

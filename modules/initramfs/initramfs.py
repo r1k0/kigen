@@ -202,9 +202,18 @@ class initramfs:
             if aobj.dropbear() is not zero: self.fail('dropbear')
 
         # append strace
-        if self.cli['strace'] is True:
+#        if self.cli['strace'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.strace() is not zero: self.fail('strace')
+        if self.cli['bin-strace'] is True:
+#            if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
+            if os.path.isfile('/usr/bin/strace') and isstatic('/usr/bin/strace', self.verbose):
+                os.chdir(self.temp['work'])
+                if aobj.bin_strace() is not zero: self.fail('bin_strace')
+                
+        if self.cli['source-strace'] is True:
             os.chdir(self.temp['work'])
-            if aobj.strace() is not zero: self.fail('strace')
+            if aobj.source_strace() is not zero: self.fail('source_strace')
 
         # append screen
 #        if self.cli['screen'] is True:
@@ -231,9 +240,12 @@ class initramfs:
 #            if aobj.aufs() is not zero: self.fail('aufs')
 
         # append ttyecho
-        if self.cli['ttyecho'] is True:
+#        if self.cli['ttyecho'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.ttyecho() is not zero: self.fail('ttyecho')
+        if self.cli['source-ttyecho'] is True:
             os.chdir(self.temp['work'])
-            if aobj.ttyecho() is not zero: self.fail('ttyecho')
+            if aobj.source_ttyecho() is not zero: self.fail('source-ttyecho')
 
         # 16) append splash
         if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
