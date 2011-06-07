@@ -7,6 +7,7 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.*
 =====
+TODO: use presets from modules/default.py if none are found in /etc/kigen/* 
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first
 TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
