@@ -193,7 +193,7 @@ class append:
     
         if os.path.isfile(self.temp['cache']+'/busybox-bin-'+self.version_conf['busybox-version']+'.tar.bz2') and self.nocache is False:
             # use cache
-            print(green(' * ') + '... '+'cache found: importing')
+            print(green(' * ') + '... '+'source cache found: importing')
         else:
             # compile
             from .sources.busybox import busybox
@@ -403,7 +403,7 @@ class append:
 
         if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
             # use cache
-            print(green(' * ') + '... '+'cache found: importing')
+            print(green(' * ') + '... '+'source cache found: importing')
 
             # extract cache
             logging.debug('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-source-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
@@ -487,7 +487,7 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/cryptsetup-'+self.version_conf['luks-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print(green(' * ') + '... '+'cache found: importing')
+                print(green(' * ') + '... '+'source cache found: importing')
 
                 # extract cache
                 logging.debug('/bin/bzip2 -dc %s/cryptsetup-%s.bz2 > %s/initramfs-luks-temp/sbin/cryptsetup' % (self.temp['cache'], self.version_conf['luks-version'], self.temp['work']))
@@ -648,7 +648,7 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
                 # use cache
-                print(green(' * ') + '... '+'cache found: importing')
+                print(green(' * ') + '... '+'source cache found: importing')
 
                 # extract cache
                 process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
@@ -775,7 +775,7 @@ class append:
 
         if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
             # use cache
-            print(green(' * ') + '... '+'cache found: importing')
+            print(green(' * ') + '... '+'source cache found: importing')
         else:
             # compile
             from .sources.e2fsprogs import e2fsprogs
@@ -830,7 +830,7 @@ class append:
 #
 #            if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
 #                # use cache
-#                print(green(' * ') + '... '+'cache found: importing')
+#                print(green(' * ') + '... '+'source cache found: importing')
 #            else:
 #                # compile
 #                from .sources.e2fsprogs import e2fsprogs
@@ -960,7 +960,7 @@ class append:
 
         if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
             # use cache
-            print(green(' * ') + '... '+'cache found: importing')
+            print(green(' * ') + '... '+'source cache found: importing')
 
             # extract cache
             os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
@@ -1028,7 +1028,7 @@ class append:
 #
 #            if os.path.isfile(self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2') and self.nocache is False:
 #                # use cache
-#                print(green(' * ') + '... '+'cache found: importing')
+#                print(green(' * ') + '... '+'source cache found: importing')
 #
 #                # extract cache
 #                os.system('bzip2 -dc %s > %s/initramfs-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
@@ -1159,7 +1159,7 @@ class append:
 
             if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print(green(' * ') + '... '+'cache found: importing')
+                print(green(' * ') + '... '+'source cache found: importing')
             else:
                 # compile
                 from .sources.dmraid import dmraid
@@ -1384,7 +1384,7 @@ class append:
 
             if os.path.isfile(self.temp['cache'] + '/strace-' + self.version_conf['strace-version']+'.bz2') and self.nocache is False:
                 # use cache
-                print(green(' * ') + '... ' + 'cache found: importing')
+                print(green(' * ') + '... ' + 'source cache found: importing')
             else:
                 # compile
                 from .sources.strace import strace
@@ -1456,7 +1456,7 @@ class append:
 
         if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
             # use cache
-            print(green(' * ') + '... '+'cache found: importing')
+            print(green(' * ') + '... '+'source cache found: importing')
         else:
             # compile
             from .sources.screen import screen
@@ -1518,7 +1518,7 @@ class append:
 #
 #            if os.path.isfile(self.temp['cache'] + '/screen-' + self.version_conf['screen-version']+'.bz2') and self.nocache is False:
 #                # use cache
-#                print(green(' * ') + '... '+'cache found: importing')
+#                print(green(' * ') + '... '+'source cache found: importing')
 #            else:
 #                # compile
 #                from .sources.screen import screen
