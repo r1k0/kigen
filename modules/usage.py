@@ -153,8 +153,8 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('\t\tInteractive busybox options menu')
     print()
 
-    print('Features:') # built from host binaries:')
-    print('+ built from host binaries')
+    print('Features:')
+    print('+ from host binaries')
     print('| --bin-luks                ', end='')
     print(initramfs_conf['bin-luks'], end='') # bool 
     print('\t\tInclude LUKS support from host')
@@ -170,9 +170,8 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-strace              ', end='')
     print(initramfs_conf['bin-strace'], end='') # bool
     print('\t\tInclude the strace binary tool from host')
-    print()
-
-    print('+ built from source code')
+    
+    print('+ from source code')
     print('| --source-luks             ', end='')
     print(initramfs_conf['source-luks'], end='') # bool 
     print('\t\tInclude LUKS support from sources')
