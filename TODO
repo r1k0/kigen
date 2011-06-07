@@ -11,10 +11,10 @@ TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
+    what for already?
 TODO: dont fail when finding a dynamically linked binary
-    - raise a warning if the user passed --plugin maybe the user knows what hes doing
-    - let ldd parse a dynamically linked binary and get a list of 
-    libs to ship
+    - raise a warning if the user passed --plugin maybe he knows what he's doing
+    - let ldd parse a dynamically linked binary and get a list of libs to ship
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
@@ -22,6 +22,7 @@ TODO: find a way to split append.py a bit more
     dissociate a binary class too? why not?
     split append.py into append_feature.py? append_luks.py ...
     append directory?
+TODO: offload append.py to initramfs.py wrt bin/source checks
 TODO: kigen i --screen
     see if screen can attach to /dev/console
     I need something clean to replace ttyecho 
@@ -31,5 +32,8 @@ TODO: kigen i --gnupg
 TODO: kigen i --aufs
     aufs-version = 0_p20100405
 TODO: support xen-sources -> doublehp this one is for you ;) patience though
+    lucky bastard linux-3.0 will have full Xen support
+    start dev with gentoo-sources-3.0 or fall back to xen-sources
     http://en.gentoo-wiki.com/wiki/Xen
     read dracut code
+    

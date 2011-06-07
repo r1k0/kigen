@@ -16,7 +16,7 @@ def print_credits():
     print()
     for i in credits.author:
         print(stdout.green(i))
-    print('Alphabetical list of contributors:')
+    print('Alphabetical list of awesome contributors:')
     print()
     for i in credits.contributor:
         print(stdout.green(i))
