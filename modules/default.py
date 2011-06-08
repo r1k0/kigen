@@ -125,7 +125,8 @@ initramfs_conf = {
         'source-ttyecho': 'False',  \
         'luks'          : 'False',  \
         'bin-luks'      : 'False',  \
-        'source-luks'   : 'False'}
+        'source-luks'   : 'False',  \
+        'nomodules'     : 'False'}
 
 # default version values
 version_conf = {

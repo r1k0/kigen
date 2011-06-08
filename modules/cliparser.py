@@ -700,6 +700,8 @@ def cli_parser():
                 cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
+            elif o in ("--nomodules"):
+                cli['nomodules'] = True
 
             else:
                 assert False, "uncaught option"
