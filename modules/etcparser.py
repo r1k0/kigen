@@ -1,6 +1,6 @@
 import sys
 import os
-import default
+from default import *
 import utils.misc
 import stdout
 
@@ -46,11 +46,13 @@ def etc_parser_kernel():
 
 # parse /etc/kigen/initramfs/{modules.conf,initramfs.conf,version.conf}
 def etc_parser_initramfs():
-   
-    modules_conf    = {}
-    initramfs_conf  = {}
-    version_conf    = {}
-    url_conf        = {}
+
+    # do not declare modules_conf initramfs_conf version_conf url_conf
+    # we already import their defaults from default.py
+#    modules_conf    = {}
+#    initramfs_conf  = {}
+#    version_conf    = {}
+#    url_conf        = {}
 
     etc = { 'kigen'         :   '/etc/kigen',                           \
             'initramfs_conf':   '/etc/kigen/initramfs/default.conf',    \
