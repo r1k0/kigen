@@ -119,7 +119,8 @@ class initramfs:
         # 3) append modules
         # note that /etc/boot.conf initrd modules if set
         # overlap the ones from /etc/kigen.conf
-        if aobj.modules() is not zero: self.fail('modules')
+        if self.cli['nomodules'] is not True:
+            if aobj.modules() is not zero: self.fail('modules')
 
         # 4) append busybox
         os.chdir(self.temp['work'])
