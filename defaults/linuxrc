@@ -751,7 +751,17 @@ echo -ne "${BOLD}.${NORMAL}"
 
 # kill udhcpc client and dropbear
 pkill dhcp 2>/dev/null
-[ -d /dev/pts ] && killall dropbear 2>/dev/null ; umount /dev/pts 2>/dev/null
+
+if [ -d /dev/pts ] 
+then
+	# Slight race condition here with killing
+	# the processes, and trying to umount. So we
+	# sleep a little.
+
+	killall dropbear 2>/dev/null
+	sleep 1
+	umount /dev/pts 2>/dev/null
+fi
 
 # If devtmpfs is mounted, try move it to the new root
 # If that fails, try to unmount all possible mounts of devtmpfs as stuff breaks otherwise
