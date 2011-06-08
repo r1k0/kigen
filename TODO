@@ -18,6 +18,7 @@ TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
 TODO: dont fail when finding a dynamically linked binary
     - raise a warning if the user passed --plugin maybe he knows what he's doing
     - let ldd parse a dynamically linked binary and get a list of libs to ship
+    already thrown some code at it but it gets quickly messy (will do when sober)
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
@@ -38,5 +39,4 @@ TODO: support xen-sources -> doublehp this one is for you ;) patience though
     lucky bastard linux-3.0 will have full Xen support
     start dev with gentoo-sources-3.0 or fall back to xen-sources
     http://en.gentoo-wiki.com/wiki/Xen
-    read dracut code
-    
+    read dracut code there lies the solution to xen and other stuff

@@ -942,14 +942,14 @@ class append:
     
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.lvm2')
+        logging.debug('>>> entering initramfs.append.source_lvm2')
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-source-lvm2-temp/etc/lvm', self.verbose)
         process('mkdir -p ' + self.temp['work']+'/initramfs-source-lvm2-temp/bin', self.verbose)
 
-        logging.debug('initramfs.append.lvm2 ' + self.version_conf['lvm2-version'])
+        logging.debug('initramfs.append.source_lvm2 ' + self.version_conf['lvm2-version'])
         print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
 
 # FIXME move this to initramfs.py instead

@@ -60,10 +60,10 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
     print()
     print('Kernel:')
-    print('  --dotconfig=/file          "'+kernel_conf['dotconfig']+'"', end='')
+    print('  --dotconfig=/file         "'+kernel_conf['dotconfig']+'"', end='')
     print('\t\tCustom kernel .config file')
 
-    print('  --initramfs=/file          "'+kernel_conf['initramfs']+'"', end='')
+    print('  --initramfs=/file         "'+kernel_conf['initramfs']+'"', end='')
     print('\t\tEmbed initramfs into the kernel')
 
     if kernel_conf['fixdotconfig'] != '':
@@ -80,55 +80,54 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print(stdout.yellow('  --fixdotconfig=<feature>  '), end='')
     print('"'+kernel_conf['fixdotconfig']+'"', end='')
     print(tab+'Check and auto fix the kernel config file (experimental)')
-    print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
+    print('\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
 
     print('  --clean                   ', end='')
     print(kernel_conf['clean'], end='')
-    print('\t\tClean precompiled objects only')
+    print('\tClean precompiled objects only')
 
     print('  --mrproper                ', end='')
     print(kernel_conf['mrproper'], end='')
-    print('\t\tClean precompiled objects and remove config file')
+    print('\tClean precompiled objects and remove config file')
 
     print('  --menuconfig              ', end='')
     print(kernel_conf['menuconfig'], end='')
-    print('\t\tInteractive kernel options menu')
+    print('\tInteractive kernel options menu')
 
-    print('  --fakeroot=/dir            "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules')
+    print('  --fakeroot=/dir           "'+cli['fakeroot']+'"\t\tAppend modules to /dir/lib/modules')
 
     print('  --nooldconfig             ', end='')
     print(kernel_conf['nooldconfig'], end='')
-    print('\t\tDo not ask for new kernel/initramfs options')
+    print('\tDo not ask for new kernel/initramfs options')
 
     print('  --nomodinstall            ', end='')
     print(kernel_conf['nomodinstall'], end='')
-    print('\t\tDo not install modules')
-    print()
+    print('\tDo not install modules')
 
-    print('  --nomodules            ', end='')
+    print('  --nomodules               ', end='')
     print(kernel_conf['nomodules'], end='')
-    print('\t\tDo not compile or install modules')
+    print('\tDo not compile or install modules')
     print()
 
     print('Misc:')
     print('  --nosaveconfig            ', end='')
     print(kernel_conf['nosaveconfig'], end='')
-    print('\t\tDo not save kernel config in /etc/kernels')
+    print('\tDo not save kernel config in /etc/kernels')
 
     print('  --noboot                  ', end='')
     print(kernel_conf['noboot'], end='')
-    print('\t\tDo not copy kernel to /boot')
+    print('\tDo not copy kernel to /boot')
 
-    print('  --rename=/file             "'+kernel_conf['rename']+'"', end='')
+    print('  --rename=/file            "'+kernel_conf['rename']+'"', end='')
     print('\t\tCustom kernel file name')
 
-    print('  --logfile=/file            "'+master_conf['logfile']+'"', end='')
+    print('  --logfile=/file           "'+master_conf['logfile']+'"', end='')
     print() #'\t\tLog to file'
 
-    print('  --debug, -d                '+master_conf['debug']+'\t\tDebug verbose')
+    print('  --debug, -d               '+master_conf['debug']+'\tDebug verbose')
     print()
     print('Handy tools:')
-    print('  --getdotconfig=/vmlinux    "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
+    print('  --getdotconfig=/vmlinux   "'+cli['getdotconfig']+'"\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
 
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
