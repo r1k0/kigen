@@ -203,7 +203,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
         elif len(cli['splash']) > 8:
             tab = '\t\t'
     else:
-        tab = '\t\t'
+        tab = '\t\t\t'
     print('  --splash=<theme>          "'+initramfs_conf['splash']+'"', end='')
     print(tab+'Include splash support (splashutils must be merged)')
     print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres']+'"', end='')
