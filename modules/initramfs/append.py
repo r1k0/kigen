@@ -950,7 +950,7 @@ class append:
         process('mkdir -p ' + self.temp['work']+'/initramfs-source-lvm2-temp/bin', self.verbose)
 
         logging.debug('initramfs.append.source_lvm2 ' + self.version_conf['lvm2-version'])
-        print(green(' * ') + turquoise('initramfs.append.lvm2 ') + self.version_conf['lvm2-version'])
+        print(green(' * ') + turquoise('initramfs.append.source_lvm2 ') + self.version_conf['lvm2-version'])
 
 # FIXME move this to initramfs.py instead
 #        if not os.path.isfile(lvm2_static_bin) and self.hostbin is True:
