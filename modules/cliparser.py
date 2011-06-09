@@ -295,6 +295,7 @@ def cli_parser():
                                     "iscsi",        \
                                     "logfile=",     \
                                     "evms",         \
+                                    "bin-evms",     \
                                     "mdadm",        \
                                     "splash=",      \
                                     "sres=",        \
@@ -409,9 +410,13 @@ def cli_parser():
 #        if initramfs_conf['iscsi'] == 'True':
 #            cli['iscsi'] = True
 
-        cli['evms'] = False
-        if initramfs_conf['evms'] == 'True':
-            cli['evms'] = True
+#        cli['evms'] = False
+#        if initramfs_conf['evms'] == 'True':
+#            cli['evms'] = True
+
+        cli['bin-evms'] = False
+        if initramfs_conf['bin-evms'] == 'True':
+            cli['bin-evms'] = True
 
 #        cli['mdadm'] = False
 #        if initramfs_conf['mdadm'] == 'True':
@@ -609,6 +614,8 @@ def cli_parser():
                 cli['iscsi'] = True
             elif o in ("--evms"):
                 cli['evms'] = True
+            elif o in ("--bin-evms"):
+                cli['bin-evms'] = True
             elif o in ("--mdadm"):
                 cli['mdadm'] = True
             elif o in ("--mrproper"):

@@ -150,9 +150,12 @@ class initramfs:
 #            if aobj.iscsi() is not zero: self.fail('iscsi')
 
         # 8) append evms
-        if self.cli['evms'] is True:
+#        if self.cli['evms'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.evms() is not zero: self.fail('evms')
+        if self.cli['bin-evms'] is True:
             os.chdir(self.temp['work'])
-            if aobj.evms() is not zero: self.fail('evms')
+            if aobj.bin_evms() is not zero: self.fail('bin_evms')
 
 #        # 9) append mdadm
 #        if self.cli['mdadm'] is True:

@@ -7,6 +7,10 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 
 0.3.*
 =====
+TODO: move all bin_feat logic to its own dir and create binary classes like with sources.
+    -> initramfs.append.source.luks
+    -> initramfs.append.bin.luks
+TODO: check uuid feature is really working
 TODO: take some time and clean append.py, for real
 TODO: use presets from modules/default.py if none are found in /etc/kigen/* 
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first

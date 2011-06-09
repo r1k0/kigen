@@ -83,6 +83,7 @@ initramfs_conf = {
         'rename'        : '',   \
         'keymaps'       : 'all',\
         'evms'          : 'False',   \
+        'bin-evms'      : 'False',   \
         'lvm2'          : 'False',   \
         'bin-lvm2'      : 'False',   \
         'source-lvm2'   : 'False',   \
