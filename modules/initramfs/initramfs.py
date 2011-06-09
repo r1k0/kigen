@@ -279,9 +279,12 @@ class initramfs:
         # TODO # 18) append overlay
 
         # 19) append glibc
-        if self.cli['glibc'] is True:
+#        if self.cli['glibc'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.glibc() is not zero: self.fail('glibc')
+        if self.cli['bin-glibc'] is True:
             os.chdir(self.temp['work'])
-            if aobj.glibc() is not zero: self.fail('glibc')
+            if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
 
         # 19bis) append libncurses
         if self.cli['libncurses'] is True:

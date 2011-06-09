@@ -172,6 +172,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-evms                ', end='')
     print(initramfs_conf['bin-evms'], end='') # bool
     print('\t\tInclude the evms binary tool from host')
+    print('| --bin-glibc               ', end='')
+    print(initramfs_conf['bin-glibc'], end='') # bool
+    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
     
     print('+ from source code')
     print('| --source-luks             ', end='')
@@ -280,9 +283,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print()
 
     print('Libraries: (host only)')
-    print('  --glibc                   ', end='')
-    print(initramfs_conf['glibc'], end='') # bool
-    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
+#    print('  --glibc                   ', end='')
+#    print(initramfs_conf['glibc'], end='') # bool
+#    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
     print('  --libncurses              ', end='')
     print(initramfs_conf['libncurses'], end='') # bool
     print('\t\tInclude host libncurses (required for dropbear)')

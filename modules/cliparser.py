@@ -319,6 +319,7 @@ def cli_parser():
                                     "nosaveconfig", \
                                     "hostbin",      \
                                     "glibc",        \
+                                    "bin-glibc",    \
                                     "libncurses",   \
                                     "zlib",         \
                                     "rename=",      \
@@ -484,9 +485,12 @@ def cli_parser():
         if initramfs_conf['hostbin'] == 'True':
             cli['hostbin'] = True
 
-        cli['glibc'] = False
-        if initramfs_conf['glibc'] == 'True':
-            cli['glibc'] = True
+#        cli['glibc'] = False
+#        if initramfs_conf['glibc'] == 'True':
+#            cli['glibc'] = True
+        cli['bin-glibc'] = False
+        if initramfs_conf['bin-glibc'] == 'True':
+            cli['bin-glibc'] = True
 
         cli['libncurses'] = False
         if initramfs_conf['libncurses'] == 'True':
@@ -654,13 +658,15 @@ def cli_parser():
                 cli['selinux'] = True
             elif o in ("--dropbear"):
                 cli['dropbear'] = True
-                cli['glibc'] = True         # dropbear needs glibc
+                cli['bin-glibc'] = True         # dropbear needs glibc
                 cli['libncurses'] = True    # dropbear needs libncurses
                 cli['zlib'] = True          # dropbear needs zlib
             elif o in ("--hostbin"):
                 cli['hostbin'] = True
-            elif o in ("--glibc"):
-                cli['glibc'] = True
+#            elif o in ("--glibc"):
+#                cli['glibc'] = True
+            elif o in ("--bin-glibc"):
+                cli['bin-glibc'] = True
             elif o in ("--libncurses"):
                 cli['libncurses'] = True
             elif o in ("--zlib"):
@@ -695,15 +701,15 @@ def cli_parser():
                 cli['bin-strace'] = False
             elif o in ("--screen"):
                 cli['screen'] = True
-                cli['glibc'] = True         # screen needs glibc
+                cli['bin-glibc'] = True         # screen needs glibc
                 cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--bin-screen"):
                 cli['bin-screen'] = True
-                cli['glibc'] = True         # screen needs glibc
+                cli['bin-glibc'] = True         # screen needs glibc
                 cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--source-screen"):
                 cli['source-screen'] = True
-                cli['glibc'] = True         # screen needs glibc
+                cli['bin-glibc'] = True         # screen needs glibc
                 cli['libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):
                 cli['debugflag'] = True

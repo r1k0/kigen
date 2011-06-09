@@ -509,52 +509,52 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-luks-temp')
         return os.system(self.cpio())
 
-    def glibc(self):
+    def bin_glibc(self):
         """
         Append GNU C libraries from host to the initramfs
 
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.glibc')
+        logging.debug('>>> entering initramfs.append.bin_glibc')
 
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-glibc-temp/etc', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
 
-        print(green(' * ') + turquoise('initramfs.append.glibc'))
+        print(green(' * ') + turquoise('initramfs.append.bin_glibc'))
         # for shell
         print(green(' * ') + '... ' + '/lib/libm.so.6')
-        process('cp /lib/libm.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libm.so.6           %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         # mostly for authentication
         print(green(' * ') + '... ' + '/lib/libnss_files.so.2')
-        process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_files.so.2   %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/libnss_dns.so.2')
-        process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_dns.so.2     %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/libnss_nis.so.2')
-        process('cp /lib/libnss_nis.so.2     %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_nis.so.2     %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/libnsl.so.1')
-        process('cp /lib/libnsl.so.1         %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnsl.so.1         %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         # resolves dns->ip
         print(green(' * ') + '... ' + '/lib/libresolv.so.2')
-        process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libresolv.so.2      %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/ld-linux.so.2')
-        process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/ld-linux.so.2       %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         # this is for 64b arch
         if os.path.isfile('/lib/ld-linux-x86-64.so.2'):
             print(green(' * ') + '... ' + '/lib/ld-linux-x86-64.so.2')
-            process('cp /lib/ld-linux-x86-64.so.2  %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+            process('cp /lib/ld-linux-x86-64.so.2  %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/libc.so.6')
-        process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libc.so.6           %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         # for dropbear
         print(green(' * ') + '... ' + '/lib/libnss_compat.so.2')
-        process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libnss_compat.so.2  %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/lib/libutil.so.1')
-        process('cp /lib/libutil.so.1        %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libutil.so.1        %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
         print(green(' * ') + '... ' + '/etc/ld.so.cache')
-        process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-glibc-temp/etc', self.verbose)
+        process('cp /etc/ld.so.cache         %s' % self.temp['work']+'/initramfs-bin-glibc-temp/etc', self.verbose)
         print(green(' * ') + '... ' + '/lib/libcrypt.so.1')
-        process('cp /lib/libcrypt.so.1       %s' % self.temp['work']+'/initramfs-glibc-temp/lib', self.verbose)
+        process('cp /lib/libcrypt.so.1       %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-glibc-temp')
+        os.chdir(self.temp['work']+'/initramfs-bin-glibc-temp')
         return os.system(self.cpio())
 
     def libncurses(self):
