@@ -323,6 +323,7 @@ def cli_parser():
                                     "libncurses",   \
                                     "bin-libncurses",\
                                     "zlib",         \
+                                    "bin-zlib",     \
                                     "rename=",      \
                                     "plugin=",      \
                                     "rootpasswd=",  \
@@ -378,9 +379,9 @@ def cli_parser():
         if initramfs_conf['defconfig'] == 'True':
             cli['defconfig'] = True
 
-        cli['luks'] = False
-        if initramfs_conf['luks'] == 'True':
-            cli['luks'] = True
+#        cli['luks'] = False
+#        if initramfs_conf['luks'] == 'True':
+#            cli['luks'] = True
 
         cli['bin-luks'] = False
         if initramfs_conf['bin-luks'] == 'True':
@@ -392,9 +393,9 @@ def cli_parser():
             cli['source-luks'] = True
             cli['bin-luks'] = False
 
-        cli['lvm2'] = False
-        if initramfs_conf['lvm2'] == 'True':
-            cli['lvm2'] = True
+#        cli['lvm2'] = False
+#        if initramfs_conf['lvm2'] == 'True':
+#            cli['lvm2'] = True
 
         cli['source-lvm2'] = False
         if initramfs_conf['source-lvm2'] == 'True':
@@ -436,9 +437,9 @@ def cli_parser():
 
 #        cli['firmware'] = ''
 
-        cli['disklabel'] = False
-        if initramfs_conf['disklabel'] == 'True':
-            cli['disklabel'] = True
+#        cli['disklabel'] = False
+#        if initramfs_conf['disklabel'] == 'True':
+#            cli['disklabel'] = True
 
         cli['bin-disklabel'] = False
         if initramfs_conf['bin-disklabel'] == 'True':
@@ -500,9 +501,12 @@ def cli_parser():
         if initramfs_conf['bin-libncurses'] == 'True':
             cli['bin-libncurses'] = True
 
-        cli['zlib'] = False
-        if initramfs_conf['zlib'] == 'True':
-            cli['zlib'] = True
+#        cli['zlib'] = False
+#        if initramfs_conf['zlib'] == 'True':
+#            cli['zlib'] = True
+        cli['bin-zlib'] = False
+        if initramfs_conf['bin-zlib'] == 'True':
+            cli['bin-zlib'] = True
 
         cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         if initramfs_conf['rename'] != '':
@@ -516,9 +520,9 @@ def cli_parser():
         if initramfs_conf['rootpasswd'] != '':
             cli['rootpasswd'] = initramfs_conf['rootpasswd']
 
-        cli['ttyecho'] = False
-        if initramfs_conf['ttyecho'] == 'True':
-            cli['ttyecho'] = True
+#        cli['ttyecho'] = False
+#        if initramfs_conf['ttyecho'] == 'True':
+#            cli['ttyecho'] = True
 
         cli['source-ttyecho'] = False
         if initramfs_conf['source-ttyecho'] == 'True':
@@ -528,9 +532,9 @@ def cli_parser():
         if initramfs_conf['keymaps'] != '':
             cli['keymaps'] = initramfs_conf['keymaps']
 
-        cli['strace'] = False
-        if initramfs_conf['strace'] == 'True':
-            cli['strace'] = True
+#        cli['strace'] = False
+#        if initramfs_conf['strace'] == 'True':
+#            cli['strace'] = True
 
         cli['bin-strace'] = False
         if initramfs_conf['bin-strace'] == 'True':
@@ -540,9 +544,9 @@ def cli_parser():
         if initramfs_conf['source-strace'] == 'True':
             cli['source-strace'] =True
 
-        cli['screen'] = False
-        if initramfs_conf['screen'] == 'True':
-            cli['screen'] = True
+#        cli['screen'] = False
+#        if initramfs_conf['screen'] == 'True':
+#            cli['screen'] = True
 
         cli['bin-screen'] = False
         if initramfs_conf['bin-screen'] == 'True':
@@ -664,7 +668,7 @@ def cli_parser():
                 cli['dropbear'] = True
                 cli['bin-glibc'] = True         # dropbear needs glibc
                 cli['bin-libncurses'] = True    # dropbear needs libncurses
-                cli['zlib'] = True          # dropbear needs zlib
+                cli['bin-zlib'] = True          # dropbear needs zlib
             elif o in ("--hostbin"):
                 cli['hostbin'] = True
 #            elif o in ("--glibc"):
@@ -675,8 +679,10 @@ def cli_parser():
 #                cli['libncurses'] = True
             elif o in ("--bin-libncurses"):
                 cli['bin-libncurses'] = True
-            elif o in ("--zlib"):
-                cli['zlib'] = True
+#            elif o in ("--zlib"):
+#                cli['zlib'] = True
+            elif o in ("--bin-zlib"):
+                cli['bin-zlib'] = True
             elif o in ("--rename="):
                 cli['rename'] = a
             elif o in ("--plugin"):

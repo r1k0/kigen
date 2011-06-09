@@ -295,9 +295,12 @@ class initramfs:
             if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
 
         # 19terce) append zlib
-        if self.cli['zlib'] is True:
+#        if self.cli['zlib'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.zlib() is not zero: self.fail('zlib')
+        if self.cli['bin-zlib'] is True:
             os.chdir(self.temp['work'])
-            if aobj.zlib() is not zero: self.fail('zlib')
+            if aobj.bin_zlib() is not zero: self.fail('bin-zlib')
 
         # last) append user plugin
         if self.pluginroot is not '':

@@ -82,38 +82,38 @@ modules_conf = {
 initramfs_conf = {
         'rename'        : '',   \
         'keymaps'       : 'all',\
-        'evms'          : 'False',   \
+#        'evms'          : 'False',   \
         'bin-evms'      : 'False',   \
-        'lvm2'          : 'False',   \
+#        'lvm2'          : 'False',   \
         'bin-lvm2'      : 'False',   \
         'source-lvm2'   : 'False',   \
 #        'selinux'       : '',   \
-        'screen'        : 'False',   \
+#        'screen'        : 'False',   \
         'bin-screen'    : 'False',   \
         'source-screen' : 'False',   \
         'rootpasswd'    : '',   \
         'defconfig'     : 'False',   \
-        'disklabel'     : '',   \
+#        'disklabel'     : '',   \
         'bin-disklabel' : 'False',   \
         'source-disklabel': 'False', \
-        'strace'        : '',   \
+#        'strace'        : '',   \
         'bin-strace'    : 'False',  \
         'source-strace' : 'False',  \
         'noboot'        : '',   \
         'debugflag'     : '',   \
         'sres'          : '',   \
         'menuconfig'    : '',   \
-        'dmraid'        : 'False',  \
+#        'dmraid'        : 'False',  \
         'bin-dmraid'    : 'False',  \
         'source-dmraid' : 'False',  \
         'nocache'       : '',   \
         'plugin'        : '',   \
         'linuxrc'       : '',   \
-        'glibc'         : 'False',  \
+#        'glibc'         : 'False',  \
         'bin-glibc'     : 'False',  \
-        'zlib'          : 'False',  \
+#        'zlib'          : 'False',  \
         'bin-zlib'      : 'False',  \
-        'libncurses'    : 'False',  \
+#        'libncurses'    : 'False',  \
         'bin-libncurses': 'False',  \
         'dotconfig'     : '',   \
         'dropbear'      : 'False',  \
@@ -122,9 +122,9 @@ initramfs_conf = {
         'hostbin'       : '',   \
         'splash'        : '',   \
         'oldconfig'     : '',   \
-        'ttyecho'       : 'False',  \
+#        'ttyecho'       : 'False',  \
         'source-ttyecho': 'False',  \
-        'luks'          : 'False',  \
+#        'luks'          : 'False',  \
         'bin-luks'      : 'False',  \
         'source-luks'   : 'False',  \
         'nomodules'     : 'False'}

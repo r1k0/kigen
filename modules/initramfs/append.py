@@ -573,20 +573,20 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-bin-libncurses-temp')
         return os.system(self.cpio())
 
-    def zlib(self):
+    def bin_zlib(self):
         """
         Append host zlib libraries to the initramfs
 
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.zlib')
-        print(green(' * ') + turquoise('initramfs.append.zlib'))
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
+        logging.debug('>>> entering initramfs.append.bin_zlib')
+        print(green(' * ') + turquoise('initramfs.append.bin_zlib'))
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-zlib-temp/lib', self.verbose)
 
         print(green(' * ') + '... ' + '/lib/libz.so.1')
-        process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-zlib-temp/lib', self.verbose)
+        process('cp /lib/libz.so.1      %s' % self.temp['work']+'/initramfs-bin-zlib-temp/lib', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-zlib-temp')
+        os.chdir(self.temp['work']+'/initramfs-bin-zlib-temp')
         return os.system(self.cpio())
         
     def dropbear(self):

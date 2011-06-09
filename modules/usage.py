@@ -178,6 +178,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-libncurses          ', end='')
     print(initramfs_conf['bin-libncurses'], end='') # bool
     print('\t\tInclude host libncurses (required for dropbear)')
+    print('| --bin-zlib                ', end='')
+    print(initramfs_conf['bin-zlib'], end='') # bool
+    print('\t\tInclude host zlib (required for dropbear)')
 
     print('+ from source code')
     print('| --source-luks             ', end='')
@@ -193,7 +196,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(initramfs_conf['source-disklabel'], end='') # bool
     print('\t\tInclude support for UUID/LABEL from sources')
     print('| --source-ttyecho          ', end='')
-    print(initramfs_conf['ttyecho'], end='') # bool
+    print(initramfs_conf['source-ttyecho'], end='') # bool
     print('\t\tCompile and include the handy ttyecho.c tool')
     print('| --source-strace           ', end='')
     print(initramfs_conf['source-strace'], end='') # bool
@@ -285,17 +288,17 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(tab+'Include list of user generated custom roots')
     print()
 
-    print('Libraries: (host only)')
+#    print('Libraries: (host only)')
 #    print('  --glibc                   ', end='')
 #    print(initramfs_conf['glibc'], end='') # bool
 #    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
 #    print('  --libncurses              ', end='')
 #    print(initramfs_conf['libncurses'], end='') # bool
 #    print('\t\tInclude host libncurses (required for dropbear)')
-    print('  --zlib                    ', end='')
-    print(initramfs_conf['zlib'], end='') # bool
-    print('\t\tInclude host zlib (required for dropbear)')
-    print()
+#    print('  --zlib                    ', end='')
+#    print(initramfs_conf['zlib'], end='') # bool
+#    print('\t\tInclude host zlib (required for dropbear)')
+#    print()
 
     print('Misc:')
     print('  --nocache                 ', end='')
