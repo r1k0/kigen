@@ -214,9 +214,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print('  --luks                    ', end='')
 #    print(initramfs_conf['luks'], end='') # bool 
 #    print('\t\tInclude LUKS support (host binary or sources)')
-    print(stdout.yellow('  --evms                    '), end='')
-    print(initramfs_conf['evms'], end='') # bool
-    print('\t\tInclude EVMS support (host binary only)')
+#    print(stdout.yellow('  --evms                    '), end='')
+#    print(initramfs_conf['evms'], end='') # bool
+#    print('\t\tInclude EVMS support (host binary only)')
     print(stdout.yellow('  --dmraid                  '), end='')
     print(initramfs_conf['dmraid'], end='') # bool
     print('\t\tInclude DMRAID support (host binary or sources)')
