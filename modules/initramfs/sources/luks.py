@@ -99,8 +99,9 @@ class luks:
         """
         print(green(' * ') + '... luks.configure')
         self.chgdir(self.lukstmp)
-    
-        return os.system('./configure --disable-selinux --enable-static %s' % self.verbose['std'])
+   
+        # use --disable-selinux?
+        return os.system('./configure --enable-static-cryptsetup %s' % self.verbose['std'])
     
     def make(self):
         """
@@ -122,7 +123,7 @@ class luks:
         print(green(' * ') + '... luks.strip')
         self.chgdir(self.lukstmp)
     
-        return process('strip %s/src/cryptsetup' % self.lukstmp, self.verbose)
+        return process('strip %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
     
     def compress(self):
         """
@@ -133,7 +134,7 @@ class luks:
         print(green(' * ') + '... luks.compress')
         self.chgdir(self.lukstmp)
     
-        return process('bzip2 %s/src/cryptsetup' % self.lukstmp, self.verbose)
+        return process('bzip2 %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
     
     def cache(self):
         """
@@ -144,5 +145,5 @@ class luks:
         print(green(' * ') + '... luks.cache')
         self.chgdir(self.lukstmp)
     
-        return process('mv %s/src/cryptsetup.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.luks_ver), self.verbose)
+        return process('mv %s/src/cryptsetup.static.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.luks_ver), self.verbose)
 
