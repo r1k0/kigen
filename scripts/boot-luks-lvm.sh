@@ -11,6 +11,7 @@ fi
 pkill cryptsetup
 sleep 2
 /sbin/cryptsetup luksOpen $1 root
-vgscan
-vgchange -a y
+sleep 2
+/bin/lvm vgscan
+/bin/lvm vgchange -a y
 /sbin/ttyecho -n /dev/console $2
