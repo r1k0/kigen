@@ -321,6 +321,7 @@ def cli_parser():
                                     "glibc",        \
                                     "bin-glibc",    \
                                     "libncurses",   \
+                                    "bin-libncurses",\
                                     "zlib",         \
                                     "rename=",      \
                                     "plugin=",      \
@@ -492,9 +493,12 @@ def cli_parser():
         if initramfs_conf['bin-glibc'] == 'True':
             cli['bin-glibc'] = True
 
-        cli['libncurses'] = False
-        if initramfs_conf['libncurses'] == 'True':
-            cli['libncurses'] = True
+#        cli['libncurses'] = False
+#        if initramfs_conf['libncurses'] == 'True':
+#            cli['libncurses'] = True
+        cli['bin-libncurses'] = False
+        if initramfs_conf['bin-libncurses'] == 'True':
+            cli['bin-libncurses'] = True
 
         cli['zlib'] = False
         if initramfs_conf['zlib'] == 'True':
@@ -659,7 +663,7 @@ def cli_parser():
             elif o in ("--dropbear"):
                 cli['dropbear'] = True
                 cli['bin-glibc'] = True         # dropbear needs glibc
-                cli['libncurses'] = True    # dropbear needs libncurses
+                cli['bin-libncurses'] = True    # dropbear needs libncurses
                 cli['zlib'] = True          # dropbear needs zlib
             elif o in ("--hostbin"):
                 cli['hostbin'] = True
@@ -667,8 +671,10 @@ def cli_parser():
 #                cli['glibc'] = True
             elif o in ("--bin-glibc"):
                 cli['bin-glibc'] = True
-            elif o in ("--libncurses"):
-                cli['libncurses'] = True
+#            elif o in ("--libncurses"):
+#                cli['libncurses'] = True
+            elif o in ("--bin-libncurses"):
+                cli['bin-libncurses'] = True
             elif o in ("--zlib"):
                 cli['zlib'] = True
             elif o in ("--rename="):
@@ -702,15 +708,15 @@ def cli_parser():
             elif o in ("--screen"):
                 cli['screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
-                cli['libncurses'] = True    # screen needs libncurses
+                cli['bin-libncurses'] = True    # screen needs libncurses
             elif o in ("--bin-screen"):
                 cli['bin-screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
-                cli['libncurses'] = True    # screen needs libncurses
+                cli['bin-libncurses'] = True    # screen needs libncurses
             elif o in ("--source-screen"):
                 cli['source-screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
-                cli['libncurses'] = True    # screen needs libncurses
+                cli['bin-libncurses'] = True    # screen needs libncurses
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
             elif o in ("--nomodules"):

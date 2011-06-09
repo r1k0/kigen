@@ -175,7 +175,10 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-glibc               ', end='')
     print(initramfs_conf['bin-glibc'], end='') # bool
     print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-    
+    print('| --bin-libncurses          ', end='')
+    print(initramfs_conf['bin-libncurses'], end='') # bool
+    print('\t\tInclude host libncurses (required for dropbear)')
+
     print('+ from source code')
     print('| --source-luks             ', end='')
     print(initramfs_conf['source-luks'], end='') # bool 
@@ -286,9 +289,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print('  --glibc                   ', end='')
 #    print(initramfs_conf['glibc'], end='') # bool
 #    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-    print('  --libncurses              ', end='')
-    print(initramfs_conf['libncurses'], end='') # bool
-    print('\t\tInclude host libncurses (required for dropbear)')
+#    print('  --libncurses              ', end='')
+#    print(initramfs_conf['libncurses'], end='') # bool
+#    print('\t\tInclude host libncurses (required for dropbear)')
     print('  --zlib                    ', end='')
     print(initramfs_conf['zlib'], end='') # bool
     print('\t\tInclude host zlib (required for dropbear)')

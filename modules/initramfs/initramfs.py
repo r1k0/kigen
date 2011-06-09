@@ -287,9 +287,12 @@ class initramfs:
             if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
 
         # 19bis) append libncurses
-        if self.cli['libncurses'] is True:
+#        if self.cli['libncurses'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.libncurses() is not zero: self.fail('libncurses')
+        if self.cli['bin-libncurses'] is True:
             os.chdir(self.temp['work'])
-            if aobj.libncurses() is not zero: self.fail('libncurses')
+            if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
 
         # 19terce) append zlib
         if self.cli['zlib'] is True:
