@@ -5,8 +5,9 @@ NODO: make --fakemod=/ in case kernel modules are copied from another chroot
 NODO: make multiple targets callable (left for the next new whole rewrite of cliparser.py)
     do kigen k && kigen i instead
 
-0.3.*
+0.3.1
 =====
+TODO: detect if same feat is called with both --bin and --source
 TODO: warn user if binis not static dont be silent
     warn user if bin not found on host
     migrate code from append.py to initramfs.py asap
@@ -15,7 +16,10 @@ TODO: move all bin_feat logic to its own dir and create binary classes like with
     -> initramfs.append.bin.luks
 TODO: check uuid feature is really working
 TODO: take some time and clean append.py, for real
-TODO: use presets from modules/default.py if none are found in /etc/kigen/* 
+TODO: use presets from modules/default.py if none are found in /etc/kigen/*
+
+0.3.*
+=====
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first
 TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
