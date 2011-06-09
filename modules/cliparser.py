@@ -292,6 +292,8 @@ def cli_parser():
                                     "source-lvm2",  \
                                     "bin-lvm2",     \
                                     "dmraid",       \
+                                    "bin-dmraid",   \
+                                    "source-dmraid",\
                                     "iscsi",        \
                                     "logfile=",     \
                                     "evms",         \
@@ -405,9 +407,15 @@ def cli_parser():
         if initramfs_conf['bin-lvm2'] == 'True':
             cli['bin-lvm2'] = True
 
-        cli['dmraid'] = False
-        if initramfs_conf['dmraid'] == 'True':
-            cli['dmraid'] = True
+#        cli['dmraid'] = False
+#        if initramfs_conf['dmraid'] == 'True':
+#            cli['dmraid'] = True
+        cli['bin-dmraid'] = False
+        if initramfs_conf['bin-dmraid'] == 'True':
+            cli['bin-dmraid'] = True
+        cli['source-dmraid'] = False
+        if initramfs_conf['source-dmraid'] == 'True':
+            cli['source-dmraid'] = True
 
 #        cli['iscsi'] = False
 #        if initramfs_conf['iscsi'] == 'True':
@@ -617,15 +625,19 @@ def cli_parser():
             elif o in ("--bin-lvm2"):
                 cli['bin-lvm2'] = True
                 cli['source-lvm2'] = False
-            elif o in ("--dmraid"):
-                cli['dmraid'] = True
+#            elif o in ("--dmraid"):
+#                cli['dmraid'] = True
+            elif o in ("--bin-dmraid"):
+                cli['bin-dmraid'] = True
+            elif o in ("--source-dmraid"):
+                cli['source-dmraid'] = True
             elif o in ("--dotconfig"):
                 cli['dotconfig'] = a
                 cli['oldconfig'] = True # make sure .config is ok
             elif o in ("--iscsi"):
                 cli['iscsi'] = True
-            elif o in ("--evms"):
-                cli['evms'] = True
+#            elif o in ("--evms"):
+#                cli['evms'] = True
             elif o in ("--bin-evms"):
                 cli['bin-evms'] = True
             elif o in ("--mdadm"):

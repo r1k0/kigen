@@ -181,6 +181,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-zlib                ', end='')
     print(initramfs_conf['bin-zlib'], end='') # bool
     print('\t\tInclude host zlib (required for dropbear)')
+    print('| --bin-dmraid              ', end='')
+    print(initramfs_conf['bin-dmraid'], end='') # bool
+    print('\t\tInclude DMRAID support from host')
 
     print('+ from source code')
     print('| --source-luks             ', end='')
@@ -201,6 +204,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-strace           ', end='')
     print(initramfs_conf['source-strace'], end='') # bool
     print('\t\tCompile and include the strace binary tool from sources')
+    print(stdout.yellow('| --source-dmraid           '), end='')
+    print(initramfs_conf['source-dmraid'], end='') # bool
+    print('\t\tInclude DMRAID support from sources')
     print()
 
     # fix \t display depending on length of cli[splash']
@@ -226,9 +232,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print(stdout.yellow('  --evms                    '), end='')
 #    print(initramfs_conf['evms'], end='') # bool
 #    print('\t\tInclude EVMS support (host binary only)')
-    print(stdout.yellow('  --dmraid                  '), end='')
-    print(initramfs_conf['dmraid'], end='') # bool
-    print('\t\tInclude DMRAID support (host binary or sources)')
+#    print(stdout.yellow('  --dmraid                  '), end='')
+#    print(initramfs_conf['dmraid'], end='') # bool
+#    print('\t\tInclude DMRAID support (host binary or sources)')
 #    print stdout.yellow('   --selinux                '),
 #    print initramfs_conf['selinux'], # bool
 #    print stdout.yellow('\t\t Include selinux support in --dmraid (selinux libs required)')

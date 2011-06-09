@@ -1117,68 +1117,148 @@ class append:
 #    
 #        os.chdir(self.temp['work']+'/initramfs-mdadm-temp')
 #        return os.system(self.cpio())
-#
-    def dmraid(self):
+
+    def bin_dmraid(self):
         """
-        Append dmraid to initramfs
+        Append dmraid to initramfs from the host
     
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.dmraid')
+        logging.debug('>>> entering initramfs.append.bin_dmraid')
 
         dmraid_bin = '/usr/sbin/dmraid'
 
-        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
-   
-        # check how dmraid binary is linked 
-        if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
-            # use from host
-            logging.debug('initramfs.append.dmraid from %s' % white('host'))
-            print(green(' * ') + turquoise('initramfs.append.dmraid ')+ dmraid_bin +' from ' + white('host'))
-            process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
-            process('chmod +x %s/initramfs-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-bin-dmraid-temp/bin', self.verbose)
 
-#            if not isstatic(dmraid_bin, self.verbose):
-#                dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
+        # use from host
+        logging.debug('initramfs.append.bin_dmraid from %s' % white('host'))
+        print(green(' * ') + turquoise('initramfs.append.bin_dmraid ')+ dmraid_bin +' from ' + white('host'))
+        process('cp %s %s/initramfs-bin-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
+        process('chmod +x %s/initramfs-bin-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
+
+#        if not isstatic(dmraid_bin, self.verbose):
+#            dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
 #
-#                process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
-#                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
-#                for i in dmraid_libs:
-#                    print green(' * ') + '... ' + i
-#                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
-#            else:
-#                logging.debug(dmraid_bin+' is statically linked nothing to do')
-        else:
-            logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
-            print(green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'])
+#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dmraid-temp/lib', self.verbose)
+#            print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
+#            for i in dmraid_libs:
+#                print green(' * ') + '... ' + i
+#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-dmraid-temp/lib'), self.verbose)
+#        else:
+#            logging.debug(dmraid_bin+' is statically linked nothing to do')
 
-            if not os.path.isfile(dmraid_bin) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources')
-            elif not isstatic(dmraid_bin, self.verbose) and self.hostbin is True:
-                print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources')
-
-            if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
-                # use cache
-                print(green(' * ') + '... '+'source cache found: importing')
-            else:
-                # compile
-                from .sources.dmraid import dmraid
-                dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
-                dmraidobj.build()
-    
-            # extract cache
-            # FIXME careful with the > 
-            logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
-            os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
-            # FIXME make symlink rather than cp
-            process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
-    
         # FIXME ln -sf raid456.ko raid45.ko ?
         # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
         #   or should we raise an error and make the user enabling the module manually? warning?
-    
-        os.chdir(self.temp['work']+'/initramfs-dmraid-temp')
+
+        os.chdir(self.temp['work']+'/initramfs-bin-dmraid-temp')
         return os.system(self.cpio())
+
+    def source_dmraid(self):
+        """
+        Append dmraid to initramfs from sources
+    
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.source_dmraid')
+
+        dmraid_bin = '/usr/sbin/dmraid'
+
+        process('mkdir -p ' + self.temp['work']+'/initramfs-source-dmraid-temp/bin', self.verbose)
+
+        logging.debug('initramfs.append.source_dmraid '+ self.version_conf['dmraid-version']),
+        print(green(' * ') + turquoise('initramfs.append.source_dmraid ') + self.version_conf['dmraid-version'])
+
+# FIXME ### move this to initramfs.py
+        if not os.path.isfile(dmraid_bin) and self.hostbin is True:
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources')
+        elif not isstatic(dmraid_bin, self.verbose) and self.hostbin is True:
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources')
+###
+        if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'source cache found: importing')
+        else:
+            # compile
+            from .sources.dmraid import dmraid
+            dmraidobj = dmraid(self.master_conf, self.version_conf, self.url_conf, self.selinux, self.temp, self.verbose)
+            dmraidobj.build()
+
+        # extract cache
+        # FIXME careful with the > 
+        logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-source-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+        os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-source-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+        # FIXME make symlink rather than cp
+        process('cp %s/initramfs-source-dmraid-temp/bin/dmraid.static %s/initramfs-source-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+
+        # FIXME ln -sf raid456.ko raid45.ko ?
+        # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
+        #   or should we raise an error and make the user enabling the module manually? warning?
+
+        os.chdir(self.temp['work']+'/initramfs-source-dmraid-temp')
+        return os.system(self.cpio())
+
+#    def dmraid(self):
+#        """
+#        Append dmraid to initramfs
+#    
+#        @return: bool
+#        """
+#        logging.debug('>>> entering initramfs.append.dmraid')
+#
+#        dmraid_bin = '/usr/sbin/dmraid'
+#
+#        process('mkdir -p ' + self.temp['work']+'/initramfs-dmraid-temp/bin', self.verbose)
+#   
+#        # check how dmraid binary is linked 
+#        if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
+#            # use from host
+#            logging.debug('initramfs.append.dmraid from %s' % white('host'))
+#            print(green(' * ') + turquoise('initramfs.append.dmraid ')+ dmraid_bin +' from ' + white('host'))
+#            process('cp %s %s/initramfs-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
+#            process('chmod +x %s/initramfs-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
+#
+##            if not isstatic(dmraid_bin, self.verbose):
+##                dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
+##
+##                process('mkdir -p %s' % self.temp['work']+'/initramfs-dmraid-temp/lib', self.verbose)
+##                print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
+##                for i in dmraid_libs:
+##                    print green(' * ') + '... ' + i
+##                    process('cp %s %s' % (i, self.temp['work']+'/initramfs-dmraid-temp/lib'), self.verbose)
+##            else:
+##                logging.debug(dmraid_bin+' is statically linked nothing to do')
+#        else:
+#            logging.debug('initramfs.append.dmraid '+ self.version_conf['dmraid-version']),
+#            print(green(' * ') + turquoise('initramfs.append.dmraid ') + self.version_conf['dmraid-version'])
+#
+#            if not os.path.isfile(dmraid_bin) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' not found on host, compiling from sources')
+#            elif not isstatic(dmraid_bin, self.verbose) and self.hostbin is True:
+#                print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is not static, compiling from sources')
+#
+#            if os.path.isfile(self.temp['cache']+'/dmraid.static-'+self.version_conf['dmraid-version']+'.bz2') and self.nocache is False:
+#                # use cache
+#                print(green(' * ') + '... '+'source cache found: importing')
+#            else:
+#                # compile
+#                from .sources.dmraid import dmraid
+#                dmraidobj = dmraid(self.master_conf, self.version_conf, self.selinux, self.temp, self.verbose)
+#                dmraidobj.build()
+#    
+#            # extract cache
+#            # FIXME careful with the > 
+#            logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+#            os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
+#            # FIXME make symlink rather than cp
+#            process('cp %s/initramfs-dmraid-temp/bin/dmraid.static %s/initramfs-dmraid-temp/bin/dmraid' % (self.temp['work'],self.temp['work']), self.verbose)
+#    
+#        # FIXME ln -sf raid456.ko raid45.ko ?
+#        # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?
+#        #   or should we raise an error and make the user enabling the module manually? warning?
+#    
+#        os.chdir(self.temp['work']+'/initramfs-dmraid-temp')
+#        return os.system(self.cpio())
 
 #    # FIXME: make sure somehow the appropriate modules get loaded when using iscsi?
 #    def iscsi(self):

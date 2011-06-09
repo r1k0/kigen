@@ -140,9 +140,17 @@ class initramfs:
             if aobj.source_lvm2() is not zero: self.fail('source_lvm2')
 
         # 6) append dmraid
-        if self.cli['dmraid'] is True:
+#        if self.cli['dmraid'] is True:
+#            os.chdir(self.temp['work'])
+#            if aobj.dmraid() is not zero: self.fail('dmraid')
+        if self.cli['bin-dmraid'] is True:
             os.chdir(self.temp['work'])
-            if aobj.dmraid() is not zero: self.fail('dmraid')
+#            if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
+            if os.path.isfile('/usr/sbin/dmraid') and isstatic('/usr/sbin/dmraid', self.verbose):
+                if aobj.bin_dmraid() is not zero: self.fail('bin-dmraid')
+        if self.cli['source-dmraid'] is True:
+            os.chdir(self.temp['work'])
+            if aobj.source_dmraid() is not zero: self.fail('source-dmraid')
 
 #        # 7) append iscsi
 #        if self.cli['iscsi'] is True:

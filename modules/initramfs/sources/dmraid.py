@@ -134,7 +134,6 @@ class dmraid:
     
         return os.system('strip %s/tools/dmraid' % self.dmraidtmp)
 
-    
     def compress(self):
         """
         dmraid compression routine
