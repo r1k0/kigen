@@ -8,10 +8,6 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 0.3.1
 =====
 TODO: add timestamp for each line in logfile and beautify logs a bit
-TODO: 1)add kigen k --fixdotconfig=luks with aes-xts-plain cipher else dmsetup fails
-    2)AND let the user add it as a modules and ship it into the initramfs too?
-    but I've done 2) already I think...mmh something must go wrong with MODULES_CRYPT from modules.conf
-     plus, xts is already in modules.conf, smthg is wrong with that file
 TODO: detect if same feat is called with both --bin and --source
 TODO: warn user if binis not static dont be silent
     warn user if bin not found on host
