@@ -24,21 +24,28 @@ class e2fsprogs:
         ret = zero = int('0')
     
         if os.path.isfile('%s/e2fsprogs-%s.tar.gz' % (get_distdir(self.temp), self.e2fsprogs_ver)) is not True:
+            print(green(' * ') + '... e2fsprogs.download')
             if self.download() is not zero:
                 process('rm %s/e2fsprogs-%s.tar.gz' % (get_distdir(self.temp), self.e2fsprogs_ver), self.verbose)
                 self.fail('download')
     
+        print(green(' * ') + '... e2fsprogs.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
     
+        print(green(' * ') + '... e2fsprogs.configure')
         if self.configure() is not zero: self.fail('configure')
     
+        print(green(' * ') + '... e2fsprogs.make')
         if self.make() is not zero: self.fail('make')
     
+        print(green(' * ') + '... e2fsprogs.strip')
         if self.strip() is not zero: self.fail('strip')
     
+        print(green(' * ') + '... e2fsprogs.compress')
         if self.compress() is not zero: self.fail('compress')
     
+        print(green(' * ') + '... e2fsprogs.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -69,7 +76,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.download')
         e2fsprogs_url = self.url+'/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output!
@@ -81,8 +87,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.extract')
-    
         os.system('tar xvfz %s/e2fsprogs-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.e2fsprogs_ver), self.temp['work'], self.verbose['std']))
     
     # e2fsprogrs building functions
@@ -92,7 +96,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.configure')
         self.chgdir(self.e2tmp)
     
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
@@ -103,7 +106,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.make')
         self.chgdir(self.e2tmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -117,7 +119,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.strip')
         self.chgdir(self.e2tmp)
         os.system('cp %s/misc/blkid %s/misc/blkid.bak' % (self.e2tmp, self.e2tmp))
 
@@ -132,7 +133,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.compress')
         self.chgdir(self.e2tmp)
     
         return os.system('bzip2 %s/misc/blkid' % self.e2tmp)
@@ -143,8 +143,6 @@ class e2fsprogs:
     
         @return: bool
         """
-        print(green(' * ') + '... e2fsprogs.cache')
         self.chgdir(self.e2tmp)
     
         return process('mv %s/misc/blkid.bz2 %s/blkid-e2fsprogs-%s.bz2' % (self.e2tmp, self.temp['cache'], self.e2fsprogs_ver), self.verbose)
-

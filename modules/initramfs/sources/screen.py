@@ -24,21 +24,28 @@ class screen:
         zero = int('0')
     
         if os.path.isfile('%s/screen-%s.tar.gz' % (get_distdir(self.temp), self.screen_ver)) is not True:
+            print(green(' * ') + '... screen.download')
             if self.download() is not zero:
                 process('rm %s/screen-%s.tar.gz' % (get_distdir(self.temp), self.screen_ver), self.verbose)
                 self.fail('download')
     
+        print(green(' * ') + '... screen.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
     
+        print(green(' * ') + '... screen.configure')
         if self.configure() is not zero: self.fail('configure')
     
+        print(green(' * ') + '... screen.make')
         if self.make() is not zero: self.fail('make')
     
+        print(green(' * ') + '... screen.strip')
         if self.strip() is not zero: self.fail('strip')
     
+        print(green(' * ') + '... screen.compress')
         if self.compress() is not zero: self.fail('compress')
     
+        print(green(' * ') + '... screen.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -69,7 +76,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.download')
         screen_url = self.url + '/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
@@ -81,8 +87,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.extract')
-    
         os.system('tar xvfz %s/screen-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.screen_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
@@ -91,10 +95,9 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.configure')
         self.chgdir(self.screentmp)
     
-        # @@ return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
+        # FIXME return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
         return os.system('./configure %s' % self.verbose['std'])
     
     def make(self):
@@ -103,7 +106,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.make')
         self.chgdir(self.screentmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -117,7 +119,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.strip')
         self.chgdir(self.screentmp)
     
         return os.system('strip %s/screen ' % self.screentmp)
@@ -131,7 +132,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.compress')
         self.chgdir(self.screentmp)
     
         return os.system('bzip2 %s/screen' % self.screentmp)
@@ -142,7 +142,6 @@ class screen:
     
         @return: bool
         """
-        print(green(' * ') + '... screen.cache')
         self.chgdir(self.screentmp)
     
         return process('cp %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.screen_ver), self.verbose)

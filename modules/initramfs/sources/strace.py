@@ -24,21 +24,28 @@ class strace:
         zero = int('0')
     
         if os.path.isfile('%s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver)) is not True:
+            print(green(' * ') + '... strace.download')
             if self.download() is not zero:
                 process('rm %s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver), self.verbose)
                 self.fail('download')
     
+        print(green(' * ') + '... strace.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
     
+        print(green(' * ') + '... strace.configure')
         if self.configure() is not zero: self.fail('configure')
     
+        print(green(' * ') + '... strace.make')
         if self.make() is not zero: self.fail('make')
     
+        print(green(' * ') + '... strace.strip')
         if self.strip() is not zero: self.fail('strip')
     
+        print(green(' * ') + '... strace.compress')
         if self.compress() is not zero: self.fail('compress')
     
+        print(green(' * ') + '... strace.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -69,7 +76,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.download')
         strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
@@ -81,8 +87,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.extract')
-    
         os.system('tar xvfj %s/strace-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
     
     # strace building functions
@@ -92,7 +96,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.configure')
         self.chgdir(self.stracetmp)
     
         return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
@@ -103,7 +106,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.make')
         self.chgdir(self.stracetmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -117,7 +119,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.strip')
         self.chgdir(self.stracetmp)
     
         return os.system('strip %s/strace ' % self.stracetmp)
@@ -131,7 +132,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.compress')
         self.chgdir(self.stracetmp)
     
         return os.system('bzip2 %s/strace' % self.stracetmp)
@@ -142,8 +142,6 @@ class strace:
     
         @return: bool
         """
-        print(green(' * ') + '... strace.cache')
         self.chgdir(self.stracetmp)
     
         return process('mv %s/strace.bz2 %s/strace-%s.bz2' % (self.stracetmp, self.temp['cache'], self.strace_ver), self.verbose)
-

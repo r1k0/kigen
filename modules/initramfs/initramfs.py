@@ -114,15 +114,18 @@ class initramfs:
         if ret is not zero: self.fail('cpio')
 
         # 2) append base
+        print(green(' * ') + turquoise('initramfs.append.base'))
         aobj.base()
 
         # 3) append modules
         # note that /etc/boot.conf initrd modules if set
         # overlap the ones from /etc/kigen.conf
         if self.cli['nomodules'] is not True:
+            print(green(' * ') + turquoise('initramfs.append.modules ') + self.KV)
             if aobj.modules() is not zero: self.fail('modules')
 
         # 4) append busybox
+        print(green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version'])
         os.chdir(self.temp['work'])
         if aobj.busybox() is not zero: self.fail('busybox')
 
@@ -132,6 +135,7 @@ class initramfs:
 #            if os.path.isfile('/sbin/lvm.static') and self.hostbin is True and isstatic('/sbin/lvm.static', self.verbose):
             if os.path.isfile('/sbin/lvm.static'):
                 if isstatic('/sbin/lvm.static', self.verbose):
+                    print(green(' * ') + turquoise('initramfs.append.bin_lvm2 ')+'/sbin/lvm.static from '+white('host'))
                     if aobj.bin_lvm2() is not zero: self.fail('bin-lvm2')
                 else:
                     self.fail_msg('/sbin/lvm.static is not statically linked. Merge sys-fs/lvm2 with USE=static')
@@ -139,6 +143,7 @@ class initramfs:
                 self.fail_msg('sys-fs/lvm2 must be merged')
         if self.cli['source-lvm2'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_lvm2 ') + self.version_conf['lvm2-version'])
             if aobj.source_lvm2() is not zero: self.fail('source_lvm2')
 
         # 6) append dmraid
@@ -147,6 +152,7 @@ class initramfs:
 #            if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
             if os.path.isfile('/usr/sbin/dmraid'):
                 if isstatic('/usr/sbin/dmraid', self.verbose):
+                    print(green(' * ') + turquoise('initramfs.append.bin_dmraid ')+'/usr/sbin/dmraid from ' + white('host'))
                     if aobj.bin_dmraid() is not zero: self.fail('bin-dmraid')
                 else:
                     self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static')
@@ -154,6 +160,7 @@ class initramfs:
                 self.fail_msg('sys-fs/dmraid must be merged')
         if self.cli['source-dmraid'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_dmraid ') + self.version_conf['dmraid-version'])
             if aobj.source_dmraid() is not zero: self.fail('source-dmraid')
 
 #        # 7) append iscsi
@@ -164,6 +171,7 @@ class initramfs:
         # 8) append evms
         if self.cli['bin-evms'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.bin_evms'))
             if aobj.bin_evms() is not zero: self.fail('bin_evms')
 
 #        # 9) append mdadm
@@ -184,6 +192,7 @@ class initramfs:
                 self.fail_msg('sys-fs/cryptsetup must be merged')
         if self.cli['source-luks'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_luks ') + self.version_conf['luks-version'])
             if aobj.source_luks() is not zero: self.fail('source_luks')
 
         # 11) append multipath
@@ -195,6 +204,7 @@ class initramfs:
 #            if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
             if os.path.isfile('/sbin/blkid'):
                 if isstatic('/sbin/blkid', self.verbose):
+                    print(green(' * ') + turquoise('initramfs.append.bin_disklabel ')+ '/sbin/blkid from ' + white('host'))
                     if aobj.bin_disklabel() is not zero: self.fail('bin_disklabel')
                 else:
                     self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static')
@@ -202,6 +212,7 @@ class initramfs:
                 self.fail_msg('sys-fs/e2fsprogs must be merged')
         if self.cli['source-disklabel']:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_disklabel ') + self.version_conf['e2fsprogs-version'])
             if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
  
         # 13) append dropbear
@@ -215,6 +226,7 @@ class initramfs:
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/bin/strace'):
                 if isstatic('/usr/bin/strace', self.verbose):
+                    print(green(' * ') + turquoise('initramfs.append.bin_strace ')+'/usr/bin/strace from ' + white('host'))
                     if aobj.bin_strace() is not zero: self.fail('bin_strace')
                 else:
                     self.fail_msg('/usr/bin/strace is not statically linked. Merge dev-util/strace with USE=static')
@@ -222,6 +234,7 @@ class initramfs:
                 self.fail_msg('dev-util/strace must be merged')
         if self.cli['source-strace'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_strace ') + self.version_conf['strace-version'])
             if aobj.source_strace() is not zero: self.fail('source_strace')
 
         # 15) append screen
@@ -230,14 +243,15 @@ class initramfs:
 #            if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
             if os.path.isfile('/usr/bin/screen'):
                 if isstatic('/usr/bin/screen', self.verbose):
+                    print(green(' * ') + turquoise('initramfs.append.bin_screen ')+ '/usr/bin/screen from ' + white('host'))
                     if aobj.bin_screen() is not zero: self.fail('bin-screen')
                 else:
                     self.fail_msg('/usr/bin/screen is not statically linked. Merge app-misc/screen with USE=static')
             else:
                 self.fail_msg('app-misc/screen must be merge')
-
         if self.cli['source-screen'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_screen ') + self.version_conf['screen-version'])
             if aobj.source_screen() is not zero: self.fail('source_screen')
 
 #        # 16) append unionfs_fuse
@@ -253,6 +267,7 @@ class initramfs:
         # 18) append ttyecho
         if self.cli['source-ttyecho'] is True:
             os.chdir(self.temp['work'])
+            print(green(' * ') + turquoise('initramfs.append.source_ttyecho'))
             if aobj.source_ttyecho() is not zero: self.fail('source-ttyecho')
 
         # 19) append splash
@@ -262,6 +277,7 @@ class initramfs:
 
         # 20) append rootpasswd
         if self.cli['rootpasswd'] is not '':
+            print(green(' * ') + turquoise('initramfs.append.rootpasswd'))
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
 
@@ -279,16 +295,19 @@ class initramfs:
 
         # 23) append glibc
         if self.cli['bin-glibc'] is True:
+            print(green(' * ') + turquoise('initramfs.append.bin_glibc'))
             os.chdir(self.temp['work'])
             if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
 
         # 23bis) append libncurses
         if self.cli['bin-libncurses'] is True:
+            print(green(' * ') + turquoise('initramfs.append.bin_libncurses'))
             os.chdir(self.temp['work'])
             if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
 
         # 23terce) append zlib
         if self.cli['bin-zlib'] is True:
+            print(green(' * ') + turquoise('initramfs.append.bin_zlib'))
             os.chdir(self.temp['work'])
             if aobj.bin_zlib() is not zero: self.fail('bin-zlib')
 

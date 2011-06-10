@@ -25,25 +25,32 @@ class dmraid:
         zero = int('0')
     
         if os.path.isfile('%s/dmraid-%s.tar.bz2' % (get_distdir(self.temp), self.dmraid_ver)) is not True:
+            print(green(' * ') + '... dmraid.download')
             if self.download() is not zero:
                 process('rm %s/dmraid-%s.tar.bz2' % (get_distdir(self.temp), self.dmraid_ver), self.verbose)
                 self.fail('download')
-    
+
+        print(green(' * ') + '... dmraid.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
-    
+
+        print(green(' * ') + '... dmraid.configure')
         if self.configure() is not zero: self.fail('configure')
-    
+
 #        if self.unset_selinux() is not zero: self.fail('selinux')
 
+        print(green(' * ') + '... dmraid.make')
         if self.make() is not zero: self.fail('make')
-    
+
+        print(green(' * ') + '... dmraid.strip')
         if self.strip() is not zero: self.fail('strip')
-    
+
+        print(green(' * ') + '... dmraid.compress')
         if self.compress() is not zero: self.fail('compress')
-    
+
+        print(green(' * ') + '... dmraid.cache')
         if self.cache() is not zero: self.fail('cache')
-   
+
 #    def set_config(self):
 #        self.chgdir(self.dmraidtmp)
 #        print green(' * ') + '... dmraid.set_selinux'
@@ -82,7 +89,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.download')
         dmraid_url = self.url + '/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output
@@ -94,8 +100,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.extract')
-    
         os.system('tar xvfj %s/dmraid-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.dmraid_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
@@ -104,7 +108,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.configure')
         self.chgdir(self.dmraidtmp)
     
         return os.system('LIBS=-ldevmapper ./configure --enable-static_link %s' % self.verbose['std'])
@@ -115,7 +118,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.make')
         self.chgdir(self.dmraidtmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -129,7 +131,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.strip')
         self.chgdir(self.dmraidtmp)
     
         return os.system('strip %s/tools/dmraid' % self.dmraidtmp)
@@ -143,7 +144,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.compress')
         self.chgdir(self.dmraidtmp)
     
         return os.system('bzip2 %s/tools/dmraid' % self.dmraidtmp)
@@ -154,8 +154,6 @@ class dmraid:
     
         @return: bool
         """
-        print(green(' * ') + '... dmraid.cache')
         self.chgdir(self.dmraidtmp)
     
         return process('mv %s/tools/dmraid.bz2 %s/dmraid.static-%s.bz2' % (self.dmraidtmp, self.temp['cache'], self.dmraid_ver), self.verbose)
-

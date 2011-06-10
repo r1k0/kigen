@@ -41,12 +41,15 @@ class busybox:
         zero = int('0')
     
         if os.path.isfile('%s/busybox-%s.tar.bz2' % (get_distdir(self.temp), str(self.bb_version))) is not True:
+            print(green(' * ') + '... busybox.download')
             if self.download() is not zero: 
                 process('rm -v %s/busybox-%s.tar.bz2' % (get_distdir(self.temp), str(self.bb_version)), self.verbose)
                 self.fail('download')
-    
+ 
+        print(green(' * ') + '... busybox.extract')
         if self.extract() is not zero: self.fail('extract')
 
+        print(green(' * ') + '... busybox.copy_config '+self.dotconfig)
         if self.copy_config() is not zero: self.fail('copy_config')
 
         # compare bb .config version and the one from version.conf
@@ -67,20 +70,27 @@ class busybox:
             self.oldconfig = True
 
         if self.defconfig is True:
+            print(green(' * ') + '... busybox.defconfig')
             if self.make_defconfig() is not zero: self.fail('defconfig')
- 
+
         if self.oldconfig is True:
+            print(green(' * ') + '... busybox.oldconfig')
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
 
         if self.menuconfig is True:
+            print(green(' * ') + '... busybox.menuconfig')
             if self.make_menuconfig() is not zero: self.fail('menuconfig')
-    
+
+        print(green(' * ') + '... busybox.make')
         if self.make() is not zero: self.fail('make')
-    
+
+        print(green(' * ') + '... busybox.strip')
         if self.strip() is not zero: self.fail('stip')
     
+        print(green(' * ') + '... busybox.compress')
         if self.compress() is not zero: self.fail('compress')
-    
+
+        print(green(' * ') + '... busybox.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -110,7 +120,6 @@ class busybox:
         Busybox tarball download command
         
         """
-        print(green(' * ') + '... busybox.download')
         bb_url = self.url + '/busybox-' + str(self.bb_version) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
@@ -122,8 +131,6 @@ class busybox:
         
         @return         boot
         """
-        print(green(' * ') + '... busybox.extract')
-
         return os.system('tar xvfj %s/busybox-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.bb_version), self.temp['work'], self.verbose['std']))
     
     def copy_config(self):
@@ -132,7 +139,6 @@ class busybox:
         
         @return         bool
         """
-        print(green(' * ') + '... busybox.copy_config '+self.dotconfig)
         cpv = ''
         if self.verbose['set'] is True: cpv = '-v'
         if self.dotconfig:
@@ -146,7 +152,6 @@ class busybox:
         """
         Busybox binary strip routine
         """
-        print(green(' * ') + '... busybox.strip')
         self.chgdir(self.bb_tmp)
 
         return os.system('strip %s/busybox ' % (self.bb_tmp))
@@ -157,7 +162,6 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.compress')
         self.chgdir(self.bb_tmp)
 
         return os.system('tar -cj -C %s -f %s/busybox-%s.tar.bz2 busybox .config' % (self.bb_tmp, self.temp['work'], self.bb_version))
@@ -168,8 +172,6 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.cache')
-
         return os.system('mv %s/busybox-%s.tar.bz2  %s/busybox-bin-%s.tar.bz2' % (self.temp['work'], self.bb_version, self.temp['cache'], self.bb_version))
     
     # busybox building functions
@@ -196,7 +198,6 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.defconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('defconfig', self.verbose['std'])
         if self.verbose['set'] is True:
@@ -210,7 +211,6 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.oldconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('oldconfig', '')
         if self.verbose['set'] is True:
@@ -224,7 +224,6 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.menuconfig')
         self.chgdir(self.bb_tmp)
         command = self.build_command('menuconfig', '')
         if self.verbose['set'] is True:
@@ -238,11 +237,9 @@ class busybox:
         
         @return: bool
         """
-        print(green(' * ') + '... busybox.make')
         self.chgdir(self.bb_tmp)
         command = self.build_command('all', self.verbose['std'])
         if self.verbose['set'] is True:
             print(command)
         
         return os.system(command)
-        

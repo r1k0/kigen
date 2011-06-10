@@ -25,10 +25,12 @@ class dropbear:
         zero = int('0')
     
         if os.path.isfile('%s/dropbear-%s.tar.gz' % (get_distdir(self.temp), str(self.dropbear_ver))) is not True:
+            print(green(' * ') + '... dropbear.download')
             if self.download() is not zero: 
                 process('rm -v %s/dropbear-%s.tar.gz' % (get_distdir(self.temp), str(self.dropbear_ver)), self.verbose)
                 self.fail('download')
     
+        print(green(' * ') + '... dropbear.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
 
@@ -39,13 +41,28 @@ class dropbear:
 # FIXME       if self.patch() is not zero: self.fail('patch')
 
         if self.debugflag is True:
+            print(green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE')
             if self.patch_debug_header() is not zero: self.fail('patch_debug_header')
+
+        print(green(' * ') + '... dropbear.configure')
         if self.configure() is not zero: self.fail('configure')
+
+        print(green(' * ') + '... dropbear.make')
         if self.make() is not zero: self.fail('make')
+
+        print(green(' * ') + '... dropbear.strip')
         if self.strip() is not zero: self.fail('strip')
+
+        print(green(' * ') + '... dropbear.dsskey')
         if self.dsskey() is not zero: self.fail('dsskey')
+
+        print(green(' * ') + '... dropbear.rsakey')
         if self.rsakey() is not zero: self.fail('rsakey')
+
+        print(green(' * ') + '... dropbear.compress')
         if self.compress() is not zero: self.fail('compress')
+
+        print(green(' * ') + '... dropbear.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -77,7 +94,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.download')
         dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
 
 #       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
@@ -89,7 +105,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.extract')
         self.chgdir(self.temp['work'])
 
         os.system('tar xvfz %s/dropbear-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
@@ -118,7 +133,6 @@ class dropbear:
         Patch debug.h by adding
         #define DEBUG_TRACE
         """
-        print(green(' * ') + '... dropbear.patch_debug_header #define DEBUG_TRACE')
         self.chgdir(self.dropbeartmp)
 
         return os.system('mv debug.h debug.h.tmp && echo "#define DEBUG_TRACE" > debug.h && cat debug.h.tmp >> debug.h && rm debug.h.tmp')
@@ -129,7 +143,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.configure')
         self.chgdir(self.dropbeartmp)
     
         return os.system('CFLAGS="-Os -static -Wall" LDFLAGS="-static" ./configure --disable-zlib %s' % self.verbose['std'])
@@ -140,7 +153,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.make')
         self.chgdir(self.dropbeartmp)
     
         return os.system('STATIC=1 PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp" %s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -151,7 +163,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.strip')
         self.chgdir(self.dropbeartmp)
     
         os.system('strip %s/dbclient'           % self.dropbeartmp)
@@ -164,7 +175,6 @@ class dropbear:
         """
         dropbear dsskey creation
         """
-        print(green(' * ') + '... dropbear.dsskey')
         self.chgdir(self.dropbeartmp)
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
 
@@ -174,7 +184,6 @@ class dropbear:
         """
         dropbear rsakey creation
         """
-        print(green(' * ') + '... dropbear.rsakey')
         self.chgdir(self.dropbeartmp)
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
 
@@ -186,8 +195,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.compress')
-    
         self.chgdir(self.dropbeartmp)
         # create temp bin and sbin
         process('mkdir -p bin sbin usr/local/etc', self.verbose)
@@ -205,7 +212,6 @@ class dropbear:
     
         @return: bool
         """
-        print(green(' * ') + '... dropbear.cache')
         self.chgdir(self.dropbeartmp)
     
         return process('mv %s/dropbear.tar %s/dropbear-%s.tar' % (self.dropbeartmp, self.temp['cache'], self.dropbear_ver), self.verbose)

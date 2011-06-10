@@ -29,21 +29,28 @@ class luks:
             sys.exit(2)
 
         if os.path.isfile('%s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver)) is not True:
+            print(green(' * ') + '... luks.download')
             if self.download() is not zero: 
                 process('rm -v %s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver), self.verbose)
                 self.fail('download')
     
+        print(green(' * ') + '... luks.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
     
+        print(green(' * ') + '... luks.configure')
         if self.configure()is not zero: self.fail('configure')
     
+        print(green(' * ') + '... luks.make')
         if self.make() is not zero: self.fail('make')
     
+        print(green(' * ') + '... luks.strip')
         if self.strip() is not zero: self.fail('strip')
     
+        print(green(' * ') + '... luks.compress')
         if self.compress() is not zero: self.fail('compress')
     
+        print(green(' * ') + '... luks.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -75,7 +82,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.download')
         luks_url = self.url +'/cryptsetup-'+ self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
@@ -87,8 +93,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.extract')
-    
         os.system('tar xvfj %s/cryptsetup-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.luks_ver), self.temp['work'], self.verbose['std']))
     
     def configure(self):
@@ -97,7 +101,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.configure')
         self.chgdir(self.lukstmp)
    
         # use --disable-selinux?
@@ -109,7 +112,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.make')
         self.chgdir(self.lukstmp)
     
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
@@ -120,7 +122,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.strip')
         self.chgdir(self.lukstmp)
     
         return process('strip %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
@@ -131,7 +132,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.compress')
         self.chgdir(self.lukstmp)
     
         return process('bzip2 %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
@@ -142,8 +142,6 @@ class luks:
     
         @return: bool
         """
-        print(green(' * ') + '... luks.cache')
         self.chgdir(self.lukstmp)
     
         return process('mv %s/src/cryptsetup.static.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.luks_ver), self.verbose)
-

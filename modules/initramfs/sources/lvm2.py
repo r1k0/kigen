@@ -24,23 +24,31 @@ class lvm2:
         zero = int('0')
     
         if os.path.isfile('%s/LVM2.%s.tgz' % (get_distdir(self.temp), self.lvm2_ver)) is not True:
+            print(green(' * ') + '... lvm2.download')
             if self.download() is not zero:
                 process('rm -v %s/LVM2.%s.tgz' % (get_distdir(self.temp), self.lvm2_ver), self.verbose)
                 self.fail('download')
-    
+
+        print(green(' * ') + '... lvm2.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
-    
+
+        print(green(' * ') + '... lvm2.configure')
         if self.configure() is not zero: self.fail('configure')
-    
+
+        print(green(' * ') + '... lvm2.make')
         if self.make() is not zero: self.fail('make')
-    
+
+        print(green(' * ') + '... lvm2.install')
         if self.install() is not zero: self.fail('install')
-    
+
+        print(green(' * ') + '... lvm2.strip')
         if self.strip() is not zero: self.fail('strip')
-    
+
+        print(green(' * ') + '... lvm2.compress')
         if self.compress() is not zero: self.fail('compress')
-    
+ 
+        print(green(' * ') + '... lvm2.cache')
         if self.cache() is not zero: self.fail('cache')
     
     def fail(self, step):
@@ -71,7 +79,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.download')
         lvm2_url = self.url+'/LVM2.' + self.lvm2_ver + '.tgz'
 
         # FIXME utils.shell.process does not remove the output!!!!
@@ -83,8 +90,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.extract')
-
         os.system('tar xvfz %s/LVM2.%s.tgz -C %s %s' % (get_distdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
     
     def configure(self):
@@ -93,12 +98,7 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.configure')
         self.chgdir(self.lvm2_tmp)
-#       return os.system('LDFLAGS=-L%s/device-mapper/lib \
-#       CFLAGS=-I%s/device-mapper/include \
-#       CPPFLAGS=-I%s/device-mapper/include \
-#       ./configure --enable-static_link --prefix=%s/lvm %s' % (self.temp['work'], self.temp['work'], self.temp['work'], self.temp['work'], self.verbose['std']))
 
         return os.system('./configure --disable-selinux --enable-static_link %s' % self.verbose['std'])
 
@@ -108,7 +108,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.make')
         self.chgdir(self.lvm2_tmp)
 
         return os.system('%s %s CC="%s" LD="%s" AS="%s" %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
@@ -118,37 +117,35 @@ class lvm2:
                                                                 self.master_config['DEFAULT_UTILS_AS'], \
                                                                 self.verbose['std']))
 
-    def make_device_mapper(self):
-        """
-        lvm2 Makefile interface to make device-mapper
-
-        @return: bool
-        """
-        print(green(' * ') + '... lvm2.make_device_mapper')
-        self.chgdir(self.lvm2_tmp)
-
-        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
-                                    self.master_config['DEFAULT_MAKEOPTS'], \
-                                    self.master_config['DEFAULT_UTILS_CC'], \
-                                    self.master_config['DEFAULT_UTILS_LD'], \
-                                    self.master_config['DEFAULT_UTILS_AS'], \
-                                    self.verbose['std']))
-
-    def make_device_mapper_install(self):
-        """
-        lvm2 Makefile interface to make device-mapper_install
-
-        @return: bool
-        """
-        print(green(' * ') + '... lvm2.make_device_mapper_install')
-        self.chgdir(self.lvm2_tmp)
-
-        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper_install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
-                                    self.master_config['DEFAULT_MAKEOPTS'], \
-                                    self.master_config['DEFAULT_UTILS_CC'], \
-                                    self.master_config['DEFAULT_UTILS_LD'], \
-                                    self.master_config['DEFAULT_UTILS_AS'], \
-                                    self.verbose['std']))
+#    def make_device_mapper(self):
+#        """
+#        lvm2 Makefile interface to make device-mapper
+#
+#        @return: bool
+#        """
+#        self.chgdir(self.lvm2_tmp)
+#
+#        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
+#                                    self.master_config['DEFAULT_MAKEOPTS'], \
+#                                    self.master_config['DEFAULT_UTILS_CC'], \
+#                                    self.master_config['DEFAULT_UTILS_LD'], \
+#                                    self.master_config['DEFAULT_UTILS_AS'], \
+#                                    self.verbose['std']))
+#
+#    def make_device_mapper_install(self):
+#        """
+#        lvm2 Makefile interface to make device-mapper_install
+#
+#        @return: bool
+#        """
+#        self.chgdir(self.lvm2_tmp)
+#
+#        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper_install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
+#                                    self.master_config['DEFAULT_MAKEOPTS'], \
+#                                    self.master_config['DEFAULT_UTILS_CC'], \
+#                                    self.master_config['DEFAULT_UTILS_LD'], \
+#                                    self.master_config['DEFAULT_UTILS_AS'], \
+#                                    self.verbose['std']))
 
     def install(self):
         """
@@ -156,7 +153,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.install')
         self.chgdir(self.lvm2_tmp)
 
         return os.system('%s %s CC="%s" LD="%s" AS="%s" install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
@@ -172,8 +168,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.strip')
-
         self.chgdir(self.lvm2_tmp)
 
         return os.system('strip tools/lvm.static ')
@@ -184,7 +178,6 @@ class lvm2:
     
         @return: bool
         """
-        print(green(' * ') + '... lvm2.compress')
         self.chgdir(self.lvm2_tmp)
 
         return os.system('bzip2 tools/lvm.static')
@@ -195,7 +188,6 @@ class lvm2:
 
         @return: bool
         """
-        print(green(' * ') + '... lvm2.cache')
         self.chgdir(self.lvm2_tmp)
         mvv = ''
         if self.verbose['set'] is '': mvv = '-v'
