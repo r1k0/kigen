@@ -1245,7 +1245,6 @@ class append:
         # make keymaplist a real list
         self.keymaplist = self.keymaplist.split(',')
 
-        z = int('0')
         if 'all' in self.keymaplist:
             process('tar zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
             f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
