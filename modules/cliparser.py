@@ -343,6 +343,8 @@ def cli_parser():
                                     "bin-screen",   \
                                     "source-screen", \
                                     "debugflag",    \
+                                    "bin-all",      \
+                                    "source-all",   \
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
@@ -568,6 +570,30 @@ def cli_parser():
         if initramfs_conf['debugflag'] == 'True':
             cli['debugflag']= True
 
+        cli['bin-all'] = False
+        if initramfs_conf['bin-all'] == 'True':
+            cli['bin-luks'] = True
+            cli['bin-lvm2'] = True
+            cli['bin-screen'] = True
+            cli['bin-disklabel'] = True
+            cli['bin-strace'] = True
+            cli['bin-evms'] = True
+            cli['bin-glibc'] = True
+            cli['bin-libncurses'] = True
+            cli['bin-zlib'] = True
+            cli['bin-dmraid'] = True
+
+        cli['source-all'] = False
+        if initramfs_conf['source-all'] == 'True':
+            cli['source-luks'] = True
+            cli['source-lvm2'] = True
+            cli['source-screen'] = True
+            cli['source-disklabel'] = True
+            cli['source-ttyecho'] = True
+            cli['source-strace'] = True
+            cli['source-dmraid'] = True
+
+        # tools
         cli['extract']      = ''
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
         cli['compress']     = ''
@@ -739,6 +765,25 @@ def cli_parser():
                 cli['debugflag'] = True
             elif o in ("--nomodules"):
                 cli['nomodules'] = True
+            elif o in ("--bin-all"):
+                cli['bin-luks'] = True
+                cli['bin-lvm2'] = True
+                cli['bin-screen'] = True
+                cli['bin-disklabel'] = True
+                cli['bin-strace'] = True
+                cli['bin-evms'] = True
+                cli['bin-glibc'] = True
+                cli['bin-libncurses'] = True
+                cli['bin-zlib'] = True
+                cli['bin-dmraid'] = True
+            elif o in ("--source-all"):
+                cli['source-luks'] = True
+                cli['source-lvm2'] = True
+                cli['source-disklabel'] = True
+                cli['source-screen'] = True
+                cli['source-ttyecho'] = True
+                cli['source-strace'] = True
+                cli['source-dmraid'] = True
 
             else:
                 assert False, "uncaught option"

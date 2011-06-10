@@ -184,6 +184,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-dmraid              ', end='')
     print(initramfs_conf['bin-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from host')
+    print(stdout.yellow('| --bin-all                 '), end='')
+    print(initramfs_conf['bin-all'], end='') # bool
+    print('\t\tInclude all possible features from host')
 
     print('+ from source code')
     print('| --source-luks             ', end='')
@@ -204,9 +207,12 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-strace           ', end='')
     print(initramfs_conf['source-strace'], end='') # bool
     print('\t\tCompile and include the strace binary tool from sources')
-    print(stdout.yellow('| --source-dmraid           '), end='')
+    print('| --source-dmraid           ', end='')
     print(initramfs_conf['source-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from sources')
+    print(stdout.yellow('| --source-all              '), end='')
+    print(initramfs_conf['source-all'], end='') # bool
+    print('\t\tInclude all possible features from sources')
     print()
 
     # fix \t display depending on length of cli[splash']
@@ -310,9 +316,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('  --nocache                 ', end='')
     print(initramfs_conf['nocache'], end='')
     print('\t\tDelete previous cached data on startup')
-    print(stdout.yellow('  --hostbin                 '), end='')
-    print(initramfs_conf['hostbin'], end='')
-    print('\t\tUse host binaries (fall back to sources if dynamic linkage detected)')
+#    print(stdout.yellow('  --hostbin                 '), end='')
+#    print(initramfs_conf['hostbin'], end='')
+#    print('\t\tUse host binaries (fall back to sources if dynamic linkage detected)')
     print('  --nomodules               ', end='')
     print(initramfs_conf['nomodules'], end='')
     print('\t\tDo not install kernel modules (all is kernel builtin)')

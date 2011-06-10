@@ -127,6 +127,8 @@ initramfs_conf = {
 #        'luks'          : 'False',  \
         'bin-luks'      : 'False',  \
         'source-luks'   : 'False',  \
+        'bin-all'       : 'False',  \
+        'source-all'    : 'False',  \
         'nomodules'     : 'False'}
 
 # default version values
