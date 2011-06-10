@@ -127,27 +127,31 @@ class initramfs:
         if aobj.busybox() is not zero: self.fail('busybox')
 
         # 5) append lvm2
-#        if self.cli['lvm2'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.lvm2() is not zero: self.fail('lvm2')
         if self.cli['bin-lvm2'] is True:
             os.chdir(self.temp['work'])
 #            if os.path.isfile('/sbin/lvm.static') and self.hostbin is True and isstatic('/sbin/lvm.static', self.verbose):
-            if os.path.isfile('/sbin/lvm.static') and isstatic('/sbin/lvm.static', self.verbose):
-                if aobj.bin_lvm2() is not zero: self.fail('bin-lvm2')
+            if os.path.isfile('/sbin/lvm.static'):
+                if isstatic('/sbin/lvm.static', self.verbose):
+                    if aobj.bin_lvm2() is not zero: self.fail('bin-lvm2')
+                else:
+                    self.fail_msg('/sbin/lvm.static is not statically linked. Merge sys-fs/lvm2 with USE=static')
+            else:
+                self.fail_msg('sys-fs/lvm2 must be merged')
         if self.cli['source-lvm2'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_lvm2() is not zero: self.fail('source_lvm2')
 
         # 6) append dmraid
-#        if self.cli['dmraid'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.dmraid() is not zero: self.fail('dmraid')
         if self.cli['bin-dmraid'] is True:
             os.chdir(self.temp['work'])
 #            if os.path.isfile(dmraid_bin) and self.hostbin is True and isstatic(dmraid_bin, self.verbose):
-            if os.path.isfile('/usr/sbin/dmraid') and isstatic('/usr/sbin/dmraid', self.verbose):
-                if aobj.bin_dmraid() is not zero: self.fail('bin-dmraid')
+            if os.path.isfile('/usr/sbin/dmraid'):
+                if isstatic('/usr/sbin/dmraid', self.verbose):
+                    if aobj.bin_dmraid() is not zero: self.fail('bin-dmraid')
+                else:
+                    self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static')
+            else:
+                self.fail_msg('sys-fs/dmraid must be merged')
         if self.cli['source-dmraid'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_dmraid() is not zero: self.fail('source-dmraid')
@@ -158,9 +162,6 @@ class initramfs:
 #            if aobj.iscsi() is not zero: self.fail('iscsi')
 
         # 8) append evms
-#        if self.cli['evms'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.evms() is not zero: self.fail('evms')
         if self.cli['bin-evms'] is True:
             os.chdir(self.temp['work'])
             if aobj.bin_evms() is not zero: self.fail('bin_evms')
@@ -171,16 +172,16 @@ class initramfs:
 #            if aobj.mdadm() is not zero: self.fail('mdadm')
 
         # 10) append luks
-#        if self.cli['luks'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.luks() is not zero: self.fail('luks')
         if self.cli['bin-luks'] is True:
-            # the check is done within bin_luks itself
 #            if os.path.isfile(cryptsetup_bin) and self.hostbin is True and isstatic(cryptsetup_bin, self.verbose):
-#            if os.path.isfile('/bin/cryptsetup') and isstatic('/bin/cryptsetup', self.verbose):
             os.chdir(self.temp['work'])
-            if aobj.bin_luks() is not zero: self.fail('bin-luks')
-
+            if os.path.isfile('/sbin/cryptsetup'):
+                if isstatic('/sbin/cryptsetup', self.verbose):
+                    if aobj.bin_luks() is not zero: self.fail('bin-luks')
+                else:
+                    self.fail_msg('/sbin/cryptsetup is not statically linked. Merge sys-fs/cryptsetup with USE=static')
+            else:
+                self.fail_msg('sys-fs/cryptsetup must be merged')
         if self.cli['source-luks'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_luks() is not zero: self.fail('source_luks')
@@ -189,123 +190,104 @@ class initramfs:
         # TODO
 
         # 12) append blkid
-#        if self.cli['disklabel'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.e2fsprogs() is not zero: self.fail('e2fsprogs')
         if self.cli['bin-disklabel'] is True:
             os.chdir(self.temp['work'])
 #            if os.path.isfile(blkid_sbin) and self.hostbin is True and isstatic(blkid_sbin, self.verbose):
-            if os.path.isfile('/sbin/blkid') and isstatic('/sbin/blkid', self.verbose):
-                if aobj.bin_disklabel() is not zero: self.fail('bin_disklabel')
+            if os.path.isfile('/sbin/blkid'):
+                if isstatic('/sbin/blkid', self.verbose):
+                    if aobj.bin_disklabel() is not zero: self.fail('bin_disklabel')
+                else:
+                    self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static')
             else:
-                if not os.path.isfile('/sbin/blkid'):
-                    print(yellow(' * ') + yellow('warning')+': /bin/blkid not found on host, compiling from sources')
-                elif not isstatic('/sbin/blkid', self.verbose):
-                    print(yellow(' * ') + yellow('warning')+': /sbin/blkid is not static, compiling from sources')
-                if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
- 
-        if self.cli['source-disklabel'] is True:
+                self.fail_msg('sys-fs/e2fsprogs must be merged')
+        if self.cli['source-disklabel']:
             os.chdir(self.temp['work'])
             if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
-
+ 
         # 13) append dropbear
         if self.cli['dropbear'] is True:
             os.chdir(self.temp['work'])
             if aobj.dropbear() is not zero: self.fail('dropbear')
 
-        # append strace
-#        if self.cli['strace'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.strace() is not zero: self.fail('strace')
+        # 14) append strace
         if self.cli['bin-strace'] is True:
 #            if os.path.isfile(strace_bin) and self.hostbin is True and isstatic(strace_bin, self.verbose):
-            if os.path.isfile('/usr/bin/strace') and isstatic('/usr/bin/strace', self.verbose):
-                os.chdir(self.temp['work'])
-                if aobj.bin_strace() is not zero: self.fail('bin_strace')
-                
+            os.chdir(self.temp['work'])
+            if os.path.isfile('/usr/bin/strace'):
+                if isstatic('/usr/bin/strace', self.verbose):
+                    if aobj.bin_strace() is not zero: self.fail('bin_strace')
+                else:
+                    self.fail_msg('/usr/bin/strace is not statically linked. Merge dev-util/strace with USE=static')
+            else:
+                self.fail_msg('dev-util/strace must be merged')
         if self.cli['source-strace'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_strace() is not zero: self.fail('source_strace')
 
-        # append screen
-#        if self.cli['screen'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.screen() is not zero: self.fail('screen')
+        # 15) append screen
         if self.cli['bin-screen'] is True:
             os.chdir(self.temp['work'])
 #            if os.path.isfile(screen_bin) and self.hostbin is True and isstatic(screen_bin, self.verbose):
-            if os.path.isfile('/usr/bin/screen') and isstatic('/usr/bin/screen', self.verbose):
-                if aobj.bin_screen() is not zero: self.fail('bin-screen')
+            if os.path.isfile('/usr/bin/screen'):
+                if isstatic('/usr/bin/screen', self.verbose):
+                    if aobj.bin_screen() is not zero: self.fail('bin-screen')
+                else:
+                    self.fail_msg('/usr/bin/screen is not statically linked. Merge app-misc/screen with USE=static')
+            else:
+                self.fail_msg('app-misc/screen must be merge')
 
         if self.cli['source-screen'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_screen() is not zero: self.fail('source_screen')
 
-#        # 14) append unionfs_fuse
+#        # 16) append unionfs_fuse
 #        if self.cli['unionfs'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.unionfs_fuse() is not zero: self.fail('unionfs-fuse')
 
-#        # 15) append aufs
+#        # 17) append aufs
 #        if self.cli['aufs'] is True:
 #            os.chdir(self.temp['work'])
 #            if aobj.aufs() is not zero: self.fail('aufs')
 
-        # append ttyecho
-#        if self.cli['ttyecho'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.ttyecho() is not zero: self.fail('ttyecho')
+        # 18) append ttyecho
         if self.cli['source-ttyecho'] is True:
             os.chdir(self.temp['work'])
             if aobj.source_ttyecho() is not zero: self.fail('source-ttyecho')
 
-        # 16) append splash
+        # 19) append splash
         if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
             os.chdir(self.temp['work'])
             if aobj.splash() is not zero: self.fail('splash')
 
-        # append rootpasswd
+        # 20) append rootpasswd
         if self.cli['rootpasswd'] is not '':
             os.chdir(self.temp['work'])
             if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
 
-#        # append keymaps
-#        if self.cli['keymaps'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.keymaps() is not zero: self.fail('keympas')
-
-        # append keymaps
+        # 21) append keymaps
         if self.cli['keymaps'] is not '':
             os.chdir(self.temp['work'])
             if aobj.keymaps() is not zero: self.fail('keymaps')
 
-#        # 17) append firmware
+#        # 22) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            if aobj.firmware() is not zero: self.fail('firmware')
 
-        # TODO # 18) append overlay
+        # TODO # 22bis) append overlay
 
-        # 19) append glibc
-#        if self.cli['glibc'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.glibc() is not zero: self.fail('glibc')
+        # 23) append glibc
         if self.cli['bin-glibc'] is True:
             os.chdir(self.temp['work'])
             if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
 
-        # 19bis) append libncurses
-#        if self.cli['libncurses'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.libncurses() is not zero: self.fail('libncurses')
+        # 23bis) append libncurses
         if self.cli['bin-libncurses'] is True:
             os.chdir(self.temp['work'])
             if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
 
-        # 19terce) append zlib
-#        if self.cli['zlib'] is True:
-#            os.chdir(self.temp['work'])
-#            if aobj.zlib() is not zero: self.fail('zlib')
+        # 23terce) append zlib
         if self.cli['bin-zlib'] is True:
             os.chdir(self.temp['work'])
             if aobj.bin_zlib() is not zero: self.fail('bin-zlib')
@@ -332,3 +314,12 @@ class initramfs:
         print(red('error')+': initramfs.append.'+step+'() failed')
         sys.exit(2)
  
+    def fail_msg(self, msg):
+        """
+        @arg step   string
+
+        @return     exit
+        """
+        print(red('error')+': ' + msg)
+        sys.exit(2)
+

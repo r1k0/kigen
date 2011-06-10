@@ -145,5 +145,4 @@ class screen:
         print(green(' * ') + '... screen.cache')
         self.chgdir(self.screentmp)
     
-        return process('mv %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.screen_ver), self.verbose)
-
+        return process('cp %s/screen.bz2 %s/screen-%s.bz2' % (self.screentmp, self.temp['cache'], self.screen_ver), self.verbose)
