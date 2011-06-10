@@ -259,7 +259,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
         elif len(cli['rootpasswd']) > 4:
             tab = '\t\t'
     else:
-        tab = '\t\t'
+        tab = '\t\t\t'
     print('  --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"', end='')
     print(tab+'Create and set root password (required for dropbear)')
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
@@ -268,13 +268,13 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     # fix \t display depending on length of cli[splash']
     if cli['keymaps'] != '':
         if len(cli['keymaps']) <= 4:
-            tab = '\t\t'
+            tab = '\t\t\t'
         elif len(cli['keymaps']) > 4 and len(cli['keymaps']) < 8:
-            tab = '\t'
+            tab = '\t\t'
         elif len(cli['keymaps']) > 8:
             tab = '\t'
     else:
-        tab = '\t\t'
+        tab = '\t\t\t'
 #    print('  --keymaps                 ', end='')
     print('  --keymaps=xx[,xx]|all     ', end='')
     print(initramfs_conf['keymaps'], end='') # bool
