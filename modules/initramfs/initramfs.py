@@ -297,7 +297,10 @@ class initramfs:
         if self.cli['bin-glibc'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin_glibc'))
             os.chdir(self.temp['work'])
-            if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
+#            if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
+            from .bin.glibc import glibc
+            bin_glibc = glibc(self.temp, self.verbose)
+            bin_glibc.build()
 
         # 23bis) append libncurses
         if self.cli['bin-libncurses'] is True:
