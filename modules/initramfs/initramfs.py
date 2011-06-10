@@ -296,8 +296,6 @@ class initramfs:
         # 23) append glibc
         if self.cli['bin-glibc'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin_glibc'))
-            os.chdir(self.temp['work'])
-#            if aobj.bin_glibc() is not zero: self.fail('bin-glibc')
             from .bin.glibc import glibc
             bin_glibc = glibc(self.temp, self.verbose)
             bin_glibc.build()
@@ -305,8 +303,6 @@ class initramfs:
         # 23bis) append libncurses
         if self.cli['bin-libncurses'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.libncurses'))
-            os.chdir(self.temp['work'])
-#            if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
             from .bin.libncurses import libncurses
             bin_libncurses = libncurses(self.temp, self.verbose)
             bin_libncurses.build()
@@ -314,8 +310,6 @@ class initramfs:
         # 23terce) append zlib
         if self.cli['bin-zlib'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.zlib'))
-            os.chdir(self.temp['work'])
-#            if aobj.bin_zlib() is not zero: self.fail('bin-zlib')
             from .bin.zlib import zlib
             bin_zlib = zlib(self.temp, self.verbose)
             bin_zlib.build()
