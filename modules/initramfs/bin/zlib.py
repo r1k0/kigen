@@ -6,10 +6,9 @@ from utils.misc import *
 
 class zlib:
 
-    def __init__(self, master_config, version_conf, url_conf, temp, verbose):
+    def __init__(self, temp, verbose):
         self.temp = temp
         self.verbose = verbose
-        self.temp = temp
 
     def build(self):
         """

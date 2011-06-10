@@ -301,9 +301,12 @@ class initramfs:
 
         # 23bis) append libncurses
         if self.cli['bin-libncurses'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin_libncurses'))
+            print(green(' * ') + turquoise('initramfs.append.bin.libncurses'))
             os.chdir(self.temp['work'])
-            if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
+#            if aobj.bin_libncurses() is not zero: self.fail('bin_libncurses')
+            from .bin.libncurses import libncurses
+            bin_libncurses = libncurses(self.temp, self.verbose)
+            bin_libncurses.build()
 
         # 23terce) append zlib
         if self.cli['bin-zlib'] is True:
@@ -311,7 +314,7 @@ class initramfs:
             os.chdir(self.temp['work'])
 #            if aobj.bin_zlib() is not zero: self.fail('bin-zlib')
             from .bin.zlib import zlib
-            bin_zlib = zlib(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            bin_zlib = zlib(self.temp, self.verbose)
             bin_zlib.build()
 
         # last) append user plugin
