@@ -1187,6 +1187,9 @@ TODO?
 Howto boot LUKS/LVM through SSH (dropbear)
 ==========================================
 
+Warning: this only works with ethernet devices.
+TODO: wlan devices.
+
 Build initramfs with SSH support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

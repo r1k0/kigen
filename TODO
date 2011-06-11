@@ -11,6 +11,7 @@ TODO: migrate bin code from append.py to initramfs/bin
 TODO: fix bin_luks sbin/bin thingy
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
+    this will be fixed by the last TODO ;)
 TODO: add timestamp for each line in logfile and beautify logs a bit
 TODO: move all bin_feat logic to its own dir and create binary classes like with sources.
     -> initramfs.append.source.luks
@@ -18,6 +19,10 @@ TODO: move all bin_feat logic to its own dir and create binary classes like with
 TODO: check uuid feature is really working
 TODO: take some time and clean append.py, for real
 TODO: use presets from modules/default.py if none are found in /etc/kigen/*
+TODO: dont fail when finding a dynamically linked binary
+    - let ldd parse a dynamically linked binary and get a list of libs to ship
+    already thrown some code at it but it gets quickly messy
+    this feat is awesome actually: it raises a lot the probability of having a fine first build
 
 0.3.*
 =====
