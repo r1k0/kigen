@@ -129,30 +129,31 @@ initramfs_conf = {
         'source-luks'   : 'False',  \
         'bin-all'       : 'False',  \
         'source-all'    : 'False',  \
-        'nomodules'     : 'False'}
+        'nomodules'     : 'False',  \
+        'bin-busybox'   : 'False'}
 
 # default version values
 version_conf = {
-        'strace-version'    : '4.5.20',     \
-        'luks-version'      : '1.1.3',      \
-        'screen-version'    : '4.0.3',      \
-        'dropbear-version'  : '0.53',       \
-        'busybox-version'   : '1.18.4',     \
+        'strace-version'    : '4.5.20',         \
+        'luks-version'      : '1.1.3',          \
+        'screen-version'    : '4.0.3',          \
+        'dropbear-version'  : '0.53',           \
+        'busybox-version'   : '1.18.4',         \
         'dmraid-version'    : '1.0.0.rc16-3',   \
-        'lvm2-version'      : '2.02.85',    \
+        'lvm2-version'      : '2.02.85',        \
         'e2fsprogs-version' : '1.41.14'}
 
 # default url values
 url_conf = {
-        'device_mapper' : 'http://ftp.snt.utwente.nl/pub/os/linux/gentoo/distfiles',   \
-        'fuse'          : 'http://sourceforge.net/projects/fuse/files/fuse-2.X',   \
-        'iscsi'         : 'http://www.open-iscsi.org/bits',   \
-        'unionfs_fuse'  : 'http://podgorny.cz/unionfs-fuse/releases',   \
-        'busybox'       : 'http://www.busybox.net/downloads',   \
-        'dmraid'        : 'http://people.redhat.com/~heinzm/sw/dmraid/src',   \
-        'dropbear'      : 'http://matt.ucc.asn.au/dropbear/releases',   \
+        'device_mapper' : 'http://ftp.snt.utwente.nl/pub/os/linux/gentoo/distfiles',        \
+        'fuse'          : 'http://sourceforge.net/projects/fuse/files/fuse-2.X',            \
+        'iscsi'         : 'http://www.open-iscsi.org/bits',                                 \
+        'unionfs_fuse'  : 'http://podgorny.cz/unionfs-fuse/releases',                       \
+        'busybox'       : 'http://www.busybox.net/downloads',                               \
+        'dmraid'        : 'http://people.redhat.com/~heinzm/sw/dmraid/src',                 \
+        'dropbear'      : 'http://matt.ucc.asn.au/dropbear/releases',                       \
         'e2fsprogs'     : 'http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs',   \
-        'luks'          : 'http://gentoo.osuosl.org/distfiles',   \
-        'lvm2'          : 'ftp://sourceware.org/pub/lvm2',   \
-        'strace'        : 'http://downloads.sourceforge.net/project/strace/strace',   \
-        'screen'        : 'http://ftp.gnu.org/gnu/screen',}
+        'luks'          : 'http://gentoo.osuosl.org/distfiles',                             \
+        'lvm2'          : 'ftp://sourceware.org/pub/lvm2',                                  \
+        'strace'        : 'http://downloads.sourceforge.net/project/strace/strace',         \
+        'screen'        : 'http://ftp.gnu.org/gnu/screen'}

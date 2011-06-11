@@ -23,6 +23,9 @@ TODO: dont fail when finding a dynamically linked binary
     - let ldd parse a dynamically linked binary and get a list of libs to ship
     already thrown some code at it but it gets quickly messy
     this feat is awesome actually: it raises a lot the probability of having a fine first build
+    --ship-dynlibs to detect libs from dyn bin and ship them in the build
+TODO: when using --plugin=dir detect file collision and fail if found
+    add --overwrite to force?
 
 0.3.*
 =====

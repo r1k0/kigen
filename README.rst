@@ -19,8 +19,10 @@ Genkernel being a bash script, interfacing it with boot-update is 'tricky' if no
 
 KIGen tries to provide a flexible approach to shipping binaries in an initramfs. In theory,
 one can ship any binary, statically or dynamically linked. If it's linked the appropriated 
-libraries need to be shipped as well.
-It tries to provide binaries that just work.
+libraries need to be shipped as well. 
+KIGen tries to provide a host and source binary for each feature in case one breaks. This wway
+one can use both Portage binaries or the sources from KIGen. It does not matter as long as it works.
+KIGen attempts to detect and ship dynamically linked binaries. It does not matter any more as long as it works ;P
 
 KIGen provides a more visible configuration file than genkernel in terms of kernel modules,
 custom URLs or versions.

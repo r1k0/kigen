@@ -16,7 +16,7 @@ class glibc:
 
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.bin_glibc')
+        logging.debug('>>> entering initramfs.append.bin.glibc')
 
         process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-glibc-temp/etc', self.verbose)
         process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-glibc-temp/lib', self.verbose)

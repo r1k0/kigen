@@ -345,6 +345,7 @@ def cli_parser():
                                     "debugflag",    \
                                     "bin-all",      \
                                     "source-all",   \
+                                    "bin-busybox",  \
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
@@ -396,6 +397,10 @@ def cli_parser():
         if initramfs_conf['source-luks'] == 'True':
             cli['source-luks'] = True
             cli['bin-luks'] = False
+
+        cli['bin-busybox'] = False
+        if initramfs_conf['bin-busybox'] == 'True':
+            cli['bin-busybox'] = True
 
 #        cli['lvm2'] = False
 #        if initramfs_conf['lvm2'] == 'True':
@@ -784,6 +789,8 @@ def cli_parser():
                 cli['source-ttyecho'] = True
                 cli['source-strace'] = True
                 cli['source-dmraid'] = True
+            elif o in ("--bin-busybox"):
+                cli['bin-busybox'] = True
 
             else:
                 assert False, "uncaught option"
