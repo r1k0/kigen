@@ -155,7 +155,7 @@ class initramfs:
                     self.fail_msg('/sbin/lvm.static is not statically linked. Merge sys-fs/lvm2 with USE=static')
             else:
                 self.fail_msg('sys-fs/lvm2 must be merged')
-        if self.cli['source-lvm2'] is True:
+        elif self.cli['source-lvm2'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.lvm2 ') + self.version_conf['lvm2-version'])
             os.chdir(self.temp['work'])
             if aobj.source_lvm2() is not zero: self.fail('source.lvm2')
@@ -215,7 +215,7 @@ class initramfs:
                     self.fail_msg('/sbin/cryptsetup is not statically linked. Merge sys-fs/cryptsetup with USE=static')
             else:
                 self.fail_msg('sys-fs/cryptsetup must be merged')
-        if self.cli['source-luks'] is True:
+        elif self.cli['source-luks'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.luks ') + self.version_conf['luks-version'])
             os.chdir(self.temp['work'])
             if aobj.source_luks() is not zero: self.fail('source.luks')
@@ -236,7 +236,7 @@ class initramfs:
                     self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static')
             else:
                 self.fail_msg('sys-fs/e2fsprogs must be merged')
-        if self.cli['source-disklabel']:
+        elif self.cli['source-disklabel']:
             print(green(' * ') + turquoise('initramfs.append.source.disklabel ') + self.version_conf['e2fsprogs-version'])
             os.chdir(self.temp['work'])
             if aobj.source_disklabel() is not zero: self.fail('source.disklabel')
@@ -253,7 +253,7 @@ class initramfs:
                     self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static')
             else:
                 self.fail_msg('net-misc/dropbear must be merged')
-        if self.cli['source-dropbear'] is True:
+        elif self.cli['source-dropbear'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.dropbear ') + self.version_conf['dropbear-version'])
             if aobj.source_dropbear() is not zero: self.fail('source.dropbear')
 
@@ -270,7 +270,7 @@ class initramfs:
                     self.fail_msg('/usr/bin/strace is not statically linked. Merge dev-util/strace with USE=static')
             else:
                 self.fail_msg('dev-util/strace must be merged')
-        if self.cli['source-strace'] is True:
+        elif self.cli['source-strace'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.strace ') + self.version_conf['strace-version'])
             os.chdir(self.temp['work'])
             if aobj.source_strace() is not zero: self.fail('source.strace')
@@ -288,7 +288,7 @@ class initramfs:
                     self.fail_msg('/usr/bin/screen is not statically linked. Merge app-misc/screen with USE=static')
             else:
                 self.fail_msg('app-misc/screen must be merge')
-        if self.cli['source-screen'] is True:
+        elif self.cli['source-screen'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.screen ') + self.version_conf['screen-version'])
             os.chdir(self.temp['work'])
             if aobj.source_screen() is not zero: self.fail('source.screen')
