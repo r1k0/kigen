@@ -138,7 +138,7 @@ class initramfs:
             else:
                 self.fail_msg('sys-app/busybox must be merged')            
         else:
-            print(green(' * ') + turquoise('initramfs.append.busybox ') + self.version_conf['busybox-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.busybox ') + self.version_conf['busybox-version'])
             os.chdir(self.temp['work'])
             if aobj.source_busybox() is not zero: self.fail('busybox')
 
@@ -156,9 +156,9 @@ class initramfs:
             else:
                 self.fail_msg('sys-fs/lvm2 must be merged')
         if self.cli['source-lvm2'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_lvm2 ') + self.version_conf['lvm2-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.lvm2 ') + self.version_conf['lvm2-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_lvm2() is not zero: self.fail('source_lvm2')
+            if aobj.source_lvm2() is not zero: self.fail('source.lvm2')
 
         # 6) append dmraid
         if self.cli['bin-dmraid'] is True:
@@ -174,9 +174,9 @@ class initramfs:
             else:
                 self.fail_msg('sys-fs/dmraid must be merged')
         if self.cli['source-dmraid'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_dmraid ') + self.version_conf['dmraid-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.dmraid ') + self.version_conf['dmraid-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_dmraid() is not zero: self.fail('source-dmraid')
+            if aobj.source_dmraid() is not zero: self.fail('source.dmraid')
 
 #        # 7) append iscsi
 #        if self.cli['iscsi'] is True:
@@ -216,9 +216,9 @@ class initramfs:
             else:
                 self.fail_msg('sys-fs/cryptsetup must be merged')
         if self.cli['source-luks'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_luks ') + self.version_conf['luks-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.luks ') + self.version_conf['luks-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_luks() is not zero: self.fail('source_luks')
+            if aobj.source_luks() is not zero: self.fail('source.luks')
 
         # 11) append multipath
         # TODO
@@ -237,14 +237,25 @@ class initramfs:
             else:
                 self.fail_msg('sys-fs/e2fsprogs must be merged')
         if self.cli['source-disklabel']:
-            print(green(' * ') + turquoise('initramfs.append.source_disklabel ') + self.version_conf['e2fsprogs-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.disklabel ') + self.version_conf['e2fsprogs-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_disklabel() is not zero: self.fail('source_disklabel')
+            if aobj.source_disklabel() is not zero: self.fail('source.disklabel')
  
         # 13) append dropbear
-        if self.cli['dropbear'] is True:
+        if self.cli['bin-dropbear'] is True:
             os.chdir(self.temp['work'])
-            if aobj.dropbear() is not zero: self.fail('dropbear')
+            if os.path.isfile('/usr/sbin/dropbear'):
+                if isstatic('/usr/sbin/dropbear', self.verbose):
+                    from .bin.dropbear import dropbear
+                    bin_dropbear = dropbear(self.temp, self.verbose)
+                    bin_dropbear.build()
+                else:
+                    self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static')
+            else:
+                self.fail_msg('net-misc/dropbear must be merged')
+        if self.cli['source-dropbear'] is True:
+            print(green(' * ') + turquoise('initramfs.append.source.dropbear ') + self.version_conf['dropbear-version'])
+            if aobj.source_dropbear() is not zero: self.fail('source.dropbear')
 
         # 14) append strace
         if self.cli['bin-strace'] is True:
@@ -260,9 +271,9 @@ class initramfs:
             else:
                 self.fail_msg('dev-util/strace must be merged')
         if self.cli['source-strace'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_strace ') + self.version_conf['strace-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.strace ') + self.version_conf['strace-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_strace() is not zero: self.fail('source_strace')
+            if aobj.source_strace() is not zero: self.fail('source.strace')
 
         # 15) append screen
         if self.cli['bin-screen'] is True:
@@ -278,9 +289,9 @@ class initramfs:
             else:
                 self.fail_msg('app-misc/screen must be merge')
         if self.cli['source-screen'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_screen ') + self.version_conf['screen-version'])
+            print(green(' * ') + turquoise('initramfs.append.source.screen ') + self.version_conf['screen-version'])
             os.chdir(self.temp['work'])
-            if aobj.source_screen() is not zero: self.fail('source_screen')
+            if aobj.source_screen() is not zero: self.fail('source.screen')
 
 #        # 16) append unionfs_fuse
 #        if self.cli['unionfs'] is True:
@@ -294,53 +305,53 @@ class initramfs:
 
         # 18) append ttyecho
         if self.cli['source-ttyecho'] is True:
-            print(green(' * ') + turquoise('initramfs.append.source_ttyecho'))
+            print(green(' * ') + turquoise('initramfs.append.source.ttyecho'))
             os.chdir(self.temp['work'])
-            if aobj.source_ttyecho() is not zero: self.fail('source-ttyecho')
+            if aobj.source_ttyecho() is not zero: self.fail('source.ttyecho')
 
-        # 19) append splash
-        if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
-            os.chdir(self.temp['work'])
-            if aobj.splash() is not zero: self.fail('splash')
-
-        # 20) append rootpasswd
-        if self.cli['rootpasswd'] is not '':
-            print(green(' * ') + turquoise('initramfs.append.rootpasswd'))
-            os.chdir(self.temp['work'])
-            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
-
-        # 21) append keymaps
-        if self.cli['keymaps'] is not '':
-            os.chdir(self.temp['work'])
-            if aobj.keymaps() is not zero: self.fail('keymaps')
-
-#        # 22) append firmware
+#        # 20) append firmware
 #        if os.path.isdir(self.firmware):
 #            os.chdir(self.temp['work'])
 #            if aobj.firmware() is not zero: self.fail('firmware')
 
         # TODO # 22bis) append overlay
 
-        # 23) append glibc
+        # 21) append glibc
         if self.cli['bin-glibc'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.glibc'))
             from .bin.glibc import glibc
             bin_glibc = glibc(self.temp, self.verbose)
             bin_glibc.build()
 
-        # 23bis) append libncurses
+        # 21bis) append libncurses
         if self.cli['bin-libncurses'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.libncurses'))
             from .bin.libncurses import libncurses
             bin_libncurses = libncurses(self.temp, self.verbose)
             bin_libncurses.build()
 
-        # 23terce) append zlib
+        # 21terce) append zlib
         if self.cli['bin-zlib'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.zlib'))
             from .bin.zlib import zlib
             bin_zlib = zlib(self.temp, self.verbose)
             bin_zlib.build()
+
+        # 22) append splash
+        if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
+            os.chdir(self.temp['work'])
+            if aobj.splash() is not zero: self.fail('splash')
+
+        # 23) append rootpasswd
+        if self.cli['rootpasswd'] is not '':
+            print(green(' * ') + turquoise('initramfs.append.rootpasswd'))
+            os.chdir(self.temp['work'])
+            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
+
+        # 24) append keymaps
+        if self.cli['keymaps'] is not '':
+            os.chdir(self.temp['work'])
+            if aobj.keymaps() is not zero: self.fail('keymaps')
 
         # last) append user plugin
         if self.pluginroot is not '':

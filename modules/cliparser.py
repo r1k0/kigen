@@ -309,6 +309,8 @@ def cli_parser():
                                     "unionfs-fuse", \
                                     "aufs",         \
                                     "dropbear",     \
+                                    "bin-dropbear", \
+                                    "source-dropbear",\
                                     "linuxrc=",     \
                                     "nocache",      \
                                     "nomodules",    \
@@ -474,9 +476,16 @@ def cli_parser():
         if initramfs_conf['linuxrc'] != '':
             cli['linuxrc'] = initramfs_conf['linuxrc']
 
-        cli['dropbear'] = False
-        if initramfs_conf['dropbear'] == 'True':
-            cli['dropbear'] = True
+#        cli['dropbear'] = False
+#        if initramfs_conf['dropbear'] == 'True':
+#            cli['dropbear'] = True
+        cli['bin-dropbear'] = False
+        if initramfs_conf['bin-dropbear'] == 'True':
+            cli['bin-dropbear'] = True
+
+        cli['source-dropbear'] = False
+        if initramfs_conf['source-dropbear'] == 'True':
+            cli['source-dropbear'] = True
 
         cli['nomodules'] = False
         if initramfs_conf['nomodules'] == 'True':
@@ -710,6 +719,16 @@ def cli_parser():
                 cli['selinux'] = True
             elif o in ("--dropbear"):
                 cli['dropbear'] = True
+                cli['bin-glibc'] = True         # dropbear needs glibc
+                cli['bin-libncurses'] = True    # dropbear needs libncurses
+                cli['bin-zlib'] = True          # dropbear needs zlib
+            elif o in ("--bin-dropbear"):
+                cli['bin-dropbear'] = True
+                cli['bin-glibc'] = True         # dropbear needs glibc
+                cli['bin-libncurses'] = True    # dropbear needs libncurses
+                cli['bin-zlib'] = True          # dropbear needs zlib
+            elif o in ("--source-dropbear"):
+                cli['source-dropbear'] = True
                 cli['bin-glibc'] = True         # dropbear needs glibc
                 cli['bin-libncurses'] = True    # dropbear needs libncurses
                 cli['bin-zlib'] = True          # dropbear needs zlib
