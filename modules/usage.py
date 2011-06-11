@@ -163,6 +163,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-lvm2                ', end='')
     print(initramfs_conf['bin-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from host')
+    print('| --bin-dropbear            ', end='')
+    print(initramfs_conf['bin-dropbear'], end='') # bool
+    print('\t\tInclude dropbear support from host')
     print('| --bin-screen              ', end='')
     print(initramfs_conf['bin-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from host')
@@ -198,6 +201,12 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-lvm2             ', end='')
     print(initramfs_conf['source-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from sources')
+    print('| --source-dropbear         ', end='')
+    print(initramfs_conf['source-dropbear'], end='') # bool
+    print('\t\tInclude dropbear support from sources')
+    print('   --debugflag              ', end='')
+    print(initramfs_conf['debugflag'], end='') # bool
+    print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
     print('| --source-screen           ', end='')
     print(initramfs_conf['source-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from sources')
@@ -232,6 +241,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(tab+'Include splash support (splashutils must be merged)')
     print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres']+'"', end='')
     print('\t\t\t Splash resolution, all if not set')
+
 #    print('  --disklabel               ', end='')
 #    print(initramfs_conf['disklabel'], end='') # bool
 #    print('\t\tInclude support for UUID/LABEL (host binary or sources)')
@@ -249,12 +259,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print stdout.yellow('\t\t Include selinux support in --dmraid (selinux libs required)')
 #   print '  --iscsi                    False                   Include iscsi support'
 #   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
-    print('  --dropbear                ', end='')
-    print(initramfs_conf['dropbear'], end='') # bool
-    print('\t\tInclude dropbear tools and daemon (host binary or sources)')
-    print('   --debugflag              ', end='')
-    print(initramfs_conf['debugflag'], end='') # bool
-    print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
+    
     # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
         if len(cli['rootpasswd']) <= 4:

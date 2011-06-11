@@ -173,7 +173,7 @@ class initramfs:
                     self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static')
             else:
                 self.fail_msg('sys-fs/dmraid must be merged')
-        if self.cli['source-dmraid'] is True:
+        elif self.cli['source-dmraid'] is True:
             print(green(' * ') + turquoise('initramfs.append.source.dmraid ') + self.version_conf['dmraid-version'])
             os.chdir(self.temp['work'])
             if aobj.source_dmraid() is not zero: self.fail('source.dmraid')
