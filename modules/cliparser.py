@@ -577,6 +577,7 @@ def cli_parser():
 
         cli['bin-all'] = False
         if initramfs_conf['bin-all'] == 'True':
+            cli['bin-busybox'] = True
             cli['bin-luks'] = True
             cli['bin-lvm2'] = True
             cli['bin-screen'] = True
@@ -771,19 +772,20 @@ def cli_parser():
             elif o in ("--nomodules"):
                 cli['nomodules'] = True
             elif o in ("--bin-all"):
-                cli['bin-luks'] = True
-                cli['bin-lvm2'] = True
-                cli['bin-screen'] = True
+                cli['bin-busybox']  = True
+                cli['bin-luks']     = True
+                cli['bin-lvm2']     = True
+                cli['bin-screen']   = True
                 cli['bin-disklabel'] = True
-                cli['bin-strace'] = True
-                cli['bin-evms'] = True
-                cli['bin-glibc'] = True
+                cli['bin-strace']   = True
+                cli['bin-evms']     = True
+                cli['bin-glibc']    = True
                 cli['bin-libncurses'] = True
-                cli['bin-zlib'] = True
-                cli['bin-dmraid'] = True
+                cli['bin-zlib']     = True
+                cli['bin-dmraid']   = True
             elif o in ("--source-all"):
-                cli['source-luks'] = True
-                cli['source-lvm2'] = True
+                cli['source-luks']  = True
+                cli['source-lvm2']  = True
                 cli['source-disklabel'] = True
                 cli['source-screen'] = True
                 cli['source-ttyecho'] = True
