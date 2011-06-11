@@ -17,7 +17,13 @@ KIGen for Linux aims at providing first an equal set of features (in Python)
 as Genkernel does for Gentoo as well as a python interface to sys-boot/boot-update for Funtoo.
 Genkernel being a bash script, interfacing it with boot-update is 'tricky' if not insane.
 
-KIGen provides a more visible configuration file than genkernel in terms of kernel modules at least.
+KIGen tries to provide a flexible approach to shipping binaries in an initramfs. In theory,
+one can ship any binary, statically or dynamically linked. If it's linked the appropriated 
+libraries need to be shipped as well.
+It tries to provide binaries that just work.
+
+KIGen provides a more visible configuration file than genkernel in terms of kernel modules,
+custom URLs or versions.
 KIGen will automagically detect if you are running boot-update (we support Gentoo and
 Sabayon too) then read your /etc/boot.conf and overwrite your /etc/kigen.conf
 configuration in terms of kernel modules only.
@@ -125,7 +131,7 @@ Some GRUB examples of kernel command line boot options.
         set root='(hd0,1)'
         search --no-floppy --fs-uuid --set 90527f58-e0d9-4b21-817d-49b223161071
         echo    Loading Linux x86_64-2.6.35-sabayon ...
-        linux   /kernel-kigen-x86_64-2.6.35-sabayon ro init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear
+        linux   /kernel-kigen-x86_64-2.6.35-sabayon ro init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear ip=dhcp
         echo    Loading initial ramdisk ...
         initrd  /initramfs-kigen-x86_64-2.6.35-sabayon
   }
@@ -339,7 +345,7 @@ emerge it.
 Kigen has 3 sets of config files:
  - /etc/kigen/master.conf
  - /etc/kigen/kernel/default.conf
- - /etc/kigen/initramfs/{default.conf,modules.conf,version.conf}
+ - /etc/kigen/initramfs/{default.conf,modules.conf,version.conf,url.conf}
 
 They are heavily commented, their options should be self explanatory.
 
@@ -1456,4 +1462,4 @@ Note the autodeconnection done by the host thanks to /etc/conf.d/local.
 
     Portage community (linuxrc scripts),
 
-:Version: 0.3.0
+:Version: 0.3.1
