@@ -77,8 +77,8 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
             tab = ''
     else:
         tab = '\t\t'
-    print(stdout.yellow('  --fixdotconfig=<feature>  '), end='')
-    print('"'+kernel_conf['fixdotconfig']+'"', end='')
+    print(stdout.yellow('  --fixdotconfig=<feature>  '), end='"')
+    print(kernel_conf['fixdotconfig'], end='"')
     print(tab+'Check and auto fix the kernel config file (experimental)')
     print('\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
 
@@ -237,9 +237,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t\t'
     else:
         tab = '\t\t\t'
-    print('  --splash=<theme>          "'+initramfs_conf['splash']+'"', end='')
+    print('  --splash=<theme>          "'+initramfs_conf['splash'], end='"')
     print(tab+'Include splash support (splashutils must be merged)')
-    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres']+'"', end='')
+    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
     print('\t\t\t Splash resolution, all if not set')
 
 #    print('  --disklabel               ', end='')
@@ -268,7 +268,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t\t'
     else:
         tab = '\t\t\t'
-    print('  --rootpasswd=<passwd>     "'+cli['rootpasswd']+'"', end='')
+    print('  --rootpasswd=<passwd>     "'+cli['rootpasswd'], end='"')
     print(tab+'Create and set root password (required for dropbear)')
 #   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
 #   print '  --aufs                     False                   Include aufs support'
@@ -284,8 +284,8 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     else:
         tab = '\t\t\t'
 #    print('  --keymaps                 ', end='')
-    print('  --keymaps=xx[,xx]|all     ', end='')
-    print(initramfs_conf['keymaps'], end='') # bool
+    print('  --keymaps=xx[,xx]|all     ', end='"')
+    print(initramfs_conf['keymaps'], end='"') # bool
     print(tab+'Include all keymaps')
 #    print('  --ttyecho                 ', end='')
 #    print(initramfs_conf['ttyecho'], end='') # bool
