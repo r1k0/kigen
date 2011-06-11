@@ -41,7 +41,7 @@ modules_scan() {
 			if find /lib/modules/${KV} | grep /"${x}${KSUFF}" >/dev/null 2>&1
 			then
 				echo -ne "${BOLD}   ::${NORMAL} Scanning for ${x}..."
-				modprobe ${x} -n
+				modprobe ${x} -n 2>/dev/null || modprobe ${x} # -n option may not be compiled
 				backup
 				echo -ne "${NORMAL}"
 			fi
