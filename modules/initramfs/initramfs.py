@@ -6,7 +6,6 @@ from stdout                 import *
 from utils.process          import *
 from utils.misc             import *
 from utils.isstatic         import isstatic
-from utils.listdynamiclibs  import listdynamiclibs
 from .append                import append
 
 class initramfs:
@@ -282,20 +281,11 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.screen ')+ '/usr/bin/screen from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/bin/screen'):
-                if isstatic('/usr/bin/screen', self.verbose):
-                    from .bin.screen import screen
-                    bin_screen = screen(self.temp, self.verbose)
-                    bin_screen.build()
-                else:
-                    if self.cli['dynlibs'] is True:
-                        screen_libs = listdynamiclibs('/usr/bin/screen', self.verbose)
-                        process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-screen-temp/lib', self.verbose)
-                        print(yellow(' * ') + '... ' + yellow('warning')+': /usr/bin/screen is dynamically linked, copying detected libraries')
-                        for i in screen_libs:
-                            print(green(' * ') + '... ' + i)
-                            process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-screen-temp/lib'), self.verbose)
-                    else:
-                        self.fail_msg('/usr/bin/screen is not statically linked. Merge app-misc/screen with USE=static or use --dynlibs')
+                from .bin.screen import screen
+                bin_screen = screen(self.cli, self.temp, self.verbose)
+                bin_screen.build()
+                if not isstatic('/usr/bin/screen', self.verbose) and self.cli['dynlibs'] is False:
+                    self.fail_msg('/usr/bin/screen is not statically linked. Merge app-misc/screen with USE=static or use --dynlibs')
             else:
                 self.fail_msg('app-misc/screen must be merge')
         elif self.cli['source-screen'] is True:
