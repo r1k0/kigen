@@ -243,6 +243,7 @@ class initramfs:
  
         # 13) append dropbear
         if self.cli['bin-dropbear'] is True:
+            print(green(' * ') + turquoise('initramfs.append.bin.dropbear ') + 'from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dropbear'):
                 if isstatic('/usr/sbin/dropbear', self.verbose):

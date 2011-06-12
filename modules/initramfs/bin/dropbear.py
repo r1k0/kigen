@@ -33,7 +33,6 @@ class dropbear:
         dropbearkey_bin     = '/usr/bin/dropbearkey'
         dropbearconvert_bin = '/usr/bin/dropbearconvert'
 
-        print(green(' * ') + turquoise('initramfs.append.bin.dropbear ')+dbscp_bin+' '+dbclient_bin+' '+dropbearkey_bin+' '+dropbearconvert_bin+' '+dropbear_sbin +' from ' + white('host'))
         process('cp %s %s/initramfs-bin-dropbear-temp/bin'                  % (dbscp_bin, self.temp['work']), self.verbose)
         process('cp %s %s/initramfs-bin-dropbear-temp/bin'                  % (dbclient_bin, self.temp['work']), self.verbose)
         process('cp %s %s/initramfs-bin-dropbear-temp/bin'                  % (dropbearkey_bin, self.temp['work']), self.verbose)

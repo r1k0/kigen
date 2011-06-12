@@ -291,59 +291,6 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())
  
-    def source_dropbear(self):
-        """
-        Append dropbear support to the initramfs
-    
-        @return: bool
-        """
-        logging.debug('>>> entering initramfs.append.source.dropbear')
-        for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
-            process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-source-dropbear-temp/', i), self.verbose)
-
-        dropbear_sbin       = '/usr/sbin/dropbear'
-
-        logging.debug('initramfs.append.source.dropbear ' + self.version_conf['dropbear-version'])
-        if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
-            # use cache
-            print(green(' * ') + '... '+'cache found: importing')
-
-            # extract cache
-            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
-
-        else:
-            # compile and cache
-            from .sources.dropbear import dropbear
-            dropbearobj = dropbear(self.master_conf, self.version_conf, self.url_conf, self.dbdebugflag, self.temp, self.verbose)
-            dropbearobj.build()
-
-            # extract cache
-            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
-
-        process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
-        process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
-        process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/lastlog', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/wtmp', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/run/utmp', self.verbose)
-
-        # ship the boot* scripts too
-        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
-        process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks.sh', self.verbose)
-
-        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp/dev')
-        process('mknod urandom c 1 9', self.verbose)
-        process('mknod ptmx c 5 2', self.verbose)
-        process('mknod tty c 5 0', self.verbose)
-        process('chmod 0666 urandom', self.verbose)
-        process('chmod 0666 ptmx', self.verbose)
-        process('chmod 0666 tty', self.verbose)
-
-        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp')
-        return os.system(self.cpio())
-
     def set_rootpasswd(self):
         """
         Set root password of the initramfs
@@ -376,37 +323,6 @@ class append:
 #        os.chroot('.')
 
         os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
-        return os.system(self.cpio())
-
-    def source_disklabel(self):
-        """
-        Append blkid binary to the initramfs
-        after compiling e2fsprogs
-        
-        @return: bool
-        """
-        logging.debug('>>> entering initramfs.append.source_disklabel')
-        blkid_sbin = '/sbin/blkid'
-
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-source-disklabel-temp/bin', self.verbose)
-
-        logging.debug('initramfs.append.source_disklabel ' + self.version_conf['e2fsprogs-version'])
-
-        if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
-            # use cache
-            print(green(' * ') + '... '+'cache found: importing')
-        else:
-            # compile
-            from .sources.e2fsprogs import e2fsprogs
-            e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
-            e2obj.build()
-
-        # extract cache
-        # FIXME careful with the >
-        os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-source-disklabel-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
-        process('chmod +x %s/initramfs-source-disklabel-temp/bin/blkid' % self.temp['work'], self.verbose)
-
-        os.chdir(self.temp['work']+'/initramfs-source-disklabel-temp')
         return os.system(self.cpio())
 
     def splash(self):
@@ -460,6 +376,49 @@ class append:
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
+
+    def keymaps(self):
+        """
+        Ship all keymaps within initramfs
+        It's up to the user to provide the correct kernel cmdline parameter
+
+        @return bool
+        """
+        logging.debug('>>> entering initramfs.append.keymaps')
+        print(green(' * ') + turquoise('initramfs.append.keymaps ')+self.keymaplist)
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-keymaps-temp/lib/keymaps', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/keymaplist', self.verbose) # temp keymap dir
+
+        # make keymaplist a real list
+        self.keymaplist = self.keymaplist.split(',')
+
+        if 'all' in self.keymaplist:
+            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+            f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
+            for i in f.readlines():
+                # filter out item with numbers
+                if re.match("^[a-z]", i):
+                    print(green(' * ') + '... ' +i, end='')
+        else:
+            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/keymaplist' % (self.libdir, self.temp['work']), self.verbose)
+            for i in self.keymaplist:
+                if os.path.isfile('%s/keymaplist/%s.map'%(self.temp['work'],i)):
+                    if re.match("^[a-z]", i):
+                        process('cp %s/keymaplist/%s.map %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], i, self.temp['work']), self.verbose)
+                        print(green(' * ') + '... ' +i+'.map', end='\n')
+                else:
+                    print(yellow(' * ') + '... ' + yellow('warning')+' %s.map does not exist, skipping'%i)
+
+            # still copy keymapList: linuxrc expects it
+            process('cp %s/keymaplist/keymapList %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], self.temp['work']), self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-keymaps-temp')
+        return os.system(self.cpio())
+
+########################
+# source based features 
+########################
 
     def source_lvm2(self):
         """
@@ -872,5 +831,89 @@ class append:
             process('chmod a+x %s/initramfs-source-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-source-luks-temp')
+        return os.system(self.cpio())
+
+    def source_dropbear(self):
+        """
+        Append dropbear support to the initramfs
+    
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.source.dropbear')
+        for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
+            process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-source-dropbear-temp/', i), self.verbose)
+
+        dropbear_sbin       = '/usr/sbin/dropbear'
+
+        logging.debug('initramfs.append.source.dropbear ' + self.version_conf['dropbear-version'])
+        if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'cache found: importing')
+
+            # extract cache
+            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
+
+        else:
+            # compile and cache
+            from .sources.dropbear import dropbear
+            dropbearobj = dropbear(self.master_conf, self.version_conf, self.url_conf, self.dbdebugflag, self.temp, self.verbose)
+            dropbearobj.build()
+
+            # extract cache
+            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
+
+        process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/lastlog', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/wtmp', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/run/utmp', self.verbose)
+
+        # ship the boot* scripts too
+        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
+        process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks.sh', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp/dev')
+        process('mknod urandom c 1 9', self.verbose)
+        process('mknod ptmx c 5 2', self.verbose)
+        process('mknod tty c 5 0', self.verbose)
+        process('chmod 0666 urandom', self.verbose)
+        process('chmod 0666 ptmx', self.verbose)
+        process('chmod 0666 tty', self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp')
+        return os.system(self.cpio())
+
+    def source_disklabel(self):
+        """
+        Append blkid binary to the initramfs
+        after compiling e2fsprogs
+        
+        @return: bool
+        """
+        logging.debug('>>> entering initramfs.append.source_disklabel')
+        blkid_sbin = '/sbin/blkid'
+
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-source-disklabel-temp/bin', self.verbose)
+
+        logging.debug('initramfs.append.source_disklabel ' + self.version_conf['e2fsprogs-version'])
+
+        if os.path.isfile(self.temp['cache'] + '/blkid-e2fsprogs-' + self.version_conf['e2fsprogs-version']+'.bz2') and self.nocache is False:
+            # use cache
+            print(green(' * ') + '... '+'cache found: importing')
+        else:
+            # compile
+            from .sources.e2fsprogs import e2fsprogs
+            e2obj = e2fsprogs(self.master_conf, self.version_conf, self.url_conf, self.temp, self.verbose)
+            e2obj.build()
+
+        # extract cache
+        # FIXME careful with the >
+        os.system('/bin/bzip2 -dc %s/blkid-e2fsprogs-%s.bz2 > %s/initramfs-source-disklabel-temp/bin/blkid' % (self.temp['cache'], self.version_conf['e2fsprogs-version'], self.temp['work']))
+        process('chmod +x %s/initramfs-source-disklabel-temp/bin/blkid' % self.temp['work'], self.verbose)
+
+        os.chdir(self.temp['work']+'/initramfs-source-disklabel-temp')
         return os.system(self.cpio())
 
