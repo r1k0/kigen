@@ -623,8 +623,6 @@ def cli_parser():
             elif o in ("--bin-lvm2"):
                 cli['bin-lvm2'] = True
                 cli['source-lvm2'] = False
-#            elif o in ("--dmraid"):
-#                cli['dmraid'] = True
             elif o in ("--bin-dmraid"):
                 cli['bin-dmraid'] = True
             elif o in ("--source-dmraid"):
@@ -634,8 +632,6 @@ def cli_parser():
                 cli['oldconfig'] = True # make sure .config is ok
             elif o in ("--iscsi"):
                 cli['iscsi'] = True
-#            elif o in ("--evms"):
-#                cli['evms'] = True
             elif o in ("--bin-evms"):
                 cli['bin-evms'] = True
             elif o in ("--mdadm"):
@@ -674,11 +670,6 @@ def cli_parser():
                 cli['noboot'] = True
             elif o in ("--selinux"):
                 cli['selinux'] = True
-            elif o in ("--dropbear"):
-                cli['dropbear'] = True
-                cli['bin-glibc'] = True         # dropbear needs glibc
-                cli['bin-libncurses'] = True    # dropbear needs libncurses
-                cli['bin-zlib'] = True          # dropbear needs zlib
             elif o in ("--bin-dropbear"):
                 cli['bin-dropbear'] = True
                 cli['bin-glibc'] = True         # dropbear needs glibc
@@ -691,16 +682,10 @@ def cli_parser():
                 cli['bin-zlib'] = True          # dropbear needs zlib
             elif o in ("--hostbin"):
                 cli['hostbin'] = True
-#            elif o in ("--glibc"):
-#                cli['glibc'] = True
             elif o in ("--bin-glibc"):
                 cli['bin-glibc'] = True
-#            elif o in ("--libncurses"):
-#                cli['libncurses'] = True
             elif o in ("--bin-libncurses"):
                 cli['bin-libncurses'] = True
-#            elif o in ("--zlib"):
-#                cli['zlib'] = True
             elif o in ("--bin-zlib"):
                 cli['bin-zlib'] = True
             elif o in ("--rename="):

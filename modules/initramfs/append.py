@@ -299,17 +299,17 @@ class append:
         """
         logging.debug('>>> entering initramfs.append.source.dropbear')
         for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
-            process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-dropbear-temp/', i), self.verbose)
+            process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-source-dropbear-temp/', i), self.verbose)
 
         dropbear_sbin       = '/usr/sbin/dropbear'
 
-        logging.debug('initramfs.append.dropbear ' + self.version_conf['dropbear-version'])
+        logging.debug('initramfs.append.source.dropbear ' + self.version_conf['dropbear-version'])
         if os.path.isfile(self.temp['cache']+'/dropbear-'+self.version_conf['dropbear-version']+'.tar') and self.nocache is False:
             # use cache
             print(green(' * ') + '... '+'cache found: importing')
 
             # extract cache
-            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
+            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
         else:
             # compile and cache
@@ -318,22 +318,22 @@ class append:
             dropbearobj.build()
 
             # extract cache
-            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
+            process('tar xpf %s/dropbear-%s.tar -C %s/initramfs-source-dropbear-temp ' % (self.temp['cache'], self.version_conf['dropbear-version'], self.temp['work']), self.verbose)
 
-        process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-        process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-        process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-dropbear-temp/etc', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/lastlog', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/log/wtmp', self.verbose)
-        process('touch %s'                      % self.temp['work']+'/initramfs-dropbear-temp/var/run/utmp', self.verbose)
+        process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/lastlog', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/wtmp', self.verbose)
+        process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/run/utmp', self.verbose)
 
         # ship the boot* scripts too
-        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
+        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
         process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-dropbear-temp/root/boot-luks.sh', self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks.sh', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-dropbear-temp/dev')
+        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp/dev')
         process('mknod urandom c 1 9', self.verbose)
         process('mknod ptmx c 5 2', self.verbose)
         process('mknod tty c 5 0', self.verbose)
@@ -341,7 +341,7 @@ class append:
         process('chmod 0666 ptmx', self.verbose)
         process('chmod 0666 tty', self.verbose)
 
-        os.chdir(self.temp['work']+'/initramfs-dropbear-temp')
+        os.chdir(self.temp['work']+'/initramfs-source-dropbear-temp')
         return os.system(self.cpio())
 
     def set_rootpasswd(self):
