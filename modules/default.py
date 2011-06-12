@@ -130,7 +130,8 @@ initramfs_conf = {
         'bin-all'       : 'False',  \
         'source-all'    : 'False',  \
         'nomodules'     : 'False',  \
-        'bin-busybox'   : 'False'}
+        'bin-busybox'   : 'False',  \
+        'dynlibs'  : 'False'}
 
 # default version values
 version_conf = {

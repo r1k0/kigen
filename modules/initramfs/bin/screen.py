@@ -26,17 +26,6 @@ class screen:
         process('cp %s %s/initramfs-bin-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
-#        if not isstatic(screen_bin, self.verbose):
-#            screen_libs = listdynamiclibs(screen_bin, self.verbose)
-#
-#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-screen-temp/lib', self.verbose)
-#            print yellow(' * ') + '... ' + yellow('warning')+': '+screen_bin+' is dynamically linked, copying detected libraries'
-#            for i in screen_libs:
-#                print green(' * ') + '... ' + i
-#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-screen-temp/lib'), self.verbose)
-#        else:
-#            logging.debug(screen_bin+' is statically linked nothing to do')
-
         # add required /usr/share/terminfo/l/linux for screen
         # FIXME: to support other arch copy accordingly
         os.makedirs(self.temp['work']+'/initramfs-bin-screen-temp/usr/share/terminfo/l')

@@ -227,6 +227,10 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('\t\tInclude all possible features from sources')
     print()
 
+    print('  --dynlibs                 ', end='')
+    print(initramfs_conf['dynlibs'], end='') # bool
+    print('\t\tInclude detected libraries from dynamically linked binaries')
+
     # fix \t display depending on length of cli[splash']
     if cli['splash'] != '':
         if len(cli['splash']) <= 4:

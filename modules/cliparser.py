@@ -348,6 +348,7 @@ def cli_parser():
                                     "bin-all",      \
                                     "source-all",   \
                                     "bin-busybox",  \
+                                    "dynlibs", \
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
@@ -536,6 +537,10 @@ def cli_parser():
         cli['source-screen'] = False
         if initramfs_conf['source-screen'] == 'True':
             cli['source-screen'] = True
+
+        cli['dynlibs'] = False
+        if initramfs_conf['dynlibs'] == 'True':
+            cli['dynlibs'] = True
 
         cli['debugflag'] = False
         if initramfs_conf['debugflag'] == 'True':
@@ -754,6 +759,8 @@ def cli_parser():
                 cli['source-dmraid'] = True
             elif o in ("--bin-busybox"):
                 cli['bin-busybox'] = True
+            elif o in ("--dynlibs"):
+                cli['dynlibs'] = True
 
             else:
                 assert False, "uncaught option"
