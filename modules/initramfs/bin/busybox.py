@@ -3,6 +3,8 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 from utils.process import *
 from utils.misc import *
+from utils.listdynamiclibs import *
+from utils.isstatic import *
 
 class busybox:
 
@@ -29,19 +31,17 @@ class busybox:
         process('cp %s %s/initramfs-bin-busybox-temp/bin' % (bb_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-busybox-temp/bin/busybox' % self.temp['work'], self.verbose)
 
-#        if not isstatic(blkid_sbin, self.verbose):
-#            blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
-#
-#            process('mkdir -p %s' % self.temp['work']+'/initramfs-blkid-temp/lib', self.verbose)
-#            print yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries'
-#            for i in blkid_libs:
-#                print green(' * ') + '... ' + i
-#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-blkid-temp/lib'), self.verbose)
-#        else:
-#            logging.debug(blkid_sbin+' is statically linked nothing to do')
+        if not isstatic(bb_bin, self.verbose):
+            bb_libs = listdynamiclibs(bb_bin, self.verbose)
+            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-busybox-temp/lib', self.verbose)
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+bb_bin+' is dynamically linked, copying detected libraries')
+            for i in bb_libs:
+                print(green(' * ') + '... ' + i)
+                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-busybox-temp/lib'), self.verbose)
+        else:
+            logging.debug(blkid_sbin+' is statically linked nothing to do')
 
         os.chdir(self.temp['work']+'/initramfs-bin-busybox-temp')
-
         process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-busybox-temp/usr/share/udhcpc/', self.verbose)
         process('cp %s/defaults/udhcpc.scripts %s/initramfs-bin-busybox-temp/usr/share/udhcpc/default.script' % (self.libdir, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-busybox-temp/usr/share/udhcpc/default.script' % self.temp['work'], self.verbose)

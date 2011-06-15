@@ -3,6 +3,8 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 from utils.process import *
 from utils.misc import *
+from utils.listdynamiclibs import *
+from utils.isstatic import *
 
 class dmraid:
 
@@ -27,16 +29,15 @@ class dmraid:
         process('cp %s %s/initramfs-bin-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
 
-#        if not isstatic(dmraid_bin, self.verbose):
-#            dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
-#
-#            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dmraid-temp/lib', self.verbose)
-#            print yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries'
-#            for i in dmraid_libs:
-#                print green(' * ') + '... ' + i
-#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-dmraid-temp/lib'), self.verbose)
-#        else:
-#            logging.debug(dmraid_bin+' is statically linked nothing to do')
+        if not isstatic(dmraid_bin, self.verbose):
+            dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
+            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dmraid-temp/lib', self.verbose)
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries')
+            for i in dmraid_libs:
+                print(green(' * ') + '... ' + i)
+                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-dmraid-temp/lib'), self.verbose)
+        else:
+            logging.debug(dmraid_bin+' is statically linked nothing to do')
 
         # FIXME ln -sf raid456.ko raid45.ko ?
         # FIXME is it ok to have no raid456.ko? if so shouldn't we check .config for inkernel feat?

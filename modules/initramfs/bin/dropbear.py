@@ -3,6 +3,8 @@ import sys
 from stdout import green, turquoise, white, red, yellow
 from utils.process import *
 from utils.misc import *
+from utils.listdynamiclibs import *
+from utils.isstatic import *
 
 class dropbear:
 
@@ -44,17 +46,16 @@ class dropbear:
         process('chmod +x %s/initramfs-bin-dropbear-temp/bin/dropbearconvert' % self.temp['work'], self.verbose)
         process('chmod +x %s/initramfs-bin-dropbear-temp/sbin/dropbear'     % self.temp['work'], self.verbose)
 
-            # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too? NO ldd says they all use the same as /usr/sbin/dropbear
-#        if not isstatic(dropbear_sbin, self.verbose):
-#            dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
-#
-#            process('mkdir -p %s' % self.temp['work']+'/initramfs-dropbear-temp/lib', self.verbose)
-#            print yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries'
-#            for i in dropbear_libs:
-#                print green(' * ') + '... ' + i
-#                process('cp %s %s' % (i, self.temp['work']+'/initramfs-dropbear-temp/lib'), self.verbose)
-#        else:
-#            logging.debug('dropbear is static nothing to do')
+# FIXME check if dropbearkey dropbearconvert dbclient dbscp static too? NO ldd says they all use the same as /usr/sbin/dropbear
+        if not isstatic(dropbear_sbin, self.verbose):
+            dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
+            process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dropbear-temp/lib', self.verbose)
+            print(yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries')
+            for i in dropbear_libs:
+                print(green(' * ') + '... ' + i)
+                process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-dropbear-temp/lib'), self.verbose)
+        else:
+            logging.debug('dropbear is static nothing to do')
 
         process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-bin-dropbear-temp/etc', self.verbose)
         process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-bin-dropbear-temp/etc', self.verbose)

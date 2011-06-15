@@ -25,6 +25,7 @@ class evms:
             process('mkdir -p ' + self.temp['work']+'/initramfs-bin-evms-temp/bin', self.verbose)
             process('mkdir -p ' + self.temp['work']+'/initramfs-bin-evms-temp/sbin', self.verbose)
 
+# FIXME compare this list to the one from 'ldd /sbin/evms'
             process_star('cp -a /lib/ld-*           %s/initramfs-bin-evms-temp/lib' % self.temp['work'], self.verbose)
             process_star('cp -a /lib/libgcc_s*      %s/initramfs-bin-evms-temp/lib' % self.temp['work'], self.verbose)
             process_star('cp -a /lib/libc.*         %s/initramfs-bin-evms-temp/lib' % self.temp['work'], self.verbose)
@@ -37,7 +38,8 @@ class evms:
             process('cp -a /lib/evms                %s/initramfs-bin-evms-temp/lib' % self.temp['work'], self.verbose)
             process_star('cp -a /lib/evms/*         %s/initramfs-bin-evms-temp/lib/evms' % self.temp['work'], self.verbose)
             process('cp -a /etc/evms.conf           %s/initramfs-bin-evms-temp/etc' % self.temp['work'], self.verbose)
-            # FIXME isstatic('/sbin/evms_activate')?
+
+# FIXME isstatic('/sbin/evms_activate')?
             process('cp /sbin/evms_activate         %s/initramfs-bin-evms-temp/sbin' % self.temp['work'], self.verbose)
             process_star('rm %s/initramfs-bin-evms-temp/lib/evms/*/swap*.so' % self.temp['work'], self.verbose)
         else:

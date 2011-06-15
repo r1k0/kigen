@@ -129,14 +129,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.busybox ') + '/bin/busybox from '+white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/bin/busybox'):
-                if isstatic('/bin/busybox', self.verbose):
+#                if isstatic('/bin/busybox', self.verbose):
                     from .bin.busybox import busybox
                     bin_bb = busybox(self.master_conf['busybox-progs'], self.libdir, self.temp, self.verbose)
                     bin_bb.build()
                     if not isstatic('/bin/busybox', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/bin/busybox is not statically linked. Merge sys-app/busybox with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/bin/busybox is not statically linked. Merge sys-app/busybox with USE=static')
+#                else:
+#                    self.fail_msg('/bin/busybox is not statically linked. Merge sys-app/busybox with USE=static')
             else:
                 self.fail_msg('sys-app/busybox must be merged')            
         else:
@@ -169,14 +169,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.dmraid ')+'/usr/sbin/dmraid from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dmraid'):
-                if isstatic('/usr/sbin/dmraid', self.verbose):
+#                if isstatic('/usr/sbin/dmraid', self.verbose):
                     from .bin.dmraid import dmraid
                     bin_dmraid = dmraid(self.temp, self.verbose)
                     bin_dmraid.build()
                     if not isstatic('/usr/sbin/dmraid', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static')
+#                else:
+#                    self.fail_msg('/usr/sbin/dmraid is not statically linked. Merge sys-fs/dmraid with USE=static')
             else:
                 self.fail_msg('sys-fs/dmraid must be merged')
         elif self.cli['source-dmraid'] is True:
@@ -194,14 +194,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.evms'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/evms'):
-                if isstatic('/sbin/evms', self.verbose):
+#                if isstatic('/sbin/evms', self.verbose):
                     from .bin.evms import evms
                     bin_evms = evms(self.temp, self.verbose)
                     bin_evms.build()
-                    if not isstatic('/sbin/evms', self.verbose) and self.cli['dynlibs'] is False:
-                        self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static')
+#                    if not isstatic('/sbin/evms', self.verbose) and self.cli['dynlibs'] is False:
+#                        self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static or use --dynlibs')
+#                else:
+#                    self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static')
             else:
                 self.fail_msg('sys-fs/evms must be merged')
 
@@ -215,14 +215,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.luks ') +'/sbin/cryptsetup from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/cryptsetup'):
-                if isstatic('/sbin/cryptsetup', self.verbose):
+#                if isstatic('/sbin/cryptsetup', self.verbose):
                     from .bin.luks import luks
                     bin_luks = luks(self.temp, self.verbose)
                     bin_luks.build()
                     if not isstatic('/sbin/cryptsetup', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/sbin/cryptsetup is not statically linked. Merge sys-fs/cryptsetup with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/sbin/cryptsetup is not statically linked. Merge sys-fs/cryptsetup with USE=static')
+#                else:
+#                    self.fail_msg('/sbin/cryptsetup is not statically linked. Merge sys-fs/cryptsetup with USE=static')
             else:
                 self.fail_msg('sys-fs/cryptsetup must be merged')
         elif self.cli['source-luks'] is True:
@@ -238,14 +238,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.disklabel ')+ '/sbin/blkid from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/blkid'):
-                if isstatic('/sbin/blkid', self.verbose):
+#                if isstatic('/sbin/blkid', self.verbose):
                     from .bin.disklabel import disklabel
                     bin_disklabel = disklabel(self.temp, self.verbose)
                     bin_disklabel.build()
                     if not isstatic('/sbin/blkid', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static')
+#                else:
+#                    self.fail_msg('/sbin/blkid is not statically linked. Merge sys-fs/e2fsprogs with USE=static')
             else:
                 self.fail_msg('sys-fs/e2fsprogs must be merged')
         elif self.cli['source-disklabel']:
@@ -258,14 +258,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.dropbear ') + 'from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dropbear'):
-                if isstatic('/usr/sbin/dropbear', self.verbose):
+#                if isstatic('/usr/sbin/dropbear', self.verbose):
                     from .bin.dropbear import dropbear
                     bin_dropbear = dropbear(self.temp, self.verbose)
                     bin_dropbear.build()
                     if not isstatic('/usr/sbin/dropbear', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static')
+#                else:
+#                    self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static')
             else:
                 self.fail_msg('net-misc/dropbear must be merged')
         elif self.cli['source-dropbear'] is True:
@@ -277,14 +277,14 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.bin.strace ')+'/usr/bin/strace from ' + white('host'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/bin/strace'):
-                if isstatic('/usr/bin/strace', self.verbose):
+#                if isstatic('/usr/bin/strace', self.verbose):
                     from .bin.strace import strace
                     bin_strace = strace(self.temp, self.verbose)
                     bin_strace.build()
                     if not isstatic('/usr/bin/strace', self.verbose) and self.cli['dynlibs'] is False:
                         self.fail_msg('/usr/bin/strace is not statically linked. Merge app-misc/strace with USE=static or use --dynlibs')
-                else:
-                    self.fail_msg('/usr/bin/strace is not statically linked. Merge dev-util/strace with USE=static')
+#                else:
+#                    self.fail_msg('/usr/bin/strace is not statically linked. Merge dev-util/strace with USE=static')
             else:
                 self.fail_msg('dev-util/strace must be merged')
         elif self.cli['source-strace'] is True:

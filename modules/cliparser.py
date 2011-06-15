@@ -559,6 +559,7 @@ def cli_parser():
             cli['bin-libncurses'] = True
             cli['bin-zlib'] = True
             cli['bin-dmraid'] = True
+            cli['bin-dropbear'] = True
 
         cli['source-all'] = False
         if initramfs_conf['source-all'] == 'True':
@@ -569,6 +570,7 @@ def cli_parser():
             cli['source-ttyecho'] = True
             cli['source-strace'] = True
             cli['source-dmraid'] = True
+            cli['source-dropbear'] = True
 
         # tools
         cli['extract']      = ''
