@@ -39,7 +39,7 @@ class busybox:
                 print(green(' * ') + '... ' + i)
                 process('cp %s %s' % (i, self.temp['work']+'/initramfs-bin-busybox-temp/lib'), self.verbose)
         else:
-            logging.debug(blkid_sbin+' is statically linked nothing to do')
+            logging.debug(bb_bin+' is statically linked nothing to do')
 
         os.chdir(self.temp['work']+'/initramfs-bin-busybox-temp')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-busybox-temp/usr/share/udhcpc/', self.verbose)
