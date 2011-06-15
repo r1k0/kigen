@@ -27,7 +27,7 @@ class screen:
          # use from host
         logging.debug('initramfs.append.bin_screen from %s' % white('host'))
         process('cp %s %s/initramfs-bin-screen-temp/bin' % (screen_bin, self.temp['work']), self.verbose)
-        process('chmod +x %s/initramfs-bin-screen-temp/bin/screen' % self.temp['work'], self.verbose)
+        process('chmod +rx %s/initramfs-bin-screen-temp/bin/screen' % self.temp['work'], self.verbose)
 
         if not isstatic(screen_bin, self.verbose) and self.cli['dynlibs'] is True:
             screen_libs = listdynamiclibs(screen_bin, self.verbose)
