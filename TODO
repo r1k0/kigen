@@ -9,6 +9,7 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.3.1
 =====
+TODO: move kernel/extract.py and initramfs/extract.py to tool/
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
 TODO: check uuid feature really works
