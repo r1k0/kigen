@@ -37,10 +37,12 @@ def print_usage():
     print(stdout.turquoise('Targets')+':')
     print('  kernel, k                  Build kernel/modules')
     print('  initramfs, i               Build initramfs')
+    print('  tool, t                    Use handy tools')
     print()
     print(stdout.turquoise('Parameters')+':')
     print(' '+os.path.basename(sys.argv[0])+' kernel'+'                --help, -h')
     print(' '+os.path.basename(sys.argv[0])+' initramfs'+'             --help, -h')
+    print(' '+os.path.basename(sys.argv[0])+' tool'+'                  --help, -h')
 
 def print_examples():
     print()
@@ -52,8 +54,8 @@ def print_examples():
     print(' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs')
     print(' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --hostbin')
     print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon --disklabel --luks --lvm2 --dropbear --debugflag --rootpasswd=mypasswd --keymaps --ttyecho --strace --screen --glibc --zlib --libncurses --defconfig --nocache')
-    print(' '+os.path.basename(sys.argv[0])+' --extract=/file i --to=/dir')
-    print(' '+os.path.basename(sys.argv[0])+' initramfs --compress=/dir --into=/file')
+    print(' '+os.path.basename(sys.argv[0])+' --extract=/file t --to=/dir')
+    print(' '+os.path.basename(sys.argv[0])+' tool --compress=/dir --into=/file')
 
 
 def print_usage_kernel(cli, master_conf, kernel_conf):
@@ -125,9 +127,9 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print() #'\t\tLog to file'
 
     print('  --debug, -d               '+master_conf['debug']+'\tDebug verbose')
-    print()
-    print('Handy tools:')
-    print('  --getdotconfig=/vmlinux   "'+cli['getdotconfig']+'"\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
+#    print()
+#    print('Handy tools:')
+#    print('  --getdotconfig=/vmlinux   "'+cli['getdotconfig']+'"\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
 
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
@@ -293,10 +295,11 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(tab+'Include list of user generated custom roots')
     print()
 
-    print('Linuxrc:')
-    print('  --linuxrc=/linuxrc[,/file]"'+initramfs_conf['linuxrc']+'"', end='')
-    print('\t\t\tInclude custom linuxrc (files copied over to etc)')
-    print()
+# NOFIX this works but force user to use --plugin= instead
+#    print('Linuxrc:')
+#    print('  --linuxrc=/linuxrc[,/file]"'+initramfs_conf['linuxrc']+'"', end='')
+#    print('\t\t\tInclude custom linuxrc (files copied over to etc)')
+#    print()
 
     print('Busybox:')
     print('  --dotconfig=/file         "'+initramfs_conf['dotconfig']+'"', end='')
@@ -331,12 +334,27 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print() #'\t\tLog to file'
     print('  --debug, -d               '+master_conf['debug']+'', end='')
     print('\t\tDebug verbose')
-    print()
+#    print()
 
-    print('Handy tools:')
+#    print('Handy tools:')
+#    print('  --extract=/file           "'+cli['extract']+'"                  Extract initramfs file')
+#    print('   --to=/dir                "'+cli['to']+'"')
+#    print('\t\t\t\t\t\t Custom extracting directory')
+#    print('  --compress=/dir           "'+cli['compress']+'"                  Compress directory into initramfs')
+#    print('   --into=/file             "'+cli['into']+'"')
+#    print('\t\t\t\t\t\t Custom initramfs file')
+
+def print_usage_tool(cli):
+    print('Parameter:\t\t    Config value:\tDescription:')
+    print()
+    print('Kernel:')
+    print('  --getdotconfig=/vmlinux   "'+cli['getdotconfig']+'"\t\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
+    print()
+    print('Initramfs:')
     print('  --extract=/file           "'+cli['extract']+'"                  Extract initramfs file')
     print('   --to=/dir                "'+cli['to']+'"')
     print('\t\t\t\t\t\t Custom extracting directory')
     print('  --compress=/dir           "'+cli['compress']+'"                  Compress directory into initramfs')
     print('   --into=/file             "'+cli['into']+'"')
     print('\t\t\t\t\t\t Custom initramfs file')
+

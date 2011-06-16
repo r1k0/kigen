@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 from utils.process import *
+from utils.fstab import *
 from stdout import white, green, turquoise, yellow, red
 
 def initramfs(temproot, extract, to, verbose):

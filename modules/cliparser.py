@@ -63,7 +63,15 @@ def cli_parser():
     if ('k' in cliopts and 'i' in cliopts)               or \
         ('initramfs' in cliopts and 'kernel' in cliopts) or \
         ('k' in cliopts and 'initramfs' in cliopts)      or \
-        ('i' in cliopts and 'kernel' in cliopts):
+        ('i' in cliopts and 'kernel' in cliopts)         or \
+        ('t' in cliopts and 'kernel' in cliopts)         or \
+        ('t' in cliopts and 'initramfs' in cliopts)      or \
+        ('tool' in cliopts and 'kernel' in cliopts)      or \
+        ('tool' in cliopts and 'initramfs' in cliopts)   or \
+        ('tool' in cliopts and 'i' in cliopts)           or \
+        ('tool' in cliopts and 'k' in cliopts)           or \
+        ('t' in cliopts and 'i' in cliopts)              or \
+        ('t' in cliopts and 'k' in cliopts):
         print(stdout.red('error') + ': kigen cannot run multiple targets at once.')
         sys.exit(2)
 
@@ -83,9 +91,9 @@ def cli_parser():
 
         try:
             # parse command line
-            opts, args = getopt(cliopts[1:], "idhn", [  \
+            opts, args = getopt(cliopts[1:], "dhn", [  \
                                     "help",                     \
-                                    "info",                     \
+#                                    "info",                     \
                                     "version",                  \
                                     "credits",                  \
                                     "conf=",                    \
@@ -277,7 +285,7 @@ def cli_parser():
 
         try:
             # parse command line
-            opts, args = getopt(cliopts[1:], "hdin", [  \
+            opts, args = getopt(cliopts[1:], "hdn", [  \
                                     "dotconfig=",   \
                                     "mrproper",     \
                                     "menuconfig",   \
@@ -317,7 +325,7 @@ def cli_parser():
                                     "noboot",       \
                                     "selinux",      \
                                     "help",         \
-                                    "info",         \
+#                                    "info",         \
                                     "version",      \
                                     "credits",      \
                                     "nosaveconfig", \
@@ -769,8 +777,63 @@ def cli_parser():
             else:
                 assert False, "uncaught option"
 
+    # === parsing for the tool target ===
+    elif 'tool' in sys.argv or 't' in sys.argv:
+        # we found the tool target
+        # parse accordingly
+        if 'tool' in sys.argv:
+            target = 'tool'
+            cliopts.remove('tool')
+        if 't' in sys.argv:
+            target = 't'
+            cliopts.remove('t')
+
+        # parse all /etc/kigen/ config files
+        kernel_conf = etcparser.etc_parser_kernel()
+        initramfs_conf, modules_conf, version_conf, url_conf = etcparser.etc_parser_initramfs()
+
+        try:
+            # parse command line
+            opts, args = getopt(cliopts[1:], "hdin", [  \
+                                    "extract=",         \
+                                    "to=",              \
+                                    "compress=",        \
+                                    "into=",            \
+                                    "getdotconfig="])
+        except GetoptError as err:
+            print(str(err)) # "option -a not recognized"
+            usage.print_usage()
+            sys.exit(2)
+
+        cli['getdotconfig'] = ''
+        cli['extract']      = ''
+        cli['to']           = '/var/tmp/kigen/extracted-initramfs'
+        cli['compress']     = ''
+        cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
+
+        for o, a in opts:
+            if o in ("-h", "--help"):
+                usage.print_usage_tool(cli)
+                sys.exit(0)
+            elif o in ("--getdotconfig"):
+                cli['getdotconfig'] = a
+            elif o in ("--extract"):
+                cli['extract'] = a
+            elif o in ("--to"):
+                cli['to'] = a
+            elif o in ("--compress"):
+                cli['compress'] = a
+            elif o in ("--into"):
+                cli['into'] = a
+
+            else:
+                assert False, "uncaught option"
+
+        if not opts:
+            usage.print_usage_tool(cli)
+            sys.exit(0)
+    # === parsing for NO target ===
     else:
-        # no target found in cliopts
         try:
             opts, args = getopt(cliopts[1:], "hn", [\
                                 "help",             \

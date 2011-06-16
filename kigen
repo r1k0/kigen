@@ -78,27 +78,19 @@ logging.basicConfig(filename=verbose['logfile'],level=logging.DEBUG)
 
 logging.debug('dumping /etc/kigen/master.conf')
 logging.debug(master_conf)
-
 logging.debug('dumping /etc/kigen/kernel/default.conf')
 logging.debug(kernel_conf)
-
 logging.debug('dumping /etc/kigen/initramfs/modules.conf')
 logging.debug(modules_conf)
-
 logging.debug('dumping /etc/kigen/initramfs/default.conf')
 logging.debug(initramfs_conf)
-
 logging.debug('dumping /etc/kigen/initramfs/version.conf')
 logging.debug(version_conf)
-
 logging.debug('dumping /etc/kigen/initramfs/url.conf')
 logging.debug(url_conf)
-
 logging.debug('dumping ARGV')
 logging.debug(sys.argv)
-
 logging.debug('kigen target is '+target)
-
 logging.debug('dumping command line interface')
 logging.debug(cli)
 logging.debug(verbose)
@@ -163,11 +155,12 @@ except Exception:
 boot_mounted = False
 # run the kernel target
 if target == 'kernel' or target == 'k':
-        # --getdotconfig
-        if cli['getdotconfig'] is not '':
-            from kernel.extract import getdotconfig
-            getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
-            sys.exit(0)
+
+#        # --getdotconfig
+#        if cli['getdotconfig'] is not '':
+#            from kernel.extract import getdotconfig
+#            getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
+#            sys.exit(0)
     
         from kernel.kernel import kernel
         kobj = kernel(cli['kerneldir'],   \
@@ -305,6 +298,28 @@ if target == 'initramfs' or target == 'i':
         elif cli['noboot'] is True:
             logging.debug(temp['cache']+'/initramfs-cpio.gz')
             print(green(' * success ') + temp['cache']+'/initramfs-cpio.gz')
+
+# run the tool target
+if target == 'tool' or target == 't':
+
+        # --extract
+        if cli['extract']:
+            import initramfs.extract
+            initramfs.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+            sys.exit(0)
+
+        # --compress
+        if cli['compress']:
+            import initramfs.compress
+            initramfs.compress.initramfs(temp['work'], cli['compress'], cli['into'], verbose)
+            sys.exit(0)
+
+        # --getdotconfig
+        if cli['getdotconfig'] is not '':
+            from kernel.extract import getdotconfig
+            getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
+            sys.exit(0)
+
 
 # FIXME unset os.environ['KIGEN_STDOUT']?
 

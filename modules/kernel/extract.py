@@ -15,4 +15,4 @@ def getdotconfig(binary, kerneldir, verbose):
         from time import strftime
         os.system('mv %s %s-%s ' % ('/var/tmp/kigen/dotconfig', '/var/tmp/kigen/dotconfig', strftime("%Y-%m-%d-%H-%M-%S")))
 
-    os.system('%s %s > /var/tmp/kigen/dotconfig &>/dev/null' % (kerneldir+'/scripts/extract-ikconfig', binary))
+    os.system('%s %s > /var/tmp/kigen/dotconfig 2>/dev/null' % (kerneldir+'/scripts/extract-ikconfig', binary))

@@ -11,30 +11,22 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 =====
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
-TODO: add timestamp for each line in logfile and beautify logs a bit
-TODO: check uuid feature is really working
-TODO: when using --plugin=dir detect file collision and fail if found
-    add --overwrite to force?
+TODO: check uuid feature really works
+TODO: try to display modules list by category instead of just listing them
+    - crypt fs net ataraid ... see MY_HWOPTS
 
 0.3.*
 =====
-TODO: try to display modules list by category instead of just listing them
-    - crypt fs net ataraid ... see MY_HWOPTS
 TODO: remove that 'root block device() ::' loop in linuxrc and drop to shell instead
     - to help user provide sortof message that points boot scripts in his current dir
     - boot.sh boot-luk.sh boot-luks-lvm2.sh boot-dmraid.sh...
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first
+TODO: add timestamp for each line in logfile and beautify logs a bit
 TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
     what for already?
-TODO: dont fail when finding a dynamically linked binary
-    - raise a warning if the user passed --plugin maybe he knows what he's doing
-    - let ldd parse a dynamically linked binary and get a list of libs to ship
-    already thrown some code at it but it gets quickly messy (will do when sober)
-    this feat is awesome actually: it raises a lot the probability of having a fine first build
-    regardless of static/dyn binaries
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
     http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
     http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
@@ -42,7 +34,6 @@ TODO: find a way to split append.py a bit more
     dissociate a binary class too? why not?
     split append.py into append_feature.py? append_luks.py ...
     append directory?
-TODO: offload append.py to initramfs.py wrt bin/source checks
 TODO: kigen i --screen
     see if screen can attach to /dev/console
     I need something clean to replace ttyecho 
