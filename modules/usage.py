@@ -133,25 +133,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
     print()
 
-    print('Linuxrc:')
-    print('  --linuxrc=/linuxrc[,/file]"'+initramfs_conf['linuxrc']+'"', end='')
-    print('\t\t\tInclude custom linuxrc (files copied over to etc)')
-    print()
-
-    print('Busybox:')
-    print('  --dotconfig=/file         "'+initramfs_conf['dotconfig']+'"', end='')
-    print('\t\t\tCustom busybox config file')
-    print('  --defconfig               ', end='')
-    print(initramfs_conf['defconfig'], end='') # bool
-    print('\t\tSet .config to largest generic options')
-    print('  --oldconfig               ', end='')
-    print(initramfs_conf['oldconfig'], end='') # bool
-    print('\t\tAsk for new busybox options if any')
-    print('  --menuconfig              ', end='')
-    print(initramfs_conf['menuconfig'], end='') # bool
-    print('\t\tInteractive busybox options menu')
-    print()
-
     print('Features:')
     print('+ from host binaries')
     print('| --bin-busybox             ', end='')
@@ -190,7 +171,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-dmraid              ', end='')
     print(initramfs_conf['bin-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from host')
-    print(stdout.yellow('| --bin-all                 '), end='')
+    print('| --bin-all                 ', end='')
     print(initramfs_conf['bin-all'], end='') # bool
     print('\t\tInclude all possible features from host')
 
@@ -222,12 +203,12 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-dmraid           ', end='')
     print(initramfs_conf['source-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from sources')
-    print(stdout.yellow('| --source-all              '), end='')
+    print('| --source-all              ', end='')
     print(initramfs_conf['source-all'], end='') # bool
     print('\t\tInclude all possible features from sources')
     print()
 
-    print('  --dynlibs                 ', end='')
+    print(stdout.yellow('  --dynlibs                 '), end='')
     print(initramfs_conf['dynlibs'], end='') # bool
     print('\t\tInclude detected libraries from dynamically linked binaries')
 
@@ -312,17 +293,24 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(tab+'Include list of user generated custom roots')
     print()
 
-#    print('Libraries: (host only)')
-#    print('  --glibc                   ', end='')
-#    print(initramfs_conf['glibc'], end='') # bool
-#    print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-#    print('  --libncurses              ', end='')
-#    print(initramfs_conf['libncurses'], end='') # bool
-#    print('\t\tInclude host libncurses (required for dropbear)')
-#    print('  --zlib                    ', end='')
-#    print(initramfs_conf['zlib'], end='') # bool
-#    print('\t\tInclude host zlib (required for dropbear)')
-#    print()
+    print('Linuxrc:')
+    print('  --linuxrc=/linuxrc[,/file]"'+initramfs_conf['linuxrc']+'"', end='')
+    print('\t\t\tInclude custom linuxrc (files copied over to etc)')
+    print()
+
+    print('Busybox:')
+    print('  --dotconfig=/file         "'+initramfs_conf['dotconfig']+'"', end='')
+    print('\t\t\tCustom busybox config file')
+    print('  --defconfig               ', end='')
+    print(initramfs_conf['defconfig'], end='') # bool
+    print('\t\tSet .config to largest generic options')
+    print('  --oldconfig               ', end='')
+    print(initramfs_conf['oldconfig'], end='') # bool
+    print('\t\tAsk for new busybox options if any')
+    print('  --menuconfig              ', end='')
+    print(initramfs_conf['menuconfig'], end='') # bool
+    print('\t\tInteractive busybox options menu')
+    print()
 
     print('Misc:')
     print('  --nocache                 ', end='')
