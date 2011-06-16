@@ -4,19 +4,15 @@ NODO: make --fakemod=/ in case kernel modules are copied from another chroot
     kigen i --fakemod=/chroot can feed from kigen k --fakeroot=/chroot
 NODO: make multiple targets callable (left for the next new whole rewrite of cliparser.py)
     do kigen k && kigen i instead
+NODO: when using --plugin=dir detect file collision and fail if found, add --overwrite to force?
+    can't do as temp dirs can't see each other.
 
 0.3.1
 =====
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
-    this will be fixed by the last TODO ;)
 TODO: add timestamp for each line in logfile and beautify logs a bit
 TODO: check uuid feature is really working
-TODO: dont fail when finding a dynamically linked binary
-    - let ldd parse a dynamically linked binary and get a list of libs to ship
-    already thrown some code at it but it gets quickly messy
-    this feat is awesome actually: it raises a lot the probability of having a fine first build
-    --ship-dynlibs to detect libs from dyn bin and ship them in the build
 TODO: when using --plugin=dir detect file collision and fail if found
     add --overwrite to force?
 

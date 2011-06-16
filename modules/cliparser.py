@@ -285,30 +285,30 @@ def cli_parser():
                                     "nooldconfig",  \
                                     "defconfig",    \
                                     "oldconfig",    \
-                                    "luks",         \
+#                                    "luks",         \
                                     "bin-luks",     \
                                     "source-luks",  \
-                                    "lvm2",         \
+#                                    "lvm2",         \
                                     "source-lvm2",  \
                                     "bin-lvm2",     \
-                                    "dmraid",       \
+#                                    "dmraid",       \
                                     "bin-dmraid",   \
                                     "source-dmraid",\
                                     "iscsi",        \
                                     "logfile=",     \
-                                    "evms",         \
+#                                    "evms",         \
                                     "bin-evms",     \
                                     "mdadm",        \
                                     "splash=",      \
                                     "sres=",        \
                                     "sinitrd=",     \
                                     "firmware=",    \
-                                    "disklabel",    \
+#                                    "disklabel",    \
                                     "bin-disklabel",\
                                     "source-disklabel",\
                                     "unionfs-fuse", \
                                     "aufs",         \
-                                    "dropbear",     \
+#                                    "dropbear",     \
                                     "bin-dropbear", \
                                     "source-dropbear",\
                                     "linuxrc=",     \
@@ -323,10 +323,10 @@ def cli_parser():
                                     "nosaveconfig", \
                                     "hostbin",      \
                                     "glibc",        \
-                                    "bin-glibc",    \
+#                                    "bin-glibc",    \
                                     "libncurses",   \
                                     "bin-libncurses",\
-                                    "zlib",         \
+#                                    "zlib",         \
                                     "bin-zlib",     \
                                     "rename=",      \
                                     "plugin=",      \
@@ -336,12 +336,12 @@ def cli_parser():
                                     "compress=",    \
                                     "into=",        \
                                     "keymaps=",     \
-                                    "ttyecho",      \
+#                                    "ttyecho",      \
                                     "source-ttyecho",\
-                                    "strace",       \
+#                                    "strace",       \
                                     "bin-strace",   \
                                     "source-strace",\
-                                    "screen",       \
+#                                    "screen",       \
                                     "bin-screen",   \
                                     "source-screen", \
                                     "debugflag",    \
@@ -740,25 +740,27 @@ def cli_parser():
             elif o in ("--nomodules"):
                 cli['nomodules'] = True
             elif o in ("--bin-all"):
-                cli['bin-busybox']  = True
-                cli['bin-luks']     = True
-                cli['bin-lvm2']     = True
-                cli['bin-screen']   = True
-                cli['bin-disklabel'] = True
-                cli['bin-strace']   = True
-                cli['bin-evms']     = True
-                cli['bin-glibc']    = True
-                cli['bin-libncurses'] = True
-                cli['bin-zlib']     = True
-                cli['bin-dmraid']   = True
+                cli['bin-busybox']      = True
+                cli['bin-luks']         = True
+                cli['bin-lvm2']         = True
+                cli['bin-screen']       = True
+                cli['bin-disklabel']    = True
+                cli['bin-strace']       = True
+                cli['bin-evms']         = True
+                cli['bin-glibc']        = True
+                cli['bin-libncurses']   = True
+                cli['bin-zlib']         = True
+                cli['bin-dmraid']       = True
+                cli['bin-dropbear']     = True
             elif o in ("--source-all"):
-                cli['source-luks']  = True
-                cli['source-lvm2']  = True
+                cli['source-luks']      = True
+                cli['source-lvm2']      = True
                 cli['source-disklabel'] = True
-                cli['source-screen'] = True
-                cli['source-ttyecho'] = True
-                cli['source-strace'] = True
-                cli['source-dmraid'] = True
+                cli['source-screen']    = True
+                cli['source-ttyecho']   = True
+                cli['source-strace']    = True
+                cli['source-dmraid']    = True
+                cli['source-dropbear']  = True
             elif o in ("--bin-busybox"):
                 cli['bin-busybox'] = True
             elif o in ("--dynlibs"):
