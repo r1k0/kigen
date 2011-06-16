@@ -8,7 +8,9 @@ from utils.isstatic import *
 
 class lvm2:
 
-    def __init__(self, temp, verbose):
+    def __init__(self, cli, temp, verbose):
+
+        self.cli = cli
         self.temp = temp
         self.verbose = verbose
 
@@ -32,7 +34,7 @@ class lvm2:
         process('chmod +x   %s/initramfs-bin-lvm2-temp/bin/lvm'         % self.temp['work'], self.verbose)
         process('chmod +x   %s/initramfs-bin-lvm2-temp/bin/lvm_static'  % self.temp['work'], self.verbose)
 
-        if not isstatic(lvm2_static_bin, self.verbose):
+        if not isstatic(lvm2_static_bin, self.verbose) and self.cli['dynlibs'] is True:
             lvm2_libs = listdynamiclibs(lvm2_static_bin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-lvm2-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+lvm2_bin+' is dynamically linked, copying detected libraries')

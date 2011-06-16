@@ -9,6 +9,7 @@ from utils.isstatic import *
 class screen:
 
     def __init__(self, cli, temp, verbose):
+
         self.cli = cli
         self.temp = temp
         self.verbose = verbose

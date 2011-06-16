@@ -8,7 +8,9 @@ from utils.isstatic import *
 
 class luks:
 
-    def __init__(self, temp, verbose):
+    def __init__(self, cli, temp, verbose):
+
+        self.cli = cli
         self.temp = temp
         self.verbose = verbose
 
@@ -50,7 +52,7 @@ class luks:
         process('cp %s %s/initramfs-bin-luks-temp/sbin' % (cryptsetup_sbin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-luks-temp/sbin/cryptsetup' % self.temp['work'], self.verbose)
 
-        if not isstatic(cryptsetup_sbin, self.verbose):
+        if not isstatic(cryptsetup_sbin, self.verbose) and self.cli['dynlibs'] is True:
             luks_libs = listdynamiclibs(cryptsetup_sbin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-luks-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+cryptsetup_sbin+' is dynamically linked, copying detected libraries')

@@ -8,7 +8,9 @@ from utils.isstatic import *
 
 class disklabel:
 
-    def __init__(self, temp, verbose):
+    def __init__(self, cli, temp, verbose):
+
+        self.cli = cli
         self.temp = temp
         self.verbose = verbose
 
@@ -28,7 +30,7 @@ class disklabel:
         process('cp %s %s/initramfs-bin-disklabel-temp/bin' % (blkid_sbin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-disklabel-temp/bin/blkid' % self.temp['work'], self.verbose)
 
-        if not isstatic(blkid_sbin, self.verbose):
+        if not isstatic(blkid_sbin, self.verbose) and self.cli['dynlibs'] is True:
             blkid_libs = listdynamiclibs(blkid_sbin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-blkid-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+blkid_sbin+' is dynamically linked, copying detected libraries')

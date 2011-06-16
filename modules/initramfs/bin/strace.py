@@ -8,7 +8,9 @@ from utils.isstatic import *
 
 class strace:
 
-    def __init__(self, temp, verbose):
+    def __init__(self, cli, temp, verbose):
+
+        self.cli = cli
         self.temp = temp
         self.verbose = verbose
 
@@ -29,7 +31,7 @@ class strace:
         process('cp %s %s/initramfs-bin-strace-temp/bin' % (strace_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-strace-temp/bin/strace' % self.temp['work'], self.verbose)
 
-        if not isstatic(strace_bin, self.verbose):
+        if not isstatic(strace_bin, self.verbose) and self.cli['dynlibs'] is True:
             strace_libs = listdynamiclibs(strace_bin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-strace-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+strace_bin+' is dynamically linked, copying detected libraries')

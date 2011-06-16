@@ -8,8 +8,9 @@ from utils.isstatic import *
 
 class busybox:
 
-    def __init__(self, busyboxprogs, libdir, temp, verbose):
+    def __init__(self, cli,  busyboxprogs, libdir, temp, verbose):
 
+        self.cli = cli
         self.busyboxprogs = busyboxprogs
         self.libdir = libdir
         self.temp   = temp
@@ -31,7 +32,7 @@ class busybox:
         process('cp %s %s/initramfs-bin-busybox-temp/bin' % (bb_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-busybox-temp/bin/busybox' % self.temp['work'], self.verbose)
 
-        if not isstatic(bb_bin, self.verbose):
+        if not isstatic(bb_bin, self.verbose) and self.cli['dynlibs'] is True:
             bb_libs = listdynamiclibs(bb_bin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-busybox-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+bb_bin+' is dynamically linked, copying detected libraries')

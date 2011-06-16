@@ -8,7 +8,9 @@ from utils.isstatic import *
 
 class dmraid:
 
-    def __init__(self, temp, verbose):
+    def __init__(self, cli, temp, verbose):
+        
+        self.cli = cli
         self.temp = temp
         self.verbose = verbose
 
@@ -29,7 +31,7 @@ class dmraid:
         process('cp %s %s/initramfs-bin-dmraid-temp/bin' % (dmraid_bin, self.temp['work']), self.verbose)
         process('chmod +x %s/initramfs-bin-dmraid-temp/bin/dmraid' % self.temp['work'], self.verbose)
 
-        if not isstatic(dmraid_bin, self.verbose):
+        if not isstatic(dmraid_bin, self.verbose) and self.cli['dynlibs'] is True:
             dmraid_libs = listdynamiclibs(dmraid_bin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dmraid-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+dmraid_bin+' is dynamically linked, copying detected libraries')

@@ -8,8 +8,9 @@ from utils.isstatic import *
 
 class dropbear:
 
-    def __init__(self, libdir, temp, verbose):
+    def __init__(self, cli, libdir, temp, verbose):
 
+        self.cli = cli
         self.libdir = libdir
         self.temp   = temp
         self.verbose= verbose
@@ -47,7 +48,7 @@ class dropbear:
         process('chmod +x %s/initramfs-bin-dropbear-temp/sbin/dropbear'     % self.temp['work'], self.verbose)
 
 # FIXME check if dropbearkey dropbearconvert dbclient dbscp static too? NO ldd says they all use the same as /usr/sbin/dropbear
-        if not isstatic(dropbear_sbin, self.verbose):
+        if not isstatic(dropbear_sbin, self.verbose) and self.cli['dynlibs'] is True:
             dropbear_libs = listdynamiclibs(dropbear_sbin, self.verbose)
             process('mkdir -p %s' % self.temp['work']+'/initramfs-bin-dropbear-temp/lib', self.verbose)
             print(yellow(' * ') + '... ' + yellow('warning')+': '+dropbear_sbin+' is dynamically linked, copying detected libraries')
