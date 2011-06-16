@@ -211,7 +211,7 @@ class append:
         # merge modconflist.split() + self.bootupdateinitrd['load-modules'].split() and loop once
         # but then 
         #  - if "load-modules" in self.bootupdateinitrd:
-        # if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
+        # NOFIX the if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
         # for each module in the list modconflist
         print(green(' * ') + '... ', end="")
         z = int('0')
