@@ -9,17 +9,12 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.3.1
 =====
-TODO: try using except KeyboardInterrupt: for parts where ctrl+c doesnt work and should
 TODO: check uuid feature really works
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
 TODO: update man page
 TODO: update README
 TODO: shorten the printing of keymap list
-
-0.3.2
-=====
-TODO: move kernel/extract.py and initramfs/extract.py to tool/
 TODO: try to display modules list by category instead of just listing them
     - crypt fs net ataraid ... see MY_HWOPTS
     - change get_config_modules_list to return a dict and not a list
