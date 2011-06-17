@@ -916,4 +916,3 @@ class append:
 
         os.chdir(self.temp['work']+'/initramfs-source-disklabel-temp')
         return os.system(self.cpio())
-
