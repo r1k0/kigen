@@ -240,7 +240,7 @@ class append:
 
         # compare host list and config list and ship the ones that both match
         for k, v in modconfdict.items():
-            print(green(' * ') + '... ' + k + '\t : ', end='')
+            print(green(' * ') + '... ' + k + '\t ', end='')
             vlist = v.split()
             for j in modsyslist:
                 j = j.replace('.ko', '') # easier to just remove it and add it later
@@ -249,7 +249,7 @@ class append:
                         print(e , end=' ')
                         module = os.popen('find /lib/modules/'+self.KV+' -name '+e+'.ko 2>/dev/null | head -n 1').read().strip()
                         module_dirname = os.path.dirname(module)
-                        process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
+                        process('\nmkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose) # \n is for -d display
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
                         break
             print()
