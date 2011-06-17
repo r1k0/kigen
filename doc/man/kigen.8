@@ -87,7 +87,45 @@ Log to file
 Debug verbose
 
 .PP
-.SH 'initramfs' PARAMETERS
+.SH
+ 'initramfs' PARAMETERS
+.TP
+
+\fB\-\-bin-disklabel, \fB\-\-source-disklabel
+Include support for UUID/LABEL from host or sources
+.TP
+\fB\-\-bin-luks, \fB\-\-source-luks
+Include LUKS support from host or sources
+.TP
+\fB\-\-bin-dmraid, \fB\-\-source-dmraid
+Include DMRAID support from host or sources
+.TP
+\fB\-\-bin-evms
+Include EVMS support from host
+.TP
+\fB\-\-bin-lvm2, \fB\-\-source-lvm2
+Include LVM2 support from host or sources
+.TP
+\fB\-\-bin-dropbear, \fB\-\-source-dropbear
+Include dropbear tools and daemon from host or sources
+.TP
+  \fB\-\-debugflag
+  Compile dropbear with #define DEBUG_TRACE in debug.h
+.TP
+\fB\-\-source-ttyecho
+Include the handy ttyecho.c tool from sources
+.TP
+\fB\-\-bin-strace, \fB\-\-source-strace
+Include the strace binary tool from host or sources
+.TP
+\fB\-\-bin-glibc
+Include host GNU C libraries from host (required for DNS,dropbear)
+.TP
+\fB\-\-bin-libncurses
+Include host libncurses from host (required for dropbear)
+.TP
+\fB\-\-bin-zlib
+Include host zlib from host (required for dropbear)
 .TP
 
 \fB\-\-linuxrc=\fRlinuxrc[,/file]
@@ -111,56 +149,20 @@ Include splash support (splashutils must be merged)
   \fB\-\-sres=\fR[YxZ[,YxZ]
   Splash resolution, all if not set
 .TP
-\fB\-\-bin-disklabel, \fB\-\-source-disklabel
-Include support for UUID/LABEL from host or sources
-.TP
-\fB\-\-bin-luks, \fB\-\-source-luks
-Include LUKS support from host or sources
-.TP
-\fB\-\-bin-dmraid, \fB\-\-source-dmraid
-Include DMRAID support from host or sources
-.TP
-\fB\-\-bin-evms
-Include EVMS support from host
-.TP
-\fB\-\-bin-lvm2, \fB\-\-source-lvm2
-Include LVM2 support from host or sources
-.TP
-\fB\-\-bin-dropbear, \fB\-\-source-dropbear
-Include dropbear tools and daemon from host or sources
-.TP
-  \fB\-\-debugflag
-  Compile dropbear with #define DEBUG_TRACE in debug.h
-.TP
 \fB\-\-rootpasswd=\fR<passwd>
 Create and set root password (required for dropbear)
 .TP
 \fB\-\-keymaps
 Include all keymaps
 .TP
-\fB\-\-ttyecho
-Include the handy ttyecho.c tool
-.TP
-\fB\-\-bin-strace, \fB\-\-source-strace
-Include the strace binary tool from host or sources
-.TP
 \fB\-\-plugin=\fR/dir[,/dir]
 Include list of user generated custom roots
-.TP
-\fB\-\-bin-glibc
-Include host GNU C libraries from host (required for DNS,dropbear)
-.TP
-\fB\-\-bin-libncurses
-Include host libncurses from host (required for dropbear)
-.TP
-\fB\-\-bin-zlib
-Include host zlib from host (required for dropbear)
 .TP
 \fB\-\-nocache
 Do not use cached data
 .TP
-\fB\-\-hostbin
-Use host binaries over sources when possible
+\fB\-\-dynlibs
+Include detected libraries from dynamically linked binaries
 .TP
 \fB\-\-noboot
 Do not copy initramfs to /boot
