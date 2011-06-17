@@ -136,7 +136,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-dropbear         ', end='')
     print(initramfs_conf['source-dropbear'], end='') # bool
     print('\t\tInclude dropbear support from sources')
-    print('   --debugflag              ', end='')
+    print('|  --debugflag              ', end='')
     print(initramfs_conf['debugflag'], end='') # bool
     print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
     print('| --source-screen           ', end='')
