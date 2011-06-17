@@ -97,8 +97,7 @@ class screen:
         """
         self.chgdir(self.screentmp)
     
-        # FIXME return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
-        return os.system('./configure %s' % self.verbose['std'])
+        return os.system('LDFLAGS=-static ./configure %s' % self.verbose['std'])
     
     def make(self):
         """
