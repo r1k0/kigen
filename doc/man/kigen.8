@@ -1,21 +1,23 @@
-.TH KIGEN "8" "Jan 2011" "kigen 0.3.0" "Gentoo Linux"
+.TH KIGEN "8" "June 2011" "kigen 0.3.1" "Gentoo Linux"
 .SH NAME
-kigen \- a GNU/Linux kernel|initramfs generator.
+kigen \- a GNU/Linux kernel|initramfs generator for Portage.
 .SH SYNOPSIS
 \fBkigen\fR \fI<options|target>\fR \fI[parameters]
 .SH DESCRIPTION
 KIGen is designed to allow users to build custom kernels and initramfs.
-It is split into 2 main targets:
+It is split into 3 main targets:
  - kernel
  - initramfs
+ - tool
 
 The 'kernel' target accesses the kernel build features and 
 the 'initramfs' provides from scratch and sources boot features.
+The 'tool' target is there to provide handy tools related to kernel/initramfs.
 
 KIGen supports other distributions by the mean of 
 the --linuxrc=/linuxrc[,/file] option but the engine has yet 
 some Portage assumptions (which will slowly be replaced across
-the 0.2.* cycle).
+the 0.3.* cycle).
 .PP
 .SH MAIN OPTIONS
 kigen supports the following options.
@@ -36,9 +38,6 @@ Display credits and license.
 .SH 'kernel' PARAMETERS
 .TP
 
-\fB\-\-config
-Custom master config file
-.TP
 \fB\-\-dotconfig=\fR/file
 Custom kernel .config file
 .TP
@@ -87,16 +86,11 @@ Log to file
 \fB\-\-debug, \fB\-d
 Debug verbose
 .TP
-\fB\-\-getdotconfig=\fR/vmlinux
-Extract .config from compiled binary kernel (if IKCONFIG has been set)
 
 .PP
 .SH 'initramfs' PARAMETERS
 .TP
 
-\fB\-\-config
-Custom master config file
-.TP
 \fB\-\-linuxrc=\fRlinuxrc[,/file]
 Include custom linuxrc (files copied over to etc)
 .TP
@@ -118,23 +112,23 @@ Include splash support (splashutils must be merged)
   \fB\-\-sres=\fR[YxZ[,YxZ]
   Splash resolution, all if not set
 .TP
-\fB\-\-disklabel
-Include support for UUID/LABEL
+\fB\-\-bin-disklabel, \fB\-\-source-disklabel
+Include support for UUID/LABEL from host or sources
 .TP
-\fB\-\-luks
-Include LUKS support (host binary if found)
+\fB\-\-bin-luks, \fB\-\-source-luks
+Include LUKS support from host or sources
 .TP
-\fB\-\-dmraid
-Include DMRAID support (sources only)
+\fB\-\-bin-dmraid, \fB\-\-source-dmraid
+Include DMRAID support from host or sources
 .TP
-\fB\-\-evms
-Include EVMS support (host binary only)
+\fB\-\-bin-evms
+Include EVMS support from host
 .TP
-\fB\-\-lvm2
-Include LVM2 support (host binary if found)
+\fB\-\-bin-lvm2, \fB\-\-source-lvm2
+Include LVM2 support from host or sources
 .TP
-\fB\-\-dropbear
-Include dropbear tools and daemon (host binaries if found)
+\fB\-\-bin-dropbear, \fB\-\-source-dropbear
+Include dropbear tools and daemon from host or sources
 .TP
   \fB\-\-debugflag
   Compile dropbear with #define DEBUG_TRACE in debug.h
@@ -148,20 +142,20 @@ Include all keymaps
 \fB\-\-ttyecho
 Include the handy ttyecho.c tool
 .TP
-\fB\-\-strace
-Include the strace binary tool
+\fB\-\-bin-strace, \fB\-\-source-strace
+Include the strace binary tool from host or sources
 .TP
 \fB\-\-plugin=\fR/dir[,/dir]
 Include list of user generated custom roots
 .TP
-\fB\-\-glibc
-Include host GNU C libraries (required for dns,dropbear)
+\fB\-\-bin-glibc
+Include host GNU C libraries from host (required for DNS,dropbear)
 .TP
-\fB\-\-libncurses
-Include host libncurses (required for dropbear)
+\fB\-\-bin-libncurses
+Include host libncurses from host (required for dropbear)
 .TP
-\fB\-\-zlib
-Include host zlib (required for dropbear)
+\fB\-\-bin-zlib
+Include host zlib from host (required for dropbear)
 .TP
 \fB\-\-nocache
 Do not use cached data
@@ -181,6 +175,14 @@ Log to file
 \fB\-\-debug, \fB\-d
 Debug verbose
 .TP
+
+.PP
+.SH 'tool' PARAMETERS
+.TP
+
+\fB\-\-getdotconfig=\fR/vmlinux
+Extract .config from compiled binary kernel (if IKCONFIG has been set)
+
 \fB\-\-extract=\fR/file
 Extract initramfs file
 .TP
