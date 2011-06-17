@@ -200,40 +200,60 @@ class append:
         # identify and copy host kernel modules
         if not os.path.isdir('/lib/modules/'+self.KV):
             self.fail('/lib/modules/'+self.KV+" doesn't exist: have you run 'kigen kernel'?")
+
         modsyslist  = get_sys_modules_list(self.KV)
+        
         if not modsyslist:
             self.fail('Host modules list is empty: have you run "kigen kernel"?')
-        # identify and copy config kernel modules
-        modconflist = get_config_modules_list(self.modules_conf) #.split()
-        # FIXME: add support for the 'probe' key
 
-        # FIXME: rather than looping twice
-        # merge modconflist.split() + self.bootupdateinitrd['load-modules'].split() and loop once
-        # but then 
-        #  - if "load-modules" in self.bootupdateinitrd:
-        # NOFIX the if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
-        # for each module in the list modconflist
-        print(green(' * ') + '... ', end="")
-        z = int('0')
-        for i in modconflist.split():
+#        # identify and copy config kernel modules
+#        modconflist = get_config_modules_list(self.modules_conf) #.split()
+#        # FIXME: add support for the 'probe' key
+#
+#        # FIXME: rather than looping twice
+#        # merge modconflist.split() + self.bootupdateinitrd['load-modules'].split() and loop once
+#        # but then 
+#        #  - if "load-modules" in self.bootupdateinitrd:
+#        # NOFIX the if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
+#        # for each module in the list modconflist
+#        print(green(' * ') + '... ', end="")
+#        z = int('0')
+#        for i in modconflist.split():
+#            for j in modsyslist:
+#                k = i +'.ko'
+#                # check for a match
+#                if k == j:
+#                    logging.debug('shipping ' + i)
+#                    print(i, end=" ")
+#                    z = z+1
+#                    if (z % 4 == 0):
+#                        print()
+#                        print(green(' * ') + '... ', end="")
+#                    # if the module is found copy it
+#                    module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
+#                    module_dirname = os.path.dirname(module)
+#                    process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
+#                    process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
+
+        # identify and copy config kernel modules
+        modconfdict = get_config_modules_dict(self.modules_conf)
+
+        # compare host list and config list and ship the ones that both match
+        for k, v in modconfdict.items():
+            print(green(' * ') + '... ' + k + '\t : ', end='')
+            vlist = v.split()
             for j in modsyslist:
-                k = i +'.ko'
-                # check for a match
-                if k == j:
-                    logging.debug('shipping ' + i)
-#                    print(green(' * ') + '... ' + i)
-                    print(i, end=" ")
-                    z = z+1
-#                    print(z)
-                    if (z % 4 == 0):
-                        print()
-                        print(green(' * ') + '... ', end="")
-                    # if the module is found copy it
-                    module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
-                    module_dirname = os.path.dirname(module)
-                    process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
-                    process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
-   
+                j = j.replace('.ko', '') # easier to just remove it and add it later
+                for e in vlist:
+                    if e == j:
+                        print(e , end=' ')
+                        module = os.popen('find /lib/modules/'+self.KV+' -name '+e+'.ko 2>/dev/null | head -n 1').read().strip()
+                        module_dirname = os.path.dirname(module)
+                        process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
+                        process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
+                        break
+            print()
+
         # FUNTOO: for each module in /etc/boot.conf
         if "load-modules" in self.bootupdateinitrd:
             for i in self.bootupdateinitrd['load-modules'].split():
@@ -247,13 +267,11 @@ class append:
                         process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
    
-        print()
         # FIXME: make variable of /lib/modules in case of FAKEROOT export
         process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
     
         # create etc/modules/<group>
         process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
-        modconfdict = get_config_modules_dict(self.modules_conf)
     
         # Genkernel official boot module design
         # for each key value in the module config dictionary

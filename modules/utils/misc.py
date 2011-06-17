@@ -162,33 +162,33 @@ def get_sys_modules_list(KV):
 
     return modlist
 
-def get_config_modules_list(modules_conf):
-    """
-    Get configuration module list
-
-    @arg: dict
-    @return: list
-    """
-    modules_config = modules_conf['MODULES_ATARAID']    \
-            +' '+modules_conf['MODULES_DMRAID']         \
-            +' '+modules_conf['MODULES_EVMS']           \
-            +' '+modules_conf['MODULES_LVM']            \
-            +' '+modules_conf['MODULES_MDADM']          \
-            +' '+modules_conf['MODULES_PATA']           \
-            +' '+modules_conf['MODULES_SATA']           \
-            +' '+modules_conf['MODULES_SCSI']           \
-            +' '+modules_conf['MODULES_WAITSCAN']       \
-            +' '+modules_conf['MODULES_NET']            \
-            +' '+modules_conf['MODULES_ISCSI']          \
-            +' '+modules_conf['MODULES_FIREWIRE']       \
-            +' '+modules_conf['MODULES_PCMCIA']         \
-            +' '+modules_conf['MODULES_USB']            \
-            +' '+modules_conf['MODULES_FS']             \
-            +' '+modules_conf['MODULES_CRYPT']          \
-            +' '+modules_conf['MODULES_MISC']           \
-            +' '+modules_conf['MODULES_VIDEO']  
-
-    return modules_config
+#def get_config_modules_list(modules_conf):
+#    """
+#    Get configuration module list
+#
+#    @arg: dict
+#    @return: list
+#    """
+#    modules_config = modules_conf['MODULES_ATARAID']    \
+#            +' '+modules_conf['MODULES_DMRAID']         \
+#            +' '+modules_conf['MODULES_EVMS']           \
+#            +' '+modules_conf['MODULES_LVM']            \
+#            +' '+modules_conf['MODULES_MDADM']          \
+#            +' '+modules_conf['MODULES_PATA']           \
+#            +' '+modules_conf['MODULES_SATA']           \
+#            +' '+modules_conf['MODULES_SCSI']           \
+#            +' '+modules_conf['MODULES_WAITSCAN']       \
+#            +' '+modules_conf['MODULES_NET']            \
+#            +' '+modules_conf['MODULES_ISCSI']          \
+#            +' '+modules_conf['MODULES_FIREWIRE']       \
+#            +' '+modules_conf['MODULES_PCMCIA']         \
+#            +' '+modules_conf['MODULES_USB']            \
+#            +' '+modules_conf['MODULES_FS']             \
+#            +' '+modules_conf['MODULES_CRYPT']          \
+#            +' '+modules_conf['MODULES_MISC']           \
+#            +' '+modules_conf['MODULES_VIDEO']  
+#
+#    return modules_config
 
 def get_config_modules_dict(master_conf):
     """
