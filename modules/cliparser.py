@@ -402,6 +402,32 @@ def cli_parser():
         if initramfs_conf['defconfig'] == 'True':
             cli['defconfig'] = True
 
+        cli['bin-all'] = False
+        if initramfs_conf['bin-all'] == 'True':
+            cli['bin-busybox']      = True
+            cli['bin-luks']         = True
+            cli['bin-lvm2']         = True
+            cli['bin-screen']       = True
+            cli['bin-disklabel']    = True
+            cli['bin-strace']       = True
+            cli['bin-evms']         = True
+            cli['bin-glibc']        = True
+            cli['bin-libncurses']   = True
+            cli['bin-zlib']         = True
+            cli['bin-dmraid']       = True
+            cli['bin-dropbear']     = True
+
+        cli['source-all'] = False
+        if initramfs_conf['source-all'] == 'True':
+            cli['source-luks'] = True
+            cli['source-lvm2'] = True
+            cli['source-screen'] = True
+            cli['source-disklabel'] = True
+            cli['source-ttyecho'] = True
+            cli['source-strace'] = True
+            cli['source-dmraid'] = True
+            cli['source-dropbear'] = True
+
         cli['bin-luks'] = False
         if initramfs_conf['bin-luks'] == 'True':
             cli['bin-luks'] = True
@@ -560,32 +586,6 @@ def cli_parser():
         cli['debugflag'] = False
         if initramfs_conf['debugflag'] == 'True':
             cli['debugflag']= True
-
-        cli['bin-all'] = False
-        if initramfs_conf['bin-all'] == 'True':
-            cli['bin-busybox'] = True
-            cli['bin-luks'] = True
-            cli['bin-lvm2'] = True
-            cli['bin-screen'] = True
-            cli['bin-disklabel'] = True
-            cli['bin-strace'] = True
-            cli['bin-evms'] = True
-            cli['bin-glibc'] = True
-            cli['bin-libncurses'] = True
-            cli['bin-zlib'] = True
-            cli['bin-dmraid'] = True
-            cli['bin-dropbear'] = True
-
-        cli['source-all'] = False
-        if initramfs_conf['source-all'] == 'True':
-            cli['source-luks'] = True
-            cli['source-lvm2'] = True
-            cli['source-screen'] = True
-            cli['source-disklabel'] = True
-            cli['source-ttyecho'] = True
-            cli['source-strace'] = True
-            cli['source-dmraid'] = True
-            cli['source-dropbear'] = True
 
         # tools
         cli['extract']      = ''
