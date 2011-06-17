@@ -12,6 +12,8 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 TODO: check uuid feature really works
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
+TODO: update man page
+TODO: update README
 
 0.3.2
 =====
