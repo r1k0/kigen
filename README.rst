@@ -178,7 +178,7 @@ If you're not familiar with creating your own overlay, refer to http://www.gento
 
 - Merge KIGen
 
-Optionally set the +doc USE flag.
+Optionally set the +doc USE flag or the +module-rebuild one to allow passing 'kigen k --module-rebuild'.
 ::
   z13 ~ # echo "sys-kernel/kigen doc mdoule-rebuild" >> /etc/portage/package.use
 
@@ -860,67 +860,140 @@ Connect to initramfs and boot remotely
 
 ssh to initramfs (you might have to remove the previous certificate in .ssh/known_hosts).
 ::
-  rik@hogbarn ~ $ ssh 192.168.1.68 -l root
-  root@192.168.1.68's password: 
+  z13 ~ # ssh 192.168.1.70
+  The authenticity of host '192.168.1.70 (192.168.1.70)' can't be established.
+  RSA key fingerprint is 7b:12:41:2a:fc:18:1c:23:81:b5:02:6e:a9:8e:c3:70.
+  Are you sure you want to continue connecting (yes/no)? yes
+  Warning: Permanently added '192.168.1.70' (RSA) to the list of known hosts.
+  root@192.168.1.70's password: 
   
   
-  BusyBox v1.17.2 (2010-09-15 11:14:56 CEST) built-in shell (ash)
+  BusyBox v1.18.4 (2011-06-17 21:10:46 CEST) built-in shell (ash)
   Enter 'help' for a list of built-in commands.
   
   # uname -a
-  Linux (none) 2.6.34-sabayon #19 SMP Thu Sep 9 10:06:15 CEST 2010 i686 GNU/Linux
-  # ls /
-  bin            home           lib64          root           temp
-  dev            init           modules.cache  sbin           usr
-  etc            lib            proc           sys            var
+  Linux (none) 2.6.39-sabayon #3 SMP Wed Jun 15 17:51:49 CEST 2011 i686 GNU/Linux
+  # ls -l /
+  drwxr-xr-x    2 root     root             0 Jun 17 23:07 bin
+  drwxr-xr-x    4 root     root         13380 Jun 17 23:07 dev
+  drwxr-xr-x    7 root     root             0 Jun 17 23:07 etc
+  drwxr-xr-x    2 root     root             0 Jun 17 23:02 home
+  -rwxr-xr-x    1 root     root         18642 Jun 17 23:02 init
+  drwxr-xr-x    6 root     root             0 Jun 17 23:02 lib
+  lrwxrwxrwx    1 root     root             3 Jun 17 23:02 lib64 -> lib
+  -rw-r--r--    1 root     root           214 Jun 17 23:07 modules.cache
+  dr-xr-xr-x   72 root     root             0 Jun 17 23:06 proc
+  drwxr-xr-x    2 root     root             0 Jun 17 23:02 root
+  drwxr-xr-x    2 root     root             0 Jun 17 23:07 sbin
+  drwxr-xr-x   12 root     root             0 Jun 17 23:07 sys
+  drwxr-xr-x    2 root     root             0 Jun 17 23:02 tmp
+  drwxr-xr-x    6 root     root             0 Jun 17 23:02 usr
+  drwxr-xr-x    5 root     root             0 Jun 17 23:02 var
   # ip a
   1: lo: <LOOPBACK> mtu 16436 qdisc noop state DOWN 
       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
   2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
-      link/ether 08:00:27:54:d1:a9 brd ff:ff:ff:ff:ff:ff
-      inet 192.168.1.68/24 brd 192.168.1.255 scope global eth0
-  # netstat 
+      link/ether 08:00:27:50:5e:a3 brd ff:ff:ff:ff:ff:ff
+      inet 192.168.1.70/24 brd 192.168.1.255 scope global eth0
+  # netstat
   Active Internet connections (w/o servers)
   Proto Recv-Q Send-Q Local Address           Foreign Address         State       
-  tcp        0      0 sabayon.lan:22          gritch.lan:44967        ESTABLISHED 
+  tcp        0      0 Unknown-08-00-27-50-5e-a3.lan:22 z13.lan:34046           ESTABLISHED 
   Active UNIX domain sockets (w/o servers)
   Proto RefCnt Flags       Type       State         I-Node Path
-  # 
+  # ps
+    PID USER       VSZ STAT COMMAND
+      1 root      1596 S    /bin/sh /init dokeymap dolvm docrypt dokeymap dodrop
+      2 root         0 SW   [kthreadd]
+      3 root         0 SW   [ksoftirqd/0]
+      4 root         0 SW   [kworker/0:0]
+      5 root         0 SW   [kworker/u:0]
+      6 root         0 SW   [migration/0]
+      7 root         0 SW<  [cpuset]
+      8 root         0 SW<  [khelper]
+      9 root         0 SW   [kworker/u:1]
+     31 root         0 SW<  [netns]
+    493 root         0 SW   [sync_supers]
+    495 root         0 SW   [bdi-default]
+    496 root         0 SW<  [kintegrityd]
+    498 root         0 SW<  [kblockd]
+    570 root         0 SW<  [ata_sff]
+    582 root         0 SW   [khubd]
+    589 root         0 SW<  [md]
+    691 root         0 SW   [kworker/0:1]
+    711 root         0 SW   [kswapd0]
+    712 root         0 SWN  [ksmd]
+    781 root         0 SWN  [khugepaged]
+    782 root         0 SW   [fsnotify_mark]
+    793 root         0 SW   [ecryptfs-kthrea]
+    814 root         0 SW<  [crypto]
+    826 root         0 SW<  [kthrotld]
+   1425 root         0 SW   [cciss_scan]
+   1450 root         0 SW<  [iscsi_eh]
+   1457 root         0 SW<  [fc_exch_workque]
+   1458 root         0 SW<  [fc_rport_eq]
+   1461 root         0 SW<  [fnic_event_wq]
+   1545 root         0 SW   [scsi_eh_2]
+   1548 root         0 SW   [kworker/u:2]
+   1563 root         0 SW   [scsi_eh_3]
+   1566 root         0 SW   [scsi_eh_4]
+   1569 root         0 SW   [kworker/u:3]
+   1570 root         0 SW   [kworker/u:4]
+   1636 root         0 SW<  [cnic_wq]
+   1640 root         0 SW<  [exec-osm]
+   1647 root         0 SW<  [block-osm]
+   1687 root         0 RW   [kworker/0:2]
+   1692 root         0 SW<  [kpsmoused]
+   1707 root         0 SW<  [edac-poller]
+   1753 root         0 SW   [kworker/u:5]
+   4190 root         0 SW   [jfsIO]
+   4191 root         0 SW   [jfsCommit]
+   4192 root         0 SW   [jfsSync]
+   4273 root         0 SW<  [rpciod]
+   4375 root         0 SW<  [xfs_mru_cache]
+   4376 root         0 SW<  [xfslogd]
+   4377 root         0 SW<  [xfsdatad]
+   4378 root         0 SW<  [xfsconvertd]
+   5066 root      1596 S    udhcpc
+   5067 root      1224 S    dropbear -E
+   5073 root      1460 S <  cryptsetup luksOpen /dev/sda2 root
+   5074 root      4036 S    dropbear -E
+   5075 root      1600 S    -sh
+   5080 root      4264 R    ps
   # ls
   boot-luks-lvm.sh  boot-luks.sh
-  # cat boot-luks-lvm.sh 
+  # cat boot-luks-lvm.sh
   #!/bin/sh
-  if [ "$1" = "-h" ] || [ "$1" = "" ]
+  if  [ "$1" = "-h" ]     || \
+      [ "$1" = "--help" ] || \
+      [ "$1" = "" ]       || \
+      [ "$2" = "" ]
   then
-      echo "$0 <root device>"
+      echo "$0 <root device> <lvm root device>"
+      echo "i.e. # ./boot-luks-lvm.sh /dev/sda2 /dev/mapper/vg_sabayon-lv_root"
       exit
   fi
+  pkill cryptsetup
+  sleep 2
   /sbin/cryptsetup luksOpen $1 root
-  vgscan
-  vgchange -a y
-  mkdir /newroot
-  /sbin/ttyecho -n /dev/console exit
-  sleep 1
-  /sbin/ttyecho -n /dev/console exit
-  sleep 1
-  /sbin/ttyecho -n /dev/console q
-  sleep 1
-  exit
-  # ./boot-luks-lvm.sh 
-  ./boot-luks-lvm.sh <root device>
-  # ./boot-luks-lvm.sh /dev/sda2
+  sleep 2
+  /bin/lvm vgscan
+  /bin/lvm vgchange -a y
+  /sbin/ttyecho -n /dev/console $2
+  # ./boot-luks-lvm.sh
+  ./boot-luks-lvm.sh <root device> <lvm root device>
+  i.e. # ./boot-luks-lvm.sh /dev/sda2 /dev/mapper/vg_sabayon-lv_root
+  # ./boot-luks-lvm.sh /dev/sda2 /dev/mapper/vg_sabayon-lv_root
   Enter passphrase for /dev/sda2: 
-  File descriptor 5 (pipe:[2521]) leaked on vgscan invocation. Parent PID 3984: /bin/sh
     Reading all physical volumes.  This may take a while...
     Found volume group "vg_sabayon" using metadata type lvm2
-  File descriptor 5 (pipe:[2521]) leaked on vgchange invocation. Parent PID 3984: /bin/sh
     2 logical volume(s) in volume group "vg_sabayon" now active
-  # Connection to 192.168.1.68 closed by remote host.
-  Connection to 192.168.1.68 closed.
-  rik@hogbarn ~ $ 
+  # Connection to 192.168.1.70 closed by remote host.
+  Connection to 192.168.1.70 closed.
+  z13 ~ # 
 
 The initramfs is now booting from the content of the LUKS container remotely! Yiha
-Note the autodeconnection done by the host thanks to /etc/conf.d/local.
+Note the autodeconnection done by the host.
 
 :Authors: 
     erick 'r1k0' michau (python engine),
