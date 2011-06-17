@@ -330,8 +330,8 @@ def cli_parser():
                                     "credits",      \
                                     "nosaveconfig", \
                                     "hostbin",      \
-                                    "glibc",        \
-#                                    "bin-glibc",    \
+#                                    "glibc",        \
+                                    "bin-glibc",    \
                                     "libncurses",   \
                                     "bin-libncurses",\
 #                                    "zlib",         \

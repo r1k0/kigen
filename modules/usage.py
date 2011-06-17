@@ -51,9 +51,9 @@ def print_examples():
     print(' '+os.path.basename(sys.argv[0])+' --clean --menuconfig k')
     print(' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile')
     print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon')
-    print(' '+os.path.basename(sys.argv[0])+' --disklabel --lvm2 --splash=sabayon --luks -d -n initramfs')
-    print(' '+os.path.basename(sys.argv[0])+' i --luks --lvm2 --disklabel --splash=sabayon --glibc --hostbin')
-    print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon --disklabel --luks --lvm2 --dropbear --debugflag --rootpasswd=mypasswd --keymaps --ttyecho --strace --screen --glibc --zlib --libncurses --defconfig --nocache')
+    print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --bin-luks -d -n initramfs')
+    print(' '+os.path.basename(sys.argv[0])+' i --bin-luks --bin-lvm2 --bin-disklabel --splash=sabayon --bin-glibc --dynlibs')
+    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --bin-glibc --bin-zlib --bin-libncurses --defconfig --nocache')
     print(' '+os.path.basename(sys.argv[0])+' --extract=/file t --to=/dir')
     print(' '+os.path.basename(sys.argv[0])+' tool --compress=/dir --into=/file')
 
