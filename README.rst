@@ -20,8 +20,8 @@ Genkernel being a bash script, interfacing it with boot-update is 'tricky' if no
 KIGen tries to provide a flexible approach to shipping binaries in an initramfs. In theory,
 one can ship any binary, statically or dynamically linked. If it's linked the appropriated 
 libraries need to be shipped as well. 
-KIGen tries to provide a host and source binary for each feature in case one breaks. This wway
-one can use both Portage binaries or the sources from KIGen. It does not matter as long as it works.
+KIGen tries to provide a host and source binary for each feature in case one breaks. This way
+one can use Portage binaries or the sources from KIGen. It does not matter as long as it works.
 KIGen attempts to detect and ship dynamically linked binaries. It does not matter any more as long as it works ;P
 
 KIGen provides a more visible configuration file than genkernel in terms of kernel modules,
@@ -107,7 +107,7 @@ Portage systems kernel boot options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 KIGen's linuxrc is the same as Genkernel's one except a couple of lines (bug using splash and luks for silent splash).
-Some GRUB examples of kernel command line boot options.
+Some GRUB examples of kernel command line boot options (haven't used LiLo for years).
 ::
  - LUKS
 
@@ -155,9 +155,9 @@ view.
 As long as we have to make bash calls, we'll have to have to control the return value
 of that call. Hence the return 0 logic you can find here and there in KIGen.
 
-KIGen is on purpose using simple syntax: it's a relaxing project, a drink a smoke some music
+**KIGen is on purpose using simple syntax: it's a relaxing project, a drink a smoke some music
 and let's geek around, that's the spirit.
-It's not rocket science but I do enjoy a lot writing code, it keeps the mind busy ;P
+It's not rocket science but I do enjoy a lot writing code.** ;P
 
 ==============================
 Howto build a kernel/initramfs 
