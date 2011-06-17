@@ -233,6 +233,15 @@ if target == 'kernel' or target == 'k':
             else:
                 print()
 
+        # run module-rebuild for the sake of lazyness and/or ignorance
+        if cli['module-rebuild'] is True:
+            if os.path.isfile('/usr/sbin/module-rebuild'):
+                os.system('module-rebuild populate')
+                os.system('module-rebuild rebuild')
+            else:
+                print(red('!!!') + 'cannot find /usr/sbin/module-rebuild')
+                sys.exit(2)
+
 # run the initramfs target
 if target == 'initramfs' or target == 'i':
 

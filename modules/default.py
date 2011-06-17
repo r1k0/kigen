@@ -43,19 +43,20 @@ master_conf = {
 
 # default kernel values
 kernel_conf = {
-         'dotconfig'   : '',    \
-         'initramfs'   : '',    \
-         'fixdotconfig': '',    \
-         'clean'       : '',    \
-         'mrproper'    : '',    \
-         'menuconfig'  : '',    \
-         'fakeroot'    : '',    \
-         'nooldconfig' : '',    \
-         'nomodinstall': '',    \
-         'nomodules'   : '',    \
-         'nosaveconfig': '',    \
-         'noboot'      : '',    \
-         'rename'      : ''}
+         'dotconfig'   : '',        \
+         'initramfs'   : '',        \
+         'fixdotconfig': '',        \
+         'clean'       : 'False',   \
+         'mrproper'    : 'False',   \
+         'menuconfig'  : 'False',   \
+         'fakeroot'    : '',        \
+         'nooldconfig' : 'False',   \
+         'nomodinstall': 'False',   \
+         'nomodules'   : 'False',   \
+         'nosaveconfig': 'False',   \
+         'noboot'      : 'False',   \
+         'rename'      : '',        \
+         'module-rebuild': 'False'}
 
 # default modules values
 modules_conf = {
@@ -131,7 +132,7 @@ initramfs_conf = {
         'source-all'    : 'False',  \
         'nomodules'     : 'False',  \
         'bin-busybox'   : 'False',  \
-        'dynlibs'  : 'False'}
+        'dynlibs'       : 'False'}
 
 # default version values
 version_conf = {

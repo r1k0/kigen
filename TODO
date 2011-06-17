@@ -63,3 +63,4 @@ TODO: support xen-sources -> doublehp this one is for you ;) patience though
     start dev with gentoo-sources-3.0 or fall back to xen-sources
     http://en.gentoo-wiki.com/wiki/Xen
     read dracut code there lies the solution to xen and other stuff
+TODO: support ppc ppc64

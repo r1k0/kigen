@@ -116,7 +116,8 @@ def cli_parser():
                                     "nosaveconfig",             \
                                     "hostbin",                  \
                                     "fixdotconfig=",             \
-                                    "getdotconfig=",            \
+#                                    "getdotconfig=",            \
+                                    "module-rebuild",           \
                                     "debug"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
@@ -207,7 +208,11 @@ def cli_parser():
         if kernel_conf['fixdotconfig'] != '':
             cli['fixdotconfig'] = kernel_conf['fixdotconfig']
             
-        cli['getdotconfig'] = ''
+#        cli['getdotconfig'] = ''
+
+        cli['module-rebuild'] = False
+        if kernel_conf['module-rebuild'] == 'True':
+            cli['module-rebuild'] = True
 
         # target options
         for o, a in opts:
@@ -263,8 +268,10 @@ def cli_parser():
                 cli['clean'] = True
             elif o in ("--fixdotconfig"):
                 cli['fixdotconfig'] = a
-            elif o in ("--getdotconfig"):
-                cli['getdotconfig'] = a
+#            elif o in ("--getdotconfig"):
+#                cli['getdotconfig'] = a
+            elif o in ("--module-rebuild"):
+                cli['module-rebuild'] = True
             else:
                 assert False, "uncaught option"
 

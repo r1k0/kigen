@@ -37,7 +37,7 @@ def print_usage():
     print(stdout.turquoise('Targets')+':')
     print('  kernel, k                  Build kernel/modules')
     print('  initramfs, i               Build initramfs')
-    print('  tool, t                    Use handy tools')
+    print('  tool, t                    Handy tools')
     print()
     print(stdout.turquoise('Parameters')+':')
     print(' '+os.path.basename(sys.argv[0])+' kernel'+'                --help, -h')
@@ -97,6 +97,10 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print('\t\tInteractive kernel options menu')
 
     print('  --fakeroot=/dir           "'+cli['fakeroot']+'"\t\t\tAppend modules to /dir/lib/modules')
+
+    print('  --module-rebuild          ', end='')
+    print(kernel_conf['module-rebuild'], end='')
+    print('\t\tCall sys-kernel/module-rebuild last')
 
     print('  --nooldconfig             ', end='')
     print(kernel_conf['nooldconfig'], end='')

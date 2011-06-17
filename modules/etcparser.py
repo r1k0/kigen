@@ -9,7 +9,9 @@ from stdout import *
 # parse /etc/kigen/master.conf
 def etc_parser_master():
 
-    master_conf = {}
+# do not declare modules_conf initramfs_conf version_conf url_conf
+# we already import their defaults from default.py
+#    master_conf = {}
 
     etc = { 'kigen':            '/etc/kigen',                           \
             'master_conf':      '/etc/kigen/master.conf'}
@@ -30,7 +32,9 @@ def etc_parser_master():
 # parse /etc/kigen/kernel/kernel.conf
 def etc_parser_kernel():
 
-    kernel_conf = {}
+# do not declare modules_conf initramfs_conf version_conf url_conf
+# we already import their defaults from default.py
+#    kernel_conf = {}
 
     etc = { 'kigen':            '/etc/kigen',                           \
             'kernel_conf':      '/etc/kigen/kernel/default.conf'}
@@ -47,8 +51,8 @@ def etc_parser_kernel():
 # parse /etc/kigen/initramfs/{modules.conf,initramfs.conf,version.conf}
 def etc_parser_initramfs():
 
-    # do not declare modules_conf initramfs_conf version_conf url_conf
-    # we already import their defaults from default.py
+# do not declare modules_conf initramfs_conf version_conf url_conf
+# we already import their defaults from default.py
 #    modules_conf    = {}
 #    initramfs_conf  = {}
 #    version_conf    = {}
