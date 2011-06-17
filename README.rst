@@ -188,8 +188,8 @@ emerge it.
   
   These are the packages that would be merged, in order:
   
-  Calculating dependencies                   ... done!
-  [ebuild  N    ] sys-kernel/kigen-9999  USE="doc" 0 kB [1]
+  Calculating dependencies           ... done!
+  [ebuild  N     ] sys-kernel/kigen-9999  USE="doc" 0 kB [1]
   
   Total: 1 package (1 new), Size of downloads: 0 kB
   Portage tree and overlays:
@@ -207,20 +207,24 @@ emerge it.
    * FEATURES:   preserve-libs sandbox
   >>> Unpacking source...
    * GIT NEW clone -->
-   *    repository:               git://github.com/r1k0/kigen.git
+   *    repository:       git://github.com/r1k0/kigen.git
   Cloning into bare repository /usr/portage/distfiles/git-src/kigen...
-  remote: Counting objects: 3456, done.
-  remote: Compressing objects: 100% (1137/1137), done.
-  remote: Total 3456 (delta 2420), reused 3264 (delta 2293)
-  Receiving objects: 100% (3456/3456), 666.88 KiB | 79 KiB/s, done.
-  Resolving deltas: 100% (2420/2420), done.
-   *    at the commit:            47005719708b5a2136128e186bc922d8def73ed5
-   *    branch:                   master
-   *    storage directory:        "/usr/portage/distfiles/git-src/kigen"
+  remote: Counting objects: 4635, done.
+  remote: Compressing objects: 100% (1486/1486), done.
+  remote: Total 4635 (delta 3258), reused 4487 (delta 3112)
+  Receiving objects: 100% (4635/4635), 875.07 KiB | 373 KiB/s, done.
+  Resolving deltas: 100% (3258/3258), done.
+   *    at the commit:        077846f4ffceb03f755029649c57bbf4ceb08460
+   *    branch:           master
+   *    storage directory:    "/usr/portage/distfiles/git-src/kigen"
   Cloning into /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999...
   done.
   >>> Unpacked to /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999
   >>> Source unpacked in /var/tmp/portage/sys-kernel/kigen-9999/work
+  >>> Preparing source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
+  >>> Source prepared.
+  >>> Configuring source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
+  >>> Source configured.
   >>> Compiling source in /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999 ...
   >>> Source compiled.
   >>> Test phase [not enabled]: sys-kernel/kigen-9999
@@ -231,61 +235,76 @@ emerge it.
   ecompressdir: bzip2 -9 /usr/share/man
   
   >>> Installing (1 of 1) sys-kernel/kigen-9999
-   * checking 63 files for package collisions
+   * checking 77 files for package collisions
+  >>> Merging sys-kernel/kigen-9999 to /
   --- /usr/
   --- /usr/lib/
-  --- /usr/lib/python3.1/
-  --- /usr/lib/python3.1/site-packages/
-  --- /usr/lib/python3.1/site-packages/kigen/
-  --- /usr/lib/python3.1/site-packages/kigen/modules/
-  --- /usr/lib/python3.1/site-packages/kigen/modules/initramfs/
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/aufs.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/device_mapper.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/fuse.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/gnupg.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/iscsi.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/multipath.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/splash.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/dev/unionfs_fuse.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/busybox.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/dmraid.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/dropbear.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/e2fsprogs.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/luks.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/lvm2.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/screen.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/sources/strace.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/append.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/bootupdate.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/compress.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/extract.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/initramfs/initramfs.py
-  --- /usr/lib/python3.1/site-packages/kigen/modules/kernel/
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/kernel/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/kernel/extract.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/kernel/kernel.py
-  --- /usr/lib/python3.1/site-packages/kigen/modules/utils/
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/fstab.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/isstatic.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/listdynamiclibs.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/misc.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/utils/process.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/__init__.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/cliparser.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/credits.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/default.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/etcparser.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/nocolor.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/stdout.py
-  >>> /usr/lib/python3.1/site-packages/kigen/modules/usage.py
+  --- /usr/lib/python3.2/
+  --- /usr/lib/python3.2/site-packages/
+  --- /usr/lib/python3.2/site-packages/kigen/
+  --- /usr/lib/python3.2/site-packages/kigen/modules/
+  --- /usr/lib/python3.2/site-packages/kigen/modules/initramfs/
+  --- /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/busybox.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/disklabel.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/dmraid.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/dropbear.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/evms.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/glibc.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/libncurses.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/luks.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/lvm2.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/screen.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/strace.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bin/zlib.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/aufs.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/device_mapper.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/fuse.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/gnupg.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/iscsi.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/multipath.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/splash.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/dev/unionfs_fuse.py
+  --- /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/busybox.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/dmraid.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/dropbear.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/e2fsprogs.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/luks.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/lvm2.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/screen.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/sources/strace.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/append.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/bootupdate.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/compress.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/extract.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/initramfs/initramfs.py
+  --- /usr/lib/python3.2/site-packages/kigen/modules/kernel/
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/kernel/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/kernel/extract.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/kernel/kernel.py
+  --- /usr/lib/python3.2/site-packages/kigen/modules/utils/
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/fstab.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/isstatic.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/listdynamiclibs.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/misc.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/utils/process.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/__init__.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/cliparser.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/credits.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/default.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/etcparser.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/nocolor.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/stdout.py
+  >>> /usr/lib/python3.2/site-packages/kigen/modules/usage.py
   --- /usr/share/
-  >>> /usr/share/kigen/
+  --- /usr/share/kigen/
   >>> /usr/share/kigen/arch/
   >>> /usr/share/kigen/arch/x86/
   >>> /usr/share/kigen/arch/x86/busybox.config
@@ -315,10 +334,11 @@ emerge it.
   --- /usr/sbin/
   >>> /usr/sbin/kigen
   --- /etc/
-  --- /etc/kigen/
-  --- /etc/kigen/initramfs/
-  >>> /etc/kigen/initramfs/._cfg0000_default.conf
+  >>> /etc/kigen/
+  >>> /etc/kigen/initramfs/
+  >>> /etc/kigen/initramfs/default.conf
   >>> /etc/kigen/initramfs/modules.conf
+  >>> /etc/kigen/initramfs/url.conf
   >>> /etc/kigen/initramfs/version.conf
   >>> /etc/kigen/kernel/
   >>> /etc/kigen/kernel/default.conf
@@ -329,6 +349,7 @@ emerge it.
    * Tell me what works and breaks for you by dropping a comment at
    * http://www.openchill.org/?cat=11
    * 
+  >>> sys-kernel/kigen-9999 merged.
   
   >>> Recording sys-kernel/kigen in "world" favorites file...
   >>> Auto-cleaning packages...
@@ -336,11 +357,7 @@ emerge it.
   >>> No outdated packages were found on your system.
   
    * GNU info directory index is up-to-date.
-  
-   * IMPORTANT: 1 config files in '/etc' need updating.
-   * See the CONFIGURATION FILES section of the emerge
-   * man page to learn how to update config files.
-  z13 ~ # etc-update 
+  z13 ~ # 
 
 - Care for **/etc/kigen/**
 
@@ -373,10 +390,12 @@ Main
   Targets:
     kernel, k                  Build kernel/modules
     initramfs, i               Build initramfs
+    tool, t                    Use handy tools
   
   Parameters:
    kigen kernel                --help, -h
    kigen initramfs             --help, -h
+   kigen tool                  --help, -h
   pong ~ # 
 
 - Use of **kigen kernel** to generate a kernel/system.map
@@ -404,17 +423,14 @@ Help menu.
     --rename=/file             ""                 Custom kernel file name
     --logfile=/file            "/var/log/kigen.log" 
     --debug, -d                False              Debug verbose
-  
-  Handy tools:
-    --getdotconfig=/vmlinux    ""                 Extract .config from compiled binary kernel (if IKCONFIG has been set)
   z13 ~ # 
 
 Default behavior.
 ::
   z13 ~ # kigen k
-   * Gentoo Base System release 2.0.1 on x86_64
-   * Kernel sources Makefile version 2.6.37-gentoo aka Flesh-EatingBatswithFangs
-   * kernel.copy_config /usr/src/linux/.config -> /usr/src/linux/.config.2011-01-08-15-55-39
+   * Gentoo Base System release 2.0.2 on x86_64
+   * Kernel sources Makefile version 2.6.38-gentoo-r5 aka Flesh-EatingBatswithFangs
+   * kernel.copy_config /usr/src/linux/.config -> /usr/src/linux/.config-2011-06-17-14-39-59
    * kernel.oldconfig 
   scripts/kconfig/conf --oldconfig Kconfig
   #
@@ -423,10 +439,10 @@ Default behavior.
    * kernel.prepare 
    * kernel.bzImage 
    * kernel.modules 
-   * kernel.modules_install //lib/modules/
-   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.37-gentoo
-   * produced /boot/System.map-kigen-x86_64-2.6.37-gentoo
-   * produced /boot/kernel-kigen-x86_64-2.6.37-gentoo
+   * kernel.modules_install /lib/modules
+   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.38-gentoo-r5
+   * success 2.9Mb /boot/System.map-kigen-x86_64-2.6.38-gentoo-r5
+   * success 5.4Mb /boot/kernel-kigen-x86_64-2.6.38-gentoo-r5
   z13 ~ # 
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
@@ -436,54 +452,55 @@ It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 Help menu.
 ::
   z13 ~ # kigen i -h
-  Parameter:                   Config value:      Description:
-  
-  Linuxrc:
-    --linuxrc=/linuxrc[,/file] ""                 Include custom linuxrc (files copied over to etc)
-  
-  Busybox:
-    --dotconfig=/file          ""                 Custom busybox config file
-    --defconfig                False              Set .config to largest generic options
-    --oldconfig                False              Ask for new busybox options if any
-    --menuconfig               False              Interactive busybox options menu
+  Parameter:          Config value:   Description:
   
   Features:
-    --splash=<theme>           ""                 Include splash support (splashutils must be merged)
-     --sres=YxZ[,YxZ]          ""                  Splash resolution, all if not set
-    --disklabel                False              Include support for UUID/LABEL (host binary or sources)
-    --luks                     True               Include LUKS support (host binary or sources)
-    --lvm2                     False              Include LVM2 support (host binary or sources)
-    --evms                     False              Include EVMS support (host binary only)
-    --dmraid                   False              Include DMRAID support (host binary or sources)
-    --dropbear                 False              Include dropbear tools and daemon (host binary or sources)
-     --debugflag               False               Compile dropbear with #define DEBUG_TRACE in debug.h
-    --rootpasswd=<passwd>      ""                 Create and set root password (required for dropbear)
-    --keymaps                  False              Include all keymaps
-    --ttyecho                  False              Include the handy ttyecho.c tool
-    --strace                   False              Include the strace binary tool (host binary or sources)
-    --screen                   False              Include the screen binary tool (host binary or sources)
-    --plugin=/dir[,/dir]       ""                 Include list of user generated custom roots
+  + from host binaries
+  | --bin-busybox             False       Include busybox support from host
+  | --bin-luks                Flase       Include LUKS support from host
+  | --bin-lvm2                False       Include LVM2 support from host
+  | --bin-dropbear            False       Include dropbear support from host
+  | --bin-screen              False       Include the screen binary tool from host
+  | --bin-disklabel           False       Include support for UUID/LABEL from host
+  | --bin-strace              False       Include the strace binary tool from host
+  | --bin-evms                False       Include the evms binary tool from host
+  | --bin-glibc               False       Include host GNU C libraries (required for dns,dropbear)
+  | --bin-libncurses          False       Include host libncurses (required for dropbear)
+  | --bin-zlib                False       Include host zlib (required for dropbear)
+  | --bin-dmraid              False       Include DMRAID support from host
+  | --bin-all                 False       Include all possible features from host
+  + from source code
+  | --source-luks             False       Include LUKS support from sources
+  | --source-lvm2             False       Include LVM2 support from sources
+  | --source-dropbear         False       Include dropbear support from sources
+     --debugflag              False        Compile dropbear with #define DEBUG_TRACE in debug.h
+  | --source-screen           False       Include the screen binary tool from sources
+  | --source-disklabel        False       Include support for UUID/LABEL from sources
+  | --source-ttyecho          False       Compile and include the handy ttyecho.c tool
+  | --source-strace           False       Compile and include the strace binary tool from sources
+  | --source-dmraid           False       Include DMRAID support from sources
+  | --source-all              False       Include all possible features from sources
   
-  Libraries: (host only)
-    --glibc                    False              Include host GNU C libraries (required for dns,dropbear)
-    --libncurses               False              Include host libncurses (required for dropbear)
-    --zlib                     False              Include host zlib (required for dropbear)
+    --dynlibs                 False       Include detected libraries from dynamically linked binaries
+    --splash=<theme>          ""          Include splash support (splashutils must be merged)
+     --sres=YxZ[,YxZ]         ""           Splash resolution, all if not set
+    --rootpasswd=<passwd>     ""          Create and set root password (required for dropbear)
+    --keymaps=xx[,xx]|all     "all"           Include all keymaps
+    --plugin=/dir[,/dir]      ""          Include list of user generated custom roots
+  
+  Busybox:
+    --dotconfig=/file         ""          Custom busybox config file
+    --defconfig               False       Set .config to largest generic options
+    --oldconfig               False       Ask for new busybox options if any
+    --menuconfig              False       Interactive busybox options menu
   
   Misc:
-    --nocache                  False              Delete previous cached data on startup
-    --hostbin                  False              Use host binaries (fall back to sources if dynamic linkage detected)
-    --noboot                   False              Do not copy initramfs to /boot
-    --rename=/file             ""                 Custom initramfs file name
-    --logfile=/file            "/var/log/kigen.log" 
-    --debug, -d                False              Debug verbose
-  
-  Handy tools:
-    --extract=/file            ""                 Extract initramfs file
-     --to=/dir                 "/var/tmp/kigen/extracted-initramfs"
-                                                   Custom extracting directory
-    --compress=/dir            ""                 Compress directory into initramfs
-     --into=/file              "/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz"
-                                                   Custom initramfs file
+    --nocache                 False       Delete previous cached data on startup
+    --nomodules               False       Do not install kernel modules (all is kernel builtin)
+    --noboot                  False       Do not copy initramfs to /boot
+    --rename=/file            ""          Custom initramfs file name
+    --logfile=/file           "/var/log/kigen.log"
+    --debug, -d               False       Debug verbose
   z13 ~ # 
 
 Default behavior.

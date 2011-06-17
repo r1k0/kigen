@@ -2,7 +2,7 @@ import sys
 import os
 from default import *
 import utils.misc
-import stdout
+from stdout import *
 
 # WARN don't import logging here as it's not already declared in kigen
 
