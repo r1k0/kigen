@@ -171,16 +171,16 @@ Portage (Gentoo/Sabayon/Funtoo)
 Download an ebuild of your choice at http://www.github.com/r1k0/kigen/downloads.
 If you're not familiar with creating your own overlay, refer to http://www.gentoo.org/proj/en/overlays/userguide.xml.
 ::
-  pong ~ # mkdir -p /usr/local/portage/sys-kernel/kigen/
-  pong ~ # cd /usr/local/portage/sys-kernel/kigen/
-  pong ~ # wget http://github.com/downloads/r1k0/kigen/kigen-9999.ebuild
-  pong ~ # ebuild kigen-9999.ebuild digest
+  z13 ~ # mkdir -p /usr/local/portage/sys-kernel/kigen/
+  z13 ~ # cd /usr/local/portage/sys-kernel/kigen/
+  z13 ~ # wget http://github.com/downloads/r1k0/kigen/kigen-9999.ebuild
+  z13 ~ # ebuild kigen-9999.ebuild digest
 
 - Merge KIGen
 
 Optionally set the +doc USE flag.
 ::
-  pong ~ # echo "sys-kernel/kigen doc" >> /etc/portage/package.use
+  z13 ~ # echo "sys-kernel/kigen doc mdoule-rebuild" >> /etc/portage/package.use
 
 emerge it.
 ::
@@ -189,9 +189,10 @@ emerge it.
   These are the packages that would be merged, in order:
   
   Calculating dependencies           ... done!
-  [ebuild  N     ] sys-kernel/kigen-9999  USE="doc" 0 kB [1]
+  [ebuild  N     ] sys-kernel/module-rebuild-0.7  0 kB [0]
+  [ebuild  N     ] sys-kernel/kigen-9999  USE="doc module-rebuild" 0 kB [1]
   
-  Total: 1 package (1 new), Size of downloads: 0 kB
+  Total: 2 packages (2 new), Size of downloads: 0 kB
   Portage tree and overlays:
    [0] /usr/portage
    [1] /usr/local/portage
@@ -200,21 +201,41 @@ emerge it.
   
   >>> Verifying ebuild manifests
   
-  >>> Emerging (1 of 1) sys-kernel/kigen-9999 from r1k0
-   * Package:    sys-kernel/kigen-9999
-   * Repository: r1k0
-   * USE:        amd64 doc elibc_glibc kernel_linux multilib userland_GNU
+  >>> Starting parallel fetch
+  
+  >>> Emerging (1 of 2) sys-kernel/module-rebuild-0.7
+   * Package:    sys-kernel/module-rebuild-0.7
+   * Repository: gentoo
+   * Maintainer: kernel-misc@gentoo.org
+   * USE:        amd64 elibc_glibc kernel_linux multilib userland_GNU
    * FEATURES:   preserve-libs sandbox
   >>> Unpacking source...
-   * GIT NEW clone -->
+  >>> Source unpacked in /var/tmp/portage/sys-kernel/module-rebuild-0.7/work
+  >>> Compiling source in /var/tmp/portage/sys-kernel/module-rebuild-0.7/work ...
+  >>> Source compiled.
+  >>> Test phase [not enabled]: sys-kernel/module-rebuild-0.7
+  
+  >>> Install module-rebuild-0.7 into /var/tmp/portage/sys-kernel/module-rebuild-0.7/image/ category sys-kernel
+  >>> Completed installing module-rebuild-0.7 into /var/tmp/portage/sys-kernel/module-rebuild-0.7/image/
+  
+  
+  >>> Installing (1 of 2) sys-kernel/module-rebuild-0.7
+   * checking 1 files for package collisions
+  >>> Merging sys-kernel/module-rebuild-0.7 to /
+  --- /usr/
+  --- /usr/sbin/
+  >>> /usr/sbin/module-rebuild
+  >>> sys-kernel/module-rebuild-0.7 merged.
+  
+  >>> Emerging (2 of 2) sys-kernel/kigen-9999 from r1k0
+   * Package:    sys-kernel/kigen-9999
+   * Repository: r1k0
+   * USE:        amd64 doc elibc_glibc kernel_linux module-rebuild multilib userland_GNU
+   * FEATURES:   preserve-libs sandbox
+  >>> Unpacking source...
+   * GIT update -->
    *    repository:       git://github.com/r1k0/kigen.git
-  Cloning into bare repository /usr/portage/distfiles/git-src/kigen...
-  remote: Counting objects: 4635, done.
-  remote: Compressing objects: 100% (1486/1486), done.
-  remote: Total 4635 (delta 3258), reused 4487 (delta 3112)
-  Receiving objects: 100% (4635/4635), 875.07 KiB | 373 KiB/s, done.
-  Resolving deltas: 100% (3258/3258), done.
-   *    at the commit:        077846f4ffceb03f755029649c57bbf4ceb08460
+   *    at the commit:        61e647ed54180ef7cb49f3178e3bf9b33e94ec55
    *    branch:           master
    *    storage directory:    "/usr/portage/distfiles/git-src/kigen"
   Cloning into /var/tmp/portage/sys-kernel/kigen-9999/work/kigen-9999...
@@ -234,7 +255,7 @@ emerge it.
   
   ecompressdir: bzip2 -9 /usr/share/man
   
-  >>> Installing (1 of 1) sys-kernel/kigen-9999
+  >>> Installing (2 of 2) sys-kernel/kigen-9999
    * checking 77 files for package collisions
   >>> Merging sys-kernel/kigen-9999 to /
   --- /usr/
@@ -455,6 +476,17 @@ Help menu.
   Parameter:          Config value:   Description:
   
   Features:
+  + from source code
+  | --source-luks             False       Include LUKS support from sources
+  | --source-lvm2             False       Include LVM2 support from sources
+  | --source-dropbear         False       Include dropbear support from sources
+  |  --debugflag              False        Compile dropbear with #define DEBUG_TRACE in debug.h
+  | --source-screen           False       Include the screen binary tool from sources
+  | --source-disklabel        False       Include support for UUID/LABEL from sources
+  | --source-ttyecho          False       Compile and include the handy ttyecho.c tool
+  | --source-strace           False       Compile and include the strace binary tool from sources
+  | --source-dmraid           False       Include DMRAID support from sources
+  | --source-all              False       Include all possible features from sources
   + from host binaries
   | --bin-busybox             False       Include busybox support from host
   | --bin-luks                Flase       Include LUKS support from host
@@ -469,17 +501,6 @@ Help menu.
   | --bin-zlib                False       Include host zlib (required for dropbear)
   | --bin-dmraid              False       Include DMRAID support from host
   | --bin-all                 False       Include all possible features from host
-  + from source code
-  | --source-luks             False       Include LUKS support from sources
-  | --source-lvm2             False       Include LVM2 support from sources
-  | --source-dropbear         False       Include dropbear support from sources
-     --debugflag              False        Compile dropbear with #define DEBUG_TRACE in debug.h
-  | --source-screen           False       Include the screen binary tool from sources
-  | --source-disklabel        False       Include support for UUID/LABEL from sources
-  | --source-ttyecho          False       Compile and include the handy ttyecho.c tool
-  | --source-strace           False       Compile and include the strace binary tool from sources
-  | --source-dmraid           False       Include DMRAID support from sources
-  | --source-all              False       Include all possible features from sources
   
     --dynlibs                 False       Include detected libraries from dynamically linked binaries
     --splash=<theme>          ""          Include splash support (splashutils must be merged)
@@ -505,105 +526,30 @@ Help menu.
 
 Default behavior.
 ::
-  z13 ~ # kigen i
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
+  z13 ~ # kigen i 
+   * Gentoo Base System release 2.0.2 on x86_64
+   * initramfs.append.base
+   * ... Gentoo linuxrc 3.4.15 patched
+   * initramfs.append.modules 2.6.38-gentoo-r5
+   * ... MODULES_SATA  
+   * ... MODULES_DMRAID    
+   * ... MODULES_MDADM     
+   * ... MODULES_VIDEO     intel-agp drm drm_kms_helper i915 i2c-algo-bit 
+   * ... MODULES_ISCSI     iscsi_tcp 
+   * ... MODULES_MISC  
+   * ... MODULES_CRYPT     
+   * ... MODULES_FS    
+   * ... MODULES_WAITSCAN  scsi_wait_scan 
+   * ... MODULES_USB   ehci-hcd ohci-hcd sl811-hcd uhci-hcd 
+   * ... MODULES_SCSI  sx8 fdomain imm 
+   * ... MODULES_PATA  pata_legacy pata_pcmcia 
+   * ... MODULES_FIREWIRE  
+   * ... MODULES_NET   sky2 tg3 atl1c e1000 e1000e 
+   * ... MODULES_LVM   
+   * ... MODULES_EVMS  
+   * ... MODULES_ATARAID   
+   * ... MODULES_PCMCIA    i82092 pcmcia pd6729 yenta_socket 
+   * initramfs.append.source.busybox 1.18.4
    * ... busybox.download
    * ... busybox.extract
    * ... busybox.copy_config 
@@ -611,236 +557,99 @@ Default behavior.
    * ... busybox.strip
    * ... busybox.compress
    * ... busybox.cache
+   * initramfs.append.keymaps all
+   * ... azerty be bg br-a br-l 
+   * ... by cf croat cz de dk 
+   * ... dvorak es et fi fr gr 
+   * ... hu il is it jp keymapList 
+   * ... la lt mk nl no pl 
+   * ... pt ro ru se sg sk-y 
+   * ... sk-z slovene trf trq ua uk 
+   * ... us wangbe 
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
+   * boot.mounted
+   * success 1.8Mb /boot/initramfs-kigen-x86_64-2.6.38-gentoo-r5
+   * boot.umounted
   z13 ~ # 
-  
-A second run would use what has been cached.
+
 Generally, what can be compiled with KIGen should be cacheable.
 In this case, busybox cache is used.
 ::
-  z13 ~ # kigen i
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
+  z13 ~ # kigen i 
+   * Gentoo Base System release 2.0.2 on x86_64
+   * initramfs.append.base
+   * ... Gentoo linuxrc 3.4.15 patched
+   * initramfs.append.modules 2.6.38-gentoo-r5
+   * ... MODULES_SATA  
+   * ... MODULES_DMRAID    
+   * ... MODULES_MDADM     
+   * ... MODULES_VIDEO     intel-agp drm drm_kms_helper i915 i2c-algo-bit 
+   * ... MODULES_ISCSI     iscsi_tcp 
+   * ... MODULES_MISC  
+   * ... MODULES_CRYPT     
+   * ... MODULES_FS    
+   * ... MODULES_WAITSCAN  scsi_wait_scan 
+   * ... MODULES_USB   ehci-hcd ohci-hcd sl811-hcd uhci-hcd 
+   * ... MODULES_SCSI  sx8 fdomain imm 
+   * ... MODULES_PATA  pata_legacy pata_pcmcia 
+   * ... MODULES_FIREWIRE  
+   * ... MODULES_NET   sky2 tg3 atl1c e1000 e1000e 
+   * ... MODULES_LVM   
+   * ... MODULES_EVMS  
+   * ... MODULES_ATARAID   
+   * ... MODULES_PCMCIA    i82092 pcmcia pd6729 yenta_socket 
+   * initramfs.append.source.busybox 1.18.4
    * ... cache found: importing
+   * initramfs.append.keymaps all
+   * ... azerty be bg br-a br-l 
+   * ... by cf croat cz de dk 
+   * ... dvorak es et fi fr gr 
+   * ... hu il is it jp keymapList 
+   * ... la lt mk nl no pl 
+   * ... pt ro ru se sg sk-y 
+   * ... sk-z slovene trf trq ua uk 
+   * ... us wangbe 
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
+   * boot.mounted
+   * success 1.8Mb /boot/initramfs-kigen-x86_64-2.6.38-gentoo-r5
+   * boot.umounted
   z13 ~ # 
 
 Now let's make a full blown initramfs.
 ::
-  z13 ~ # kigen i --splash=emergence --disklabel --luks --lvm2 --keymaps --dropbear --debugflag --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --strace 
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
-   * ... busybox.download
+  z13 ~ # kigen i --splash=emergence --source-disklabel --source-luks --bin-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --bin-glibc --bin-zlib --bin-libncurses --defconfig --nocache
+   * Gentoo Base System release 2.0.2 on x86_64
+   * initramfs.append.base
+   * ... Gentoo linuxrc 3.4.15 patched
+   * initramfs.append.modules 2.6.38-gentoo-r5
+   * ... MODULES_SATA  
+   * ... MODULES_DMRAID    
+   * ... MODULES_MDADM     
+   * ... MODULES_VIDEO     intel-agp drm drm_kms_helper i915 i2c-algo-bit 
+   * ... MODULES_ISCSI     iscsi_tcp 
+   * ... MODULES_MISC  
+   * ... MODULES_CRYPT     
+   * ... MODULES_FS    
+   * ... MODULES_WAITSCAN  scsi_wait_scan 
+   * ... MODULES_USB   ehci-hcd ohci-hcd sl811-hcd uhci-hcd 
+   * ... MODULES_SCSI  sx8 fdomain imm 
+   * ... MODULES_PATA  pata_legacy pata_pcmcia 
+   * ... MODULES_FIREWIRE  
+   * ... MODULES_NET   sky2 tg3 atl1c e1000 e1000e 
+   * ... MODULES_LVM   
+   * ... MODULES_EVMS  
+   * ... MODULES_ATARAID   
+   * ... MODULES_PCMCIA    i82092 pcmcia pd6729 yenta_socket 
+   * initramfs.append.source.busybox 1.18.4
    * ... busybox.extract
    * ... busybox.copy_config 
+   * ... busybox.defconfig
    * ... busybox.make
    * ... busybox.strip
    * ... busybox.compress
    * ... busybox.cache
-   * initramfs.append.lvm2 2.02.77
-   * ... lvm2.download
-   * ... lvm2.extract
-   * ... lvm2.configure
-   * ... lvm2.make
-   * ... lvm2.install
-   * ... lvm2.strip
-   * ... lvm2.compress
-   * ... lvm2.cache
-   * initramfs.append.luks 1.1.3
+   * initramfs.append.bin.lvm2 /sbin/lvm.static from host
+   * initramfs.append.source.luks 1.3.1
    * ... luks.download
    * ... luks.extract
    * ... luks.configure
@@ -848,7 +657,7 @@ Now let's make a full blown initramfs.
    * ... luks.strip
    * ... luks.compress
    * ... luks.cache
-   * initramfs.append.e2fsprogs 1.41.12
+   * initramfs.append.source.disklabel 1.41.14
    * ... e2fsprogs.download
    * ... e2fsprogs.extract
    * ... e2fsprogs.configure
@@ -856,7 +665,7 @@ Now let's make a full blown initramfs.
    * ... e2fsprogs.strip
    * ... e2fsprogs.compress
    * ... e2fsprogs.cache
-   * initramfs.append.dropbear 0.52
+   * initramfs.append.source.dropbear 0.53
    * ... dropbear.download
    * ... dropbear.extract
    * ... dropbear.patch_debug_header #define DEBUG_TRACE
@@ -864,14 +673,14 @@ Now let's make a full blown initramfs.
    * ... dropbear.make
    * ... dropbear.strip
    * ... dropbear.dsskey
-  Will output 1024 bit dss secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_dss_host_key'
+  Will output 1024 bit dss secret key to '/var/tmp/kigen/work/dropbear-0.53/etc/dropbear/dropbear_dss_host_key'
   Generating key, this may take a while...
    * ... dropbear.rsakey
-  Will output 4096 bit rsa secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_rsa_host_key'
+  Will output 4096 bit rsa secret key to '/var/tmp/kigen/work/dropbear-0.53/etc/dropbear/dropbear_rsa_host_key'
   Generating key, this may take a while...
    * ... dropbear.compress
    * ... dropbear.cache
-   * initramfs.append.strace 4.5.20
+   * initramfs.append.source.strace 4.5.20
    * ... strace.download
    * ... strace.extract
    * ... strace.configure
@@ -879,14 +688,18 @@ Now let's make a full blown initramfs.
    * ... strace.strip
    * ... strace.compress
    * ... strace.cache
-   * initramfs.append.ttyecho
-   * ... gcc -static /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
-   * initramfs.append.splash emergence 
-   * initramfs.append.rootpasswd
-   * ... /etc/passwd
-   * ... /etc/group
-   * initramfs.append.keymaps
-   * initramfs.append.glibc
+   * initramfs.append.source.screen 4.0.3
+   * ... screen.download
+   * ... screen.extract
+   * ... screen.configure
+   * ... screen.make
+   * ... screen.strip
+   * ... screen.compress
+   * ... screen.cache
+   * initramfs.append.source.ttyecho
+   * ... gcc -static /usr/share/kigen/tools/ttyecho.c
+   * ...     -o /var/tmp/kigen/work/initramfs-source-ttyecho-temp/sbin/ttyecho
+   * initramfs.append.bin.glibc
    * ... /lib/libm.so.6
    * ... /lib/libnss_files.so.2
    * ... /lib/libnss_dns.so.2
@@ -900,300 +713,32 @@ Now let's make a full blown initramfs.
    * ... /lib/libutil.so.1
    * ... /etc/ld.so.cache
    * ... /lib/libcrypt.so.1
-   * initramfs.append.libncurses
+   * initramfs.append.bin.libncurses
    * ... /lib/libncurses.so.5
-   * initramfs.append.zlib
+   * initramfs.append.bin.zlib
    * ... /lib/libz.so.1
-   * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
-  z13 ~ # 
-
-Re run from cache.
-::
-  z13 ~ # kigen i --splash=emergence --disklabel --luks --lvm2 --keymaps --dropbear --debugflag --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --strace 
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
-   * ... cache found: importing
-   * initramfs.append.lvm2 2.02.77
-   * ... cache found: importing
-   * initramfs.append.luks 1.1.3
-   * ... cache found: importing
-   * initramfs.append.e2fsprogs 1.41.12
-   * ... cache found: importing
-   * initramfs.append.dropbear 0.52
-   * ... cache found: importing
-   * initramfs.append.strace 4.5.20
-   * ... cache found: importing
-   * initramfs.append.ttyecho
-   * ... gcc -static /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
    * initramfs.append.splash emergence 
    * initramfs.append.rootpasswd
    * ... /etc/passwd
    * ... /etc/group
-   * initramfs.append.keymaps
-   * initramfs.append.glibc
-   * ... /lib/libm.so.6
-   * ... /lib/libnss_files.so.2
-   * ... /lib/libnss_dns.so.2
-   * ... /lib/libnss_nis.so.2
-   * ... /lib/libnsl.so.1
-   * ... /lib/libresolv.so.2
-   * ... /lib/ld-linux.so.2
-   * ... /lib/ld-linux-x86-64.so.2
-   * ... /lib/libc.so.6
-   * ... /lib/libnss_compat.so.2
-   * ... /lib/libutil.so.1
-   * ... /etc/ld.so.cache
-   * ... /lib/libcrypt.so.1
-   * initramfs.append.libncurses
-   * ... /lib/libncurses.so.5
-   * initramfs.append.zlib
-   * ... /lib/libz.so.1
+   * initramfs.append.keymaps all
+   * ... azerty be bg br-a br-l 
+   * ... by cf croat cz de dk 
+   * ... dvorak es et fi fr gr 
+   * ... hu il is it jp keymapList 
+   * ... la lt mk nl no pl 
+   * ... pt ro ru se sg sk-y 
+   * ... sk-z slovene trf trq ua uk 
+   * ... us wangbe 
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
-  z13 ~ # 
-
-Now let's use binaries when possible.
-::
-  z13 ~ # kigen i --splash=emergence --disklabel --luks --lvm2 --keymaps --dropbear --debugflag --glibc --libncurses --zlib --rootpasswd=mypass --ttyecho --strace --hostbin
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
-   * ... cache found: importing
-   * initramfs.append.lvm2 /sbin/lvm.static from host
-   * initramfs.append.cryptsetup /sbin/cryptsetup from host
-   * initramfs.append.e2fsprogs 1.41.12
-   * ... warning: /sbin/blkid is not static, compiling from sources
-   * ... cache found: importing
-   * initramfs.append.dropbear 0.52
-   * ... warning: /usr/sbin/dropbear not found on host, compiling from sources
-   * ... cache found: importing
-   * initramfs.append.strace 4.5.20
-   * ... warning: /usr/bin/strace not found on host, compiling from sources
-   * ... cache found: importing
-   * initramfs.append.ttyecho
-   * ... gcc -static /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
-   * initramfs.append.splash emergence 
-   * initramfs.append.rootpasswd
-   * ... /etc/passwd
-   * ... /etc/group
-   * initramfs.append.keymaps
-   * initramfs.append.glibc
-   * ... /lib/libm.so.6
-   * ... /lib/libnss_files.so.2
-   * ... /lib/libnss_dns.so.2
-   * ... /lib/libnss_nis.so.2
-   * ... /lib/libnsl.so.1
-   * ... /lib/libresolv.so.2
-   * ... /lib/ld-linux.so.2
-   * ... /lib/ld-linux-x86-64.so.2
-   * ... /lib/libc.so.6
-   * ... /lib/libnss_compat.so.2
-   * ... /lib/libutil.so.1
-   * ... /etc/ld.so.cache
-   * ... /lib/libcrypt.so.1
-   * initramfs.append.libncurses
-   * ... /lib/libncurses.so.5
-   * initramfs.append.zlib
-   * ... /lib/libz.so.1
-   * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
+   * boot.mounted
+   * success 13.2Mb /boot/initramfs-kigen-x86_64-2.6.38-gentoo-r5
+   * boot.umounted
   z13 ~ # 
 
 Typically this adds support for splash/luks/lvm2/dropbear to the initramfs.
 Note that by default kigen will will fetch the sources and link statically.
-Passing --hostbin will use host binaries when possible.
+Passing --bin-all --dynlibs will use host binaries when possible.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
@@ -1214,162 +759,46 @@ Build initramfs with SSH support
 
 Make sure libraries are called.
 ::
-  z13 ~ # kigen i --splash=emergence --disklabel --luks --lvm2 --dropbear --debugflag --rootpasswd=sabayon --keymaps --ttyecho --strace --glibc --libncurses --zlib --nocache
-   * Gentoo Base System release 2.0.1 on x86_64
-   * initramfs.append.base Gentoo linuxrc 3.4.10.907-r2
-   * initramfs.append.modules 2.6.37-gentoo
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... dm-crypt
-   * ... dm-crypt
-   * ... raid0
-   * ... raid1
-   * ... raid456
-   * ... raid10
-   * ... pata_mpiix
-   * ... pata_pdc2027x
-   * ... pata_rz1000
-   * ... pata_cmd64x
-   * ... pata_hpt366
-   * ... pata_hpt37x
-   * ... pata_hpt3x3
-   * ... pata_hpt3x2n
-   * ... pata_optidma
-   * ... pata_it821x
-   * ... pata_artop
-   * ... pata_oldpiix
-   * ... pata_legacy
-   * ... pata_it8213
-   * ... pata_ali
-   * ... pata_amd
-   * ... pata_atiixp
-   * ... pata_sis
-   * ... pata_hpt3x2n
-   * ... pata_marvell
-   * ... pata_cs5520
-   * ... pata_cs5530
-   * ... sata_promise
-   * ... sata_sil
-   * ... sata_sil24
-   * ... sata_nv
-   * ... sata_sx4
-   * ... sata_vsc
-   * ... sata_qstor
-   * ... sata_mv
-   * ... sata_inic162x
-   * ... pdc_adma
-   * ... aic79xx
-   * ... aic7xxx
-   * ... aic7xxx_old
-   * ... arcmsr
-   * ... BusLogic
-   * ... initio
-   * ... gdth
-   * ... sym53c8xx
-   * ... imm
-   * ... ips
-   * ... qla1280
-   * ... dc395x
-   * ... atp870u
-   * ... mptbase
-   * ... mptscsih
-   * ... mptspi
-   * ... mptfc
-   * ... mptsas
-   * ... 3w-xxxx
-   * ... 3w-9xxx
-   * ... cpqarray
-   * ... cciss
-   * ... DAC960
-   * ... sx8
-   * ... aacraid
-   * ... megaraid
-   * ... megaraid_mbox
-   * ... megaraid_mm
-   * ... megaraid_sas
-   * ... qla2xxx
-   * ... lpfc
-   * ... scsi_transport_fc
-   * ... aic94xx
-   * ... scsi_wait_scan
-   * ... e1000
-   * ... tg3
-   * ... sky2
-   * ... atl1c
-   * ... scsi_transport_iscsi
-   * ... libiscsi
-   * ... iscsi_tcp
-   * ... yenta_socket
-   * ... pd6729
-   * ... i82092
-   * ... usb-storage
-   * ... sl811-hcd
-   * ... i915
-   * ... drm
-   * ... drm_kms_helper
-   * ... i2c-algo-bit
-   * initramfs.append.busybox 1.18.0
-   * ... busybox.extract
-   * ... busybox.copy_config 
-   * ... busybox.make
-   * ... busybox.strip
-   * ... busybox.compress
-   * ... busybox.cache
-   * initramfs.append.lvm2 2.02.77
-   * ... lvm2.extract
-   * ... lvm2.configure
-   * ... lvm2.make
-   * ... lvm2.install
-   * ... lvm2.strip
-   * ... lvm2.compress
-   * ... lvm2.cache
-   * initramfs.append.luks 1.1.3
-   * ... luks.extract
-   * ... luks.configure
-   * ... luks.make
-   * ... luks.strip
-   * ... luks.compress
-   * ... luks.cache
-   * initramfs.append.e2fsprogs 1.41.12
-   * ... e2fsprogs.extract
-   * ... e2fsprogs.configure
-   * ... e2fsprogs.make
-   * ... e2fsprogs.strip
-   * ... e2fsprogs.compress
-   * ... e2fsprogs.cache
-   * initramfs.append.dropbear 0.52
-   * ... dropbear.extract
-   * ... dropbear.patch_debug_header #define DEBUG_TRACE
-   * ... dropbear.configure
-   * ... dropbear.make
-   * ... dropbear.strip
-   * ... dropbear.dsskey
-  Will output 1024 bit dss secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_dss_host_key'
-  Generating key, this may take a while...
-   * ... dropbear.rsakey
-  Will output 4096 bit rsa secret key to '/var/tmp/kigen/work/dropbear-0.52/etc/dropbear/dropbear_rsa_host_key'
-  Generating key, this may take a while...
-   * ... dropbear.compress
-   * ... dropbear.cache
-   * initramfs.append.strace 4.5.20
-   * ... strace.extract
-   * ... strace.configure
-   * ... strace.make
-   * ... strace.strip
-   * ... strace.compress
-   * ... strace.cache
-   * initramfs.append.ttyecho
-   * ... gcc -static /usr/share/kigen/tools/ttyecho.c -o /var/tmp/kigen/work/initramfs-ttyecho-temp/sbin/ttyecho
-   * initramfs.append.splash emergence 
-   * initramfs.append.rootpasswd
-   * ... /etc/passwd
-   * ... /etc/group
-   * initramfs.append.keymaps
-   * initramfs.append.glibc
+  z13 ~ # kigen i --splash=emergence --source-disklabel --source-luks --bin-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --bin-glibc --bin-zlib --bin-libncurses --defconfig 
+   * Gentoo Base System release 2.0.2 on x86_64
+   * initramfs.append.base
+   * ... Gentoo linuxrc 3.4.15 patched
+   * initramfs.append.modules 2.6.38-gentoo-r5
+   * ... MODULES_SATA  
+   * ... MODULES_DMRAID    
+   * ... MODULES_MDADM     
+   * ... MODULES_VIDEO     intel-agp drm drm_kms_helper i915 i2c-algo-bit 
+   * ... MODULES_ISCSI     iscsi_tcp 
+   * ... MODULES_MISC  
+   * ... MODULES_CRYPT     
+   * ... MODULES_FS    
+   * ... MODULES_WAITSCAN  scsi_wait_scan 
+   * ... MODULES_USB   ehci-hcd ohci-hcd sl811-hcd uhci-hcd 
+   * ... MODULES_SCSI  sx8 fdomain imm 
+   * ... MODULES_PATA  pata_legacy pata_pcmcia 
+   * ... MODULES_FIREWIRE  
+   * ... MODULES_NET   sky2 tg3 atl1c e1000 e1000e 
+   * ... MODULES_LVM   
+   * ... MODULES_EVMS  
+   * ... MODULES_ATARAID   
+   * ... MODULES_PCMCIA    i82092 pcmcia pd6729 yenta_socket 
+   * initramfs.append.source.busybox 1.18.4
+   * ... cache found: importing
+   * initramfs.append.bin.lvm2 /sbin/lvm.static from host
+   * initramfs.append.source.luks 1.3.1
+   * ... cache found: importing
+   * initramfs.append.source.disklabel 1.41.14
+   * ... cache found: importing
+   * initramfs.append.source.dropbear 0.53
+   * ... cache found: importing
+   * initramfs.append.source.strace 4.5.20
+   * ... cache found: importing
+   * initramfs.append.source.screen 4.0.3
+   * ... cache found: importing
+   * initramfs.append.source.ttyecho
+   * ... gcc -static /usr/share/kigen/tools/ttyecho.c
+   * ...     -o /var/tmp/kigen/work/initramfs-source-ttyecho-temp/sbin/ttyecho
+   * initramfs.append.bin.glibc
    * ... /lib/libm.so.6
    * ... /lib/libnss_files.so.2
    * ... /lib/libnss_dns.so.2
@@ -1383,14 +812,28 @@ Make sure libraries are called.
    * ... /lib/libutil.so.1
    * ... /etc/ld.so.cache
    * ... /lib/libcrypt.so.1
-   * initramfs.append.libncurses
+   * initramfs.append.bin.libncurses
    * ... /lib/libncurses.so.5
-   * initramfs.append.zlib
+   * initramfs.append.bin.zlib
    * ... /lib/libz.so.1
+   * initramfs.append.splash emergence 
+   * initramfs.append.rootpasswd
+   * ... /etc/passwd
+   * ... /etc/group
+   * initramfs.append.keymaps all
+   * ... azerty be bg br-a br-l 
+   * ... by cf croat cz de dk 
+   * ... dvorak es et fi fr gr 
+   * ... hu il is it jp keymapList 
+   * ... la lt mk nl no pl 
+   * ... pt ro ru se sg sk-y 
+   * ... sk-z slovene trf trq ua uk 
+   * ... us wangbe 
    * initramfs.compress
-   * produced /boot/initramfs-kigen-x86_64-2.6.37-gentoo
+   * boot.mounted
+   * success 13.2Mb /boot/initramfs-kigen-x86_64-2.6.38-gentoo-r5
+   * boot.umounted
   z13 ~ # 
-
 
 Set kernel command option
 ~~~~~~~~~~~~~~~~~~~~~~~~~
