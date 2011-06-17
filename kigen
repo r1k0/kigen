@@ -155,12 +155,6 @@ except Exception:
 boot_mounted = False
 # run the kernel target
 if target == 'kernel' or target == 'k':
-
-#        # --getdotconfig
-#        if cli['getdotconfig'] is not '':
-#            from kernel.extract import getdotconfig
-#            getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
-#            sys.exit(0)
     
         from kernel.kernel import kernel
         kobj = kernel(cli['kerneldir'],   \
@@ -171,7 +165,11 @@ if target == 'kernel' or target == 'k':
                     cli,                  \
                     temp,                 \
                     verbose)
-        kobj.build()
+        try: 
+            kobj.build()
+
+        except KeyboardInterrupt:
+            raise
     
         # copy kernel/system.map to /boot
         if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
@@ -245,18 +243,6 @@ if target == 'kernel' or target == 'k':
 # run the initramfs target
 if target == 'initramfs' or target == 'i':
 
-        # --extract
-        if cli['extract']:
-            import initramfs.extract
-            initramfs.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
-            sys.exit(0)
-    
-        # --compress
-        if cli['compress']:
-            import initramfs.compress
-            initramfs.compress.initramfs(temp['work'], cli['compress'], cli['into'], verbose)
-            sys.exit(0)
-    
         from initramfs.initramfs import initramfs
         iobj = initramfs(cli['kerneldir'],  \
                     cli['arch'],            \
@@ -272,7 +258,11 @@ if target == 'initramfs' or target == 'i':
                     bootupdateset,          \
                     bootupdateinitrd,       \
                     verbose)
-        iobj.build()
+        try:
+            iobj.build()
+
+        except KeyboardInterrupt:
+            raise
     
         # copy initramfs to /boot
         if cli['noboot'] is False:
