@@ -421,11 +421,11 @@ class append:
                 if re.match("^[a-z]", i):
                     i = i.replace('.map', '')
                     i = i.replace('\n', '')
-                    print(i, end=" ")
                     z = z+1
-                    if (z % 4 == 0):
+                    if (z % 6 == 0):
                         print()
                         print(green(' * ') + '... ', end='')
+                    print(i, end=' ')
             print()
 
         else:
@@ -437,11 +437,11 @@ class append:
                     if re.match("^[a-z]", i):
                         process('cp %s/keymaplist/%s.map %s/initramfs-keymaps-temp/lib/keymaps'%(self.temp['work'], i, self.temp['work']), self.verbose)
                         i = i.replace('\n', '')
-                        print(i, end=' ')
                         z = z+1
-                        if (z % 4 == 0):
+                        if (z % 6 == 0):
                             print()
                             print(green(' * ') + '... ', end='')
+                        print(i, end=' ')
                 else:
                     print(yellow(' * ') + '... ' + yellow('warning')+' %s.map does not exist, skipping'%i)
             print()
@@ -475,9 +475,6 @@ class append:
             # use cache
             print(green(' * ') + '... '+'cache found: importing')
 
-            # extract cache
-#            os.system('bzip2 -dc %s > %s/initramfs-source-lvm2-temp/bin/lvm' % (self.temp['cache']+'/lvm.static-'+self.version_conf['lvm2-version']+'.bz2', self.temp['work']))
-#            process('chmod a+x %s/initramfs-source-lvm2-temp/bin/lvm' % self.temp['work'], self.verbose)
         else:
             # compile and cache
             from .sources.lvm2 import lvm2
