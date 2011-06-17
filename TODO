@@ -9,6 +9,9 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.3.1
 =====
+TODO: new ebuild should have dep to >=python-3 and NOT python:3.1
+    this will always pull for 3.1 as 3.2 might be there
+TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: try using except KeyboardInterrupt: for parts where ctrl+c doesnt work and should
 TODO: check uuid feature really works
 TODO: --source-screen is actually not static :( fix it
@@ -36,7 +39,6 @@ TODO: remove that 'root block device() ::' loop in linuxrc and drop to shell ins
     - boot.sh boot-luk.sh boot-luks-lvm2.sh boot-dmraid.sh...
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first
 TODO: add timestamp for each line in logfile and beautify logs a bit
-TODO: add USE=module-rebuild and option to /etc/kigen/ and module-rebuild dep in ebuild
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
     add --nohash option (as in Misc:)
 TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
