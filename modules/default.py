@@ -14,18 +14,10 @@ temp = {'root'      : temp_root,              \
 # These default variables are just for convenience
 # when the option is not found in /etc/kigen config files
 # it will fall back to these values
+
 # default values
 master_conf = {
-        'busybox-version'       : '',             \
-        'dm_ver'                : '',             \
-        'dmraid_ver'            : '',             \
-        'e2fsprogs-version'     : '',             \
-        'luks-version'          : '',             \
-        'fuse_ver'              : '',             \
-        'iscsi_ver'             : '',             \
         'kernel-source'         : '/usr/src/linux',\
-        'lvm2-version'          : '',             \
-        'aufs_ver'              : '',             \
         'unionfs_fuse_ver'      : '',             \
         'DEFAULT_KERNEL_AS'     : 'as',           \
         'DEFAULT_KERNEL_CC'     : 'gcc',          \
