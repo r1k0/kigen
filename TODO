@@ -9,6 +9,7 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.3.1
 =====
+TODO: try using except KeyboardInterrupt: for parts where ctrl+c doesnt work and should
 TODO: check uuid feature really works
 TODO: --source-screen is actually not static :( fix it
     but LDFLAGS=-static ./configure fails with missing getent :(
