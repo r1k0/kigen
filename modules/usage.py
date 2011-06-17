@@ -83,53 +83,40 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print(kernel_conf['fixdotconfig'], end='"')
     print(tab+'Check and auto fix the kernel config file (experimental)')
     print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
-
     print('  --clean                   ', end='')
     print(kernel_conf['clean'], end='')
     print('\t\tClean precompiled objects only')
-
     print('  --mrproper                ', end='')
     print(kernel_conf['mrproper'], end='')
     print('\t\tClean precompiled objects and remove config file')
-
     print('  --menuconfig              ', end='')
     print(kernel_conf['menuconfig'], end='')
     print('\t\tInteractive kernel options menu')
-
     print('  --fakeroot=/dir           "'+cli['fakeroot']+'"\t\t\tAppend modules to /dir/lib/modules')
-
     print('  --module-rebuild          ', end='')
     print(kernel_conf['module-rebuild'], end='')
     print('\t\tCall sys-kernel/module-rebuild last')
-
     print('  --nooldconfig             ', end='')
     print(kernel_conf['nooldconfig'], end='')
     print('\t\tDo not ask for new kernel/initramfs options')
-
     print('  --nomodinstall            ', end='')
     print(kernel_conf['nomodinstall'], end='')
     print('\t\tDo not install modules')
-
     print('  --nomodules               ', end='')
     print(kernel_conf['nomodules'], end='')
     print('\t\tDo not compile or install modules')
     print()
-
     print('Misc:')
     print('  --nosaveconfig            ', end='')
     print(kernel_conf['nosaveconfig'], end='')
     print('\t\tDo not save kernel config in /etc/kernels')
-
     print('  --noboot                  ', end='')
     print(kernel_conf['noboot'], end='')
     print('\t\tDo not copy kernel to /boot')
-
     print('  --rename=/file            "'+kernel_conf['rename']+'"', end='')
     print('\t\t\tCustom kernel file name')
-
     print('  --logfile=/file           "'+master_conf['logfile']+'"', end='')
     print() #'\t\tLog to file'
-
     print('  --debug, -d               '+master_conf['debug']+'\t\tDebug verbose')
 #    print()
 #    print('Handy tools:')
@@ -138,8 +125,39 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
     print()
-
     print('Features:')
+    print('+ from source code')
+    print('| --source-luks             ', end='')
+    print(initramfs_conf['source-luks'], end='') # bool 
+    print('\t\tInclude LUKS support from sources')
+    print('| --source-lvm2             ', end='')
+    print(initramfs_conf['source-lvm2'], end='') # bool
+    print('\t\tInclude LVM2 support from sources')
+    print('| --source-dropbear         ', end='')
+    print(initramfs_conf['source-dropbear'], end='') # bool
+    print('\t\tInclude dropbear support from sources')
+    print('   --debugflag              ', end='')
+    print(initramfs_conf['debugflag'], end='') # bool
+    print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
+    print('| --source-screen           ', end='')
+    print(initramfs_conf['source-screen'], end='') # bool
+    print('\t\tInclude the screen binary tool from sources')
+    print('| --source-disklabel        ', end='')
+    print(initramfs_conf['source-disklabel'], end='') # bool
+    print('\t\tInclude support for UUID/LABEL from sources')
+    print('| --source-ttyecho          ', end='')
+    print(initramfs_conf['source-ttyecho'], end='') # bool
+    print('\t\tCompile and include the handy ttyecho.c tool')
+    print('| --source-strace           ', end='')
+    print(initramfs_conf['source-strace'], end='') # bool
+    print('\t\tCompile and include the strace binary tool from sources')
+    print('| --source-dmraid           ', end='')
+    print(initramfs_conf['source-dmraid'], end='') # bool
+    print('\t\tInclude DMRAID support from sources')
+    print('| --source-all              ', end='')
+    print(initramfs_conf['source-all'], end='') # bool
+    print('\t\tInclude all possible features from sources')
+
     print('+ from host binaries')
     print('| --bin-busybox             ', end='')
     print(initramfs_conf['bin-busybox'], end='') # bool 
@@ -180,38 +198,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-all                 ', end='')
     print(initramfs_conf['bin-all'], end='') # bool
     print('\t\tInclude all possible features from host')
-
-    print('+ from source code')
-    print('| --source-luks             ', end='')
-    print(initramfs_conf['source-luks'], end='') # bool 
-    print('\t\tInclude LUKS support from sources')
-    print('| --source-lvm2             ', end='')
-    print(initramfs_conf['source-lvm2'], end='') # bool
-    print('\t\tInclude LVM2 support from sources')
-    print('| --source-dropbear         ', end='')
-    print(initramfs_conf['source-dropbear'], end='') # bool
-    print('\t\tInclude dropbear support from sources')
-    print('   --debugflag              ', end='')
-    print(initramfs_conf['debugflag'], end='') # bool
-    print('\t\t Compile dropbear with #define DEBUG_TRACE in debug.h')
-    print('| --source-screen           ', end='')
-    print(initramfs_conf['source-screen'], end='') # bool
-    print('\t\tInclude the screen binary tool from sources')
-    print('| --source-disklabel        ', end='')
-    print(initramfs_conf['source-disklabel'], end='') # bool
-    print('\t\tInclude support for UUID/LABEL from sources')
-    print('| --source-ttyecho          ', end='')
-    print(initramfs_conf['source-ttyecho'], end='') # bool
-    print('\t\tCompile and include the handy ttyecho.c tool')
-    print('| --source-strace           ', end='')
-    print(initramfs_conf['source-strace'], end='') # bool
-    print('\t\tCompile and include the strace binary tool from sources')
-    print('| --source-dmraid           ', end='')
-    print(initramfs_conf['source-dmraid'], end='') # bool
-    print('\t\tInclude DMRAID support from sources')
-    print('| --source-all              ', end='')
-    print(initramfs_conf['source-all'], end='') # bool
-    print('\t\tInclude all possible features from sources')
     print()
 
     print(stdout.yellow('  --dynlibs                 '), end='')
