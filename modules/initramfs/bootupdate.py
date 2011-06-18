@@ -33,5 +33,3 @@ def get_boot_initrd():
             return d
     else:
         return d
-
-

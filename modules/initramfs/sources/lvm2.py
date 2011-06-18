@@ -117,36 +117,6 @@ class lvm2:
                                                                 self.master_config['DEFAULT_UTILS_AS'], \
                                                                 self.verbose['std']))
 
-#    def make_device_mapper(self):
-#        """
-#        lvm2 Makefile interface to make device-mapper
-#
-#        @return: bool
-#        """
-#        self.chgdir(self.lvm2_tmp)
-#
-#        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
-#                                    self.master_config['DEFAULT_MAKEOPTS'], \
-#                                    self.master_config['DEFAULT_UTILS_CC'], \
-#                                    self.master_config['DEFAULT_UTILS_LD'], \
-#                                    self.master_config['DEFAULT_UTILS_AS'], \
-#                                    self.verbose['std']))
-#
-#    def make_device_mapper_install(self):
-#        """
-#        lvm2 Makefile interface to make device-mapper_install
-#
-#        @return: bool
-#        """
-#        self.chgdir(self.lvm2_tmp)
-#
-#        return os.system('%s %s CC="%s" LD="%s" AS="%s" device-mapper_install %s' % (self.master_config['DEFAULT_UTILS_MAKE'], \
-#                                    self.master_config['DEFAULT_MAKEOPTS'], \
-#                                    self.master_config['DEFAULT_UTILS_CC'], \
-#                                    self.master_config['DEFAULT_UTILS_LD'], \
-#                                    self.master_config['DEFAULT_UTILS_AS'], \
-#                                    self.verbose['std']))
-
     def install(self):
         """
         Install lvm2

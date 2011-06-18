@@ -75,49 +75,36 @@ modules_conf = {
 initramfs_conf = {
         'rename'        : '',   \
         'keymaps'       : 'all',\
-#        'evms'          : 'False',   \
         'bin-evms'      : 'False',   \
-#        'lvm2'          : 'False',   \
         'bin-lvm2'      : 'False',   \
         'source-lvm2'   : 'False',   \
 #        'selinux'       : '',   \
-#        'screen'        : 'False',   \
         'bin-screen'    : 'False',   \
         'source-screen' : 'False',   \
         'rootpasswd'    : '',   \
         'defconfig'     : 'False',   \
-#        'disklabel'     : '',   \
         'bin-disklabel' : 'False',   \
         'source-disklabel': 'False', \
-#        'strace'        : '',   \
         'bin-strace'    : 'False',  \
         'source-strace' : 'False',  \
         'noboot'        : '',   \
         'debugflag'     : '',   \
         'sres'          : '',   \
         'menuconfig'    : '',   \
-#        'dmraid'        : 'False',  \
         'bin-dmraid'    : 'False',  \
         'source-dmraid' : 'False',  \
         'nocache'       : '',   \
         'plugin'        : '',   \
         'linuxrc'       : '',   \
-#        'glibc'         : 'False',  \
         'bin-glibc'     : 'False',  \
-#        'zlib'          : 'False',  \
         'bin-zlib'      : 'False',  \
-#        'libncurses'    : 'False',  \
         'bin-libncurses': 'False',  \
         'dotconfig'     : '',   \
-        'dropbear'      : 'False',  \
         'bin-dropbear'  : 'False',  \
         'source-dropbear':'False',  \
-        'hostbin'       : '',   \
         'splash'        : '',   \
         'oldconfig'     : '',   \
-#        'ttyecho'       : 'False',  \
         'source-ttyecho': 'False',  \
-#        'luks'          : 'False',  \
         'bin-luks'      : 'False',  \
         'source-luks'   : 'False',  \
         'bin-all'       : 'False',  \

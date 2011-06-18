@@ -9,7 +9,7 @@ from stdout import *
 # parse /etc/kigen/master.conf
 def etc_parser_master():
 
-# do not declare modules_conf initramfs_conf version_conf url_conf
+# do not declare master_conf
 # we already import their defaults from default.py
 #    master_conf = {}
 
@@ -32,7 +32,7 @@ def etc_parser_master():
 # parse /etc/kigen/kernel/kernel.conf
 def etc_parser_kernel():
 
-# do not declare modules_conf initramfs_conf version_conf url_conf
+# do not declare kernel_conf
 # we already import their defaults from default.py
 #    kernel_conf = {}
 

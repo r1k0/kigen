@@ -118,9 +118,6 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print('  --logfile=/file           "'+master_conf['logfile']+'"', end='')
     print() #'\t\tLog to file'
     print('  --debug, -d               '+master_conf['debug']+'\t\tDebug verbose')
-#    print()
-#    print('Handy tools:')
-#    print('  --getdotconfig=/vmlinux   "'+cli['getdotconfig']+'"\t\tExtract .config from compiled binary kernel (if IKCONFIG has been set)')
 
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
@@ -219,24 +216,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
     print('\t\t\t Splash resolution, all if not set')
 
-#    print('  --disklabel               ', end='')
-#    print(initramfs_conf['disklabel'], end='') # bool
-#    print('\t\tInclude support for UUID/LABEL (host binary or sources)')
-#    print('  --luks                    ', end='')
-#    print(initramfs_conf['luks'], end='') # bool 
-#    print('\t\tInclude LUKS support (host binary or sources)')
-#    print(stdout.yellow('  --evms                    '), end='')
-#    print(initramfs_conf['evms'], end='') # bool
-#    print('\t\tInclude EVMS support (host binary only)')
-#    print(stdout.yellow('  --dmraid                  '), end='')
-#    print(initramfs_conf['dmraid'], end='') # bool
-#    print('\t\tInclude DMRAID support (host binary or sources)')
-#    print stdout.yellow('   --selinux                '),
-#    print initramfs_conf['selinux'], # bool
-#    print stdout.yellow('\t\t Include selinux support in --dmraid (selinux libs required)')
-#   print '  --iscsi                    False                   Include iscsi support'
-#   print '  --mdadm                    False                   Include mdadm support (mdadm must be merged)'
-    
     # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
         if len(cli['rootpasswd']) <= 4:
@@ -247,10 +226,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
         tab = '\t\t\t'
     print('  --rootpasswd=<passwd>     "'+cli['rootpasswd'], end='"')
     print(tab+'Create and set root password (required for dropbear)')
-#   print '  --unionfs-fuse             False                   Include unionfs-fuse support'
-#   print '  --aufs                     False                   Include aufs support'
-#   print '  --firmware=/dir            ""                      Include custom firmware support'
-    # fix \t display depending on length of cli[splash']
     if cli['keymaps'] != '':
         if len(cli['keymaps']) <= 4:
             tab = '\t\t\t'
@@ -260,19 +235,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t'
     else:
         tab = '\t\t\t'
-#    print('  --keymaps                 ', end='')
     print('  --keymaps=xx[,xx]|all     ', end='"')
     print(initramfs_conf['keymaps'], end='"') # bool
     print(tab+'Include all keymaps')
-#    print('  --ttyecho                 ', end='')
-#    print(initramfs_conf['ttyecho'], end='') # bool
-#    print('\t\tInclude the handy ttyecho.c tool')
-#    print('  --strace                  ', end='')
-#    print(initramfs_conf['strace'], end='') # bool
-#    print('\t\tInclude the strace binary tool (host binary or sources)')
-#    print('  --screen                  ', end='')
-#    print(initramfs_conf['screen'], end='') # bool
-#    print('\t\tInclude the screen binary tool (host binary or sources)')
     # fix \t display depending on length of cli['plugin']
     if cli['plugin'] != '': 
         if len(cli['plugin']) <= 4:
@@ -309,9 +274,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('  --nocache                 ', end='')
     print(initramfs_conf['nocache'], end='')
     print('\t\tDelete previous cached data on startup')
-#    print(stdout.yellow('  --hostbin                 '), end='')
-#    print(initramfs_conf['hostbin'], end='')
-#    print('\t\tUse host binaries (fall back to sources if dynamic linkage detected)')
     print('  --nomodules               ', end='')
     print(initramfs_conf['nomodules'], end='')
     print('\t\tDo not install kernel modules (all is kernel builtin)')
@@ -324,15 +286,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print() #'\t\tLog to file'
     print('  --debug, -d               '+master_conf['debug']+'', end='')
     print('\t\tDebug verbose')
-#    print()
-
-#    print('Handy tools:')
-#    print('  --extract=/file           "'+cli['extract']+'"                  Extract initramfs file')
-#    print('   --to=/dir                "'+cli['to']+'"')
-#    print('\t\t\t\t\t\t Custom extracting directory')
-#    print('  --compress=/dir           "'+cli['compress']+'"                  Compress directory into initramfs')
-#    print('   --into=/file             "'+cli['into']+'"')
-#    print('\t\t\t\t\t\t Custom initramfs file')
 
 def print_usage_tool(cli):
     print('Parameter:\t\t    Config value:\tDescription:')

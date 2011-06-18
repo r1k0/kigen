@@ -93,7 +93,6 @@ def cli_parser():
             # parse command line
             opts, args = getopt(cliopts[1:], "dhn", [  \
                                     "help",                     \
-#                                    "info",                     \
                                     "version",                  \
                                     "credits",                  \
                                     "conf=",                    \
@@ -116,7 +115,6 @@ def cli_parser():
                                     "nosaveconfig",             \
                                     "hostbin",                  \
                                     "fixdotconfig=",             \
-#                                    "getdotconfig=",            \
                                     "module-rebuild",           \
                                     "debug"])
         except GetoptError as err:
@@ -208,8 +206,6 @@ def cli_parser():
         if kernel_conf['fixdotconfig'] != '':
             cli['fixdotconfig'] = kernel_conf['fixdotconfig']
             
-#        cli['getdotconfig'] = ''
-
         cli['module-rebuild'] = False
         if kernel_conf['module-rebuild'] == 'True':
             cli['module-rebuild'] = True
@@ -300,30 +296,24 @@ def cli_parser():
                                     "nooldconfig",  \
                                     "defconfig",    \
                                     "oldconfig",    \
-#                                    "luks",         \
                                     "bin-luks",     \
                                     "source-luks",  \
-#                                    "lvm2",         \
                                     "source-lvm2",  \
                                     "bin-lvm2",     \
-#                                    "dmraid",       \
                                     "bin-dmraid",   \
                                     "source-dmraid",\
                                     "iscsi",        \
                                     "logfile=",     \
-#                                    "evms",         \
                                     "bin-evms",     \
                                     "mdadm",        \
                                     "splash=",      \
                                     "sres=",        \
                                     "sinitrd=",     \
                                     "firmware=",    \
-#                                    "disklabel",    \
                                     "bin-disklabel",\
                                     "source-disklabel",\
                                     "unionfs-fuse", \
                                     "aufs",         \
-#                                    "dropbear",     \
                                     "bin-dropbear", \
                                     "source-dropbear",\
                                     "linuxrc=",     \
@@ -332,31 +322,21 @@ def cli_parser():
                                     "noboot",       \
                                     "selinux",      \
                                     "help",         \
-#                                    "info",         \
                                     "version",      \
                                     "credits",      \
                                     "nosaveconfig", \
                                     "hostbin",      \
-#                                    "glibc",        \
                                     "bin-glibc",    \
                                     "libncurses",   \
                                     "bin-libncurses",\
-#                                    "zlib",         \
                                     "bin-zlib",     \
                                     "rename=",      \
                                     "plugin=",      \
                                     "rootpasswd=",  \
-                                    "extract=",     \
-                                    "to=",          \
-                                    "compress=",    \
-                                    "into=",        \
                                     "keymaps=",     \
-#                                    "ttyecho",      \
                                     "source-ttyecho",\
-#                                    "strace",       \
                                     "bin-strace",   \
                                     "source-strace",\
-#                                    "screen",       \
                                     "bin-screen",   \
                                     "source-screen", \
                                     "debugflag",    \
@@ -388,11 +368,6 @@ def cli_parser():
         if initramfs_conf['dotconfig'] != '':
             cli['dotconfig'] = initramfs_conf['dotconfig']
             cli['oldconfig'] = True # make sure .config is ok
-
-#        cli['info'] = False
-#        cli['mrproper'] = False
-#        if initramfs_conf['mrproper'] == 'True':
-#            cli['mrproper'] = True
 
         cli['menuconfig'] = False
         if initramfs_conf['menuconfig'] == 'True':
@@ -620,8 +595,6 @@ def cli_parser():
                 verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
-            elif o in ("--disklabel"):
-                cli['disklabel'] = True
             elif o in ("--bin-disklabel"):
                 cli['bin-disklabel'] = True
                 cli['source-disklabel'] = False
@@ -637,8 +610,6 @@ def cli_parser():
             elif o in ("--source-luks"):
                 cli['source-luks'] = True
                 cli['bin-luks'] = False
-            elif o in ("--lvm2"):
-                cli['lvm2'] = True
             elif o in ("--source-lvm2"):
                 cli['source-lvm2'] = True
                 cli['bin-lvm2'] = False
@@ -702,8 +673,6 @@ def cli_parser():
                 cli['bin-glibc'] = True         # dropbear needs glibc
                 cli['bin-libncurses'] = True    # dropbear needs libncurses
                 cli['bin-zlib'] = True          # dropbear needs zlib
-            elif o in ("--hostbin"):
-                cli['hostbin'] = True
             elif o in ("--bin-glibc"):
                 cli['bin-glibc'] = True
             elif o in ("--bin-libncurses"):
@@ -716,22 +685,10 @@ def cli_parser():
                 cli['plugin'] = a # a is a list
             elif o in ("--rootpasswd="):
                 cli['rootpasswd'] = a
-            elif o in ("--extract"):
-                cli['extract'] = a
-            elif o in ("--to"):
-                cli['to'] = a
-            elif o in ("--compress"):
-                cli['compress'] = a
-            elif o in ("--into"):
-                cli['into'] = a
-            elif o in ("--ttyecho"):
-                cli['ttyecho'] = True
             elif o in("--source-ttyecho"):
                 cli['source-ttyecho'] = True
             elif o in ("--keymaps"):
                 cli['keymaps'] = a
-            elif o in ("--strace"):
-                cli['strace'] = True
             elif o in ("--bin-strace"):
                 cli['bin-strace'] = True
                 cli['source-strace'] = False

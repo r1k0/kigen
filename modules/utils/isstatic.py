@@ -20,8 +20,7 @@ def isstatic(binary, verbose):
 
     cmd.append(binary)
 
-    # subprocess.check_output only support on python-2.7
-    # p = subprocess.check_output(cmd)#, stdout=subprocess.PIPE) #, stderr=f) #, shell = True) # , close_fds=True)
+#    p = subprocess.check_output(cmd)#, stdout=subprocess.PIPE) #, stderr=f) #, shell = True) # , close_fds=True)
     p = subprocess.getoutput(' '.join(cmd))
    
     logging.debug(p)

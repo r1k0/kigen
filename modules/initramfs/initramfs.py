@@ -378,4 +378,3 @@ class initramfs:
         """
         print(red('error')+': ' + msg)
         sys.exit(2)
-
