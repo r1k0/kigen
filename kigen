@@ -319,7 +319,6 @@ if target == 'tool' or target == 't':
             getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
             sys.exit(0)
 
-
 # FIXME unset os.environ['KIGEN_STDOUT']?
 
 sys.exit(0)

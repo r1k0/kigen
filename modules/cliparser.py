@@ -695,10 +695,6 @@ def cli_parser():
             elif o in ("--source-strace"):
                 cli['source-strace'] = True
                 cli['bin-strace'] = False
-            elif o in ("--screen"):
-                cli['screen'] = True
-                cli['bin-glibc'] = True         # screen needs glibc
-                cli['bin-libncurses'] = True    # screen needs libncurses
             elif o in ("--bin-screen"):
                 cli['bin-screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
