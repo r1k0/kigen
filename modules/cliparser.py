@@ -759,7 +759,8 @@ def cli_parser():
                                     "to=",              \
                                     "compress=",        \
                                     "into=",            \
-                                    "getdotconfig="])
+                                    "getdotconfig=",    \
+                                    "rmcache"])
         except GetoptError as err:
             print(str(err)) # "option -a not recognized"
             usage.print_usage()
@@ -770,6 +771,7 @@ def cli_parser():
         cli['to']           = '/var/tmp/kigen/extracted-initramfs'
         cli['compress']     = ''
         cli['into']         = '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz'
+        cli['rmcache']      = False
 
         for o, a in opts:
             if o in ("-h", "--help"):
@@ -785,6 +787,8 @@ def cli_parser():
                 cli['compress'] = a
             elif o in ("--into"):
                 cli['into'] = a
+            elif o in ("--rmcache"):
+                cli['rmcache'] = True
 
             else:
                 assert False, "uncaught option"

@@ -301,6 +301,11 @@ if target == 'initramfs' or target == 'i':
 # run the tool target
 if target == 'tool' or target == 't':
 
+        if cli['rmcache']:
+            print(green(' * ') + turquoise('kigen.rmcache ')+ temp['cache'])
+            if os.path.isdir(temp['cache']):
+                shutil.rmtree(temp['cache'])
+
         # --extract
         if cli['extract']:
             import initramfs.extract

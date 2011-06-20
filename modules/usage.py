@@ -300,4 +300,9 @@ def print_usage_tool(cli):
     print('  --compress=/dir           "'+cli['compress']+'"                  Compress directory into initramfs')
     print('   --into=/file             "'+cli['into']+'"')
     print('\t\t\t\t\t\t Custom initramfs file')
+    print()
+    print('Misc:')
+    print('  --rmcache                 ', end='')
+    print(cli['rmcache'], end='')
+    print('\t\tRemove cached data')
 
