@@ -5,7 +5,7 @@ from stdout import white, green, turquoise, yellow, red
 
 def getdotconfig(binary, kerneldir, verbose):
 
-    print(green(' * ')+turquoise('kernel.extract.getdotconfig ')+'from '+binary+' to /var/tmp/kigen/dotconfig')
+    print(green(' * ')+turquoise('tool.extract.kernel.getdotconfig ')+'from '+binary+' to /var/tmp/kigen/dotconfig')
 
     if not os.path.isfile(kerneldir+'/scripts/extract-ikconfig'):
         print('err: kernel sources not found')

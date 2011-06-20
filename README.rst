@@ -742,6 +742,71 @@ Passing --bin-all --dynlibs will use host binaries when possible.
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
+KIGen has a toolbox. It is provided for convenience (read lazyness).
+It lets you extract a .config file from a kernel.
+::
+  z13 ~ # kigen tool
+  Parameter:          Config value:   Description:
+  
+  Kernel:
+    --getdotconfig=/vmlinux   ""          Extract .config from compiled binary kernel (if IKCONFIG has been set)
+  
+  Initramfs:
+    --extract=/file           ""                  Extract initramfs file
+     --to=/dir                "/var/tmp/kigen/extracted-initramfs"
+                           Custom extracting directory
+    --compress=/dir           ""                  Compress directory into initramfs
+     --into=/file             "/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz"
+                           Custom initramfs file
+  
+  Misc:
+    --rmcache                 False       Remove cached data
+  z13 ~ # mount /boot
+  z13 ~ # kigen tool --getdotconfig=/boot/kernel-kigen-x86_64-2.6.38-gentoo-r5 
+   * Gentoo Base System release 2.0.3 on x86_64
+   * kernel.extract.getdotconfig from /boot/kernel-kigen-x86_64-2.6.38-gentoo-r5 to /var/tmp/kigen/dotconfig
+  z13 ~ # head /var/tmp/kigen/dotconfig
+  #
+  # Automatically generated make config: don't edit
+  # Linux/x86_64 2.6.38-gentoo-r5 Kernel Configuration
+  # Sun Jun 19 20:23:40 2011
+  #
+  CONFIG_64BIT=y
+  # CONFIG_X86_32 is not set
+  CONFIG_X86_64=y
+  CONFIG_X86=y
+  CONFIG_INSTRUCTION_DECODER=y
+  z13 ~ # 
+
+You can easily extract an initramfs for troubleshooting or the sake of customization.
+::
+  z13 ~ # kigen t --extract=/boot/initramfs-kigen-x86_64-2.6.38-gentoo-r5
+   * Gentoo Base System release 2.0.3 on x86_64
+   * tool.extract.initramfs to /var/tmp/kigen/extracted-initramfs
+  z13 ~ # ls -ls /var/tmp/kigen/extracted-initramfs
+  total 20
+   0 drwxr-xr-x 1 root root   212 Jun 20 10:46 bin
+   0 drwxr-xr-x 1 root root    82 Jun 20 10:46 dev
+   0 drwxr-xr-x 1 root root   250 Jun 20 10:46 etc
+   0 drwxr-xr-x 1 root root     0 Jun 20 10:46 home
+  20 -rwxr-xr-x 1 root root 18642 Jun 20 10:46 init
+   0 drwxr-xr-x 1 root root    96 Jun 20 10:46 lib
+   0 lrwxrwxrwx 1 root root     3 Jun 20 10:46 lib64 -> lib
+   0 lrwxrwxrwx 1 root root     4 Jun 20 10:46 linuxrc -> init
+   0 drwxr-xr-x 1 root root     0 Jun 20 10:46 proc
+   0 drwxr-xr-x 1 root root    56 Jun 20 10:46 root
+   0 drwxr-xr-x 1 root root   134 Jun 20 10:46 sbin
+   0 drwxr-xr-x 1 root root     0 Jun 20 10:46 sys
+   0 drwxr-xr-x 1 root root     0 Jun 20 10:46 tmp
+   0 drwxr-xr-x 1 root root    34 Jun 20 10:46 usr
+   0 drwxr-xr-x 1 root root    20 Jun 20 10:46 var
+  z13 ~ # 
+
+You manually can actually create your own initramfs environment and litterally compress it.
+You can then do some tweaking and then close again the initramfs.
+::
+
+
 APT (Debian/Ubuntu)
 ~~~~~~~~~~~~~~~~~~~
 

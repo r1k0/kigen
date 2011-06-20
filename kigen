@@ -302,7 +302,7 @@ if target == 'initramfs' or target == 'i':
 if target == 'tool' or target == 't':
 
         if cli['rmcache']:
-            print(green(' * ') + turquoise('kigen.rmcache ')+ temp['cache'])
+            print(green(' * ') + turquoise('tool.rmcache ')+ temp['cache'])
             if os.path.isdir(temp['cache']):
                 shutil.rmtree(temp['cache'])
 
