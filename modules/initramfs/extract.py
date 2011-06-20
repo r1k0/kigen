@@ -31,5 +31,5 @@ def initramfs(temproot, extract, to, verbose):
 
     # extract cpio archive
     os.chdir(to)
-    os.system('cpio -id < initramfs_data.cpio &>/dev/null')
+    os.system('cpio -id < initramfs_data.cpio 2>/dev/null')
     os.system('rm initramfs_data.cpio')

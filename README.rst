@@ -802,10 +802,17 @@ You can easily extract an initramfs for troubleshooting or the sake of customiza
    0 drwxr-xr-x 1 root root    20 Jun 20 10:46 var
   z13 ~ # 
 
-You manually can actually create your own initramfs environment and litterally compress it.
+You can actually create your own initramfs environment and litterally compress it.
 You can then do some tweaking and then close again the initramfs.
 ::
-
+  z13 ~ # kigen t --compress=/var/tmp/kigen/extracted-initramfs
+   * Gentoo Base System release 2.0.3 on x86_64
+   * initramfs.compress.initramfs from /var/tmp/kigen/extracted-initramfs into /var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz
+  cpio: blank line ignored
+  mv: '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz' and '/var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz' are the same file
+  z13 ~ # ls -ls /var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz
+  12568 -rw-r--r-- 1 root root 12867574 Jun 20 11:13 /var/tmp/kigen/compressed-initramfs/initramfs_data.cpio.gz
+  z13 ~ # 
 
 APT (Debian/Ubuntu)
 ~~~~~~~~~~~~~~~~~~~
