@@ -91,7 +91,7 @@ def cli_parser():
 
         try:
             # parse command line
-            opts, args = getopt(cliopts[1:], "dhn", [  \
+            opts, args = getopt(cliopts[1:], "dhn", [           \
                                     "help",                     \
                                     "version",                  \
                                     "credits",                  \
@@ -102,6 +102,10 @@ def cli_parser():
                                     "initramfs=",               \
                                     "mrproper",                 \
                                     "clean",                    \
+                                    "silentoldconfig",          \
+                                    "defconfig",                \
+                                    "localmodconfig",           \
+                                    "localyesconfig",           \
                                     "menuconfig",               \
                                     "allyesconfig",             \
                                     "nomodules",                \
@@ -114,7 +118,7 @@ def cli_parser():
                                     "noboot",                   \
                                     "nosaveconfig",             \
                                     "hostbin",                  \
-                                    "fixdotconfig=",             \
+                                    "fixdotconfig=",            \
                                     "module-rebuild",           \
                                     "debug"])
         except GetoptError as err:
@@ -148,11 +152,27 @@ def cli_parser():
         if kernel_conf['mrproper'] == 'True':
             cli['mrproper'] = True
 
+        cli['localmodconfig'] = False
+        if kernel_conf['localmodconfig'] == 'True':
+            cli['localmodconfig'] = True
+
+        cli['localyesconfig'] = False
+        if kernel_conf['localyesconfig'] == 'True':
+            cli['localyesconfig'] = True
+
+        cli['silentoldconfig'] = False
+        if kernel_conf['silentoldconfig'] == 'True':
+            cli['silentoldconfig'] = True
+
+        cli['defconfig'] = False
+        if kernel_conf['defconfig'] == 'True':
+            cli['defconfig'] = True
+
         cli['menuconfig']   = False
         if kernel_conf['menuconfig'] == 'True':
             cli['menuconfig'] = True
 
-        cli['clean']        = False
+        cli['clean'] = False
         if kernel_conf['clean'] == 'True':
             cli['clean'] = True
 
@@ -240,6 +260,14 @@ def cli_parser():
                 cli['initramfs'] = a
             elif o in ("--mrproper"):
                 cli['mrproper'] = True
+            elif o in ("--localmodconfig"):
+                cli['localmodconfig'] = True
+            elif o in ("--localyesconfig"):
+                cli['localyesconfig'] = True
+            elif o in ("--silentoldconfig"):
+                cli['silentoldconfig'] = True
+            elif o in ("--defconfig"):
+                cli['defconfig'] = True
             elif o in ("--menuconfig"):
                 cli['menuconfig'] = True
             elif o in ("--nooldconfig"):

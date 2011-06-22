@@ -25,6 +25,10 @@ class kernel:
         self.dotconfig      = cli['dotconfig']
         self.mrproper       = cli['mrproper']
         self.allnoconfig    = cli['allnoconfig']
+        self.silentoldconfig= cli['silentoldconfig']
+        self.defconfig      = cli['defconfig']
+        self.localmodconfig = cli['localmodconfig']
+        self.localyesconfig = cli['localyesconfig']
         self.menuconfig     = cli['menuconfig']
         self.oldconfig      = cli['oldconfig']
         self.quiet          = verbose['std']
@@ -134,6 +138,14 @@ class kernel:
 #            if self.fixdotconfig is True:
 #                self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
+        if self.defconfig is True:
+            if self.make_defconfig() is not zero: self.fail('defconfig')
+        if self.localmodconfig is True:
+            if self.make_localmodconfig() is not zero: self.fail('localmodconfig')
+        if self.localyesconfig is True:
+            if self.make_localyesconfig() is not zero: self.fail('localyesconfig')
+        if self.silentoldconfig is True:
+            if self.make_silentoldconfig() is not zero: self.fail('silentoldconfig')
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
         if (self.menuconfig is True) or (self.menuconfig == 'True'):
@@ -387,6 +399,54 @@ class kernel:
         print(green(' * ') + turquoise('kernel.menuconfig '))
         self.chgdir(self.kerneldir)
         command = self.build_command('menuconfig', '')
+
+        return os.system(command)
+
+    def make_localmodconfig(self):
+        """
+        Kernel command interface for localmodconfig
+        
+        @return: bool
+        """
+        print(green(' * ') + turquoise('kernel.localmodconfig '))
+        self.chgdir(self.kerneldir)
+        command = self.build_command('localmodconfig', '')
+
+        return os.system(command)
+
+    def make_localyesconfig(self):
+        """
+        Kernel command interface for localyesconfig
+        
+        @return: bool
+        """
+        print(green(' * ') + turquoise('kernel.localyesconfig '))
+        self.chgdir(self.kerneldir)
+        command = self.build_command('localyesconfig', '')
+
+        return os.system(command)
+
+    def make_silentoldconfig(self):
+        """
+        Kernel command interface for silentoldconfig
+        
+        @return: bool
+        """
+        print(green(' * ') + turquoise('kernel.silentoldconfig '))
+        self.chgdir(self.kerneldir)
+        command = self.build_command('silentoldconfig', '')
+
+        return os.system(command)
+
+    def make_defconfig(self):
+        """
+        Kernel command interface for defconfig
+        
+        @return: bool
+        """
+        print(green(' * ') + turquoise('kernel.defconfig '))
+        self.chgdir(self.kerneldir)
+        command = self.build_command('defconfig', '')
 
         return os.system(command)
     

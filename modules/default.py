@@ -35,20 +35,24 @@ master_conf = {
 
 # default kernel values
 kernel_conf = {
-         'dotconfig'   : '',        \
-         'initramfs'   : '',        \
-         'fixdotconfig': '',        \
-         'clean'       : 'False',   \
-         'mrproper'    : 'False',   \
-         'menuconfig'  : 'False',   \
-         'fakeroot'    : '',        \
-         'nooldconfig' : 'False',   \
-         'nomodinstall': 'False',   \
-         'nomodules'   : 'False',   \
-         'nosaveconfig': 'False',   \
-         'noboot'      : 'False',   \
-         'rename'      : '',        \
-         'module-rebuild': 'False'}
+         'dotconfig'        : '',        \
+         'initramfs'        : '',        \
+         'fixdotconfig'     : '',        \
+         'clean'            : 'False',   \
+         'mrproper'         : 'False',   \
+         'menuconfig'       : 'False',   \
+         'fakeroot'         : '',        \
+         'nooldconfig'      : 'False',   \
+         'nomodinstall'     : 'False',   \
+         'nomodules'        : 'False',   \
+         'nosaveconfig'     : 'False',   \
+         'noboot'           : 'False',   \
+         'rename'           : '',        \
+         'module-rebuild'   : 'False',   \
+         'localmodconfig'   : 'False',   \
+         'localyesconfig'   : 'False',   \
+         'silentoldconfig'  : 'False',   \
+         'defconfig'        : 'False'}
 
 # default modules values
 modules_conf = {
