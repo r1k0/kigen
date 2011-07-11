@@ -187,7 +187,7 @@ class initramfs:
         if self.cli['bin-evms'] is True:
             print(green(' * ') + turquoise('initramfs.append.bin.evms'))
             os.chdir(self.temp['work'])
-            if os.path.isfile('/sbin/evms'):
+            if os.path.isfile('/usr/sbin/evms'):
                 from .bin.evms import evms
                 bin_evms = evms(self.temp, self.verbose)
                 bin_evms.build()

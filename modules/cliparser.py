@@ -413,7 +413,7 @@ def cli_parser():
             cli['bin-screen']       = True
             cli['bin-disklabel']    = True
             cli['bin-strace']       = True
-            cli['bin-evms']         = True
+#            cli['bin-evms']         = True
             cli['bin-glibc']        = True
             cli['bin-libncurses']   = True
             cli['bin-zlib']         = True

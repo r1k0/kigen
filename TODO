@@ -7,8 +7,9 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 NODO: when using --plugin=dir detect file collision and fail if found, add --overwrite to force?
     can't do as temp dirs can't see each other.
 
-0.3.*
+0.4.*
 =====
+TODO: rewrite bin/evms.py though we hide it
 TODO: improve arch detection and support a bit more, I feel it's missing stuf
     well amd64 and x86 work ok so far, what should I change?
 TODO: remove that 'root block device() ::' loop in linuxrc and drop to shell instead
