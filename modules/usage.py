@@ -189,9 +189,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-strace              ', end='')
     print(initramfs_conf['bin-strace'], end='') # bool
     print('\t\tInclude the strace binary tool from host')
-    print('| --bin-evms                ', end='')
-    print(initramfs_conf['bin-evms'], end='') # bool
-    print('\t\tInclude the evms binary tool from host')
+#    print('| --bin-evms                ', end='')
+#    print(initramfs_conf['bin-evms'], end='') # bool
+#    print('\t\tInclude the evms binary tool from host')
     print('| --bin-glibc               ', end='')
     print(initramfs_conf['bin-glibc'], end='') # bool
     print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
