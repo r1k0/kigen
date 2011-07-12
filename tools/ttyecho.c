@@ -7,9 +7,9 @@
 #include <unistd.h>
 
 void print_help(char *prog_name) {
-        printf("Usage: %s [-n] DEVNAME COMMAND\n", prog_name);
-        printf("Usage: '-n' is to push a new line at the end of the text\n");
-        exit(1);
+     printf("Usage: %s [-n] DEVNAME COMMAND\n", prog_name);
+     printf("Usage: '-n' is to push a new line at the end of the text\n");
+     exit(1);
 }
 
 int main (int argc, char *argv[]) {
