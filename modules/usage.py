@@ -8,7 +8,7 @@ def print_version():
     print(stdout.green('%s' % credits.version))
 
 def print_credits():
-    print('Copyright 2010 r1k0')
+    print('Copyright 2010-2011 r1k0')
     print('Portions copyright 2003-2005 Gentoo Foundation (default linuxrc)')
     print('Distributed under the terms of the GNU General Public License v2')
     print() 
