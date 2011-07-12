@@ -623,6 +623,28 @@ def cli_parser():
                 verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
+            elif o in ("--bin-all"):
+                cli['bin-busybox']      = True
+                cli['bin-luks']         = True
+                cli['bin-lvm2']         = True
+                cli['bin-screen']       = True
+                cli['bin-disklabel']    = True
+                cli['bin-strace']       = True
+#                cli['bin-evms']         = True
+                cli['bin-glibc']        = True
+                cli['bin-libncurses']   = True
+                cli['bin-zlib']         = True
+                cli['bin-dmraid']       = True
+                cli['bin-dropbear']     = True
+            elif o in ("--source-all"):
+                cli['source-luks']      = True
+                cli['source-lvm2']      = True
+                cli['source-disklabel'] = True
+                cli['source-screen']    = True
+                cli['source-ttyecho']   = True
+                cli['source-strace']    = True
+                cli['source-dmraid']    = True
+                cli['source-dropbear']  = True
             elif o in ("--bin-disklabel"):
                 cli['bin-disklabel'] = True
                 cli['source-disklabel'] = False
@@ -692,15 +714,15 @@ def cli_parser():
             elif o in ("--selinux"):
                 cli['selinux'] = True
             elif o in ("--bin-dropbear"):
-                cli['bin-dropbear'] = True
-                cli['bin-glibc'] = True         # dropbear needs glibc
-                cli['bin-libncurses'] = True    # dropbear needs libncurses
-                cli['bin-zlib'] = True          # dropbear needs zlib
+                cli['bin-dropbear']     = True
+                cli['bin-glibc']        = True    # dropbear needs glibc
+                cli['bin-libncurses']   = True    # dropbear needs libncurses
+                cli['bin-zlib']         = True    # dropbear needs zlib
             elif o in ("--source-dropbear"):
-                cli['source-dropbear'] = True
-                cli['bin-glibc'] = True         # dropbear needs glibc
-                cli['bin-libncurses'] = True    # dropbear needs libncurses
-                cli['bin-zlib'] = True          # dropbear needs zlib
+                cli['source-dropbear']  = True
+                cli['bin-glibc']        = True    # dropbear needs glibc
+                cli['bin-libncurses']   = True    # dropbear needs libncurses
+                cli['bin-zlib']         = True    # dropbear needs zlib
             elif o in ("--bin-glibc"):
                 cli['bin-glibc'] = True
             elif o in ("--bin-libncurses"):
@@ -735,28 +757,6 @@ def cli_parser():
                 cli['debugflag'] = True
             elif o in ("--nomodules"):
                 cli['nomodules'] = True
-            elif o in ("--bin-all"):
-                cli['bin-busybox']      = True
-                cli['bin-luks']         = True
-                cli['bin-lvm2']         = True
-                cli['bin-screen']       = True
-                cli['bin-disklabel']    = True
-                cli['bin-strace']       = True
-#                cli['bin-evms']         = True
-                cli['bin-glibc']        = True
-                cli['bin-libncurses']   = True
-                cli['bin-zlib']         = True
-                cli['bin-dmraid']       = True
-                cli['bin-dropbear']     = True
-            elif o in ("--source-all"):
-                cli['source-luks']      = True
-                cli['source-lvm2']      = True
-                cli['source-disklabel'] = True
-                cli['source-screen']    = True
-                cli['source-ttyecho']   = True
-                cli['source-strace']    = True
-                cli['source-dmraid']    = True
-                cli['source-dropbear']  = True
             elif o in ("--bin-busybox"):
                 cli['bin-busybox'] = True
             elif o in ("--dynlibs"):

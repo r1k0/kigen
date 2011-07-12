@@ -163,9 +163,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-dmraid           ', end='')
     print(initramfs_conf['source-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from sources')
-    print('| --source-all              ', end='')
-    print(initramfs_conf['source-all'], end='') # bool
-    print('\t\tInclude all possible features from sources')
+#    print('| --source-all              ', end='')
+#    print(initramfs_conf['source-all'], end='') # bool
+#    print('\t\tInclude all possible features from sources')
 
     print('+ from host binaries')
     print('| --bin-busybox             ', end='')
@@ -204,9 +204,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --bin-dmraid              ', end='')
     print(initramfs_conf['bin-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from host')
-    print('| --bin-all                 ', end='')
-    print(initramfs_conf['bin-all'], end='') # bool
-    print('\t\tInclude all possible features from host')
+#    print('| --bin-all                 ', end='')
+#    print(initramfs_conf['bin-all'], end='') # bool
+#    print('\t\tInclude all possible features from host')
     print()
 
     print(stdout.yellow('  --dynlibs                 '), end='')
