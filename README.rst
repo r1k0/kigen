@@ -43,13 +43,13 @@ Features
   - system/network stack tools
   - alot more
 - SSH daemon (dropbear)
-- strace
-- screen
+- strace (for troubleshoot)
+- screen (for convenience)
 - keymaps (imported from genkernel)
 - ttyecho binary (handy for ssh tty->console)
 - GLibC libraries (auth, dns)
-- libncurses
-- zlib
+- libncurses (required for dropbear)
+- zlib (required for dropbear)
 
 Supported OS
 ~~~~~~~~~~~~
