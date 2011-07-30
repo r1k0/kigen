@@ -59,7 +59,7 @@ QUIET='1'
 ROOT_LINKS='bin sbin lib lib32 lib64 boot usr opt emul'
 ROOT_TREES='etc root home var'
 INSMOD='insmod'
-if [ "${KMINOR}" -gt '4' ]
+if [ "${KMAJOR}" -ge 3 ] || [ "${KMAJOR}" -eq 2 -a "${KMINOR}" -gt '4' ]
 then
 	KSUFF='.ko'
 else
