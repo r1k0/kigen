@@ -206,35 +206,6 @@ class append:
         if not modsyslist:
             self.fail('Host modules list is empty: have you run "kigen kernel"?')
 
-#        # identify and copy config kernel modules
-#        modconflist = get_config_modules_list(self.modules_conf) #.split()
-#        # FIXME: add support for the 'probe' key
-#
-#        # FIXME: rather than looping twice
-#        # merge modconflist.split() + self.bootupdateinitrd['load-modules'].split() and loop once
-#        # but then 
-#        #  - if "load-modules" in self.bootupdateinitrd:
-#        # NOFIX the if-logic on 2nd loop should be handle somewhere else like at bootupdate import or something but eariler then now
-#        # for each module in the list modconflist
-#        print(green(' * ') + '... ', end="")
-#        z = int('0')
-#        for i in modconflist.split():
-#            for j in modsyslist:
-#                k = i +'.ko'
-#                # check for a match
-#                if k == j:
-#                    logging.debug('shipping ' + i)
-#                    print(i, end=" ")
-#                    z = z+1
-#                    if (z % 4 == 0):
-#                        print()
-#                        print(green(' * ') + '... ', end="")
-#                    # if the module is found copy it
-#                    module = os.popen('find /lib/modules/'+self.KV+' -name '+k+' 2>/dev/null | head -n 1').read().strip()
-#                    module_dirname = os.path.dirname(module)
-#                    process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
-#                    process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
-
         # identify and copy config kernel modules
         modconfdict = get_config_modules_dict(self.modules_conf)
 
