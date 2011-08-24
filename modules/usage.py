@@ -255,7 +255,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
         if len(cli['plugin']) <= 4:
             tab = '\t\t\t'
         elif len(cli['plugin']) > 4:
-            tab = '\t\t'
+            tab = '\t'
     else: 
         tab = '\t\t\t'
     print('  --plugin=/dir[,/dir]      "'+cli['plugin']+'"', end='')
