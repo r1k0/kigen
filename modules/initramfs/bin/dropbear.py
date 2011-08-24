@@ -10,7 +10,7 @@ class dropbear:
 
     def __init__(self, cli, libdir, temp, verbose):
 
-        self.cli = cli
+        self.cli    = cli
         self.libdir = libdir
         self.temp   = temp
         self.verbose= verbose

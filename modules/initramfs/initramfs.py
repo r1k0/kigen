@@ -244,7 +244,7 @@ class initramfs:
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dropbear'):
                 from .bin.dropbear import dropbear
-                bin_dropbear = dropbear(self.cli, self.temp, self.verbose)
+                bin_dropbear = dropbear(self.cli, self.libdir, self.temp, self.verbose)
                 bin_dropbear.build()
                 if not isstatic('/usr/sbin/dropbear', self.verbose) and self.cli['dynlibs'] is False:
                     self.fail_msg('/usr/sbin/dropbear is not statically linked. Merge net-misc/dropbear with USE=static or use --dynlibs')
