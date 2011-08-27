@@ -1070,4 +1070,4 @@ Note the autodeconnection done by the host.
 
     Portage community (linuxrc scripts),
 
-:Version: 0.4.1
+:Version: 0.4.2
