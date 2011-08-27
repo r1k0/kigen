@@ -319,8 +319,8 @@ runmdev() {
 		|| bad_msg "Failed to mount /dev as ${devfs}"
 
 	# http://git.busybox.net/busybox/plain/docs/mdev.txt
-	mkdir /dev/pts
-	mount -t devpts devpts /dev/pts  || bad_msg "Failed to mount /dev/pts"
+    mkdir -m 0755 /dev/pts
+    mount -t devpts -o gid=5,mode=0620 devpts /dev/pts  || bad_msg "Failed to mount /dev/pts" 
 	mdev -s  || bad_msg "Failed to receive dynamic updates from mdev"
 }
 
@@ -377,7 +377,7 @@ crypt_filter() {
 	fi
 }
 
-whereis(){
+prompt_user(){
 	# $1 = variable whose value is the path (examples: "REAL_ROOT",
 	#      "LUKS_KEYDEV")
 	# $2 = label
@@ -386,7 +386,7 @@ whereis(){
 	eval local oldvalue='$'${1}
 
 	[ \( $# != 2 \) -a \( $# != 3 \) ] && \
-		bad_msg "Bad invocation of function whereis, please file a bug \
+		bad_msg "Bad invocation of function prompt_user, please file a bug \
 		report with this message" && exit 1
 	[ -n "${3}" ] && local explnt=" or : ${3}" || local explnt="."
 	
@@ -467,7 +467,7 @@ cmdline_hwopts() {
 			fi
 			if [ "$(echo ${y} | cut -b -7)" = "keymap=" ]
 			then
-				MY_HWOPTS="${MY_HWOPTS} dokeymap keymap"
+				MY_HWOPTS="${MY_HWOPTS} keymap"
 			fi
 		done
 	done
@@ -666,25 +666,8 @@ startVolumes() {
 			good_msg "Scanning for and activating Volume Groups"
 			printf "%b\n" "${lvm_commands}" | /bin/lvm /proc/self/fd/0
 
-			# Disable EVMS since lvm is activated and they dont work together.
-			if [ "${USE_EVMS_NORMAL}" = '1' ]
-			then
-				bad_msg "Disabling EVMS Support because LVM started"
-				bad_msg "Do not add dolvm to the cmdline if this is not what you want"
-				bad_msg "LVM and EVMS do not work well together"
-				USE_EVMS_NORMAL=0
-			fi
 		else
 			bad_msg "vgscan or vgchange not found: skipping LVM volume group activation!"
-		fi
-	fi
-
-	if [ "${USE_EVMS_NORMAL}" = '1' ]
-	then
-		if [ -e '/sbin/evms_activate' ]
-		then
-			good_msg "Activating EVMS"
-			evms_activate
 		fi
 	fi
 }
@@ -800,15 +783,15 @@ openLUKS() {
 			run_shell
 		elif [ ${DEV_ERROR} -eq 1 ]
 		then
-			whereis "LUKS_DEVICE" "${LUKS_NAME}"
+			prompt_user "LUKS_DEVICE" "${LUKS_NAME}"
 			DEV_ERROR=0
 		elif [ ${KEY_ERROR} -eq 1 ]
 		then
-			whereis "LUKS_KEY" "${LUKS_NAME} key"
+			prompt_user "LUKS_KEY" "${LUKS_NAME} key"
 			KEY_ERROR=0
 		elif [ ${KEYDEV_ERROR} -eq 1 ]
 		then
-			whereis "LUKS_KEYDEV" "${LUKS_NAME} key device"
+			prompt_user "LUKS_KEYDEV" "${LUKS_NAME} key device"
 			KEYDEV_ERROR=0
 		else
 			case "${LUKS_DEVICE}" in
@@ -969,7 +952,7 @@ sdelay() {
 	# Sleep a specific number of seconds if SDELAY is set
 	if [ "${SDELAY}" ]
 	then
-		good_msg 'Waiting ${SDELAY} seconds...'
+        good_msg "Waiting ${SDELAY} seconds..."
 		sleep ${SDELAY}
 	else
 		good_msg 'Hint: Use parameter scandelay[=seconds] if you need waiting here'

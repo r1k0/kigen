@@ -37,6 +37,7 @@ CMDLINE=`cat /proc/cmdline`
 # Scan CMDLINE for any specified real_root= or cdroot arguments
 FAKE_ROOT=''
 REAL_ROOTFLAGS=''
+ROOTFSTYPE='auto'
 CRYPT_SILENT=0
 for x in ${CMDLINE}
 do
@@ -95,13 +96,6 @@ do
 			DMRAID_OPTS=`parse_opt "${x}"`
 			USE_DMRAID_NORMAL=1
 		;;
-		doevms)
-			USE_EVMS_NORMAL=1
-		;;
-		doevms2)
-			bad_msg 'Using doevms2 is deprecated, use doevms, instead.'
-			USE_EVMS_NORMAL=1
-		;;
 		# Debug Options
 		debug)
 			DEBUG='yes'
@@ -136,6 +130,7 @@ do
 		lvmraid\=*)
 			RAID_DEVICES="`parse_opt ${x}`"
 			RAID_DEVICES="`echo ${RAID_DEVICES} | sed -e 's/,/ /g'`"
+            USE_LVM_NORMAL=1
 		;;
 		part\=*)
 			MDPART=`parse_opt "${x}"`
@@ -212,6 +207,9 @@ do
 		real_rootflags\=*)
 			REAL_ROOTFLAGS=`parse_opt "${x}"`
 		;;
+        rootfstype\=*)
+            ROOTFSTYPE=`parse_opt "${x}"`
+        ;;
 		keymap\=*)
 			keymap=`parse_opt "${x}"`
 		;;
@@ -469,7 +467,7 @@ do
 					good_msg "Detected real_root=${ROOT_DEV}"
 					REAL_ROOT="${ROOT_DEV}"
 				else
-					whereis "REAL_ROOT" "root block device"
+					prompt_user "REAL_ROOT" "root block device"
 					got_good_root=0
 					continue
 				fi
@@ -479,7 +477,7 @@ do
 		if [ "${REAL_ROOT}" = '' ]
 		then
 			# No REAL_ROOT determined/specified. Prompt user for root block device.
-			whereis "REAL_ROOT" "root block device"
+			prompt_user "REAL_ROOT" "root block device"
 			got_good_root=0
 
 		# Check for a block device or /dev/nfs
@@ -513,10 +511,11 @@ do
 		else
 			# mount ro so fsck doesn't barf later
 			if [ "${REAL_ROOTFLAGS}" = '' ]; then
-				mount -o ro ${REAL_ROOT} ${NEW_ROOT}
+                good_msg "Using mount -t ${ROOTFSTYPE} -o ro"
+                mount -t ${ROOTFSTYPE} -o ro ${REAL_ROOT} ${NEW_ROOT}
 			else
-				good_msg "Using mount -o ro,${REAL_ROOTFLAGS}"
-				mount -o ro,${REAL_ROOTFLAGS} ${REAL_ROOT} ${NEW_ROOT}
+                good_msg "Using mount -t ${ROOTFSTYPE} -o ro,${REAL_ROOTFLAGS}" 
+                mount -t ${ROOTFSTYPE} -o ro,${REAL_ROOTFLAGS} ${REAL_ROOT} ${NEW_ROOT}
 			fi
 		fi
 		
@@ -737,13 +736,6 @@ fi
 verbose_kmsg
 
 echo -ne "${GOOD}>>${NORMAL}${BOLD} Booting (initramfs)${NORMAL}"
-if [ ! -e "${CHROOT}/dev/console" ] || [ ! -e "${CHROOT}/dev/null" ]
-then
-	echo -ne "${BAD}>>${NORMAL}${BOLD} ERROR: your real /dev is missing files required to boot (console and null)${NORMAL}"
-elif [ -e /etc/initrd.splash -a ! -e "${CHROOT}/dev/tty1" ]
-then
-	echo -ne "${BAD}>>${NORMAL}${BOLD} ERROR: your real /dev is missing tty1, which is required for splash${NORMAL}"
-fi
 
 cd "${CHROOT}"
 mkdir "${CHROOT}/proc" "${CHROOT}/sys" 2>/dev/null
@@ -775,6 +767,14 @@ do
 		fi
 	fi
 done
+
+if [ ! -e "${CHROOT}/dev/console" ] || [ ! -e "${CHROOT}/dev/null" ]
+then
+   echo -ne "${BAD}>>${NORMAL}${BOLD} ERROR: your real /dev is missing files required to boot (console and null)${NORMAL}"
+elif [ -e /etc/initrd.splash -a ! -e "${CHROOT}/dev/tty1" ]
+then
+   echo -ne "${BAD}>>${NORMAL}${BOLD} ERROR: your real /dev is missing tty1, which is required for splash${NORMAL}"
+fi
 
 echo -e "${BOLD}.${NORMAL}"
 
