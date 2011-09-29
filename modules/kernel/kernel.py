@@ -148,6 +148,8 @@ class kernel:
             if self.make_silentoldconfig() is not zero: self.fail('silentoldconfig')
         if (self.oldconfig is True):
             if self.make_oldconfig() is not zero: self.fail('oldconfig')
+        if (self.yesoldconfig is True):
+            if self.make_yesoldconfig() is not zero: self.fail('yesoldconfig')
         if (self.menuconfig is True) or (self.menuconfig == 'True'):
             if self.make_menuconfig() is not zero: self.fail('menuconfig')
     
