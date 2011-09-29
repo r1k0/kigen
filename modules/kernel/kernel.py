@@ -31,6 +31,7 @@ class kernel:
         self.localyesconfig = cli['localyesconfig']
         self.menuconfig     = cli['menuconfig']
         self.oldconfig      = cli['oldconfig']
+        self.yesoldconfig   = cli['yesoldconfig']
         self.quiet          = verbose['std']
         self.nomodinstall   = cli['nomodinstall']
         self.nomodules      = cli['nomodules'] 
