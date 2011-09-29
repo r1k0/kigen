@@ -91,7 +91,18 @@ class lvm2:
         @return: bool
         """
         os.system('tar xvfz %s/LVM2.%s.tgz -C %s %s' % (get_distdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
-    
+   
+    def patch(self):
+        """
+        lvm2 patch fix for http://bugs.gentoo.org/332905
+            using patch http://bugs.gentoo.org/attachment.cgi?id=243283&action=diff
+
+        @return: bool
+        """
+        self.chgdir(self.lvm2_tmp)
+
+        return os.system()
+
     def configure(self):
         """
         lvm2 Makefile interface to configure

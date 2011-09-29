@@ -347,6 +347,26 @@ class kernel:
 
         return command
 
+    def build_yescommand(self, target, verbose):
+        """
+        Kernel Makefile bash build command
+        
+        @arg: dict
+        @arg: string
+
+        @return: string
+        """
+        command = 'yes "" | %s %s CC="%s" LD="%s" AS="%s" ARCH="%s" %s %s' % (self.master_conf['DEFAULT_KERNEL_MAKE'], \
+                    self.master_conf['DEFAULT_MAKEOPTS'],     \
+                    self.master_conf['DEFAULT_KERNEL_CC'],    \
+                    self.master_conf['DEFAULT_KERNEL_LD'],    \
+                    self.master_conf['DEFAULT_KERNEL_AS'],    \
+                    self.arch,                                \
+                    target,                                   \
+                    verbose)
+
+        return command
+
     def make_mrproper(self):
         """
         Kernel command interface for mrproper
@@ -389,7 +409,21 @@ class kernel:
             print(command)
 
         return os.system(command)
-    
+   
+    def make_yesoldconfig(self):
+        """
+        Kernel command interface for yes '' | make oldconfig
+
+        @return: bool
+        """
+        print(green(' * ') + turquoise('kernel.yesoldconfig '))
+        self.chgdir(self.kerneldir)
+        command = self.build_yescommand('oldconfig', '')
+        if self.quiet is '':
+            print(command)
+        
+        return os.system(command)
+
     def make_menuconfig(self):
         """
         Kernel command interface for menuconfig
