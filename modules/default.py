@@ -52,7 +52,6 @@ kernel_conf = {
          'localmodconfig'   : 'False',   \
          'localyesconfig'   : 'False',   \
          'silentoldconfig'  : 'False',   \
-         'yesoldconfig'     : 'False',   \
          'defconfig'        : 'False'}
 
 # default modules values

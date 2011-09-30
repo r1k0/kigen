@@ -114,7 +114,6 @@ def cli_parser():
                                     "allnoconfig",              \
                                     "nooldconfig",              \
                                     "oldconfig",                \
-                                    "yesoldconfig",             \
                                     "logfile=",                 \
                                     "noboot",                   \
                                     "nosaveconfig",             \
@@ -181,8 +180,6 @@ def cli_parser():
 
         cli['allnoconfig']  = False
 
-        cli['yesoldconfig']    = False
-        
         cli['oldconfig']    = False
         if kernel_conf['nooldconfig'] == 'False':
             cli['oldconfig'] = True
@@ -277,8 +274,6 @@ def cli_parser():
                 cli['oldconfig'] = False
             elif o in ("--oldconfig"):
                 cli['oldconfig'] = True
-            elif o in ("--yesoldconfig"):
-                cli['yesoldconfig'] = True
             elif o in ("--nomodinstall"):
                 cli['nomodinstall'] = True
             elif o in ("--nomodules"):
