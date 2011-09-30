@@ -384,7 +384,8 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('oldconfig', '')
+#        command = self.build_command('oldconfig', '')
+        command = 'yes "" 2>/dev/null | make oldconfig'
         if self.quiet is '':
             print(command)
 
