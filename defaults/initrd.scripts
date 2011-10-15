@@ -1181,39 +1181,38 @@ runnetstack() {
     fi
 
     # getting ip up via dhcp
-    if [ "$IP" = "udhcpc" ] || [ "$IP" = "dhcp" ] || [ "$IP" = "DHCP" ]
+    if [ "${IP}" = "udhcpc" ] || [ "${IP}" = "dhcp" ] || [ "${IP}" = "DHCP" ]
     then
         echo -e "${BOLD}   ::${NORMAL} Bringing up IP via udhcpc..."
         udhcpc &
-    elif [ "$IP" != "" ]
+    elif [ "${IP}" != "" ]
     then
         # getting static ip up
-        if [ -n "$NETMASK" ]
+        echo -e "${BOLD}   ::${NORMAL} Bringing up static IP $IP..."
+        if [ -n "${NETMASK}" ]
         then
-            echo -e "${BOLD}   ::${NORMAL} Bringing up static IP $IP..."
-            ifconfig eth0 "$IP" netmask "$NETMASK"
+            ifconfig eth0 "${IP}" netmask "${NETMASK}"
         else
-            echo -e "${BOLD}   ::${NORMAL} Bringing up static IP $IP..."
-            ifconfig eth0 "$IP"
+            ifconfig eth0 "${IP}"
         fi
         echo -e "${BOLD}   ::${NORMAL} Creating /etc/resolv.conf..."
-        if [ -n "$NAMESERVER" ]
+        if [ -n "${NAMESERVER}" ]
         then
-            echo "nameserver $NAMESERVER" >> /etc/resolv.conf
+            echo "nameserver ${NAMESERVER}" >> /etc/resolv.conf
         fi
-        if [ -n "$DOMAIN" ]
+        if [ -n "${DOMAIN}" ]
         then
-            echo "domain $DOMAIN" >> /etc/resolv.conf
+            echo "domain ${DOMAIN}" >> /etc/resolv.conf
         fi
     fi
 
-    if [ -n "$DEFAULTGW" ]
+    if [ -n "${DEFAULTGW}" ]
     then
         echo -e "${BOLD}   ::${NORMAL} Setting default gateway ..."
-        route add default gw $DEFAULTGW
+        route add default gw ${DEFAULTGW}
     fi
 
-    if [ -n "$DROPBEAR" ]
+    if [ -n "${DROPBEAR}" ]
     then
         if [ -e /dev/pty0 ]; then # CONFIG_LEGACY_PTYS=n
             ret=1
@@ -1228,7 +1227,7 @@ runnetstack() {
             fi
         fi
 
-        if [ "$ret" = '1' ] && [ -z "$IP" ]
+        if [ "${ret}" = '1' ] && [ -z "${IP}" ]
         then
             bad_msg 'ip= kernel parameter is missing value'
             bad_msg 'add to kernel line ip=x.x.x.x or ip=dhcp'
