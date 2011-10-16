@@ -9,6 +9,7 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.4.*
 =====
+TODO: add process lockfile /var/run/kigen.pid
 TODO: add support for WLAN devices (currenlty dropbear boot only works for ethernet devices)
 TODO: rewrite bin/evms.py though we hide it
 TODO: improve arch detection and support a bit more, I feel it's missing stuf
