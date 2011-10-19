@@ -97,7 +97,11 @@ logging.debug(verbose)
 
 # Funtoo bootupdate integration
 from initramfs.bootupdate import get_boot_initrd
-bootupdateinitrd = get_boot_initrd()
+bootupdateinitrd = []
+try:
+    bootupdateinitrd = get_boot_initrd()
+except:
+    pass
 if bootupdateinitrd:
     bootupdateset = True
 else:
