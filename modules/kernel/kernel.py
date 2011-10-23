@@ -385,10 +385,9 @@ class kernel:
         print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
         command = self.build_command('oldconfig', '')
-# NOTE: this breaks if Kicktoo calls KIGen to build a kernel
-# error is due to a broken pipe, gotta fix this 
-# I need Kicktoo+KIGen to work together
+# FIXME: this breaks if Kicktoo calls KIGen to build a kernel error is due to a broken pipe
 #        command = 'yes "" 2>/dev/null | make oldconfig'
+#       then try command = 'yes "" &>/dev/null | make oldconfig'
         if self.quiet is '':
             print(command)
 
