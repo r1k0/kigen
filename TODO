@@ -9,6 +9,7 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.4.*
 =====
+TODO: check for binaries in runnetstack() -f ...
 TODO: add process lockfile /var/run/kigen.pid
     pids= [pid for pid in os.listdir('/proc') if pid.isdigit()]
     for pid in pids:
