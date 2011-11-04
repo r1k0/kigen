@@ -1233,10 +1233,13 @@ runnetstack() {
             bad_msg 'add to kernel line ip=x.x.x.x or ip=dhcp'
         else
             echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
-            # starting dropbear
-            dropbear -E || dropbear || bad_msg "Oh crap! dropbear just won't start"
+            if [ -f "/sbin/dropbear" ]; then
+                # starting dropbear
+                dropbear -E || dropbear || bad_msg "Oh crap! dropbear just won't start"
+            else
+                bad_msg "Oups! /sbin/dropbear is missing.. Have you run 'kigen initramfs --source-dropbear ..'?"
+            fi
         fi
-
 #        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
 #        then
 #            echo -e "${BOLD}   ::${NORMAL} Setting job control on..."
@@ -1244,6 +1247,6 @@ runnetstack() {
 #            setsid cttyhack sh
 #        fi
 #
-#       [ -x /bin/sh ] && /bin/sh || /bin/ash
+#        [ -x /bin/sh ] && /bin/sh || /bin/ash
    fi
 }
