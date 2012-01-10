@@ -47,7 +47,7 @@ def process_redir(cmd, verbose):
 
     cmdlines = [process.split() for process in cmd]
 
-    p = subprocess.Popen(cmdlines[0], stdout=subprocess.PIPE)#, close_fds=True)
+    p = subprocess.Popen(cmdlines[0], stdout=subprocess.PIPE) #, close_fds=True)
     ret = p.wait()
 
     # FIXME single pass
@@ -77,7 +77,7 @@ def process_append(cmd, verbose):
 
     cmdlines = [process.split() for process in cmd]
 
-    p = subprocess.Popen(cmdlines[0],  stdout=subprocess.PIPE)#, close_fds=True)
+    p = subprocess.Popen(cmdlines[0],  stdout=subprocess.PIPE) #, close_fds=True)
     ret = p.wait()
 
     # FIXME single pass
@@ -89,43 +89,43 @@ def process_append(cmd, verbose):
 
     return ret, p.stdout #, p2.stderr
 
-def process_star(cmd, verbose):
-    """
-    Single process launcher
-
-    @arg cmd    string
-
-    Handles a single start * :(
-    Don't use for anything else than 'cp' or 'rm'
-    """
-    if verbose['set'] is True:
-        print(cmd)
-
-    cmd = cmd.split()
-
-    if cmd[0] == 'cp':
-        dest = cmd[-1]
-        cmd.remove(dest)
-
-    for i in cmd:
-        # expand single *
-        if i == '*':
-            for j in glob.glob('*'):
-                cmd.append(j)
-            cmd.remove('*')
-        # expand k* *k
-        if '*' in i and i != '*':
-            for k in glob.glob(i):
-                cmd.append(k)
-            cmd.remove(i)
-   
-    if cmd[0] == 'cp':
-         cmd.append(dest)
-    logging.debug(cmd)
-    f = open(verbose['logfile'])
-    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
-
-    return p.wait() # , p.stdout #, p.stderr
+#def process_star(cmd, verbose):
+#    """
+#    Single process launcher
+#
+#    @arg cmd    string
+#
+#    Handles a single start * :(
+#    Don't use for anything else than 'cp' or 'rm'
+#    """
+#    if verbose['set'] is True:
+#        print(cmd)
+#
+#    cmd = cmd.split()
+#
+#    if cmd[0] == 'cp':
+#        dest = cmd[-1]
+#        cmd.remove(dest)
+#
+#    for i in cmd:
+#        # expand single *
+#        if i == '*':
+#            for j in glob.glob('*'):
+#                cmd.append(j)
+#            cmd.remove('*')
+#        # expand k* *k
+#        if '*' in i and i != '*':
+#            for k in glob.glob(i):
+#                cmd.append(k)
+#            cmd.remove(i)
+#   
+#    if cmd[0] == 'cp':
+#         cmd.append(dest)
+#    logging.debug(cmd)
+#    f = open(verbose['logfile'])
+#    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
+#
+#    return p.wait() # , p.stdout #, p.stderr
 
 # | > >> < 
 # processes < >> > logic
@@ -136,14 +136,16 @@ def process(cmd, verbose):
 
     @arg cmd	string
 
-    @return: ret, output #, err
+    @return: ret #, output #, err
     """
     if verbose['set'] is True:
         print(cmd)
-    cmd = cmd.split()
+#    cmd = cmd.split()
     logging.debug(cmd)
 
     f = open(verbose['logfile'])
-    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
+#    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
+    ret, o = subprocess.getstatusoutput(cmd)
 
-    return p.wait() # , p.stdout #, p.stderr
+#    return p.wait() # , p.stdout #, p.stderr
+    return ret # p.wait() # , p.stdout #, p.stderr
