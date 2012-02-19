@@ -85,7 +85,7 @@ class luks:
         luks_url = self.url +'/cryptsetup-'+ self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
-        return os.system('/usr/bin/wget %s -v -O %s/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_distdir(self.temp), str(self.luks_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget --no-proxy %s -v -O %s/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_distdir(self.temp), str(self.luks_ver), self.verbose['std']))
     
     def extract(self):
         """

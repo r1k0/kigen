@@ -79,7 +79,7 @@ class screen:
         screen_url = self.url + '/screen-' + str(self.screen_ver) + '.tar.gz'
 
         # FIXME utils.shell.process does not remove the output
-        return os.system('/usr/bin/wget %s -O %s/screen-%s.tar.gz %s' % (screen_url, get_distdir(self.temp), str(self.screen_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget --no-proxy %s -O %s/screen-%s.tar.gz %s' % (screen_url, get_distdir(self.temp), str(self.screen_ver), self.verbose['std']))
     
     def extract(self):
         """

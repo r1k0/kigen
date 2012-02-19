@@ -82,7 +82,7 @@ class lvm2:
         lvm2_url = self.url+'/LVM2.' + self.lvm2_ver + '.tgz'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget %s -O %s/LVM2.%s.tgz %s' % (lvm2_url, get_distdir(self.temp), self.lvm2_ver, self.verbose['std']))
+        return os.system('/usr/bin/wget --no-proxy %s -O %s/LVM2.%s.tgz %s' % (lvm2_url, get_distdir(self.temp), self.lvm2_ver, self.verbose['std']))
 
     def extract(self):
         """
