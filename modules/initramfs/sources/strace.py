@@ -79,7 +79,7 @@ class strace:
         strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget --no-proxy %s -O %s/strace-%s.tar.bz2 %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/strace-%s.tar.bz2 %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
     
     def extract(self):
         """

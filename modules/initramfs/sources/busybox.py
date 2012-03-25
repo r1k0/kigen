@@ -123,7 +123,7 @@ class busybox:
         bb_url = self.url + '/busybox-' + str(self.bb_version) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget --no-proxy %s -O %s/busybox-%s.tar.bz2 %s' % (bb_url, get_distdir(self.temp), str(self.bb_version), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/busybox-%s.tar.bz2 %s' % (bb_url, get_distdir(self.temp), str(self.bb_version), self.verbose['std']))
     
     def extract(self):
         """

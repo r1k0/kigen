@@ -97,7 +97,7 @@ class dropbear:
         dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
 
 #       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
-        return os.system('/usr/bin/wget --no-proxy %s -O %s/dropbear-%s.tar.gz %s' % (dropbear_url, get_distdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/dropbear-%s.tar.gz %s' % (dropbear_url, get_distdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
     
     def extract(self):
         """
