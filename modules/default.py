@@ -120,13 +120,13 @@ initramfs_conf = {
 # default version values
 version_conf = {
         'strace-version'    : '4.5.20',         \
-        'luks-version'      : '1.1.3',          \
+        'luks-version'      : '1.4.1',          \
         'screen-version'    : '4.0.3',          \
-        'dropbear-version'  : '0.53',           \
-        'busybox-version'   : '1.18.4',         \
+        'dropbear-version'  : '2011.54',        \
+        'busybox-version'   : '1.19.4',         \
         'dmraid-version'    : '1.0.0.rc16-3',   \
-        'lvm2-version'      : '2.02.85',        \
-        'e2fsprogs-version' : '1.41.14'}
+        'lvm2-version'      : '2.02.88',        \
+        'e2fsprogs-version' : '1.42'}
 
 # default url values
 url_conf = {
