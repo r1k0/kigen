@@ -6,7 +6,7 @@ import subprocess
 
 def listdynamiclibs(binary, verbose):
     """
-    Return a list of  path to dynamic libraries
+    Return a list of paths to dynamic libraries
 
     @arg:       binary    string
 
