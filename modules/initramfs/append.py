@@ -830,6 +830,7 @@ class append:
 
         process('cp /etc/localtime %s'          % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
         process('cp /etc/nsswitch.conf %s'      % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
+        process('cp /etc/gai.conf %s'           % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
         process('cp /etc/hosts %s'              % self.temp['work']+'/initramfs-source-dropbear-temp/etc', self.verbose)
         process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/lastlog', self.verbose)
         process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/log/wtmp', self.verbose)
