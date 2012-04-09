@@ -1218,13 +1218,13 @@ runnetstack() {
             ret=1
         else
             [ -d /dev/pts ] || mkdir -p /dev/pts
-            if mount -t devpts /dev/pts /dev/pts 2>/dev/null; then # CONFIG_UNIX98_PTYS=n
-                good_msg "/dev/pts mounted"
-                ret=1
-            else
-                warn_msg "Cannot mount /dev/pts"
-                rm -fr /dev/pts
-            fi
+#            if mount -t devpts devpts /dev/pts 2>/dev/null; then # CONFIG_UNIX98_PTYS=n
+#                good_msg "/dev/pts mounted"
+#                ret=1
+#            else
+#                warn_msg "Cannot mount /dev/pts"
+#                rm -fr /dev/pts
+#            fi
         fi
 
         if [ "${ret}" = '1' ] && [ -z "${IP}" ]
