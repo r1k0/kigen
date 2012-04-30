@@ -28,7 +28,7 @@ def listdynamiclibs(binary, verbose):
     dynlibs = []
 
     for i in p.split():
-        if i.startswith('/lib'):
+        if i.startswith('/lib') or i.startswith('/usr/lib'):
             dynlibs.append(i)
             
     logging.debug(binary + ' dynamic libraries found are:')
