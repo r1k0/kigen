@@ -184,7 +184,7 @@ def get_sys_modules_list(KV):
 #            +' '+modules_conf['MODULES_PCMCIA']         \
 #            +' '+modules_conf['MODULES_USB']            \
 #            +' '+modules_conf['MODULES_FS']             \
-#            +' '+modules_conf['MODULES_CRYPT']          \
+#            +' '+modules_conf['MODULES_CRYPTO']         \
 #            +' '+modules_conf['MODULES_MISC']           \
 #            +' '+modules_conf['MODULES_VIDEO']  
 #
@@ -213,8 +213,8 @@ def get_config_modules_dict(master_conf):
             'MODULES_PCMCIA':       master_conf['MODULES_PCMCIA'],   \
             'MODULES_USB':          master_conf['MODULES_USB'],      \
             'MODULES_FS':           master_conf['MODULES_FS'],       \
-            'MODULES_CRYPT':        master_conf['MODULES_CRYPT'],	 \
-            'MODULES_MISC':         master_conf['MODULES_MISC'],	 \
+            'MODULES_CRYPTO':       master_conf['MODULES_CRYPTO'],   \
+            'MODULES_MISC':         master_conf['MODULES_MISC'],     \
             'MODULES_VIDEO':        master_conf['MODULES_VIDEO'] }
 
     return modules_config
