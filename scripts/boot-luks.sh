@@ -8,7 +8,7 @@ then
     exit
 fi
 pkill cryptsetup
-sleep 2
-/sbin/cryptsetup luksOpen $1 root
-sleep 2
+sleep 2 || exit 
+/sbin/cryptsetup luksOpen $1 root || exit 
+sleep 2 || exit 1
 /sbin/ttyecho -n /dev/console q

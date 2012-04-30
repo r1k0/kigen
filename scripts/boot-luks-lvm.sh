@@ -8,11 +8,11 @@ then
     exit
 fi
 pkill cryptsetup
-sleep 2
-/sbin/cryptsetup luksOpen $1 root
-sleep 2
-/bin/lvm vgscan
-sleep 1
-/bin/lvm vgchange -a y
-sleep 1
+sleep 2 || exit 
+/sbin/cryptsetup luksOpen $1 root || exit 
+sleep 2 || exit 
+/bin/lvm vgscan || exit 
+sleep 1 || exit 
+/bin/lvm vgchange -a y || exit 
+sleep 1 || exit 1 
 /sbin/ttyecho -n /dev/console q
