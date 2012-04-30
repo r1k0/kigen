@@ -1235,9 +1235,9 @@ runnetstack() {
             echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
             if [ -f "/sbin/dropbear" ]; then
                 # starting dropbear
-                dropbear -E || dropbear || bad_msg "Oh crap! dropbear just won't start"
+                dropbear || bad_msg "Oh crap! dropbear won't start -_-'"
             else
-                bad_msg "Oups! /sbin/dropbear is missing.. Have you run 'kigen initramfs --source-dropbear ..'?"
+                bad_msg "/sbin/dropbear is missing.. Have you run 'kigen initramfs --[bin|source]-dropbear ..'?"
             fi
         fi
 #        if [ -e /usr/bin/setsid ] && [ -e /bin/cttyhack ]
