@@ -276,7 +276,7 @@ class append:
 
         process('mkdir -p ' + self.temp['work']+'/initramfs-plugin-temp/', self.verbose)
 
-        process('cp -ar %s %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'), self.verbose)
+        process('cp -ar %s/* %s' % (dir, self.temp['work']+'/initramfs-plugin-temp/'), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())
