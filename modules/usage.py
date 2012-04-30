@@ -142,7 +142,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --source-lvm2             ', end='')
     print(initramfs_conf['source-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from sources')
-    print('| --source-dropbear         ', end='')
+    print(stdout.red('| --source-dropbear         '), end='')
     print(initramfs_conf['source-dropbear'], end='') # bool
     print('\t\tInclude dropbear support from sources')
     print('|  --debugflag              ', end='')
