@@ -70,6 +70,8 @@ class dropbear:
         process('chmod +x %s' % self.temp['work']+'/initramfs-bin-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
         process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-bin-dropbear-temp/root'), self.verbose)
         process('chmod +x %s' % self.temp['work']+'/initramfs-bin-dropbear-temp/root/boot-luks.sh', self.verbose)
+        process('cp %s/scripts/boot.sh %s' % (self.libdir, self.temp['work']+'/initramfs-bin-dropbear-temp/root'), self.verbose)
+        process('chmod +x %s' % self.temp['work']+'/initramfs-bin-dropbear-temp/root/boot.sh', self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-bin-dropbear-temp/dev')
         process('mknod urandom c 1 9', self.verbose)
