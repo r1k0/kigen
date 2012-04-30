@@ -82,9 +82,9 @@ class dropbear:
         # create keys
         process('mkdir -p %s/initramfs-bin-dropbear-temp/etc/dropbear' % self.temp['work'], self.verbose)
         print(green(' * ') + '... creating dss key')
-        process('%s/initramfs-bin-dropbear-temp/bin/dropbearkey -t dss -f %s/initramfs-bin-dropbear-temp/etc/dropbear/dropbear_dss_host_key' % self.temp['work'], self.temp['work'], self.verbose)
+        process('.%s/initramfs-bin-dropbear-temp/bin/dropbearkey -t dss -f %s/initramfs-bin-dropbear-temp/etc/dropbear/dropbear_dss_host_key' % (self.temp['work'], self.temp['work']), self.verbose)
         print(green(' * ') + '... creating rsa key')
-        process('%s/initramfs-bin-dropbear-temp/bin/dropbearkey -t rsa -s 4096 -f %s/initramfs-bin-dropbear-temp/etc/dropbear/dropbear_rsa_host_key' % self.temp['work'], self.temp['work'], self.verbose)
+        process('%s/initramfs-bin-dropbear-temp/bin/dropbearkey -t rsa -s 4096 -f %s/initramfs-bin-dropbear-temp/etc/dropbear/dropbear_rsa_host_key' % (self.temp['work'], self.temp['work']), self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-bin-dropbear-temp')
 
