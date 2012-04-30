@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
         strcat(cmd, argv[i]);
         strcat(cmd, " ");
     }
-  if (newline == 0)
+    if (newline == 0)
         usleep(225000);
     for (i = 0; cmd[i]; i++)
         ioctl (fd, TIOCSTI, cmd+i);
