@@ -1069,5 +1069,3 @@ Note the autodeconnection done by the host.
     erick 'r1k0' michau (python engine),
 
     Portage community (linuxrc scripts),
-
-:Version: 0.4.4
