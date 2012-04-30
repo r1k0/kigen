@@ -11,4 +11,4 @@ pkill cryptsetup
 sleep 2
 /sbin/cryptsetup luksOpen $1 root
 sleep 2
-/sbin/ttyecho -n /dev/console /dev/mapper/root
+/sbin/ttyecho -n /dev/console q
