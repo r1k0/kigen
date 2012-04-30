@@ -837,10 +837,10 @@ class append:
         process('touch %s'                      % self.temp['work']+'/initramfs-source-dropbear-temp/var/run/utmp', self.verbose)
 
         # ship the boot* scripts too
-        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
-        process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
-        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks.sh', self.verbose)
+#        process('cp %s/scripts/boot-luks-lvm.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
+#        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks-lvm.sh', self.verbose)
+#        process('cp %s/scripts/boot-luks.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
+#        process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot-luks.sh', self.verbose)
         process('cp %s/scripts/boot.sh %s' % (self.libdir, self.temp['work']+'/initramfs-source-dropbear-temp/root'), self.verbose)
         process('chmod +x %s' % self.temp['work']+'/initramfs-source-dropbear-temp/root/boot.sh', self.verbose)
 
