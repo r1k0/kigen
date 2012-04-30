@@ -9,6 +9,7 @@ NODO: when using --plugin=dir detect file collision and fail if found, add --ove
 
 0.4.*
 =====
+TODO: change --bin-* to --host-*
 TODO: rethink modules/utils/process.py using subprocess.call/getoutput/getstatusoutput
 TODO: check for binaries in runnetstack() -f ...
 TODO: add process lockfile /var/run/kigen.pid
