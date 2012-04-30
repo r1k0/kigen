@@ -51,9 +51,9 @@ def print_examples():
     print(' '+os.path.basename(sys.argv[0])+' --clean --menuconfig k')
     print(' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile')
     print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon')
-    print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --bin-luks -d -n initramfs')
-    print(' '+os.path.basename(sys.argv[0])+' i --bin-luks --bin-lvm2 --bin-disklabel --splash=sabayon --bin-glibc --dynlibs')
-    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --bin-glibc --bin-zlib --bin-libncurses --defconfig --nocache')
+    print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --host-luks -d -n initramfs')
+    print(' '+os.path.basename(sys.argv[0])+' i --host-luks --host-lvm2 --host-disklabel --splash=sabayon --host-glibc --dynlibs')
+    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --host-glibc --host-zlib --host-libncurses --defconfig --nocache')
     print(' '+os.path.basename(sys.argv[0])+' --extract=/file t --to=/dir')
     print(' '+os.path.basename(sys.argv[0])+' tool --compress=/dir --into=/file')
 
@@ -168,43 +168,43 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print('\t\tInclude all possible features from sources')
 
     print('+ from host binaries')
-    print('| --bin-busybox             ', end='')
+    print('| --host-busybox             ', end='')
     print(initramfs_conf['bin-busybox'], end='') # bool 
     print('\t\tInclude busybox support from host')
-    print('| --bin-luks                ', end='')
+    print('| --host-luks                ', end='')
     print(initramfs_conf['bin-luks'], end='') # bool 
     print('\t\tInclude LUKS support from host')
-    print('| --bin-lvm2                ', end='')
+    print('| --host-lvm2                ', end='')
     print(initramfs_conf['bin-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from host')
-    print('| --bin-dropbear            ', end='')
+    print('| --host-dropbear            ', end='')
     print(initramfs_conf['bin-dropbear'], end='') # bool
     print('\t\tInclude dropbear support from host')
-    print('| --bin-screen              ', end='')
+    print('| --host-screen              ', end='')
     print(initramfs_conf['bin-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from host')
-    print('| --bin-disklabel           ', end='')
+    print('| --host-disklabel           ', end='')
     print(initramfs_conf['bin-disklabel'], end='') # bool
     print('\t\tInclude support for UUID/LABEL from host')
-    print('| --bin-strace              ', end='')
+    print('| --host-strace              ', end='')
     print(initramfs_conf['bin-strace'], end='') # bool
     print('\t\tInclude the strace binary tool from host')
-#    print('| --bin-evms                ', end='')
+#    print('| --host-evms                ', end='')
 #    print(initramfs_conf['bin-evms'], end='') # bool
 #    print('\t\tInclude the evms binary tool from host')
-    print('| --bin-glibc               ', end='')
+    print('| --host-glibc               ', end='')
     print(initramfs_conf['bin-glibc'], end='') # bool
     print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-    print('| --bin-libncurses          ', end='')
+    print('| --host-libncurses          ', end='')
     print(initramfs_conf['bin-libncurses'], end='') # bool
     print('\t\tInclude host libncurses (required for dropbear)')
-    print('| --bin-zlib                ', end='')
+    print('| --host-zlib                ', end='')
     print(initramfs_conf['bin-zlib'], end='') # bool
     print('\t\tInclude host zlib (required for dropbear)')
-    print('| --bin-dmraid              ', end='')
+    print('| --host-dmraid              ', end='')
     print(initramfs_conf['bin-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from host')
-#    print('| --bin-all                 ', end='')
+#    print('| --host-all                 ', end='')
 #    print(initramfs_conf['bin-all'], end='') # bool
 #    print('\t\tInclude all possible features from host')
     print()

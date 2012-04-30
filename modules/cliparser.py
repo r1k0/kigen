@@ -623,7 +623,7 @@ def cli_parser():
                 verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
-            elif o in ("--bin-all"):
+            elif o in ("--host-all"):
                 cli['bin-busybox']      = True
                 cli['bin-luks']         = True
                 cli['bin-lvm2']         = True
@@ -645,7 +645,7 @@ def cli_parser():
                 cli['source-strace']    = True
                 cli['source-dmraid']    = True
                 cli['source-dropbear']  = True
-            elif o in ("--bin-disklabel"):
+            elif o in ("--host-disklabel"):
                 cli['bin-disklabel'] = True
                 cli['source-disklabel'] = False
             elif o in ("--source-disklabel"):
@@ -654,7 +654,7 @@ def cli_parser():
             elif o in ("--luks"):
                 cli['luks'] = True
 # FIXME trigger --keymap=all?
-            elif o in ("--bin-luks"):
+            elif o in ("--host-luks"):
                 cli['bin-luks'] = True
                 cli['source-luks'] = False
             elif o in ("--source-luks"):
@@ -663,10 +663,10 @@ def cli_parser():
             elif o in ("--source-lvm2"):
                 cli['source-lvm2'] = True
                 cli['bin-lvm2'] = False
-            elif o in ("--bin-lvm2"):
+            elif o in ("--host-lvm2"):
                 cli['bin-lvm2'] = True
                 cli['source-lvm2'] = False
-            elif o in ("--bin-dmraid"):
+            elif o in ("--host-dmraid"):
                 cli['bin-dmraid'] = True
             elif o in ("--source-dmraid"):
                 cli['source-dmraid'] = True
@@ -675,7 +675,7 @@ def cli_parser():
                 cli['oldconfig'] = True # make sure .config is ok
             elif o in ("--iscsi"):
                 cli['iscsi'] = True
-            elif o in ("--bin-evms"):
+            elif o in ("--host-evms"):
                 cli['bin-evms'] = True
             elif o in ("--mdadm"):
                 cli['mdadm'] = True
@@ -713,7 +713,7 @@ def cli_parser():
                 cli['noboot'] = True
             elif o in ("--selinux"):
                 cli['selinux'] = True
-            elif o in ("--bin-dropbear"):
+            elif o in ("--host-dropbear"):
                 cli['bin-dropbear']     = True
                 cli['bin-glibc']        = True    # dropbear needs glibc
                 cli['bin-libncurses']   = True    # dropbear needs libncurses
@@ -723,11 +723,11 @@ def cli_parser():
                 cli['bin-glibc']        = True    # dropbear needs glibc
                 cli['bin-libncurses']   = True    # dropbear needs libncurses
                 cli['bin-zlib']         = True    # dropbear needs zlib
-            elif o in ("--bin-glibc"):
+            elif o in ("--host-glibc"):
                 cli['bin-glibc'] = True
-            elif o in ("--bin-libncurses"):
+            elif o in ("--host-libncurses"):
                 cli['bin-libncurses'] = True
-            elif o in ("--bin-zlib"):
+            elif o in ("--host-zlib"):
                 cli['bin-zlib'] = True
             elif o in ("--rename="):
                 cli['rename'] = a
@@ -739,13 +739,13 @@ def cli_parser():
                 cli['source-ttyecho'] = True
             elif o in ("--keymaps"):
                 cli['keymaps'] = a
-            elif o in ("--bin-strace"):
+            elif o in ("--host-strace"):
                 cli['bin-strace'] = True
                 cli['source-strace'] = False
             elif o in ("--source-strace"):
                 cli['source-strace'] = True
                 cli['bin-strace'] = False
-            elif o in ("--bin-screen"):
+            elif o in ("--host-screen"):
                 cli['bin-screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
                 cli['bin-libncurses'] = True    # screen needs libncurses
@@ -757,7 +757,7 @@ def cli_parser():
                 cli['debugflag'] = True
             elif o in ("--nomodules"):
                 cli['nomodules'] = True
-            elif o in ("--bin-busybox"):
+            elif o in ("--host-busybox"):
                 cli['bin-busybox'] = True
             elif o in ("--dynlibs"):
                 cli['dynlibs'] = True
