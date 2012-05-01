@@ -325,24 +325,30 @@ def cli_parser():
                                     "defconfig",    \
                                     "oldconfig",    \
                                     "bin-luks",     \
+                                    "host-luks",    \
                                     "source-luks",  \
                                     "source-lvm2",  \
                                     "bin-lvm2",     \
+                                    "host-lvm2",    \
                                     "bin-dmraid",   \
+                                    "host-dmraid",  \
                                     "source-dmraid",\
                                     "iscsi",        \
                                     "logfile=",     \
                                     "bin-evms",     \
+                                    "host-evms",    \
                                     "mdadm",        \
                                     "splash=",      \
                                     "sres=",        \
                                     "sinitrd=",     \
                                     "firmware=",    \
                                     "bin-disklabel",\
+                                    "host-disklabel",\
                                     "source-disklabel",\
                                     "unionfs-fuse", \
                                     "aufs",         \
                                     "bin-dropbear", \
+                                    "host-dropbear",\
                                     "source-dropbear",\
                                     "linuxrc=",     \
                                     "nocache",      \
@@ -355,22 +361,29 @@ def cli_parser():
                                     "nosaveconfig", \
                                     "hostbin",      \
                                     "bin-glibc",    \
+                                    "host-glibc",   \
                                     "libncurses",   \
                                     "bin-libncurses",\
+                                    "host-libncurses",\
                                     "bin-zlib",     \
+                                    "host-zlib",    \
                                     "rename=",      \
                                     "plugin=",      \
                                     "rootpasswd=",  \
                                     "keymaps=",     \
                                     "source-ttyecho",\
                                     "bin-strace",   \
+                                    "host-strace",  \
                                     "source-strace",\
                                     "bin-screen",   \
-                                    "source-screen", \
+                                    "host-screen",  \
+                                    "source-screen",\
                                     "debugflag",    \
                                     "bin-all",      \
+                                    "host-all",     \
                                     "source-all",   \
                                     "bin-busybox",  \
+                                    "host-busybox", \
                                     "dynlibs", \
                                     "debug"])
         except GetoptError as err:
