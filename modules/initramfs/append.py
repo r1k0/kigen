@@ -118,8 +118,11 @@ class append:
             print(green(' * ')+'... Gentoo linuxrc'+ white(' 3.4.30') + ' patched')
             # this is Gentoo official linuxrc suite (see genkernel)
             process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
+            print(green(' * ')+'... /init')
             process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            print(green(' * ')+'... /etc/initrd.scripts')
             process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            print(green(' * ')+'... /etc/initrd.defaults')
             process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
@@ -128,12 +131,14 @@ class append:
             # copy first the linuxrc to /init
             if os.path.isfile(linuxrclist[0]):
                 process('cp %s %s/initramfs-base-temp/init' % (linuxrclist[0], self.temp['work']), self.verbose)
+                print(green(' * ')+'... /init')
             else:
                 self.fail('%s does not exist.')
             # then all possible following files
             for i in linuxrclist[1:]:
                 if os.path.isfile(i):
                     process('cp %s %s/initramfs-base-temp/etc' % (i, self.temp['work']), self.verbose)
+                    print(green(' * ')+'... /etc/%s' + os.path.basename(i))
                     process('chmod +x %s/initramfs-base-temp/etc/%s' % (self.temp['work'], os.path.basename(i)), self.verbose)
                 else:
                     self.fail('%s does not exist.' % i)
@@ -147,13 +152,17 @@ class append:
         # create fstab
         process_redir('echo /dev/ram0 / ext2 defaults 0 0\n > ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
         process_append('echo proc /proc proc defaults 0 0\n >> ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
+        print(green(' * ')+'... /etc/fstab')
     
         os.chdir(self.temp['work']+'/initramfs-base-temp/dev')
     
         # create nodes
         process('mknod -m 660 console c 5 1', self.verbose)
+        print(green(' * ')+'... /dev/console')
         process('mknod -m 660 null    c 1 3', self.verbose)
+        print(green(' * ')+'... /dev/null')
         process('mknod -m 600 tty1    c 4 1', self.verbose)
+        print(green(' * ')+'... /dev/tty1')
     
         # timestamp the build
         from time import strftime
@@ -171,6 +180,7 @@ class append:
         process_append("echo HWOPTS='$HWOPTS ataraid dmraid evms firewire fs iscsi lvm2 mdadm net pata pcmcia sata scsi usb waitscan' >> %s/initramfs-base-temp/etc/initrd.defaults" % self.temp['work'], self.verbose)
 
         process('cp %s/defaults/modprobe %s/initramfs-base-temp/sbin/modprobe' % (self.libdir, self.temp['work']), self.verbose)
+        print(green(' * ')+'... /sbin/modprobe')
         process('chmod +x %s/initramfs-base-temp/sbin/modprobe' % self.temp['work'], self.verbose)
 
         os.chdir(self.temp['work']+'/initramfs-base-temp/sbin')
