@@ -21,7 +21,7 @@ class dropbear:
     
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.bin.dropbear')
+        logging.debug('>>> entering initramfs.append.host.dropbear')
         for i in ['bin', 'sbin', 'dev', 'usr/bin', 'usr/sbin', 'lib', 'etc', 'var/log', 'var/run', 'root']:
             process('mkdir -p %s/%s' % (self.temp['work']+'/initramfs-bin-dropbear-temp/', i), self.verbose)
 

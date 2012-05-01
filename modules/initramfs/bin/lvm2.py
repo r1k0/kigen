@@ -20,7 +20,7 @@ class lvm2:
     
         @return: bool
         """
-        logging.debug('>>> entering initramfs.append.bin.lvm2')
+        logging.debug('>>> entering initramfs.append.host.lvm2')
         lvm2_static_bin = '/sbin/lvm.static'
         lvm2_bin        = '/sbin/lvm'
 
@@ -28,7 +28,7 @@ class lvm2:
         process('mkdir -p ' + self.temp['work']+'/initramfs-bin-lvm2-temp/bin', self.verbose)
 
         # copy binary from host
-        logging.debug('initramfs.append.bin_lvm2 from %s' % white('host'))
+        logging.debug('initramfs.append.bin_lvm2')
         process('cp %s      %s/initramfs-bin-lvm2-temp/bin/lvm'         % (lvm2_static_bin, self.temp['work']), self.verbose)
         process('cp %s      %s/initramfs-bin-lvm2-temp/bin/lvm_static'  % (lvm2_static_bin, self.temp['work']), self.verbose)
         process('chmod +x   %s/initramfs-bin-lvm2-temp/bin/lvm'         % self.temp['work'], self.verbose)

@@ -126,7 +126,7 @@ class initramfs:
 
         # 4) append busybox
         if self.cli['bin-busybox'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.busybox ') + '/bin/busybox from '+white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.busybox ') + '/bin/busybox')
             os.chdir(self.temp['work'])
             if os.path.isfile('/bin/busybox'):
                 from .bin.busybox import busybox
@@ -143,7 +143,7 @@ class initramfs:
 
         # 5) append lvm2
         if self.cli['bin-lvm2'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.lvm2 ')+'/sbin/lvm.static from '+white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.lvm2 ')+'/sbin/lvm.static')
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/lvm.static'):
                 if isstatic('/sbin/lvm.static', self.verbose):
@@ -163,7 +163,7 @@ class initramfs:
 
         # 6) append dmraid
         if self.cli['bin-dmraid'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.dmraid ')+'/usr/sbin/dmraid from ' + white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.dmraid ')+'/usr/sbin/dmraid')
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dmraid'):
                 from .bin.dmraid import dmraid
@@ -183,18 +183,18 @@ class initramfs:
 #            os.chdir(self.temp['work'])
 #            if aobj.iscsi() is not zero: self.fail('iscsi')
 
-        # 8) append evms
-        if self.cli['bin-evms'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.evms'))
-            os.chdir(self.temp['work'])
-            if os.path.isfile('/usr/sbin/evms'):
-                from .bin.evms import evms
-                bin_evms = evms(self.temp, self.verbose)
-                bin_evms.build()
-#                if not isstatic('/sbin/evms', self.verbose) and self.cli['dynlibs'] is False:
-#                    self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static or use --dynlibs')
-            else:
-                self.fail_msg('sys-fs/evms must be merged')
+#        # 8) append evms
+#        if self.cli['bin-evms'] is True:
+#            print(green(' * ') + turquoise('initramfs.append.host.evms'))
+#            os.chdir(self.temp['work'])
+#            if os.path.isfile('/usr/sbin/evms'):
+#                from .bin.evms import evms
+#                bin_evms = evms(self.temp, self.verbose)
+#                bin_evms.build()
+##                if not isstatic('/sbin/evms', self.verbose) and self.cli['dynlibs'] is False:
+##                    self.fail_msg('/sbin/evms is not statically linked. Merge sys-fs/evms with USE=static or use --dynlibs')
+#            else:
+#                self.fail_msg('sys-fs/evms must be merged')
 
 #        # 9) append mdadm
 #        if self.cli['mdadm'] is True:
@@ -203,7 +203,7 @@ class initramfs:
 
         # 10) append luks
         if self.cli['bin-luks'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.luks ') +'/sbin/cryptsetup from ' + white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.luks ') +'/sbin/cryptsetup')
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/cryptsetup'):
                 from .bin.luks import luks
@@ -223,7 +223,7 @@ class initramfs:
 
         # 12) append blkid
         if self.cli['bin-disklabel'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.disklabel ')+ '/sbin/blkid from ' + white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.disklabel ')+ '/sbin/blkid')
             os.chdir(self.temp['work'])
             if os.path.isfile('/sbin/blkid'):
                 from .bin.disklabel import disklabel
@@ -240,7 +240,7 @@ class initramfs:
  
         # 13) append dropbear
         if self.cli['bin-dropbear'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.dropbear '))
+            print(green(' * ') + turquoise('initramfs.append.host.dropbear'))
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/sbin/dropbear'):
                 from .bin.dropbear import dropbear
@@ -256,7 +256,7 @@ class initramfs:
 
         # 14) append strace
         if self.cli['bin-strace'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.strace ')+'/usr/bin/strace from ' + white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.strace ')+'/usr/bin/strace')
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/bin/strace'):
                 from .bin.strace import strace
@@ -273,7 +273,7 @@ class initramfs:
 
         # 15) append screen
         if self.cli['bin-screen'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.screen ')+ '/usr/bin/screen from ' + white('host'))
+            print(green(' * ') + turquoise('initramfs.append.host.screen ')+ '/usr/bin/screen')
             os.chdir(self.temp['work'])
             if os.path.isfile('/usr/bin/screen'):
                 from .bin.screen import screen
@@ -313,21 +313,21 @@ class initramfs:
 
         # 21) append glibc
         if self.cli['bin-glibc'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.glibc'))
+            print(green(' * ') + turquoise('initramfs.append.host.glibc'))
             from .bin.glibc import glibc
             bin_glibc = glibc(self.temp, self.verbose)
             bin_glibc.build()
 
         # 21bis) append libncurses
         if self.cli['bin-libncurses'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.libncurses'))
+            print(green(' * ') + turquoise('initramfs.append.host.libncurses'))
             from .bin.libncurses import libncurses
             bin_libncurses = libncurses(self.temp, self.verbose)
             bin_libncurses.build()
 
         # 21terce) append zlib
         if self.cli['bin-zlib'] is True:
-            print(green(' * ') + turquoise('initramfs.append.bin.zlib'))
+            print(green(' * ') + turquoise('initramfs.append.host.zlib'))
             from .bin.zlib import zlib
             bin_zlib = zlib(self.temp, self.verbose)
             bin_zlib.build()
