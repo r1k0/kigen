@@ -248,6 +248,6 @@ def pkg_has_useflag(pkgcat, pkgname, uf):
                             # useflag not found, keep on looking
                             pass
     else:
-        print('splashutils is not installed')
+        print(pkgname+' is not installed')
     
     return False
