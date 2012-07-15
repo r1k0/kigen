@@ -384,7 +384,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
-        command = 'yes "" &>/dev/null | ' + self.build_command('oldconfig', '')
+        command = self.build_command('oldconfig', '')
 #        command = 'yes "" &>/dev/null | ' + self.build_command('oldconfig', self.quiet)
 # FIXME command = command + '; test ${PIPESTATUS[1]} -eq 0'
         if self.quiet is '':
