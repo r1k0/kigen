@@ -212,7 +212,7 @@ def cli_parser():
 
         if master_conf['debug'] == 'True':
             verbose['set'] = True
-            verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+            verbose['std'] = '2>&1 | tee -a ' + cli['logfile'] + ' ; test ${PIPESTATUS[0]} -eq 0'
             verbose['logfile'] = cli['logfile']
 
         cli['color']        = True
@@ -248,7 +248,7 @@ def cli_parser():
             elif o in ("-d", "--debug"):
 #               quiet = '>>' + logfile + ' 2>&1' # logfile
 #               quiet = '2>&1 | tee -a ' + logfile # verbose
-                verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+                verbose['std'] = '2>&1 | tee -a ' + cli['logfile'] + ' ; test ${PIPESTATUS[0]} -eq 0'
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
             elif o in ("-k", "--dotconfig"):
@@ -612,7 +612,7 @@ def cli_parser():
         verbose['set'] = False
         if master_conf['debug'] == 'True':
             verbose['set'] = True
-            verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+            verbose['std'] = '2>&1 | tee -a ' + cli['logfile'] + ' ; test ${PIPESTATUS[0]} -eq 0'
             verbose['logfile'] = cli['logfile']
     
         # target options
@@ -633,7 +633,7 @@ def cli_parser():
             elif o in ("-d", "--debug"):
 #               quiet = '>>' + logfile + ' 2>&1' # logfile
 #               quiet = '2>&1 | tee -a ' + logfile # verbose
-                verbose['std'] = '2>&1 | tee -a ' + cli['logfile']
+                verbose['std'] = '2>&1 | tee -a ' + cli['logfile'] + ' ; test ${PIPESTATUS[0]} -eq 0'
                 verbose['set'] = True
                 verbose['logfile'] = cli['logfile']
             elif o in ("--host-all"):

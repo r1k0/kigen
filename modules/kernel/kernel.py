@@ -384,7 +384,8 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('oldconfig', '')
+        command = self.build_command('oldconfig', self.quiet)
+# NOFIX: should work
 # FIXME: this breaks if Kicktoo calls KIGen to build a kernel error is due to a broken pipe
 #        command = 'yes "" 2>/dev/null | make oldconfig'
 #       then try command = 'yes "" &>/dev/null | make oldconfig'
@@ -401,7 +402,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.menuconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('menuconfig', '')
+        command = self.build_command('menuconfig', self.quiet)
 
         return os.system(command)
 
@@ -413,7 +414,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.localmodconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('localmodconfig', '')
+        command = self.build_command('localmodconfig', self.quiet)
 
         return os.system(command)
 
@@ -425,7 +426,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.localyesconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('localyesconfig', '')
+        command = self.build_command('localyesconfig', self.quiet)
 
         return os.system(command)
 
@@ -437,7 +438,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.silentoldconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('silentoldconfig', '')
+        command = self.build_command('silentoldconfig', self.quiet)
 
         return os.system(command)
 
@@ -449,7 +450,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.defconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('defconfig', '')
+        command = self.build_command('defconfig', self.quiet)
 
         return os.system(command)
     
