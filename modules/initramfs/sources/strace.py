@@ -23,10 +23,10 @@ class strace:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver)) is not True:
+        if os.path.isfile('%s/strace-%s.tar' % (get_distdir(self.temp), self.strace_ver)) is not True:
             print(green(' * ') + '... strace.download')
             if self.download() is not zero:
-                process('rm %s/strace-%s.tar.bz2' % (get_distdir(self.temp), self.strace_ver), self.verbose)
+                process('rm %s/strace-%s.tar.xz' % (get_distdir(self.temp), self.strace_ver), self.verbose)
                 self.fail('download')
     
         print(green(' * ') + '... strace.extract')
@@ -76,10 +76,10 @@ class strace:
     
         @return: bool
         """
-        strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.bz2'
+        strace_url = self.url+'/'+str(self.strace_ver)+'/strace-' + str(self.strace_ver) + '.tar.xz'
 
         # FIXME utils.shell.process does not remove the output!!!!
-        return os.system('/usr/bin/wget %s -O %s/strace-%s.tar.bz2 %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
+        return os.system('/usr/bin/wget %s -O %s/strace-%s.tar.xz %s' % (strace_url, get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -87,7 +87,10 @@ class strace:
     
         @return: bool
         """
-        os.system('tar xvfj %s/strace-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
+        self.chgdir(self.temp['work'])
+        os.system('unxz %s/strace-%s.tar.xz %s' % (get_distdir(self.temp), str(self.strace_ver), self.verbose['std']))
+
+        return os.system('tar xvf %s/strace-%s.tar -C %s %s' % (get_distdir(self.temp), str(self.strace_ver), self.temp['work'], self.verbose['std']))
     
     # strace building functions
     def configure(self):
