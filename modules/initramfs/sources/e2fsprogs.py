@@ -76,7 +76,7 @@ class e2fsprogs:
     
         @return: bool
         """
-        e2fsprogs_url = self.url+'/'+str(self.e2fsprogs_ver)+'/e2fsprogs-' + str(self.e2fsprogs_ver) + '.tar.gz'
+        e2fsprogs_url = self.url+'/v'+str(self.e2fsprogs_ver)+'/e2fsprogs-'+str(self.e2fsprogs_ver)+'.tar.gz'
 
         # FIXME utils.shell.process does not remove the output!
         return os.system('/usr/bin/wget %s -O %s/e2fsprogs-%s.tar.gz %s' % (e2fsprogs_url, get_distdir(self.temp), str(self.e2fsprogs_ver), self.verbose['std']))
