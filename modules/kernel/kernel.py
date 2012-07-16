@@ -402,7 +402,7 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.menuconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('menuconfig', self.quiet)
+        command = self.build_command('menuconfig', '')
 
         return os.system(command)
 
