@@ -375,7 +375,6 @@ class kernel:
 
         return os.system(command)
     
-    # FIXME: shouldn't we add a sort of yes '' | make oldconfig?
     def make_oldconfig(self):
         """
         Kernel command interface for oldconfig
@@ -384,9 +383,12 @@ class kernel:
         """
         print(green(' * ') + turquoise('kernel.oldconfig '))
         self.chgdir(self.kerneldir)
-        command = self.build_command('oldconfig', '')
-#        command = 'yes "" &>/dev/null | ' + self.build_command('oldconfig', self.quiet)
-# FIXME command = command + '; test ${PIPESTATUS[1]} -eq 0'
+#        command = self.build_command('oldconfig', '')
+        if self.verbose['set'] is True:
+            command = 'yes "" 2>/dev/null | ' + self.build_command('oldconfig', '')
+            command = command + '; test ${PIPESTATUS[1]} -eq 0'
+        else:
+            command = 'yes "" 2>/dev/null | ' + self.build_command('oldconfig', self.quiet)
         if self.quiet is '':
             print(command)
 
