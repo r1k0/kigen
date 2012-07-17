@@ -404,13 +404,6 @@ prompt_user(){
 	esac
 }
 
-setup_hotplug() {
-	if [ "${KV_2_6_OR_GREATER}" ]
-	then
-		echo /sbin/mdev > /proc/sys/kernel/hotplug
-	fi
-}
-
 setup_slowusb() {
 	# This function removes unset DO_slowusb if there is no usb-storage attached.
 	# If noslowusb is set, skip this function
@@ -503,12 +496,12 @@ setup_keymap() {
 		[ ! -e /dev/tty0 ] && ln -s /dev/tty1 /dev/tty0
 
 #		[ -f /lib/keymaps/keymapList ] && chooseKeymap
-        if [ -f /lib/keymaps/${keymap}.map ]
-          then
-              chooseKeymap
-          else
-              warn_msg "/lib/keymaps/${keymap}.map requested but none found: defaulting to us..."
-        fi
+		if [ -f /lib/keymaps/${keymap}.map ]
+		then
+			chooseKeymap
+		else
+			warn_msg "/lib/keymaps/${keymap}.map requested but none found: defaulting to us"
+		fi
 
 		[ "${DEVBIND}" = '1' ] && umount /dev
 		
@@ -612,7 +605,12 @@ startVolumes() {
 	
 	if [ "${USE_MDADM}" = '1' ]
 	then
-		/sbin/mdadm --assemble --scan
+		if [ -e '/sbin/mdadm' ]
+		then
+			/sbin/mdadm --assemble --scan
+		else
+			bad_msg "mdadm not found: skipping mdadm raid assembly!"
+		fi
 	fi
 
 	if [ "${USE_DMRAID_NORMAL}" = '1' ]
@@ -662,7 +660,36 @@ startVolumes() {
 	
 	if [ "${USE_ZFS}" = '1' ]
 	then
-		/sbin/zpool import -N -a ${ZPOOL_FORCE}
+		if [ -z "${ZFS_POOL}" ]
+		then
+			good_msg "Importing ZFS pools"
+
+			/sbin/zpool import -N -a "${ZPOOL_FORCE}"
+
+			if [ "$?" = '0' ]
+			then
+				good_msg "Importing ZFS pools succeeded"
+			else
+				bad_msg "Imported ZFS pools failed"
+			fi
+		else
+
+			if [ "$(zpool list -H -o name ${ZFS_POOL} 2>&1)" = "$ZFS_POOL" ]
+			then
+				good_msg "ZFS pool ${ZFS_POOL} already imported"
+			else
+				good_msg "Importing ZFS pool ${ZFS_POOL}"
+
+				/sbin/zpool import -N "${ZPOOL_FORCE}" "${ZFS_POOL}"
+
+				if [ "$?" = '0' ]
+				then
+					good_msg "Importing ${ZFS_POOL} succeeded"
+				else
+					bad_msg "Importing ${ZFS_POOL} failed"
+				fi
+			fi
+		fi
 	fi
 }
 
@@ -780,7 +807,7 @@ openLUKS() {
 					fi
 
 					if [ "${retval}" -ne 0 ]; then
-						REAL_LUKS=`blkid -l -t "${LUKS_DEVICE}" | cut -d ":" -f 1 2>/dev/null`
+						REAL_LUKS=`blkid -o device -l -t "${LUKS_DEVICE}"`
 						retval=$?
 					fi
 
@@ -1317,3 +1344,4 @@ runnetstack() {
 #        [ -x /bin/sh ] && /bin/sh || /bin/ash
    fi
 }
+
