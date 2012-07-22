@@ -22,10 +22,11 @@ one can ship any binary, statically or dynamically linked. If it's linked the ap
 libraries need to be shipped as well. 
 KIGen tries to provide a host and source binary for each feature in case one breaks. This way
 one can use Portage binaries or the sources from KIGen. It does not matter as long as it works.
-KIGen attempts to detect and ship dynamically linked binaries. It does not matter any more as long as it works ;P
+KIGen attempts to detect and ship dynamically linked binaries. It can identify linked binaries
+and ship it to the initramfs. It does not matter as long as it works ;P
 
-KIGen provides a more visible configuration file than genkernel in terms of kernel modules,
-custom URLs or versions.
+KIGen provides a more visible configuration set of files than genkernel in terms of kernel modules,
+custom source URLs and source versions.
 KIGen will automagically detect if you are running boot-update (we support Gentoo and
 Sabayon too) then read your /etc/boot.conf and overwrite your /etc/kigen.conf
 configuration in terms of kernel modules only.
@@ -41,13 +42,13 @@ Features
 - splash decorator
 - customizable busybox toolbox
   - system/network stack tools
-  - alot more
+  - a lot more..
 - SSH daemon (dropbear)
 - strace (for troubleshoot)
 - screen (for convenience)
 - keymaps (imported from genkernel)
 - ttyecho binary (handy for ssh tty->console)
-- GLibC libraries (auth, dns)
+- GLibC libraries (auth, dns, userland)
 - libncurses (required for dropbear)
 - zlib (required for dropbear)
 
@@ -59,7 +60,6 @@ KIGen supports Portage and works on the following linux based flavors:
 - Funtoo  and its boot-update interface,
 - Gentoo  (no boot-update interface),
 - Sabayon (no boot-update interface),
-- VLOS    (no boot-update interface).
 
 Portage and Funtoo boot-update support
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,7 +94,9 @@ Non Portage support
 ~~~~~~~~~~~~~~~~~~~
 
 KIgen could in theory work on non Portage Linux systems but does not.
-Here is the list of items that depend on Portage.
+It could be a nice enhancement to add support for Debian.
+To allow this we would need to get rid of the Portage code dependencies.
+Here is the list of source code items that depends on Portage.
 ::
  - Python3 version depends on 
  pyv = os.popen('eselect python show --python3').read().strip()
@@ -111,7 +113,23 @@ Some GRUB examples of kernel command line boot options (haven't used LiLo for ye
 ::
  - LUKS
 
+  GRUB 2.00 style
+
+  menuentry "kigen 3.4.5" {
+    set root=(hd1,1)
+    linux /kernel-kigen-x86_64-3.4.5-gentoo ro single init=/linuxrc splash=verbose,theme:emergence vga=791 console=tty1 quiet resume=swap:/dev/mapper/swap real_resume=/dev/mapper/swap root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/root crypt_root=/dev/sdb3 docrypt dokeymap keymap=be dodropbear ip=dhcp
+    initrd /initramfs-kigen-x86_64-3.4.5-gentoo
+  }
+
  - LUKS + DROPBEAR
+
+  GRUB 2.00 style
+
+  menuentry "kigen 3.4.5" {
+    set root=(hd1,1)
+    linux /kernel-kigen-x86_64-3.4.5-gentoo ro single init=/linuxrc splash=verbose,theme:emergence vga=791 console=tty1 quiet resume=swap:/dev/mapper/swap real_resume=/dev/mapper/swap root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/root crypt_root=/dev/sdb3 docrypt dokeymap keymap=be
+    initrd /initramfs-kigen-x86_64-3.4.5-gentoo
+  }
 
  - LVM
 
@@ -368,7 +386,7 @@ emerge it.
    * This is still experimental software, be cautious.
    * 
    * Tell me what works and breaks for you by dropping a comment at
-   * http://www.openchill.org/?cat=11
+   * http://github.com/r1k0/kigen
    * 
   >>> sys-kernel/kigen-9999 merged.
   
@@ -395,7 +413,7 @@ They are heavily commented, their options should be self explanatory.
 
 Main
 ::
-  pong ~ # kigen
+  z13 ~ # kigen
   
     a Portage kernel|initramfs generator
   
@@ -417,7 +435,7 @@ Main
    kigen kernel                --help, -h
    kigen initramfs             --help, -h
    kigen tool                  --help, -h
-  pong ~ # 
+  z13 ~ # 
 
 - Use of **kigen kernel** to generate a kernel/system.map
 
@@ -449,22 +467,18 @@ Help menu.
 Default behavior.
 ::
   z13 ~ # kigen k
-   * Gentoo Base System release 2.0.2 on x86_64
-   * Kernel sources Makefile version 2.6.38-gentoo-r5 aka Flesh-EatingBatswithFangs
-   * kernel.copy_config /usr/src/linux/.config -> /usr/src/linux/.config-2011-06-17-14-39-59
+   * Gentoo Base System release 2.1 on x86_64
+   * Kernel sources Makefile version 3.4.5-gentoo aka Saber-toothedSquirrel
+   * kernel.copy_config /usr/src/linux/.config -> /usr/src/linux/.config-2012-07-22-14-17-36
    * kernel.oldconfig 
-  scripts/kconfig/conf --oldconfig Kconfig
-  #
-  # configuration written to .config
-  #
    * kernel.prepare 
    * kernel.bzImage 
    * kernel.modules 
    * kernel.modules_install /lib/modules
-   * saved /etc/kernels/dotconfig-kigen-x86_64-2.6.38-gentoo-r5
-   * success 2.9Mb /boot/System.map-kigen-x86_64-2.6.38-gentoo-r5
-   * success 5.4Mb /boot/kernel-kigen-x86_64-2.6.38-gentoo-r5
-  z13 ~ # 
+   * saved /etc/kernels/dotconfig-kigen-x86_64-3.4.5-gentoo
+   * success 1.9Mb /boot/System.map-kigen-x86_64-3.4.5-gentoo
+   * success 3.4Mb /boot/kernel-kigen-x86_64-3.4.5-gentoo
+  z13 ~ # kigen k
 
 It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 
@@ -473,55 +487,52 @@ It is up to you to adapt your /etc/lilo.conf or /boot/grub/grub.cfg file.
 Help menu.
 ::
   z13 ~ # kigen i -h
-  Parameter:          Config value:   Description:
+  Parameter:                  Config value:       Description:
   
   Features:
   + from source code
-  | --source-luks             False       Include LUKS support from sources
-  | --source-lvm2             False       Include LVM2 support from sources
-  | --source-dropbear         False       Include dropbear support from sources
-  |  --debugflag              False        Compile dropbear with #define DEBUG_TRACE in debug.h
-  | --source-screen           False       Include the screen binary tool from sources
-  | --source-disklabel        False       Include support for UUID/LABEL from sources
-  | --source-ttyecho          False       Compile and include the handy ttyecho.c tool
-  | --source-strace           False       Compile and include the strace binary tool from sources
-  | --source-dmraid           False       Include DMRAID support from sources
-  | --source-all              False       Include all possible features from sources
+  | --source-luks             True                Include LUKS support from sources
+  | --source-lvm2             False               Include LVM2 support from sources
+  | --source-dropbear         True                Include dropbear support from sources
+  |  --debugflag              True                 Compile dropbear with #define DEBUG_TRACE in debug.h
+  | --source-screen           False               Include the screen binary tool from sources
+  | --source-disklabel        True                Include support for UUID/LABEL from sources
+  | --source-ttyecho          True                Compile and include the handy ttyecho.c tool
+  | --source-strace           True                Compile and include the strace binary tool from sources
+  | --source-dmraid           False               Include DMRAID support from sources
   + from host binaries
-  | --bin-busybox             False       Include busybox support from host
-  | --bin-luks                Flase       Include LUKS support from host
-  | --bin-lvm2                False       Include LVM2 support from host
-  | --bin-dropbear            False       Include dropbear support from host
-  | --bin-screen              False       Include the screen binary tool from host
-  | --bin-disklabel           False       Include support for UUID/LABEL from host
-  | --bin-strace              False       Include the strace binary tool from host
-  | --bin-evms                False       Include the evms binary tool from host
-  | --bin-glibc               False       Include host GNU C libraries (required for dns,dropbear)
-  | --bin-libncurses          False       Include host libncurses (required for dropbear)
-  | --bin-zlib                False       Include host zlib (required for dropbear)
-  | --bin-dmraid              False       Include DMRAID support from host
-  | --bin-all                 False       Include all possible features from host
+  | --host-busybox             False              Include busybox support from host
+  | --host-luks                Flase              Include LUKS support from host
+  | --host-lvm2                False              Include LVM2 support from host
+  | --host-dropbear            False              Include dropbear support from host
+  | --host-screen              False              Include the screen binary tool from host
+  | --host-disklabel           False              Include support for UUID/LABEL from host
+  | --host-strace              False              Include the strace binary tool from host
+  | --host-glibc               True               Include host GNU C libraries (required for dns,dropbear)
+  | --host-libncurses          False              Include host libncurses (required for dropbear)
+  | --host-zlib                False              Include host zlib (required for dropbear)
+  | --host-dmraid              False              Include DMRAID support from host
   
-    --dynlibs                 False       Include detected libraries from dynamically linked binaries
-    --splash=<theme>          ""          Include splash support (splashutils must be merged)
-     --sres=YxZ[,YxZ]         ""           Splash resolution, all if not set
-    --rootpasswd=<passwd>     ""          Create and set root password (required for dropbear)
-    --keymaps=xx[,xx]|all     "all"           Include all keymaps
-    --plugin=/dir[,/dir]      ""          Include list of user generated custom roots
+    --dynlibs                 False               Include detected libraries from dynamically linked binaries
+    --splash=<theme>          "emergence"         Include splash support (splashutils must be merged)
+     --sres=YxZ[,YxZ]         ""                   Splash resolution, all if not set
+    --rootpasswd=<passwd>     "aaa"               Create and set root password (required for dropbear)
+    --keymaps=xx[,xx]|all     "be,us"             Include all keymaps
+    --plugin=/dir[,/dir]      ""                  Include list of user generated custom roots
   
   Busybox:
-    --dotconfig=/file         ""          Custom busybox config file
-    --defconfig               False       Set .config to largest generic options
-    --oldconfig               False       Ask for new busybox options if any
-    --menuconfig              False       Interactive busybox options menu
+    --dotconfig=/file         ""                  Custom busybox config file
+    --defconfig               False               Set .config to largest generic options
+    --oldconfig               False               Ask for new busybox options if any
+    --menuconfig              False               Interactive busybox options menu
   
   Misc:
-    --nocache                 False       Delete previous cached data on startup
-    --nomodules               False       Do not install kernel modules (all is kernel builtin)
-    --noboot                  False       Do not copy initramfs to /boot
-    --rename=/file            ""          Custom initramfs file name
+    --nocache                 False               Delete previous cached data on startup
+    --nomodules               False               Do not install kernel modules (all is kernel builtin)
+    --noboot                  False               Do not copy initramfs to /boot
+    --rename=/file            ""                  Custom initramfs file name
     --logfile=/file           "/var/log/kigen.log"
-    --debug, -d               False       Debug verbose
+    --debug, -d               False               Debug verbose
   z13 ~ # 
 
 Default behavior.
