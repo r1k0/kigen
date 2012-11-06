@@ -100,7 +100,7 @@ def get_kernel_version(kerneldir):
     @return: string
     """
     # check for linux symlink
-    if not os.path.isfile(kerneldir):
+    if not os.path.isdir(kerneldir):
         print(red('error')+': no /usr/src/linux found')
         sys.exit(2)
 
