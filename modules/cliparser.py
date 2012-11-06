@@ -144,8 +144,10 @@ def cli_parser():
 
 # FIXME
 #        # HACK only use default if we use kigen k
-#        if not 'tool' in cliopts and not 't' in cliopts:
-#            cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
+        if not 'tool' in cliopts and not 't' in cliopts:
+            cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
+        else:
+            cli['rename']       = ''
         if kernel_conf['rename'] != '':
             cli['rename'] = kernel_conf['rename']
 
@@ -565,8 +567,10 @@ def cli_parser():
             cli['bin-zlib'] = True
 # FIXME
 #        # HACK setup default only when using kigen i
-#        if not 'tool' in cliopts and not 't' in cliopts:
-#            cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
+        if not 'tool' in cliopts and not 't' in cliopts:
+            cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
+        else:
+            cli['rename'] = ''
         if initramfs_conf['rename'] != '':
             cli['rename'] = initramfs_conf['rename']
 
