@@ -324,7 +324,7 @@ if target == 'tool' or target == 't':
         # --getdotconfig
         if cli['getdotconfig'] is not '':
             from kernel.extract import getdotconfig
-            getdotconfig(cli['getdotconfig'], cli['kerneldir'], verbose)
+            getdotconfig(cli['getdotconfig'], cli['kerneldir'], libdir, verbose)
             sys.exit(0)
 
 # FIXME unset os.environ['KIGEN_STDOUT']?

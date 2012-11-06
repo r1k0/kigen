@@ -99,6 +99,11 @@ def get_kernel_version(kerneldir):
     @arg: string
     @return: string
     """
+    # check for linux symlink
+    if not os.path.isfile(kerneldir):
+        print(red('error')+': no /usr/src/linux found')
+        sys.exit(2)
+
     # best way *here* is to get KV from the sources, not the running KV
     if not os.path.isfile(kerneldir+'/Makefile'):
         # if no /Makefile, that sux big time

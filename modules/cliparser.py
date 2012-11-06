@@ -48,16 +48,18 @@ def cli_parser():
         cli['kerneldir'] = master_conf['kernel-sources']
     # else: exit
 
-    cli['KV'], cli['KNAME'] = utils.misc.get_kernel_version(cli['kerneldir'])
-
-    # exit if kernel dir doesn't exist
-    if not os.path.isdir(cli['kerneldir']):
-        print(stdout.red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
-        sys.exit(2)
-    # exit if kernel version is not found
-    if cli['KV'] is 'none':
-        print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
-        sys.exit(2)
+#    if not 'tool' in cliopts and not 't' in cliopts:
+#        # don't check for kernel version if we use 'kigen tool'
+#        cli['KV'], cli['KNAME'] = utils.misc.get_kernel_version(cli['kerneldir'])
+#
+#        # exit if kernel dir doesn't exist
+#        if not os.path.isdir(cli['kerneldir']):
+#            print(stdout.red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
+#            sys.exit(2)
+#        # exit if kernel version is not found
+#        if cli['KV'] is 'none':
+#            print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
+#            sys.exit(2)
 
     # prevent multiple targets from running
     if ('k' in cliopts and 'i' in cliopts)               or \
@@ -140,7 +142,10 @@ def cli_parser():
         if kernel_conf['dotconfig'] != '':
             cli['dotconfig'] = kernel_conf['dotconfig']
 
-        cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
+# FIXME
+#        # HACK only use default if we use kigen k
+#        if not 'tool' in cliopts and not 't' in cliopts:
+#            cli['rename']       = '/boot/kernel-kigen-'+cli['arch']+'-'+cli['KV']
         if kernel_conf['rename'] != '':
             cli['rename'] = kernel_conf['rename']
 
@@ -558,8 +563,10 @@ def cli_parser():
         cli['bin-zlib'] = False
         if initramfs_conf['bin-zlib'] == 'True':
             cli['bin-zlib'] = True
-
-        cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
+# FIXME
+#        # HACK setup default only when using kigen i
+#        if not 'tool' in cliopts and not 't' in cliopts:
+#            cli['rename'] = '/boot/initramfs-kigen-'+cli['arch']+'-'+cli['KV']
         if initramfs_conf['rename'] != '':
             cli['rename'] = initramfs_conf['rename']
 
@@ -867,6 +874,21 @@ def cli_parser():
     if target == '':
         print(stdout.red('error') + ': target not known.')
         sys.exit(2)
+###############
+    if not 'tool' in cliopts and not 't' in cliopts:
+        # don't check for kernel version if we use 'kigen tool'
+        cli['KV'], cli['KNAME'] = utils.misc.get_kernel_version(cli['kerneldir'])
+
+        # exit if kernel dir doesn't exist
+        if not os.path.isdir(cli['kerneldir']):
+            print(stdout.red('error') + ': ' + cli['kerneldir'] + ' does not exist.')
+            sys.exit(2)
+        # exit if kernel version is not found
+        if cli['KV'] is 'none':
+            print(stdout.red('error') + ': ' + cli['kerneldir']+'/Makefile not found')
+            sys.exit(2)
+
+###############
 
     return  master_conf,    \
             kernel_conf,    \
