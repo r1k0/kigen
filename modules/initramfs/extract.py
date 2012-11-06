@@ -28,6 +28,8 @@ def initramfs(temproot, extract, to, verbose):
 
     # check if binary is gzip or xz format
     ret = gziporxz(extract, verbose)
+    if ret is ':(':
+        print(red('error') + ': don\'t know the format of %s' % extract)
 
     if ret is 'gzip':
         process('cp %s %s/initramfs_data.cpio.gz' % (extract, to), verbose)

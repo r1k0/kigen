@@ -20,7 +20,6 @@ def gziporxz(binary, verbose):
 
     cmd.append(binary)
 
-#    p = subprocess.check_output(cmd)#, stdout=subprocess.PIPE) #, stderr=f) #, shell = True) # , close_fds=True)
     p = subprocess.getoutput(' '.join(cmd))
    
     logging.debug(p)
@@ -29,3 +28,5 @@ def gziporxz(binary, verbose):
         return 'gzip'
     elif 'XZ' in p:
         return 'xz'
+    else:
+        return ':('
