@@ -116,9 +116,9 @@ logging.debug(flavor)
 # show flavor
 print(green(' * ')+white(flavor)+' on '+white(cli['arch']))
 
+import shutil
 # ensure temp['work'] is clean only if target != tool
 if target != 'tool' and target != 't':
-    import shutil
     if os.path.isdir(temp['work']):
         shutil.rmtree(temp['work'])
         os.makedirs(temp['work'])
