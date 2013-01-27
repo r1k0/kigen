@@ -143,7 +143,7 @@ def process(cmd, verbose):
 #    cmd = cmd.split()
     logging.debug(cmd)
 
-    f = open(verbose['logfile'])
+#    f = open(verbose['logfile'])
 #    p = subprocess.Popen(cmd , stdout=f) #, stderr=f) #, shell = True) # , close_fds=True)
     ret, o = subprocess.getstatusoutput(cmd)
 
