@@ -50,3 +50,4 @@ TODO: support xen-sources -> doublehp this one is for you ;) patience though
     http://en.gentoo-wiki.com/wiki/Xen
     read dracut code there lies the solution to xen and other stuff
 TODO: support ppc ppc64
+TODO: support sys-boot/plymouth
