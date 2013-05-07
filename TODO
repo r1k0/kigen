@@ -14,6 +14,7 @@ TODO: change --bin-* to --host-*
 TODO: rethink modules/utils/process.py using subprocess.call/getoutput/getstatusoutput
 TODO: check for binaries in runnetstack() -f ...
 TODO: add process lockfile /var/run/kigen.pid
+      only to kigen k|i not t
     pids= [pid for pid in os.listdir('/proc') if pid.isdigit()]
     for pid in pids:
         print open(os.path.join('/proc', pid, 'cmdline'), 'rb').read()
