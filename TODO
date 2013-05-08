@@ -53,3 +53,4 @@ TODO: support xen-sources -> doublehp this one is for you ;) patience though
 TODO: support ppc ppc64
 TODO: support sys-boot/plymouth
 TODO: kigen k with no modules should output better (MODULES_.*)
+TODO: kige k --initramfs=file should really check if file is a file
