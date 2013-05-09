@@ -118,7 +118,7 @@ class kernel:
 
         # !!! by default don't alter dotconfig
         # !!! only if --fixdotconfig=<feat> is passed
-        if self.initramfs is not '':
+        if (self.initramfs is not '') and (os.path.isfile(self.initramfs)):
             # user provides an initramfs!
             # FIXME do error handling: gzip screws it all like tar
 #            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
@@ -130,14 +130,17 @@ class kernel:
         #        self.remove_option('CONFIG_INITRAMFS_SOURCE')
 
         # initramfs provided by config file only
-        elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is ''):
+        elif (self.kernel_conf['initramfs'] is not '') and (self.initramfs is '') and (os.path.isfile(self.initramfs)):
 #            if (self.fixdotconfig is True) or (self.kernel_conf['fixdotconfig'] is True):
 #                self.add_option('CONFIG_INITRAMFS_SOURCE='+self.temp['initramfs'])
             self.import_user_initramfs(self.kernel_conf['initramfs'])
 #        else:
 #            if self.fixdotconfig is True:
 #                self.remove_option('CONFIG_INITRAMFS_SOURCE')
-
+        elif (self.initramfs is not ''):
+            print(red('error: ') + self.initramfs + " is not a file")
+            sys.exit(2)
+ 
         if self.defconfig is True:
             if self.make_defconfig() is not zero: self.fail('defconfig')
         if self.localmodconfig is True:
