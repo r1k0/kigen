@@ -53,6 +53,5 @@ TODO: support xen-sources -> doublehp this one is for you ;) patience though
 TODO: support ppc ppc64
 TODO: support sys-boot/plymouth
 TODO: kigen k with no modules should output better (MODULES_.*)
-TODO: kigen k --initramfs=file should really check if file is a file
 TODO: add check for cpio
 TODO: --host-lvm2 checks for lvm.static, but user might have lvm and use --dynlibs
