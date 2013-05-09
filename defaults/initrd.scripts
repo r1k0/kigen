@@ -159,7 +159,7 @@ bootstrapCD() {
 	# a bunch of extra devices
 	[ -n "${CDROOT_DEV}" ] && DEVICES="${CDROOT_DEV}"
 
-	findmediamount "cdrom" "${SUBDIR}/livecd" "REAL_ROOT" "${CDROOT_PATH}" ${DEVICES}
+	findmediamount "cdrom" "${SUBDIR}/${CDROOT_MARKER}" "REAL_ROOT" "${CDROOT_PATH}" ${DEVICES}
 }
 
 bootstrapKey() {
@@ -282,6 +282,36 @@ findnfsmount() {
 	fi
 }
 
+find_real_device() {
+	local DEVICE="${1}"
+	case "${DEVICE}" in
+		UUID\=*|LABEL\=*)
+			local REAL_DEVICE=""
+			local retval=1
+
+			if [ "${retval}" -ne 0 ]; then
+				REAL_DEVICE=`findfs "${DEVICE}" 2>/dev/null`
+				retval=$?
+			fi
+
+			if [ "$retval" -ne 0 ]; then
+				REAL_DEVICE=`busybox findfs "${DEVICE}" 2>/dev/null`
+				retval=$?
+			fi
+
+			if [ "${retval}" -ne 0 ]; then
+				REAL_DEVICE=`blkid -o device -l -t "${DEVICE}"`
+				retval=$?
+			fi
+
+			if [ "${retval}" -eq 0 ] && [ -n "${REAL_DEVICE}" ]; then
+				DEVICE="${REAL_DEVICE}"
+			fi
+		;;
+	esac
+	echo -n "${DEVICE}"
+}
+
 check_loop() {
 	if [ "${LOOP}" = '' -o ! -e "${CDROOT_PATH}/${LOOP}" ]
 	then
@@ -298,6 +328,11 @@ run_shell() {
 	/bin/ash
 }
 
+fs_type_in_use() {
+	fs_type=$1
+	cut -d ' ' -f 3 < /proc/mounts | fgrep -q "${fs_type}"
+}
+
 mount_devfs () {
 	# Use devtmpfs if enabled in kernel,
 	# else tmpfs. Always run mdev just in case
@@ -307,12 +342,16 @@ mount_devfs () {
 	fi
 
 	# Options copied from /etc/init.d/udev-mount, should probably be kept in sync
-	mount -t $devfs -o "exec,nosuid,mode=0755,size=10M" udev /dev \
-		|| bad_msg "Failed to mount /dev as ${devfs}"
+	if ! fs_type_in_use devtmpfs; then
+		mount -t $devfs -o "exec,nosuid,mode=0755,size=10M" udev /dev \
+			|| bad_msg "Failed to mount /dev as ${devfs}"
+	fi
 
 	# http://git.busybox.net/busybox/plain/docs/mdev.txt
-	mkdir -m 0755 /dev/pts
-	mount -t devpts -o gid=5,mode=0620 devpts /dev/pts  || bad_msg "Failed to mount /dev/pts"
+	if ! fs_type_in_use devpts; then
+		mkdir -m 0755 /dev/pts
+		mount -t devpts -o gid=5,mode=0620 devpts /dev/pts  || bad_msg "Failed to mount /dev/pts"
+	fi
 }
 
 test_success() {
@@ -613,6 +652,16 @@ startVolumes() {
 		fi
 	fi
 
+	if [ "${USE_MULTIPATH_NORMAL}" = '1' ] 
+	then 
+		good_msg "Scanning for multipath devices" 
+		/sbin/multipath -v 0
+		sleep 2
+		good_msg "Activating multipath devices" 
+		/sbin/dmsetup ls --target multipath --exec "/sbin/kpartx -a -v" 
+		#for MULTIPATH_VOLUMES in /dev/mapper/*; do kpartx -a $MULTIPATH_VOLUMES; done
+	fi 
+
 	if [ "${USE_DMRAID_NORMAL}" = '1' ]
 	then
 		if [ -e '/sbin/dmraid' ]
@@ -676,7 +725,14 @@ startVolumes() {
 
 			if [ "$(zpool list -H -o name ${ZFS_POOL} 2>&1)" = "$ZFS_POOL" ]
 			then
-				good_msg "ZFS pool ${ZFS_POOL} already imported"
+				good_msg "ZFS pool ${ZFS_POOL} already imported."
+
+				if [ -n "${CRYPT_ROOT}" -o -n "${CRYPT_SWAP}" ]
+				then
+					good_msg "LUKS detected. Reimporting ${ZFS_POOL}"
+					/sbin/zpool export -f "${ZFS_POOL}"
+					/sbin/zpool import -N "${ZPOOL_FORCE}" "${ZFS_POOL}"
+				fi
 			else
 				good_msg "Importing ZFS pool ${ZFS_POOL}"
 
@@ -835,10 +891,12 @@ openLUKS() {
 
 				if [ -n "${LUKS_KEY}" ] 
 				then
+					local REAL_LUKS_KEYDEV="${LUKS_KEYDEV}"
 					if [ ! -e "${mntkey}${LUKS_KEY}" ] 
 					then
-						if [ -b "${LUKS_KEYDEV}" ]
-						then good_msg "Using key device ${LUKS_KEYDEV}." ${CRYPT_SILENT}
+						REAL_LUKS_KEYDEV=$(find_real_device "${LUKS_KEYDEV}")
+						if [ -b "${REAL_LUKS_KEYDEV}" ]
+						then good_msg "Using key device ${REAL_LUKS_KEYDEV}." ${CRYPT_SILENT}
 						else
 							good_msg "Please insert removable device ${LUKS_KEYDEV} for ${LUKS_NAME}" ${CRYPT_SILENT}
 							# abort after 10 secs
@@ -847,18 +905,20 @@ openLUKS() {
 							do 
 								count=$((count-1))
 								sleep 1
-								if [ -b "${LUKS_KEYDEV}" ]
+								REAL_LUKS_KEYDEV=$(find_real_device "${LUKS_KEYDEV}")
+								if [ -b "${REAL_LUKS_KEYDEV}" ]
 								then
-									good_msg "Removable device ${LUKS_KEYDEV} detected." ${CRYPT_SILENT}
+									good_msg "Removable device ${REAL_LUKS_KEYDEV} detected." ${CRYPT_SILENT}
 									break
 								fi
 							done
-							if [ ! -b "${LUKS_KEYDEV}" ]
+							if [ ! -b "${REAL_LUKS_KEYDEV}" ]
 							then
 								eval CRYPT_${TYPE}_KEY=${LUKS_KEY}
 								bootstrapKey ${TYPE}
 								eval LUKS_KEYDEV='"${CRYPT_'${TYPE}'_KEYDEV}"'
-								if [ ! -b "${LUKS_KEYDEV}" ]; then
+								REAL_LUKS_KEYDEV=$(find_real_device "${LUKS_KEYDEV}")
+								if [ ! -b "${REAL_LUKS_KEYDEV}" ]; then
 									KEYDEV_ERROR=1
 									bad_msg "Removable device ${LUKS_KEYDEV} not found." ${CRYPT_SILENT}
 									continue
@@ -870,34 +930,34 @@ openLUKS() {
 						# At this point a device was recognized, now let's see if the key is there
 						[ ! -d "$mntkey" ] && mkdir -p ${mntkey} 2>/dev/null >/dev/null
 
-						mount -n -o ro ${LUKS_KEYDEV} ${mntkey} >/dev/null 2>/dev/null
+						mount -n -o ro ${REAL_LUKS_KEYDEV} ${mntkey} >/dev/null 2>/dev/null
 						if [ "$?" != '0' ]
 						then
 							KEYDEV_ERROR=1
-							bad_msg "Mounting of device ${LUKS_KEYDEV} failed." ${CRYPT_SILENT}
+							bad_msg "Mounting of device ${REAL_LUKS_KEYDEV} failed." ${CRYPT_SILENT}
 							continue
 						else
-							good_msg "Removable device ${LUKS_KEYDEV} mounted." ${CRYPT_SILENT}
+							good_msg "Removable device ${REAL_LUKS_KEYDEV} mounted." ${CRYPT_SILENT}
 							sleep 2
 							# keyfile exists?
 							if [ ! -e "${mntkey}${LUKS_KEY}" ]; then
 								umount -n ${mntkey} 2>/dev/null >/dev/null
 								KEY_ERROR=1
 								KEYDEV_ERROR=1
-								bad_msg "Key {LUKS_KEY} on device ${LUKS_KEYDEV} not found." ${CRYPT_SILENT}
+								bad_msg "Key {LUKS_KEY} on device ${REAL_LUKS_KEYDEV} not found." ${CRYPT_SILENT}
 								continue
 							fi
 						fi
 					fi
 					# At this point a candidate key exists (either mounted before or not)
-					good_msg "${LUKS_KEY} on device ${LUKS_KEYDEV} found" ${CRYPT_SILENT}
+					good_msg "${LUKS_KEY} on device ${REAL_LUKS_KEYDEV} found" ${CRYPT_SILENT}
 					if [ "$(echo ${LUKS_KEY} | grep -o '.gpg$')" = ".gpg" ] && [ -e /sbin/gpg ] ; then
 						[ -e /dev/tty ] && mv /dev/tty /dev/tty.org
 						mknod /dev/tty c 5 1
-						cryptsetup_options="-d -"
+						cryptsetup_options="${cryptsetup_options} -d -"
 						gpg_cmd="/sbin/gpg --logger-file /dev/null --quiet --decrypt ${mntkey}${LUKS_KEY} |"
 					else
-						cryptsetup_options="-d ${mntkey}${LUKS_KEY}"
+						cryptsetup_options="${cryptsetup_options} -d ${mntkey}${LUKS_KEY}"
 					fi
 				fi
 				# At this point, keyfile or not, we're ready!

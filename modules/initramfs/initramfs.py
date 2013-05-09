@@ -114,7 +114,7 @@ class initramfs:
         if ret is not zero: self.fail('cpio')
 
         # 2) append base
-        print(green(' * ') + turquoise('initramfs.append.base') + ' Gentoo linuxrc' + white(' 3.4.38') + ' patched')
+        print(green(' * ') + turquoise('initramfs.append.base') + ' Gentoo linuxrc' + white(' 3.4.45') + ' patched')
         aobj.base()
 
         # 3) append modules

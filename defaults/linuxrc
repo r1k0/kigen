@@ -36,9 +36,12 @@ quiet_kmsg
 CMDLINE=$(cat /proc/cmdline)
 # Scan CMDLINE for any specified real_root= or cdroot arguments
 FAKE_ROOT=''
+FAKE_INIT=''
 REAL_ROOTFLAGS=''
 ROOTFSTYPE='auto'
 CRYPT_SILENT=0
+
+mkdir -p /etc/cmdline /etc/modprobe.d
 for x in ${CMDLINE}
 do
 	case "${x}" in
@@ -54,6 +57,9 @@ do
 		real_init=*)
 			REAL_INIT=${x#*=}
 		;;
+		init=*)
+			FAKE_INIT=${x#*=}
+		;;
 		init_opts=*)
 			INIT_OPTS=${x#*=}
 		;;
@@ -67,6 +73,9 @@ do
 		;;
 		cdroot_type=*)
 			CDROOT_TYPE=${x#*=}
+		;;
+		cdroot_marker=*)
+			CDROOT_MARKER=${x#*=}
 		;;
 		# Start livecd loop, looptype options
 		loop=*)
@@ -95,6 +104,10 @@ do
 		dodmraid=*)
 			DMRAID_OPTS=${x#*=}
 			USE_DMRAID_NORMAL=1
+		;;
+		domultipath) 
+			good_msg "Booting with multipath activated." 
+			USE_MULTIPATH_NORMAL=1 
 		;;
 		dozfs*)
 			USE_ZFS=1
@@ -240,9 +253,16 @@ do
 		nounionfs)
 			USE_UNIONFS_NORMAL=0
 			;;
-		dodropbear)
-			DROPBEAR='yes'
+        dodropbear)
+            DROPBEAR='yes'
+            ;;
+		*=*)
+			case "${x%%=*}" in
+			*.*)
+				echo "${x#*.}" >> "/etc/module_options/${x%%.*}.conf"
 			;;
+			esac
+		;;
 	esac
 done
 
@@ -250,10 +270,14 @@ if [ -z "${REAL_ROOT}" -a \( "${CDROOT}" = '0' \)  -a \( "${FAKE_ROOT}" != "/dev
 then
 	REAL_ROOT="${FAKE_ROOT}"
 fi
+if [ -z "${REAL_INIT}" -a \( "${CDROOT}" = '0' \)  -a \( "${FAKE_INIT}" != "/linuxrc" \) ]
+then
+	REAL_INIT="${FAKE_INIT}"
+fi
 
 # Set variables based on the value of REAL_ROOT
 case "${REAL_ROOT}" in
-	ZFS*)
+	ZFS=*)
 		ZFS_POOL=${REAL_ROOT#*=}
 		ZFS_POOL=${ZFS_POOL%%/*}
 		USE_ZFS=1
@@ -288,7 +312,7 @@ mount_devfs
 # Mount sysfs
 mount_sysfs
 
-# Start mdev
+# Initialize mdev
 if [ "${KV_2_6_OR_GREATER}" ]
 then
 	good_msg 'Activating mdev'
@@ -298,9 +322,6 @@ then
 
 	# Setup hotplugging for firmware loading
 	echo /sbin/mdev > /proc/sys/kernel/hotplug
-
-	# Setup mdev netlink socket daemon
-	( cd /sys && mdev -s ) || bad_msg "Failed to receive dynamic updates from mdev"
 fi
 
 # Load modules listed in MY_HWOPTS if /lib/modules exists for the running kernel
@@ -322,6 +343,12 @@ then
 	modules_load ${MDOLIST}
 else
 	good_msg 'Skipping module load; no modules in the ramdisk!'
+fi
+
+# Ensure that device nodes are properly configured
+if [ "${KV_2_6_OR_GREATER}" ]
+then
+	mdev -s || bad_msg "mdev -s failed"
 fi
 
 # Apply scan delay if specified
@@ -403,7 +430,7 @@ then
 	good_msg "Making tmpfs for ${NEW_ROOT}"
 	mount -n -t tmpfs tmpfs "${NEW_ROOT}"
 
-	for i in dev mnt mnt/livecd mnt/key tmp tmp/.initrd mnt/gentoo sys
+	for i in dev mnt proc run sys tmp mnt/livecd mnt/key tmp/.initrd mnt/gentoo
 	do
 		mkdir -p "${NEW_ROOT}/${i}"
 		chmod 755 "${NEW_ROOT}/${i}"
@@ -538,6 +565,8 @@ do
 						
 						done;
 
+					else
+						got_good_root=0
 					fi
 
 				fi
@@ -615,7 +644,7 @@ do
 		# else not a good root and start over.
 		if [ "$?" = '0' ]
 		then
-			if [ -d ${NEW_ROOT}/dev -a -x ${NEW_ROOT}/sbin/init ] || [ "${REAL_ROOT}" = "/dev/nfs" ]
+			if [ -d ${NEW_ROOT}/dev -a -x "${NEW_ROOT}${REAL_INIT:-/sbin/init}" ] || [ "${REAL_ROOT}" = "/dev/nfs" ]
 			then
 				break
 			else
@@ -649,7 +678,7 @@ then
 	# If encrypted, find key and mount, otherwise mount as usual
 	if [ -n "${CRYPT_ROOT}" ]
 	then
-		CRYPT_ROOT_KEY="$(head -n 1 "${CDROOT_PATH}"/livecd)"
+		CRYPT_ROOT_KEY="$(head -n 1 "${CDROOT_PATH}"/${CDROOT_MARKER})"
 		CRYPT_ROOT='/dev/loop0'
 		good_msg 'You booted an encrypted livecd' "${CRYPT_SILENT}"
 
@@ -813,6 +842,11 @@ then
 
 	mkdir initramfs proc tmp sys run 2>/dev/null
 	chmod 1777 tmp
+
+	# have handy /mnt/cdrom (CDROOT_PATH) as well
+	_new_cdroot="${NEW_ROOT}${CDROOT_PATH}"
+	[ ! -d "${_new_cdroot}" ] && mkdir -p "${_new_cdroot}"
+	mount --bind "${CDROOT_PATH}" "${_new_cdroot}"
 
 	fi
 
