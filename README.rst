@@ -198,7 +198,7 @@ If you're not familiar with creating your own overlay, refer to http://www.gento
 
 Optionally set the +doc USE flag or the +module-rebuild one to allow passing 'kigen k --module-rebuild'.
 ::
-  z13 ~ # echo "sys-kernel/kigen doc mdoule-rebuild" >> /etc/portage/package.use
+  z13 ~ # echo "sys-kernel/kigen doc module-rebuild" >> /etc/portage/package.use
 
 emerge it.
 ::
