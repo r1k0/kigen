@@ -24,10 +24,10 @@ class dropbear:
         """
         zero = int('0')
     
-        if os.path.isfile('%s/dropbear-%s.tar.gz' % (get_distdir(self.temp), str(self.dropbear_ver))) is not True:
+        if os.path.isfile('%s/dropbear-%s.tar.bz2' % (get_distdir(self.temp), str(self.dropbear_ver))) is not True:
             print(green(' * ') + '... dropbear.download')
             if self.download() is not zero: 
-                process('rm -v %s/dropbear-%s.tar.gz' % (get_distdir(self.temp), str(self.dropbear_ver)), self.verbose)
+                process('rm -v %s/dropbear-%s.tar.bz2' % (get_distdir(self.temp), str(self.dropbear_ver)), self.verbose)
                 self.fail('download')
     
         print(green(' * ') + '... dropbear.extract')
@@ -94,10 +94,10 @@ class dropbear:
     
         @return: bool
         """
-        dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.gz'
+        dropbear_url = self.url + '/dropbear-' + str(self.dropbear_ver) + '.tar.bz2'
 
-#       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.gz' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
-        return os.system('/usr/bin/wget %s -O %s/dropbear-%s.tar.gz %s' % (dropbear_url, get_distdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
+#       return utils.process('/usr/bin/wget %s -O %s/opendropbear-%s.tar.bz2' % (dropbear_url, utils.get_distdir(temp), str(dropbearversion)), verbose)
+        return os.system('/usr/bin/wget %s -O %s/dropbear-%s.tar.bz2 %s' % (dropbear_url, get_distdir(self.temp), str(self.dropbear_ver), self.verbose['std']))
     
     def extract(self):
         """
@@ -107,7 +107,7 @@ class dropbear:
         """
         self.chgdir(self.temp['work'])
 
-        os.system('tar xvfz %s/dropbear-%s.tar.gz -C %s %s' % (get_distdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
+        os.system('tar xvfj %s/dropbear-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.dropbear_ver), self.temp['work'], self.verbose['std']))
    
 #    def patch(self): #, file):
 #        """
