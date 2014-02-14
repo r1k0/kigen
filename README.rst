@@ -517,6 +517,7 @@ Help menu.
     --splash=<theme>          "emergence"         Include splash support (splashutils must be merged)
      --sres=YxZ[,YxZ]         ""                   Splash resolution, all if not set
     --rootpasswd=<passwd>     "aaa"               Create and set root password (required for dropbear)
+    --hostsshkeys             False               Include the OpenSSHd keys from host
     --keymaps=xx[,xx]|all     "be,us"             Include all keymaps
     --plugin=/dir[,/dir]      ""                  Include list of user generated custom roots
   
