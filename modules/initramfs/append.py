@@ -39,7 +39,8 @@ class append:
                 keymaplist,         \
                 nocache,            \
                 hostbin,            \
-                rootpasswd):
+                rootpasswd,         \
+                hostsshkeys):
         """
         init class variables
         """
@@ -70,6 +71,7 @@ class append:
         self.selinux            = selinux
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
+        self.hostsshkeys        = hostsshkeys
         self.dbdebugflag        = dbdebugflag
         self.keymaplist         = keymaplist
 
@@ -832,7 +834,7 @@ class append:
         else:
             # compile and cache
             from .sources.dropbear import dropbear
-            dropbearobj = dropbear(self.master_conf, self.version_conf, self.url_conf, self.dbdebugflag, self.temp, self.verbose)
+            dropbearobj = dropbear(self.master_conf, self.version_conf, self.url_conf, self.hostsshkeys, self.dbdebugflag, self.temp, self.verbose)
             dropbearobj.build()
 
             # extract cache
