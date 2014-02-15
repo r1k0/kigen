@@ -377,6 +377,7 @@ def cli_parser():
                                     "rename=",      \
                                     "plugin=",      \
                                     "rootpasswd=",  \
+                                    "hostsshkeys",  \
                                     "keymaps=",     \
                                     "source-ttyecho",\
                                     "bin-strace",   \
@@ -582,6 +583,10 @@ def cli_parser():
         if initramfs_conf['rootpasswd'] != '':
             cli['rootpasswd'] = initramfs_conf['rootpasswd']
 
+        cli['hostsshkeys']  = False
+        if initramfs_conf['hostsshkeys'] == 'True':
+            cli['hostsshkeys'] = True
+
         cli['source-ttyecho'] = False
         if initramfs_conf['source-ttyecho'] == 'True':
             cli['source-ttyecho'] = True
@@ -759,6 +764,8 @@ def cli_parser():
                 cli['plugin'] = a # a is a list
             elif o in ("--rootpasswd="):
                 cli['rootpasswd'] = a
+            elif o in ("--hostsshkeys"):
+                cli['hostsshkeys'] = True
             elif o in("--source-ttyecho"):
                 cli['source-ttyecho'] = True
             elif o in ("--keymaps"):

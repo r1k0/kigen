@@ -60,6 +60,7 @@ class initramfs:
         self.hostbin            = cli['hostbin']
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
+        self.hostsshkeys        = cli['hostsshkeys']
         self.dbdebugflag        = cli['debugflag']
         self.keymaplist         = cli['keymaps']
 
@@ -106,7 +107,8 @@ class initramfs:
                         self.keymaplist,        \
                         self.nocache,           \
                         self.hostbin,           \
-                        self.rootpasswd)
+                        self.rootpasswd,        \
+                        self.hostsshkeys)
 
         # 1) create initial cpio and append object
         logging.debug('>>> creating empty initramfs')
