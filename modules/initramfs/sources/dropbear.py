@@ -213,7 +213,7 @@ class dropbear:
         self.chgdir(self.dropbeartmp)
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
         
-        return process('./dropbearconvert openssh dropbear /etc/ssh/ssh_host_dsa_key %s/etc/dropbear/dropbear_dsa_host_key' % self.dropbeartmp, self.verbose)
+        return process('./dropbearconvert openssh dropbear /etc/ssh/ssh_host_dsa_key %s/etc/dropbear/dropbear_dss_host_key' % self.dropbeartmp, self.verbose)
 
     def compress(self):
         """
