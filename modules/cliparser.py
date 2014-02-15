@@ -828,6 +828,7 @@ def cli_parser():
         try:
             # parse command line
             opts, args = getopt(cliopts[1:], "hn", [  \
+                                    "help",             \
                                     "extract=",         \
                                     "to=",              \
                                     "compress=",        \
