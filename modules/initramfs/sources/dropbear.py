@@ -6,13 +6,14 @@ from utils.misc import *
 
 class dropbear:
 
-    def __init__(self, master_config, version_conf, url_conf, debugflag, temp, verbose):
+    def __init__(self, master_config, version_conf, url_conf, hostsshkeys, debugflag, temp, verbose):
         
         self.master_config  = master_config
         self.temp           = temp
         self.verbose        = verbose
         self.dropbear_ver   = version_conf['dropbear-version']
         self.url            = url_conf['dropbear']
+        self.hostsshkeys    = hostsshkeys
         self.dropbeartmp    = temp['work'] + '/dropbear-' + self.dropbear_ver
         self.debugflag      = debugflag
 
@@ -53,11 +54,18 @@ class dropbear:
         print(green(' * ') + '... dropbear.strip')
         if self.strip() is not zero: self.fail('strip')
 
-        print(green(' * ') + '... dropbear.dsskey')
-        if self.dsskey() is not zero: self.fail('dsskey')
-
-        print(green(' * ') + '... dropbear.rsakey')
-        if self.rsakey() is not zero: self.fail('rsakey')
+        if self.hostsshkeys is True:
+            print(green(' * ') + '... dropbear.host-dsskey')
+            if self.hostsshkeys_dsa() is not zero: self.fail('host-dsskey')
+            
+            print(green(' * ') + '... dropbear.host-rsakey')
+            if self.hostsshkeys_rsa() is not zero: self.fail('host-rsakey')
+        else:
+            print(green(' * ') + '... dropbear.dsskey')
+            if self.dsskey() is not zero: self.fail('dsskey')
+            
+            print(green(' * ') + '... dropbear.rsakey')
+            if self.rsakey() is not zero: self.fail('rsakey')
 
         print(green(' * ') + '... dropbear.compress')
         if self.compress() is not zero: self.fail('compress')
@@ -188,6 +196,24 @@ class dropbear:
         process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
 
         return process('./dropbearkey -t rsa -s 4096 -f %s/etc/dropbear/dropbear_rsa_host_key' % self.dropbeartmp, self.verbose)
+    
+    def hostsshkeys_rsa(self):
+        """
+        dropbear host rsa ssh key convertion
+        """
+        self.chgdir(self.dropbeartmp)
+        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+        
+        return process('./dropbearconvert openssh dropbear /etc/ssh/ssh_host_rsa_key %s/etc/dropbear/dropbear_rsa_host_key' % self.dropbeartmp, self.verbose)
+    
+    def hostsshkeys_dsa(self):
+        """
+        dropbear host dsa ssh key convertion
+        """
+        self.chgdir(self.dropbeartmp)
+        process('mkdir -p %s/etc/dropbear' % self.dropbeartmp, self.verbose)
+        
+        return process('./dropbearconvert openssh dropbear /etc/ssh/ssh_host_dsa_key %s/etc/dropbear/dropbear_dss_host_key' % self.dropbeartmp, self.verbose)
 
     def compress(self):
         """

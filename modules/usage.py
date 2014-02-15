@@ -53,7 +53,7 @@ def print_examples():
     print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon')
     print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --host-luks -d -n initramfs')
     print(' '+os.path.basename(sys.argv[0])+' i --host-luks --host-lvm2 --host-disklabel --splash=sabayon --host-glibc --dynlibs')
-    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --keymaps=all --source-ttyecho --source-strace --source-screen --host-glibc --host-zlib --host-libncurses --defconfig --nocache')
+    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --hostsshkeys --keymaps=all --source-ttyecho --source-strace --source-screen --host-glibc --host-zlib --host-libncurses --defconfig --nocache')
     print(' '+os.path.basename(sys.argv[0])+' --extract=/file t --to=/dir')
     print(' '+os.path.basename(sys.argv[0])+' tool --compress=/dir --into=/file')
 
@@ -238,6 +238,9 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
         tab = '\t\t\t'
     print('  --rootpasswd=<passwd>     "'+cli['rootpasswd'], end='"')
     print(tab+'Create and set root password (required for dropbear)')
+    print('  --hostsshkeys             ', end='')
+    print(initramfs_conf['hostsshkeys'], end='') # bool
+    print('\t\tInclude the OpenSSHd keys from host (used with dropbear)')
     if cli['keymaps'] != '':
         if len(cli['keymaps']) <= 4:
             tab = '\t\t\t'

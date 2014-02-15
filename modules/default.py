@@ -86,6 +86,7 @@ initramfs_conf = {
         'bin-screen'    : 'False',   \
         'source-screen' : 'False',   \
         'rootpasswd'    : '',   \
+        'hostsshkeys'   : 'False',   \
         'defconfig'     : 'False',   \
         'bin-disklabel' : 'False',   \
         'source-disklabel': 'False', \
