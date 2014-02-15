@@ -378,6 +378,8 @@ def cli_parser():
                                     "plugin=",      \
                                     "rootpasswd=",  \
                                     "hostsshkeys",  \
+                                    "ssh-pubkeys",  \
+                                    "ssh-pubkeys-file", \
                                     "keymaps=",     \
                                     "source-ttyecho",\
                                     "bin-strace",   \
@@ -587,6 +589,14 @@ def cli_parser():
         if initramfs_conf['hostsshkeys'] == 'True':
             cli['hostsshkeys'] = True
 
+        cli['ssh-pubkeys']  = False
+        if initramfs_conf['ssh-pubkeys'] == 'True':
+            cli['ssh-pubkeys'] = True
+
+        cli['ssh-pubkeys-file']  = ''
+        if initramfs_conf['ssh-pubkeys-file'] != '':
+            cli['ssh-pubkeys-file'] = initramfs_conf['ssh-pubkeys-file']
+
         cli['source-ttyecho'] = False
         if initramfs_conf['source-ttyecho'] == 'True':
             cli['source-ttyecho'] = True
@@ -766,6 +776,10 @@ def cli_parser():
                 cli['rootpasswd'] = a
             elif o in ("--hostsshkeys"):
                 cli['hostsshkeys'] = True
+            elif o in ("--ssh-pubkeys"):
+                cli['ssh-pubkeys'] = True
+            elif o in ("--ssh-pubkeys-file="):
+                cli['ssh-pubkeys-file'] = a
             elif o in("--source-ttyecho"):
                 cli['source-ttyecho'] = True
             elif o in ("--keymaps"):

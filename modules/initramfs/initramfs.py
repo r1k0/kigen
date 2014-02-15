@@ -61,6 +61,8 @@ class initramfs:
         self.pluginroot         = cli['plugin'] # string
         self.rootpasswd         = cli['rootpasswd']
         self.hostsshkeys        = cli['hostsshkeys']
+        self.ssh_pubkeys        = cli['ssh-pubkeys']
+        self.ssh_pubkeys_file   = cli['ssh-pubkeys-file']
         self.dbdebugflag        = cli['debugflag']
         self.keymaplist         = cli['keymaps']
 
@@ -108,7 +110,9 @@ class initramfs:
                         self.nocache,           \
                         self.hostbin,           \
                         self.rootpasswd,        \
-                        self.hostsshkeys)
+                        self.hostsshkeys,       \
+                        self.ssh_pubkeys,       \
+                        self.ssh_pubkeys_file)
 
         # 1) create initial cpio and append object
         logging.debug('>>> creating empty initramfs')
@@ -340,10 +344,10 @@ class initramfs:
             if aobj.splash() is not zero: self.fail('splash')
 
         # 23) append rootpasswd
-        if self.cli['rootpasswd'] is not '':
-            print(green(' * ') + turquoise('initramfs.append.rootpasswd'))
+        if self.cli['rootpasswd'] is not '' or self.cli['ssh-pubkeys'] is True:
+            print(green(' * ') + turquoise('initramfs.append.rootcredentials'))
             os.chdir(self.temp['work'])
-            if aobj.set_rootpasswd() is not zero: self.fail('rootpasswd')
+            if aobj.set_rootcredentials() is not zero: self.fail('rootcredentials')
 
         # 24) append keymaps
         if self.cli['keymaps'] is not '':
