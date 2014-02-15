@@ -87,6 +87,8 @@ initramfs_conf = {
         'source-screen' : 'False',   \
         'rootpasswd'    : '',   \
         'hostsshkeys'   : 'False',   \
+        'ssh-pubkeys'   : 'False',   \
+        'ssh-pubkeys-file': '~/.ssh/authorized_keys',
         'defconfig'     : 'False',   \
         'bin-disklabel' : 'False',   \
         'source-disklabel': 'False', \

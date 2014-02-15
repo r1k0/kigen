@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 import subprocess
+import crypt
 from stdout import *
 from utils.process import *
 from utils.misc import *
@@ -40,7 +41,9 @@ class append:
                 nocache,            \
                 hostbin,            \
                 rootpasswd,         \
-                hostsshkeys):
+                hostsshkeys,        \
+                ssh_pubkeys,        \
+                ssh_pubkeys_file):
         """
         init class variables
         """
@@ -72,6 +75,8 @@ class append:
         self.hostbin            = hostbin
         self.rootpasswd         = rootpasswd
         self.hostsshkeys        = hostsshkeys
+        self.ssh_pubkeys        = ssh_pubkeys
+        self.ssh_pubkeys_file   = ssh_pubkeys_file
         self.dbdebugflag        = dbdebugflag
         self.keymaplist         = keymaplist
 
@@ -293,26 +298,38 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())
  
-    def set_rootpasswd(self):
+    def set_rootcredentials(self):
         """
-        Set root password of the initramfs
+        Set root password and ssh public key of the initramfs
         """
-        logging.debug('>>> entering initramfs.append.set_rootpasswd')
+        logging.debug('>>> entering initramfs.append.set_rootcredentials')
 
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
-        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootcredentials-temp/etc', self.verbose)
+        process('mkdir -p %s' % self.temp['work']+'/initramfs-rootcredentials-temp/root', self.verbose)
 
-        process('cp /etc/shells %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc', self.verbose)
-        process('chown root:root %s'% self.temp['work']+'/initramfs-rootpasswd-temp/root', self.verbose)
+        process('cp /etc/shells %s' % self.temp['work']+'/initramfs-rootcredentials-temp/etc', self.verbose)
+        process('chown root:root %s'% self.temp['work']+'/initramfs-rootcredentials-temp/root', self.verbose)
 
-        # FIXME use a python API instead of openssl
-        # FIXME deal with /etc/shadow eventually, then use openssl passwd -1 mypass for proper type/salt/hash $1$salt$hash
+        # If we are called only for ssh pubkeys and don't have a pass configured  we use * as a pass
+        if self.rootpasswd is '':
+            password_hash="*"
+        else:
+            password_hash=crypt.crypt(self.rootpasswd, crypt.mksalt())
+
+        #create the user and group files
         print(green(' * ') + '... ' + '/etc/passwd')
-        logging.debug('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
-        os.system('echo "root:$(openssl passwd %s):0:0:root:/root:/bin/sh" > %s'% (self.rootpasswd, self.temp['work']+'/initramfs-rootpasswd-temp/etc/passwd'))
+        process('echo "root:x:0:0:root:/root:/bin/sh" > %s'% self.temp['work']+'/initramfs-rootcredentials-temp/etc/passwd', self.verbose)
+        print(green(' * ') + '... ' + '/etc/shadow')
+        process("echo 'root:%s:::::::' > %s"% (password_hash, self.temp['work']+'/initramfs-rootcredentials-temp/etc/shadow'), self.verbose)
+        process('chmod 640 %s'% self.temp['work']+'/initramfs-rootcredentials-temp/etc/shadow', self.verbose)
         print(green(' * ') + '... ' + '/etc/group')
-        logging.debug('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
-        os.system('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootpasswd-temp/etc/group')
+        process('echo "root:x:0:root" > %s' % self.temp['work']+'/initramfs-rootcredentials-temp/etc/group', self.verbose)
+
+        # Add the ssh pubkeys if required
+        if self.ssh_pubkeys is True:
+            print(green(' * ') + '... ' + '/root/.ssh/authorized_keys')
+            process('mkdir -p %s' % self.temp['work']+'/initramfs-rootcredentials-temp/root/.ssh', self.verbose)
+            process('cp %s %s' % (self.ssh_pubkeys_file, self.temp['work']+'/initramfs-rootcredentials-temp/root/.ssh/authorized_keys'), self.verbose)
 
 #        # HACK quick ninja chroot to set password - leave for history museum of horror coding - actually send the whole project ;)
 #        slash = os.open('/', os.O_RDONLY)
@@ -324,7 +341,7 @@ class append:
 #            os.chdir('..')
 #        os.chroot('.')
 
-        os.chdir(self.temp['work']+'/initramfs-rootpasswd-temp')
+        os.chdir(self.temp['work']+'/initramfs-rootcredentials-temp')
         return os.system(self.cpio())
 
     def splash(self):

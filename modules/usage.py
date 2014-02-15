@@ -241,6 +241,12 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('  --hostsshkeys             ', end='')
     print(initramfs_conf['hostsshkeys'], end='') # bool
     print('\t\tInclude the OpenSSHd keys from host (used with dropbear)')
+    print('  --ssh-pubkeys             ', end='')
+    print(initramfs_conf['ssh-pubkeys'], end='') # bool
+    print('\t\tInclude the SSH public keys (used with dropbear)')
+    print('  --ssh-pubkeys-file        ', end='')
+    print(initramfs_conf['ssh-pubkeys-file'], end='') # bool
+    print('\n\t\t\t\t\t\tSource file with SSH public keys (used with dropbear)')
     if cli['keymaps'] != '':
         if len(cli['keymaps']) <= 4:
             tab = '\t\t\t'

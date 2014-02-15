@@ -518,6 +518,9 @@ Help menu.
      --sres=YxZ[,YxZ]         ""                   Splash resolution, all if not set
     --rootpasswd=<passwd>     "aaa"               Create and set root password (required for dropbear)
     --hostsshkeys             False               Include the OpenSSHd keys from host
+    --ssh-pubkeys             False               Include the SSH public keys (used with dropbear)
+    --ssh-pubkeys-file        ~/.ssh/authorized_keys
+                                                  Source file with SSH public keys (used with dropbear)
     --keymaps=xx[,xx]|all     "be,us"             Include all keymaps
     --plugin=/dir[,/dir]      ""                  Include list of user generated custom roots
   
