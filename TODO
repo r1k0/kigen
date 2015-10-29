@@ -59,3 +59,4 @@ TODO: --host-lvm2 checks for lvm.static, but user might have lvm and use --dynli
 TODO: symlink for sabayon
     kernel -> kernel-genkernel-x86_64-3.14.0-sabayon
     Initrd -> initramfs-genkernel-x86_64-3.14.0-sabayon
+
