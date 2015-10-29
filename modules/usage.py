@@ -63,6 +63,8 @@ def print_examples():
 def print_usage_kernel(cli, master_conf, kernel_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
     print()
+    print('--execute, -x\t\t\t\t\tExecute')
+    print()
     print('Kernel:')
     print('  --dotconfig=/file         "'+kernel_conf['dotconfig']+'"', end='')
     print('\t\t\tCustom kernel .config file')
@@ -135,6 +137,8 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
 
 def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Parameter:\t\t    Config value:\tDescription:')
+    print()
+    print('--execute, -x\t\t\t\t\tExecute')
     print()
     print('Features:')
     print('+ from source code')
