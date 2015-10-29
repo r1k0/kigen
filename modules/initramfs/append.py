@@ -123,14 +123,20 @@ class append:
         # elif arch is 'amd64':
         #       blablabla
 #            print(green(' * ')+'... Gentoo linuxrc'+ white(' 3.4.30') + ' patched')
-            # this is Gentoo official linuxrc suite (see genkernel)
-            process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
+            # this is Gentoo official linuxrc suite (see genkernel and genkernel-next)
             print(green(' * ')+'... /init')
-            process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/linuxrc %s/initramfs-base-temp/init' % (self.libdir, self.temp['work']), self.verbose)
             print(green(' * ')+'... /etc/initrd.scripts')
-            process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp %s/defaults/initrd.scripts %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+            print(green(' * ')+'... /etc/initrd.d/*')
+# for genkernel-next
+            process('cp -r %s/defaults/initrd.d %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
             print(green(' * ')+'... /etc/initrd.defaults')
+            process('cp %s/defaults/initrd.defaults %s/initramfs-base-temp/etc/' % (self.libdir, self.temp['work']), self.verbose)
+
             process('chmod +x %s/initramfs-base-temp/etc/initrd.scripts' % self.temp['work'], self.verbose)
+# for genkernel-next
+            process('chmod +x %s/initramfs-base-temp/etc/initrd.d/*' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
         else:
             linuxrclist = self.linuxrc.split(',')
@@ -412,7 +418,8 @@ class append:
         # make keymaplist a real list
         self.keymaplist = self.keymaplist.split(',')
         if 'all' in self.keymaplist:
-            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+#            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/initramfs-keymaps-temp/lib/keymaps' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp -r %s/defaults/keymaps %s/initramfs-keymaps-temp/lib/' % (self.libdir, self.temp['work']), self.verbose)
             f = os.popen("ls %s/initramfs-keymaps-temp/lib/keymaps/"%self.temp['work'])
 
             print(green(' * ') + '... ', end='')
@@ -430,7 +437,8 @@ class append:
             print()
 
         else:
-            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/keymaplist' % (self.libdir, self.temp['work']), self.verbose)
+#            process('tar zxf %s/defaults/keymaps.tar.gz -C %s/keymaplist' % (self.libdir, self.temp['work']), self.verbose)
+            process('cp -r %s/defaults/keymaps/* %s/keymaplist' % (self.libdir, self.temp['work']), self.verbose)
             print(green(' * ') + '... ', end='')
             z = int('0')
             for i in self.keymaplist:

@@ -38,9 +38,14 @@ def cli_parser():
     master_conf = etcparser.etc_parser_master()
 
     # if not enough parameters exit with usage
-    if len(sys.argv) < 2:
+    if len(cliopts) < 2:
         usage.print_usage()
         sys.exit(2)
+#    if len(cliopts) < 3 and ('i' in cliopts or 'initramfs' in cliopts):
+#        usage.print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf)
+#        sys.exit(2)
+#    if len(cliopts) < 3 and ('k' in cliopts or 'kernel' in cliopts):
+#        usage.print_usage_kernel()
 
     # set default kernel sources
     if 'kernel-sources' in master_conf:
@@ -78,13 +83,13 @@ def cli_parser():
         sys.exit(2)
 
     # === parsing for the kernel target ===
-    if 'kernel' in sys.argv or 'k' in sys.argv:
+    if 'kernel' in cliopts or 'k' in cliopts:
         # we found the kernel target
         # parse accordingly
-        if 'kernel' in sys.argv:
+        if 'kernel' in cliopts:
             target = 'kernel'
             cliopts.remove('kernel')
-        if 'k' in sys.argv:
+        if 'k' in cliopts:
             target = 'k'
             cliopts.remove('k')
 
@@ -93,10 +98,11 @@ def cli_parser():
 
         try:
             # parse command line
-            opts, args = getopt(cliopts[1:], "dhn", [           \
+            opts, args = getopt(cliopts[1:], "dhnx", [           \
                                     "help",                     \
                                     "version",                  \
                                     "credits",                  \
+                                    "execute",                  \
                                     "conf=",                    \
                                     "dotconfig=",               \
                                     "bbconf=",                  \
@@ -237,6 +243,10 @@ def cli_parser():
         if kernel_conf['module-rebuild'] == 'True':
             cli['module-rebuild'] = True
 
+        # show detailed usage with 'kigen k'
+        if len(cliopts) == 1: # 1 because  target is stripped
+            usage.print_usage_kernel(cli, master_conf, kernel_conf)
+
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
@@ -245,6 +255,8 @@ def cli_parser():
             elif o in ("--credits"):
                 usage.print_credits()
                 sys.exit(0)
+            elif o in ("-x", "--execute"):
+                pass
             elif o in ("--version"):
                 usage.print_version()
                 sys.exit(0)
@@ -304,16 +316,16 @@ def cli_parser():
             elif o in ("--module-rebuild"):
                 cli['module-rebuild'] = True
             else:
-                assert False, "uncaught option"
+                assert False, "uncaught kernel option"
 
     # === parsing for the initramfs target ===
-    elif 'initramfs' in sys.argv or 'i' in sys.argv:
+    elif 'initramfs' in cliopts or 'i' in cliopts:
         # we found the initramfs target
         # parse accordingly
-        if 'initramfs' in sys.argv:
+        if 'initramfs' in cliopts:
             target = 'initramfs'
             cliopts.remove('initramfs')
-        if 'i' in sys.argv:
+        if 'i' in cliopts:
             target = 'i'
             cliopts.remove('i')
 
@@ -323,7 +335,7 @@ def cli_parser():
 
         try:
             # parse command line
-            opts, args = getopt(cliopts[1:], "hdn", [  \
+            opts, args = getopt(cliopts[1:], "hdnx", [  \
                                     "dotconfig=",   \
                                     "mrproper",     \
                                     "menuconfig",   \
@@ -365,6 +377,7 @@ def cli_parser():
                                     "help",         \
                                     "version",      \
                                     "credits",      \
+                                    "execute",      \
                                     "nosaveconfig", \
                                     "hostbin",      \
                                     "bin-glibc",    \
@@ -640,7 +653,11 @@ def cli_parser():
             verbose['set'] = True
             verbose['std'] = '2>&1 | tee -a ' + cli['logfile'] + ' ; test ${PIPESTATUS[0]} -eq 0'
             verbose['logfile'] = cli['logfile']
-    
+
+        # show detailed usage with 'kigen i'
+        if len(cliopts) == 1: # 1 because  target is stripped
+            usage.print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf)
+
         # target options
         for o, a in opts:
             if o in ("-h", "--help"):
@@ -652,6 +669,8 @@ def cli_parser():
             elif o in ("--version"):
                 usage.print_version()
                 sys.exit(0)
+            elif o in ("-x", "--execute"):
+                pass
             # have to declare logfile here too
             elif o in ("--logfile="):
                 cli['logfile'] = a
@@ -808,16 +827,16 @@ def cli_parser():
                 cli['dynlibs'] = True
 
             else:
-                assert False, "uncaught option"
+                assert False, "uncaught initramfs option"
 
     # === parsing for the tool target ===
-    elif 'tool' in sys.argv or 't' in sys.argv:
+    elif 'tool' in cliopts or 't' in cliopts:
         # we found the tool target
         # parse accordingly
-        if 'tool' in sys.argv:
+        if 'tool' in cliopts:
             target = 'tool'
             cliopts.remove('tool')
-        if 't' in sys.argv:
+        if 't' in cliopts:
             target = 't'
             cliopts.remove('t')
 
@@ -865,7 +884,7 @@ def cli_parser():
                 cli['rmcache'] = True
 
             else:
-                assert False, "uncaught option"
+                assert False, "uncaught tool option"
 
         if not opts:
             usage.print_usage_tool(cli)

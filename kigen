@@ -157,137 +157,63 @@ except Exception:
 
 boot_mounted = False
 # run the kernel target
-if target == 'kernel' or target == 'k':
+if (target == 'kernel' or target == 'k') and ('--execute' in sys.argv or '-x' in sys.argv):
     
-        from kernel.kernel import kernel
-        kobj = kernel(cli['kerneldir'],   \
-                    master_conf,          \
-                    kernel_conf,          \
-                    cli['arch'],          \
-                    cli['KV'],            \
-                    cli,                  \
-                    temp,                 \
-                    verbose)
-        try: 
-            kobj.build()
+    from kernel.kernel import kernel
+    kobj = kernel(cli['kerneldir'],   \
+                master_conf,          \
+                kernel_conf,          \
+                cli['arch'],          \
+                cli['KV'],            \
+                cli,                  \
+                temp,                 \
+                verbose)
+    try: 
+        kobj.build()
 
-        except KeyboardInterrupt:
-            raise
+    except KeyboardInterrupt:
+        raise
+
+    # copy kernel/system.map to /boot
+    if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
+        if check_boot_mount() is True:
+            logging.debug('>>> copying System.map')
     
-        # copy kernel/system.map to /boot
-        if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
-            if check_boot_mount() is True:
-                logging.debug('>>> copying System.map')
-        
-                process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize('/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])/1024/1024, 1)))+'Mb'+' /boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
-        
-                logging.debug('>>> copying kernel')
-                process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb '+cli['rename'], end="")
+            process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
+            print(green(' * success ')+white(str(round(os.path.getsize('/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])/1024/1024, 1)))+'Mb'+' /boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
     
-                if cli['initramfs'] is not '':
-                    print(' with an ' + white('embedded') + ' initramfs')
-                else:
-                    print()
-            else:
-                if check_boot_fstab() is True:
-                    try:
-                        mount_boot()
-                        boot_mounted = True
-                        print(green(' * ') + turquoise('boot.mounted'))
-                    except:
-                        print(red('!!!') + 'cannot mount /boot')
-                        # FIXME: fallback to cli['noboot'] is True and don't fail
-                        sys.exit(1)
-    
-                logging.debug('>>> copying System.map')
-                process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize('/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])/1024/1024, 1)))+'Mb'+' /boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
-    
-                logging.debug('>>> copying kernel')
-                process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb '+cli['rename'], end="")
-    
-                if cli['initramfs'] is not '':
-                    print(' with an ' + white('embedded') + ' initramfs')
-                else:
-                    print()
-    
-                if boot_mounted is True:
-                    try:
-                        umount_boot()
-                        print(green(' * ') + turquoise('boot.umounted'))
-                    except:
-                        print(red('!!!') + 'cannot umount /boot')
-                        sys.exit(1)
-     
-        # leave /boot alone but tell the user where to find his kernel/system.map
-        elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
-            logging.debug(cli['kerneldir']+'/System.map')
-            print(green(' * success ') + cli['kerneldir']+'/System.map')
-        
-            logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
-            print(green(' * success ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end='')
+            logging.debug('>>> copying kernel')
+            process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+            print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb '+cli['rename'], end="")
+
             if cli['initramfs'] is not '':
-                print('with an ' + white('embedded') + ' initramfs')
+                print(' with an ' + white('embedded') + ' initramfs')
+            else:
+                print()
+        else:
+            if check_boot_fstab() is True:
+                try:
+                    mount_boot()
+                    boot_mounted = True
+                    print(green(' * ') + turquoise('boot.mounted'))
+                except:
+                    print(red('!!!') + 'cannot mount /boot')
+                    # FIXME: fallback to cli['noboot'] is True and don't fail
+                    sys.exit(1)
+
+            logging.debug('>>> copying System.map')
+            process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
+            print(green(' * success ')+white(str(round(os.path.getsize('/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])/1024/1024, 1)))+'Mb'+' /boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
+
+            logging.debug('>>> copying kernel')
+            process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
+            print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb '+cli['rename'], end="")
+
+            if cli['initramfs'] is not '':
+                print(' with an ' + white('embedded') + ' initramfs')
             else:
                 print()
 
-        # run module-rebuild for the sake of lazyness and/or ignorance
-        if cli['module-rebuild'] is True:
-            if os.path.isfile('/usr/sbin/module-rebuild'):
-                os.system('module-rebuild populate')
-                os.system('module-rebuild rebuild')
-            else:
-                print(red('!!!') + 'cannot find /usr/sbin/module-rebuild')
-                sys.exit(2)
-
-# run the initramfs target
-if target == 'initramfs' or target == 'i':
-
-        from initramfs.initramfs import initramfs
-        iobj = initramfs(cli['kerneldir'],  \
-                    cli['arch'],            \
-                    cli['KV'],              \
-                    libdir,                 \
-                    master_conf,            \
-                    modules_conf,           \
-                    initramfs_conf,         \
-                    version_conf,           \
-                    url_conf,               \
-                    cli,                    \
-                    temp,                   \
-                    bootupdateset,          \
-                    bootupdateinitrd,       \
-                    verbose)
-        try:
-            iobj.build()
-
-        except KeyboardInterrupt:
-            raise
-    
-        # copy initramfs to /boot
-        if cli['noboot'] is False:
-            if check_boot_mount() is True:
-                logging.debug('>>> copying initramfs')
-                process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb'+' '+cli['rename'])
-            else:
-                if check_boot_fstab() is True:
-                    try:
-                        mount_boot()
-                        boot_mounted = True
-                        print(green(' * ') + turquoise('boot.mounted'))
-                    except:
-                        print(red('!!!') + 'cannot mount /boot')
-                        # FIXME: fallback to cli['noboot'] is True and don't fail
-                        sys.exit(1)
-                
-                logging.debug('>>> copying initramfs')
-                process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
-                print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb'+' '+cli['rename'])
-    
             if boot_mounted is True:
                 try:
                     umount_boot()
@@ -295,37 +221,111 @@ if target == 'initramfs' or target == 'i':
                 except:
                     print(red('!!!') + 'cannot umount /boot')
                     sys.exit(1)
-     
-        # leave /boot alone but tell the user where to find his initramfs
-        elif cli['noboot'] is True:
-            logging.debug(temp['cache']+'/initramfs-cpio.gz')
-            print(green(' * success ') + temp['cache']+'/initramfs-cpio.gz')
+ 
+    # leave /boot alone but tell the user where to find his kernel/system.map
+    elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
+        logging.debug(cli['kerneldir']+'/System.map')
+        print(green(' * success ') + cli['kerneldir']+'/System.map')
+    
+        logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
+        print(green(' * success ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end='')
+        if cli['initramfs'] is not '':
+            print('with an ' + white('embedded') + ' initramfs')
+        else:
+            print()
+
+    # run module-rebuild for the sake of lazyness and/or ignorance
+    if cli['module-rebuild'] is True:
+        if os.path.isfile('/usr/sbin/module-rebuild'):
+            os.system('module-rebuild populate')
+            os.system('module-rebuild rebuild')
+        else:
+            print(red('!!!') + 'cannot find /usr/sbin/module-rebuild')
+            sys.exit(2)
+
+# run the initramfs target
+if (target == 'initramfs' or target == 'i') and ('--execute' in sys.argv or '-x' in sys.argv):
+
+   from initramfs.initramfs import initramfs
+   iobj = initramfs(cli['kerneldir'],  \
+               cli['arch'],            \
+               cli['KV'],              \
+               libdir,                 \
+               master_conf,            \
+               modules_conf,           \
+               initramfs_conf,         \
+               version_conf,           \
+               url_conf,               \
+               cli,                    \
+               temp,                   \
+               bootupdateset,          \
+               bootupdateinitrd,       \
+               verbose)
+   try:
+       iobj.build()
+
+   except KeyboardInterrupt:
+       raise
+
+   # copy initramfs to /boot
+   if cli['noboot'] is False:
+       if check_boot_mount() is True:
+           logging.debug('>>> copying initramfs')
+           process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+           print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb'+' '+cli['rename'])
+       else:
+           if check_boot_fstab() is True:
+               try:
+                   mount_boot()
+                   boot_mounted = True
+                   print(green(' * ') + turquoise('boot.mounted'))
+               except:
+                   print(red('!!!') + 'cannot mount /boot')
+                   # FIXME: fallback to cli['noboot'] is True and don't fail
+                   sys.exit(1)
+           
+           logging.debug('>>> copying initramfs')
+           process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
+           print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb'+' '+cli['rename'])
+
+       if boot_mounted is True:
+           try:
+               umount_boot()
+               print(green(' * ') + turquoise('boot.umounted'))
+           except:
+               print(red('!!!') + 'cannot umount /boot')
+               sys.exit(1)
+
+   # leave /boot alone but tell the user where to find his initramfs
+   elif cli['noboot'] is True:
+       logging.debug(temp['cache']+'/initramfs-cpio.gz')
+       print(green(' * success ') + temp['cache']+'/initramfs-cpio.gz')
 
 # run the tool target
 if target == 'tool' or target == 't':
 
-        if cli['rmcache']:
-            print(green(' * ') + turquoise('tool.rmcache ')+ temp['cache'])
-            if os.path.isdir(temp['cache']):
-                shutil.rmtree(temp['cache'])
+    if cli['rmcache']:
+        print(green(' * ') + turquoise('tool.rmcache ')+ temp['cache'])
+        if os.path.isdir(temp['cache']):
+            shutil.rmtree(temp['cache'])
 
-        # --extract
-        if cli['extract']:
-            import initramfs.extract
-            initramfs.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
-            sys.exit(0)
+    # --extract
+    if cli['extract']:
+        import initramfs.extract
+        initramfs.extract.initramfs(temp['work'], cli['extract'], cli['to'], verbose)
+        sys.exit(0)
 
-        # --compress
-        if cli['compress']:
-            import initramfs.compress
-            initramfs.compress.initramfs(temp['work'], cli['compress'], cli['into'], verbose)
-            sys.exit(0)
+    # --compress
+    if cli['compress']:
+        import initramfs.compress
+        initramfs.compress.initramfs(temp['work'], cli['compress'], cli['into'], verbose)
+        sys.exit(0)
 
-        # --getdotconfig
-        if cli['getdotconfig'] is not '':
-            from kernel.extract import getdotconfig
-            getdotconfig(cli['getdotconfig'], cli['kerneldir'], libdir, verbose)
-            sys.exit(0)
+    # --getdotconfig
+    if cli['getdotconfig'] is not '':
+        from kernel.extract import getdotconfig
+        getdotconfig(cli['getdotconfig'], cli['kerneldir'], libdir, verbose)
+        sys.exit(0)
 
 # FIXME unset os.environ['KIGEN_STDOUT']?
 

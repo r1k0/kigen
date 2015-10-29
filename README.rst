@@ -173,7 +173,7 @@ view.
 As long as we have to make bash calls, we'll have to have to control the return value
 of that call. Hence the return 0 logic you can find here and there in KIGen.
 
-**KIGen is on purpose using simple syntax: it's a relaxing project, a drink a smoke some music
+**KIGen is on purpose using simple syntax: it's a relaxing project, a smoke some music
 and let's geek around, that's the spirit.
 It's not rocket science but I do enjoy a lot writing code.** ;P
 
