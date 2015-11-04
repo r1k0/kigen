@@ -49,13 +49,13 @@ def print_usage():
 def print_examples():
     print()
     print(stdout.white('Examples')+':')
-    print(' '+os.path.basename(sys.argv[0])+' kernel --fixdotconfig=splash')
+#    print(' '+os.path.basename(sys.argv[0])+' kernel --fixdotconfig=splash')
     print(' '+os.path.basename(sys.argv[0])+' --clean --menuconfig k')
     print(' '+os.path.basename(sys.argv[0])+' k --initramfs=/myinitramfsfile -x')
-    print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon --execute')
-    print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --host-luks -d -n initramfs -x')
-    print(' '+os.path.basename(sys.argv[0])+' i --host-luks --host-lvm2 --host-disklabel --splash=sabayon --host-glibc --dynlibs -x')
-    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --hostsshkeys --keymaps=all --source-ttyecho --source-strace --source-screen --host-glibc --host-zlib --host-libncurses --defconfig --nocache -x')
+#    print(' '+os.path.basename(sys.argv[0])+' i --splash=sabayon --execute')
+#    print(' '+os.path.basename(sys.argv[0])+' --source-disklabel --source-lvm2 --splash=sabayon --host-luks -d -n initramfs -x')
+#    print(' '+os.path.basename(sys.argv[0])+' i --host-luks --host-lvm2 --host-disklabel --splash=sabayon --host-glibc --dynlibs -x')
+#    print(' '+os.path.basename(sys.argv[0])+' i --splash=emergence --source-disklabel --source-luks --source-lvm2 --source-dropbear --debugflag --rootpasswd=mypasswd --hostsshkeys --keymaps=all --source-ttyecho --source-strace --source-screen --host-glibc --host-zlib --host-libncurses --defconfig --nocache -x')
     print(' '+os.path.basename(sys.argv[0])+' --extract=/file t --to=/dir')
     print(' '+os.path.basename(sys.argv[0])+' tool --compress=/dir --into=/file')
 
@@ -86,7 +86,7 @@ def print_usage_kernel(cli, master_conf, kernel_conf):
     print(stdout.yellow('  --fixdotconfig=<feature>  '), end='"')
     print(kernel_conf['fixdotconfig'], end='"')
     print(tab+'Check and auto fix the kernel config file (experimental)')
-    print('\t\t\t\t\t\t splash,initramfs,selinux,pax supported (writes to .config)')
+    print('\t\t\t\t\t\t initramfs,selinux,pax supported (writes to .config)')
     print('  --clean                   ', end='')
     print(kernel_conf['clean'], end='')
     print('\t\tClean precompiled objects only')
@@ -229,10 +229,10 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
             tab = '\t\t'
     else:
         tab = '\t\t\t'
-    print('  --splash=<theme>          "'+initramfs_conf['splash'], end='"')
-    print(tab+'Include splash support (splashutils must be merged)')
-    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
-    print('\t\t\t Splash resolution, all if not set')
+#    print('  --splash=<theme>          "'+initramfs_conf['splash'], end='"')
+#    print(tab+'Include splash support (splashutils must be merged)')
+#    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
+#    print('\t\t\t Splash resolution, all if not set')
 
     # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
