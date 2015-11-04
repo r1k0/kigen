@@ -174,43 +174,46 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print('\t\tInclude all possible features from sources')
 
     print('+ from host binaries')
-    print('| --host-busybox             ', end='')
+    print('| --host-busybox            ', end='')
     print(initramfs_conf['bin-busybox'], end='') # bool 
     print('\t\tInclude busybox support from host')
-    print('| --host-luks                ', end='')
+    print('| --host-plymouth           ', end='')
+    print(initramfs_conf['bin-plymouth'], end='') # bool
+    print('\t\tInclude the plymouth binary tool from host')
+    print('| --host-luks               ', end='')
     print(initramfs_conf['bin-luks'], end='') # bool 
     print('\t\tInclude LUKS support from host')
-    print('| --host-lvm2                ', end='')
+    print('| --host-lvm2               ', end='')
     print(initramfs_conf['bin-lvm2'], end='') # bool
     print('\t\tInclude LVM2 support from host')
-    print('| --host-dropbear            ', end='')
+    print('| --host-dropbear           ', end='')
     print(initramfs_conf['bin-dropbear'], end='') # bool
     print('\t\tInclude dropbear support from host')
-    print('| --host-screen              ', end='')
+    print('| --host-screen             ', end='')
     print(initramfs_conf['bin-screen'], end='') # bool
     print('\t\tInclude the screen binary tool from host')
-    print('| --host-disklabel           ', end='')
+    print('| --host-disklabel          ', end='')
     print(initramfs_conf['bin-disklabel'], end='') # bool
     print('\t\tInclude support for UUID/LABEL from host')
-    print('| --host-strace              ', end='')
+    print('| --host-strace             ', end='')
     print(initramfs_conf['bin-strace'], end='') # bool
     print('\t\tInclude the strace binary tool from host')
-#    print('| --host-evms                ', end='')
+#    print('| --host-evms               ', end='')
 #    print(initramfs_conf['bin-evms'], end='') # bool
 #    print('\t\tInclude the evms binary tool from host')
-    print('| --host-glibc               ', end='')
+    print('| --host-glibc              ', end='')
     print(initramfs_conf['bin-glibc'], end='') # bool
     print('\t\tInclude host GNU C libraries (required for dns,dropbear)')
-    print('| --host-libncurses          ', end='')
+    print('| --host-libncurses         ', end='')
     print(initramfs_conf['bin-libncurses'], end='') # bool
     print('\t\tInclude host libncurses (required for dropbear)')
-    print('| --host-zlib                ', end='')
+    print('| --host-zlib               ', end='')
     print(initramfs_conf['bin-zlib'], end='') # bool
     print('\t\tInclude host zlib (required for dropbear)')
-    print('| --host-dmraid              ', end='')
+    print('| --host-dmraid             ', end='')
     print(initramfs_conf['bin-dmraid'], end='') # bool
     print('\t\tInclude DMRAID support from host')
-#    print('| --host-all                 ', end='')
+#    print('| --host-all                ', end='')
 #    print(initramfs_conf['bin-all'], end='') # bool
 #    print('\t\tInclude all possible features from host')
     print()
