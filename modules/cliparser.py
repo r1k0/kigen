@@ -407,8 +407,6 @@ def cli_parser():
                                     "source-all",   \
                                     "bin-busybox",  \
                                     "host-busybox", \
-                                    "bin-plymouth", \
-                                    "host-plymouth",\
                                     "dynlibs", \
                                     "debug"])
         except GetoptError as err:
@@ -449,7 +447,6 @@ def cli_parser():
             cli['bin-luks']         = True
             cli['bin-lvm2']         = True
             cli['bin-screen']       = True
-            cli['bin-plymouth']     = True
             cli['bin-disklabel']    = True
             cli['bin-strace']       = True
 #            cli['bin-evms']         = True
@@ -464,7 +461,6 @@ def cli_parser():
             cli['source-luks'] = True
             cli['source-lvm2'] = True
             cli['source-screen'] = True
-            cli['source-plymouth'] = True
             cli['source-disklabel'] = True
             cli['source-ttyecho'] = True
             cli['source-strace'] = True
@@ -634,17 +630,9 @@ def cli_parser():
         if initramfs_conf['bin-screen'] == 'True':
             cli['bin-screen'] = True
 
-        cli['bin-plymouth'] = False
-        if initramfs_conf['bin-plymouth'] == 'True':
-            cli['bin-plymouth'] = True
-
         cli['source-screen'] = False
         if initramfs_conf['source-screen'] == 'True':
             cli['source-screen'] = True
-
-        cli['source-plymouth'] = False
-        if initramfs_conf['source-plymouth'] == 'True':
-            cli['source-plymouth'] = True
 
         cli['dynlibs'] = False
         if initramfs_conf['dynlibs'] == 'True':
@@ -698,7 +686,6 @@ def cli_parser():
                 cli['bin-luks']         = True
                 cli['bin-lvm2']         = True
                 cli['bin-screen']       = True
-                cli['bin-plymouth']     = True
                 cli['bin-disklabel']    = True
                 cli['bin-strace']       = True
 #                cli['bin-evms']         = True
@@ -712,7 +699,6 @@ def cli_parser():
                 cli['source-lvm2']      = True
                 cli['source-disklabel'] = True
                 cli['source-screen']    = True
-                cli['source-plymouth']  = True
                 cli['source-ttyecho']   = True
                 cli['source-strace']    = True
                 cli['source-dmraid']    = True
@@ -831,10 +817,6 @@ def cli_parser():
                 cli['source-screen'] = True
                 cli['bin-glibc'] = True         # screen needs glibc
                 cli['bin-libncurses'] = True    # screen needs libncurses
-            elif o in ("--host-plymouth"):
-                cli['bin-plymouth'] = True
-                cli['bin-glibc'] = True         # screen needs glibc?
-                cli['bin-libncurses'] = True    # screen needs libncurses?
             elif o in ("--debugflag"):
                 cli['debugflag'] = True
             elif o in ("--nomodules"):

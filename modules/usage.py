@@ -177,9 +177,6 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('| --host-busybox            ', end='')
     print(initramfs_conf['bin-busybox'], end='') # bool 
     print('\t\tInclude busybox support from host')
-    print('| --host-plymouth           ', end='')
-    print(initramfs_conf['bin-plymouth'], end='') # bool
-    print('\t\tInclude the plymouth binary tool from host')
     print('| --host-luks               ', end='')
     print(initramfs_conf['bin-luks'], end='') # bool 
     print('\t\tInclude LUKS support from host')
