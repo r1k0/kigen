@@ -409,7 +409,7 @@ class append:
         logging.debug('>>> entering initramfs.append.plymouth')
         process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/', self.verbose)
 
-        print(green(' * ') + turquoise('initramfs.append.plymouth '))
+        print(green(' * ') + turquoise('initramfs.append.plymouth ') + self.plymouth)
 
         os.chdir(self.temp['work']+'/initramfs-plymouth-temp')
         return os.system(self.cpio())
