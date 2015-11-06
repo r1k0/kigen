@@ -406,6 +406,96 @@ class append:
 
     # INFO: don't name this function plymouth() or it'll fail
     def ply(self):
+#[ -z "${PLYMOUTH_THEME}" ] && \
+#    PLYMOUTH_THEME=$(plymouth-set-default-theme)
+#[ -z "${PLYMOUTH_THEME}" ] && PLYMOUTH_THEME=text
+#
+#if [ -d "${TEMP}/initramfs-ply-temp" ]
+#then
+#    rm -r "${TEMP}/initramfs-ply-temp"
+#fi
+#
+#mkdir -p "${TEMP}/initramfs-ply-temp/usr/share/plymouth/themes"
+#mkdir -p "${TEMP}/initramfs-ply-temp/etc/plymouth"
+#mkdir -p "${TEMP}/initramfs-ply-temp/"{bin,sbin}
+#mkdir -p "${TEMP}/initramfs-ply-temp/usr/"{bin,sbin}
+#
+#cd "${TEMP}/initramfs-ply-temp"
+#
+#local theme_dir="/usr/share/plymouth/themes"
+#local t=
+#
+#local p=
+#local ply="${theme_dir}/${PLYMOUTH_THEME}/${PLYMOUTH_THEME}.plymouth"
+#local plugin=$(grep "^ModuleName=" "${ply}" | cut -d= -f2-)
+#local plugin_binary=
+#if [ -n "${plugin}" ]
+#then
+#    plugin_binary="$(plymouth --get-splash-plugin-path)/${plugin}.so"
+#fi
+#
+#print_info 1 "  >> Installing plymouth [ using the ${PLYMOUTH_THEME} theme and plugin: \"${plugin}\" ]..."
+#
+#for t in text details ${PLYMOUTH_THEME}; do
+#    cp -R "${theme_dir}/${t}" \
+#        "${TEMP}/initramfs-ply-temp${theme_dir}/" || \
+#        gen_die "cannot copy ${theme_dir}/details"
+#done
+#cp /usr/share/plymouth/{bizcom.png,plymouthd.defaults} \
+#    "${TEMP}/initramfs-ply-temp/usr/share/plymouth/" || \
+#        gen_die "cannot copy bizcom.png and plymouthd.defaults"
+#
+## Do both config setup
+#echo -en "[Daemon]\nTheme=${PLYMOUTH_THEME}\n" > \
+#    "${TEMP}/initramfs-ply-temp/etc/plymouth/plymouthd.conf" || \
+#    gen_die "Cannot create /etc/plymouth/plymouthd.conf"
+#ln -sf "${PLYMOUTH_THEME}/${PLYMOUTH_THEME}.plymouth" \
+#    "${TEMP}/initramfs-ply-temp${theme_dir}/default.plymouth" || \
+#    gen_die "cannot setup the default plymouth theme"
+#
+## plymouth may have placed the libs into /usr/
+#local libply_core="/lib*/libply-splash-core.so.*"
+#if ! ls -1 ${libply_core} 2>/dev/null >/dev/null; then
+#    libply_core="/usr/lib*/libply-splash-core.so.*"
+#fi
+#
+#local libs=(
+#    "${libply_core}"
+#    "/usr/lib*/libply-splash-graphics.so.*"
+#    "/usr/lib*/plymouth/text.so"
+#    "/usr/lib*/plymouth/details.so"
+#    "/usr/lib*/plymouth/renderers/frame-buffer.so"
+#    "/usr/lib*/plymouth/renderers/drm.so"
+#    "${plugin_binary}"
+#)
+## lib64 must take the precedence or all the cpio archive
+## symlinks will be fubared
+#local slib= lib= final_lib= final_libs=()
+#for slib in "${libs[@]}"; do
+#    lib=( ${slib} )
+#    final_lib="${lib[0]}"
+#    final_libs+=( "${final_lib}" )
+#done
+#
+#local plymouthd_bin="/sbin/plymouthd"
+#[ ! -e "${plymouthd_bin}" ] && \
+#    plymouthd_bin="/usr/sbin/plymouthd"
+#
+#local plymouth_bin="/bin/plymouth"
+#[ ! -e "${plymouth_bin}" ] && \
+#    plymouth_bin="/usr/bin/plymouth"
+#
+#copy_binaries "${TEMP}/initramfs-ply-temp" \
+#    "${plymouthd_bin}" "${plymouth_bin}" \
+#    "${final_libs[@]}" || gen_die "cannot copy plymouth"
+#
+#log_future_cpio_content
+#find . -print | cpio ${CPIO_ARGS} --append -F "${CPIO}" \
+#    || gen_die "appending plymouth to cpio"
+#
+#cd "${TEMP}"
+#rm -r "${TEMP}/initramfs-ply-temp/"
+
         logging.debug('>>> entering initramfs.append.plymouth')
         process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/', self.verbose)
 
