@@ -358,6 +358,7 @@ def cli_parser():
                                     "host-evms",    \
                                     "mdadm",        \
                                     "splash=",      \
+                                    "plymouth=",    \
                                     "sres=",        \
                                     "sinitrd=",     \
                                     "firmware=",    \
@@ -507,6 +508,10 @@ def cli_parser():
 #        cli['mdadm'] = False
 #        if initramfs_conf['mdadm'] == 'True':
 #            cli['mdadm'] = True
+
+        cli['plymouth'] = ''
+        if initramfs_conf['plymouth'] != '':
+            cli['plymouth'] = initramfs_conf['plymouth']
 
         cli['splash'] = ''
         if initramfs_conf['splash'] != '':
@@ -749,6 +754,8 @@ def cli_parser():
                 cli['defconfig'] = True
             elif o in ("--splash"):
                 cli['splash'] = a
+            elif o in ("--plymouth"):
+                cli['plymouth'] = a
             elif o in ("--firmware"):
                 if os.path.isdir(a):
                     cli['firmware'] = a

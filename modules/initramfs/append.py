@@ -31,6 +31,7 @@ class append:
                 busyboxprogs,       \
                 bootupdateset,      \
                 bootupdateinitrd,   \
+                plymouth,           \
                 stheme,             \
                 sres,               \
                 sinitrd,            \
@@ -79,6 +80,7 @@ class append:
         self.ssh_pubkeys_file   = ssh_pubkeys_file
         self.dbdebugflag        = dbdebugflag
         self.keymaplist         = keymaplist
+        self.plymouth           = plymouth
 
     def cpio(self):
         """
@@ -400,6 +402,14 @@ class append:
 #            splashobj.build()
     
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
+        return os.system(self.cpio())
+
+    def plymouth(self):
+        logging.debug('>>> entering initramfs.append.plymouth')
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/', self.verbose)
+
+
+        os.chdir(self.temp['work']+'/initramfs-plymouth-temp')
         return os.system(self.cpio())
 
     def keymaps(self):

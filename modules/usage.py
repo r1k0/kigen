@@ -234,6 +234,21 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 #    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
 #    print('\t\t\t Splash resolution, all if not set')
 
+    # fix \t display depending on length of cli['ply']
+    if cli['plymouth'] != '':
+        if len(cli['plymouth']) <= 4:
+            tab = '\t\t\t'
+        elif len(cli['plymouth']) > 4 and len(cli['plymouth']) < 8:
+            tab = '\t\t'
+        elif len(cli['plymouth']) > 8:
+            tab = '\t\t'
+    else:
+        tab = '\t\t\t'
+    print('  --plymouth=<theme>          "'+initramfs_conf['plymouth'], end='"')
+    print(tab+'Include plymouth support (plymouth must be merged)')
+#    print('   --sres=YxZ[,YxZ]         "'+initramfs_conf['sres'], end='"')
+#    print('\t\t\t Plymouth resolution, all if not set')
+
     # fix \t display depending on length of cli['rootpasswd']
     if cli['rootpasswd'] != '':
         if len(cli['rootpasswd']) <= 4:

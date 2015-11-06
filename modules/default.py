@@ -110,6 +110,7 @@ initramfs_conf = {
         'bin-dropbear'  : 'False',  \
         'source-dropbear':'False',  \
         'splash'        : '',   \
+        'plymouth'      : '',   \
         'oldconfig'     : '',   \
         'source-ttyecho': 'False',  \
         'bin-luks'      : 'False',  \

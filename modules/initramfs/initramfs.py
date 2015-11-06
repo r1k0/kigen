@@ -53,6 +53,7 @@ class initramfs:
         self.cli                = cli
         self.bootupdateset      = bootupdateset
         self.bootupdateinitrd   = bootupdateinitrd
+        self.plymouth           = cli['plymouth']
         self.splash             = cli['splash']
         self.sres               = cli['sres']
         self.sinitrd            = cli['sinitrd']
@@ -100,6 +101,7 @@ class initramfs:
                         self.master_conf['busybox-progs'],  \
                         self.bootupdateset,     \
                         self.bootupdateinitrd,  \
+                        self.plymouth,          \
                         self.splash,            \
                         self.sres,              \
                         self.sinitrd,           \
@@ -342,6 +344,11 @@ class initramfs:
         if (self.cli['splash'] is not '') or (self.initramfs_conf['splash'] != ''):
             os.chdir(self.temp['work'])
             if aobj.splash() is not zero: self.fail('splash')
+
+        # 22bis) append plymouth
+        if (self.cli['plymouth'] is not '') or (self.initramfs_conf['plymouth'] != ''):
+            os.chdir(self.temp['work'])
+            if aobj.plymouth() is not zero: self.fail('plymouth')
 
         # 23) append rootpasswd
         if self.cli['rootpasswd'] is not '' or self.cli['ssh-pubkeys'] is True:
