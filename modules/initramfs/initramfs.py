@@ -348,7 +348,7 @@ class initramfs:
         # 22bis) append plymouth
         if (self.cli['plymouth'] is not '') or (self.initramfs_conf['plymouth'] != ''):
             os.chdir(self.temp['work'])
-            if aobj.plymouth() is not zero: self.fail('plymouth')
+            if aobj.ply() is not zero: self.fail('plymouth')
 
         # 23) append rootpasswd
         if self.cli['rootpasswd'] is not '' or self.cli['ssh-pubkeys'] is True:

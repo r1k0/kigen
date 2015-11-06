@@ -404,7 +404,8 @@ class append:
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
 
-    def plymouth(self):
+    # INFO: don't name this function plymouth() or it'll fail
+    def ply(self):
         logging.debug('>>> entering initramfs.append.plymouth')
         process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/', self.verbose)
 
