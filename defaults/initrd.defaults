@@ -66,6 +66,7 @@ else
 	KSUFF='.o'
 fi
 
+MDEVD='/sbin/mdev'
 REAL_ROOT=''
 CONSOLE='/dev/console'
 NEW_ROOT='/newroot'

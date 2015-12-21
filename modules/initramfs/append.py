@@ -140,6 +140,10 @@ class append:
 # for genkernel-next
             process('chmod +x %s/initramfs-base-temp/etc/initrd.d/*' % self.temp['work'], self.verbose)
             process('chmod +x %s/initramfs-base-temp/etc/initrd.defaults' % self.temp['work'], self.verbose)
+            print(green(' * ')+'... /sbin/ldconfig')
+            process('cp /sbin/ldconfig  %s/initramfs-base-temp/sbin' % self.temp['work'], self.verbose)
+            process('cp /etc/ld.so.conf %s/initramfs-base-temp/etc' % self.temp['work'], self.verbose)
+            process('chmod +x %s/initramfs-base-temp/sbin/ldconfig' % self.temp['work'], self.verbose)
         else:
             linuxrclist = self.linuxrc.split(',')
             print(str(linuxrclist) + ' from ' + white('host'))
