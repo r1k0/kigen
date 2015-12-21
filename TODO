@@ -22,12 +22,10 @@ TODO: add support for WLAN devices (currenlty dropbear boot only works for ether
 TODO: rewrite bin/evms.py though we hide it
 TODO: improve arch detection and support a bit more, I feel it's missing stuff
       amd64 and x86 work ok so far, what should I change?
-TODO: redesign kigen i -h/usage.py with a possible ascii array structure, gotta dig first
+TODO: redesign kigen i -h/usage.py with a possible ascii array structure
 TODO: add timestamp for each line in logfile and beautify logs a bit
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
       add --nohash option (as in Misc:)
-TODO: apply mdstart.sh patch applet for busybox (GK-3.4.11)
-      what for already?
 TODO: kigen k --fixdotconfig=selinux,initramfs,foo,bar
       http://www.gentoo.org/proj/en/hardened/selinux/selinux-handbook.xml?part=2&chap=2
       http://www.gentoo.org/proj/en/hardened/pax-quickstart.xml
