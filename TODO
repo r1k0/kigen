@@ -61,3 +61,4 @@ TODO: initrd.defaults pending merge from genkernel-next-63
       will results in cryptsetup saying:
       ioctl: invalid argument
       and won't boot
+      vimdiff initrd.defaults /usr/share/genkernel/defaults/initrd.defaults -> debug merge line by line
