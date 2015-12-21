@@ -498,6 +498,13 @@ class append:
 
         logging.debug('>>> entering initramfs.append.plymouth')
         process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/usr/share/plymouth/themes', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/etc/plymouth', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/{bin,sbin}', self.verbose)
+        process('mkdir -p ' + self.temp['work']+'/initramfs-plymouth-temp/usr/{bin,sbin}', self.verbose)
+
+        process('cp -r /usr/share/plymouth/themes/* ' + self.temp['work']+'/initramfs-plymouth-temp/usr/share/plymouth/themes', self.verbose)
+        process('cp /usr/share/plymouth/{bizcom.png,plymouthd.defaults} ' + self.temp['work']+'/initramfs-plymouth-temp/usr/share/plymouth/', self.verbose)
 
         print(green(' * ') + turquoise('initramfs.append.plymouth ') + self.plymouth)
 
