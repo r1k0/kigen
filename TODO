@@ -7,21 +7,19 @@ NODO: make multiple targets callable (left for the next new whole rewrite of cli
 NODO: when using --plugin=dir detect file collision and fail if found, add --overwrite to force?
       can't do as temp dirs can't see each other.
 
-0.6.*
+0.*.*
 =====
 TODO: try to USE=static emerge busybox and use --bin-dropbear and see what happens
 TODO: change --bin-* to --host-*
 TODO: rethink modules/utils/process.py using subprocess.call/getoutput/getstatusoutput
-TODO: check for binaries in runnetstack() -f ...
+TODO: check for binaries in start_dropbear() -f ...
 TODO: add process lockfile /var/run/kigen.pid
       only to kigen k|i not t
       pids= [pid for pid in os.listdir('/proc') if pid.isdigit()]
       for pid in pids:
         print open(os.path.join('/proc', pid, 'cmdline'), 'rb').read()
-TODO: add support for WLAN devices (currenlty dropbear boot only works for ethernet devices)
-TODO: rewrite bin/evms.py though we hide it
-TODO: improve arch detection and support a bit more, I feel it's missing stuff
-      amd64 and x86 work ok so far, what should I change?
+TODO: add support for WLAN devices
+TODO: rewrite bin/evms.py
 TODO: redesign kigen i -h/usage.py with a possible ascii array structure
 TODO: add timestamp for each line in logfile and beautify logs a bit
 TODO: add <pkg>_hash= to /etc/kigen/initramfs/hash.conf
@@ -42,11 +40,9 @@ TODO: kigen i --gnupg
 TODO: kigen i --aufs
       aufs-version = 0_p20100405
 TODO: support xen-sources -> doublehp this one is for you ;) patience though
-      lucky bastard linux-3.0 will have full Xen support
       start dev with gentoo-sources-3.0 or fall back to xen-sources
       http://en.gentoo-wiki.com/wiki/Xen
       read dracut code there lies the solution to xen and other stuff
-TODO: support ppc ppc64
 TODO: support sys-boot/plymouth
 TODO: kigen k with no modules should output better (MODULES_.*)
 TODO: add check for cpio
@@ -54,6 +50,9 @@ TODO: --host-lvm2 checks for lvm.static, but user might have lvm and use --dynli
 TODO: symlink for sabayon
       kernel -> kernel-genkernel-x86_64-3.14.0-sabayon
       Initrd -> initramfs-genkernel-x86_64-3.14.0-sabayon
+
+0.6.0
+=====
 TODO: initrd.defaults pending merge from genkernel-next-63
       cp /usr/share/genkernel/defaults/initrd.defaults kigen/defaults
       will results in cryptsetup saying:
