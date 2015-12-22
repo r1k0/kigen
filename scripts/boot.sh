@@ -3,12 +3,12 @@ if  [ "$1" = "-h" ]     || \
     [ "$1" = "--help" ] || \
     [ "$1" = "" ]
 then
-    echo "$0 <root device>"
+    echo "$0 <LUKS root device>"
     echo "i.e. # $0 /dev/sda3"
     exit
 fi
 
-while [ "$(ps|grep cryptsetup|wc -l)" -gt '0']; do
+while [ "$(ps|grep cryptsetup|grep -v grep|wc -l)" -gt '0']; do
   cryptPID="$(ps|grep cryptsetup|grep -v grep|sed -e 's/^ //g')"
   echo Killing "$cryptPID"...
   kill -9 "$cryptPID" && echo PID "$cryptPID" killed.
