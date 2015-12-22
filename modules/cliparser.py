@@ -547,9 +547,24 @@ def cli_parser():
         if initramfs_conf['bin-dropbear'] == 'True':
             cli['bin-dropbear'] = True
 
+        cli['bin-glibc'] = False
+        if initramfs_conf['bin-glibc'] == 'True':
+            cli['bin-glibc'] = True
+
+        cli['bin-libncurses'] = False
+        if initramfs_conf['bin-libncurses'] == 'True':
+            cli['bin-libncurses'] = True
+
+        cli['bin-zlib'] = False
+        if initramfs_conf['bin-zlib'] == 'True':
+            cli['bin-zlib'] = True
+
         cli['source-dropbear'] = False
         if initramfs_conf['source-dropbear'] == 'True':
-            cli['source-dropbear'] = True
+            cli['source-dropbear']  = True
+            cli['bin-glibc']        = True    # dropbear needs glibc
+            cli['bin-libncurses']   = True    # dropbear needs libncurses
+            cli['bin-zlib']         = True    # dropbear needs zlib
 
         cli['nomodules'] = False
         if initramfs_conf['nomodules'] == 'True':
@@ -575,17 +590,6 @@ def cli_parser():
         if initramfs_conf['hostbin'] == 'True':
             cli['hostbin'] = True
 
-        cli['bin-glibc'] = False
-        if initramfs_conf['bin-glibc'] == 'True':
-            cli['bin-glibc'] = True
-
-        cli['bin-libncurses'] = False
-        if initramfs_conf['bin-libncurses'] == 'True':
-            cli['bin-libncurses'] = True
-
-        cli['bin-zlib'] = False
-        if initramfs_conf['bin-zlib'] == 'True':
-            cli['bin-zlib'] = True
 # FIXME
 #        # HACK setup default only when using kigen i
         if not 'tool' in cliopts and not 't' in cliopts:

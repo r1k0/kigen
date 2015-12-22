@@ -259,7 +259,7 @@ for x in ${CMDLINE}; do
         overlayfs)
             USE_OVERLAYFS=1
         ;;
-        dodropbear)
+        dropbear)
             DROPBEAR=1
         ;;
     esac
@@ -302,7 +302,7 @@ zfs_start_volumes
 
 setup_keymap
 
-runnetstack
+start_dropbear
 
 # Initialize LUKS root device except for livecd's
 is_livecd || start_luks
