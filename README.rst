@@ -117,7 +117,7 @@ Some GRUB examples of kernel command line boot options (haven't used LiLo for ye
 
   menuentry "kigen 3.4.5" {
     set root=(hd1,1)
-    linux /kernel-kigen-x86_64-3.4.5-gentoo ro single init=/linuxrc splash=verbose,theme:emergence vga=791 console=tty1 quiet resume=swap:/dev/mapper/swap real_resume=/dev/mapper/swap root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/root crypt_root=/dev/sdb3 docrypt dokeymap keymap=be dodropbear ip=dhcp
+    linux /kernel-kigen-x86_64-3.4.5-gentoo ro single init=/linuxrc splash=verbose,theme:emergence vga=791 console=tty1 quiet resume=swap:/dev/mapper/swap real_resume=/dev/mapper/swap root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/root crypt_root=/dev/sdb3 docrypt dokeymap keymap=be dropbear ip=dhcp
     initrd /initramfs-kigen-x86_64-3.4.5-gentoo
   }
 
@@ -151,7 +151,7 @@ Some GRUB examples of kernel command line boot options (haven't used LiLo for ye
         set root='(hd0,1)'
         search --no-floppy --fs-uuid --set 90527f58-e0d9-4b21-817d-49b223161071
         echo    Loading Linux x86_64-2.6.35-sabayon ...
-        linux   /kernel-kigen-x86_64-2.6.35-sabayon ro init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear ip=dhcp
+        linux   /kernel-kigen-x86_64-2.6.35-sabayon ro init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dropbear ip=dhcp
         echo    Loading initial ramdisk ...
         initrd  /initramfs-kigen-x86_64-2.6.35-sabayon
   }
@@ -923,10 +923,10 @@ Make sure libraries are called.
 Set kernel command option
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To boot in SSH mode, pass the 'dodropbear' option in the kernel command line.
+To boot in SSH mode, pass the 'dropbear' option in the kernel command line.
 Edit /boot/grub/grub.cfg to have the kernel command line look like.
 ::
-  linux /kernel-kigen-x86_64-2.6.37-gentoo ro single init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dodropbear ip=dhcp
+  linux /kernel-kigen-x86_64-2.6.37-gentoo ro single init=/linuxrc splash=verbose,theme:sabayon vga=791 console=tty1 quiet resume=swap:/dev/mapper/vg_hogbarn-swap real_resume=/dev/mapper/vg_hogbarn-swap dolvm root=/dev/ram0 ramdisk=8192 real_root=/dev/mapper/vg_hogbarn-lv_root crypt_root=/dev/sda2 docrypt dokeymap keymap=be dropbear ip=dhcp
 
 Kill dropbear daemon and restart openssh (DEPRECATED)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
