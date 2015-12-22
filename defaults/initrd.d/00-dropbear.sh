@@ -51,7 +51,6 @@ start_dropbear() {
             echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
             if [ -f "/sbin/dropbear" ]; then
                 dropbear -E || bad_msg "Oh crap! dropbear won't start -_-'"
-                good_msg "dropbear started."
             else
                 bad_msg "/sbin/dropbear is missing.. Have you run 'kigen initramfs --[bin|source]-dropbear ..'?"
             fi
