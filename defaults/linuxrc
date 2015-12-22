@@ -262,6 +262,18 @@ for x in ${CMDLINE}; do
         dropbear)
             DROPBEAR=1
         ;;
+        netmask=*)
+	    NETMASK=${x#*=}
+	;;
+	gateway=*)
+	    GATEWAY=${x#*=}
+	;;
+	domain=*)
+	    DOMAIN=${x#*=}
+	;;
+	nameserver=*)
+	    NAMESERVER=${x#*=}
+	;;
     esac
 done
 

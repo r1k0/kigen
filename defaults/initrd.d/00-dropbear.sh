@@ -32,25 +32,25 @@ start_dropbear() {
     fi
 
     if [ -n "${DROPBEAR}" ]; then
-        if [ -e /dev/pty0 ]; then # CONFIG_LEGACY_PTYS=n
-            ret=1
-        else
-            [ -d /dev/pts ] || mkdir -p /dev/pts
-            if mount -t devpts devpts /dev/pts 2>/dev/null; then # CONFIG_UNIX98_PTYS=n
-                good_msg "/dev/pts mounted"
-                ret=1
-            else
-                warn_msg "Cannot mount /dev/pts"
-                rm -fr /dev/pts
-            fi
-        fi
+#        if [ -e /dev/pty0 ]; then # CONFIG_LEGACY_PTYS=n
+#            ret=1
+#        else
+#            [ -d /dev/pts ] || mkdir -p /dev/pts
+#            if mount -t devpts devpts /dev/pts 2>/dev/null; then # CONFIG_UNIX98_PTYS=n
+#                good_msg "/dev/pts mounted"
+#                ret=1
+#            else
+#                warn_msg "Cannot mount /dev/pts"
+#            fi
+#        fi
 
-        if [ "${ret}" = '1' ] && [ -z "${IP}" ]; then
+        if [ -z "${IP}" ]; then
             bad_msg 'ip=<x.x.x.x|dhcp|udhcpc|DHCP> kernel boot parameter missing!!'
+	    bad_msg 'if ip=x.x.x.x, consider using netmask= gateway= domain= nameserver= too.'
         else
             echo -e "${BOLD}   ::${NORMAL} Starting dropbear SSH daemon..."
             if [ -f "/sbin/dropbear" ]; then
-                dropbear || bad_msg "Oh crap! dropbear won't start -_-'"
+                dropbear -E || bad_msg "Oh crap! dropbear won't start -_-'"
                 good_msg "dropbear started."
             else
                 bad_msg "/sbin/dropbear is missing.. Have you run 'kigen initramfs --[bin|source]-dropbear ..'?"
