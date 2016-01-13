@@ -17,7 +17,7 @@ class lvm2:
     def build(self):
         """
         Append lvm2 static binary from host to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.host.lvm2')

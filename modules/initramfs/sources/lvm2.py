@@ -18,11 +18,11 @@ class lvm2:
     def build(self):
         """
         lvm2 build sequence
-    
+
         @return: bool
         """
         zero = int('0')
-    
+
         if os.path.isfile('%s/LVM2.%s.tgz' % (get_distdir(self.temp), self.lvm2_ver)) is not True:
             print(green(' * ') + '... lvm2.download')
             if self.download() is not zero:
@@ -47,10 +47,10 @@ class lvm2:
 
         print(green(' * ') + '... lvm2.compress')
         if self.compress() is not zero: self.fail('compress')
- 
+
         print(green(' * ') + '... lvm2.cache')
         if self.cache() is not zero: self.fail('cache')
-    
+
     def fail(self, step):
         """
         @arg step   string
@@ -63,7 +63,7 @@ class lvm2:
     def chgdir(self, dir):
         """
         Change to directory
-    
+
         @arg: string
         @return: none
         """
@@ -91,7 +91,7 @@ class lvm2:
         @return: bool
         """
         os.system('tar xvfz %s/LVM2.%s.tgz -C %s %s' % (get_distdir(self.temp), self.lvm2_ver, self.temp['work'], self.verbose['std']))
-   
+
     def patch(self):
         """
         lvm2 patch fix for http://bugs.gentoo.org/332905
@@ -142,7 +142,7 @@ class lvm2:
                                                                         self.master_config['DEFAULT_UTILS_LD'], \
                                                                         self.master_config['DEFAULT_UTILS_AS'], \
                                                                         self.verbose['std']))
-    
+
     def strip(self):
         """
         lvm.static strip binary routine
@@ -152,17 +152,17 @@ class lvm2:
         self.chgdir(self.lvm2_tmp)
 
         return os.system('strip tools/lvm.static ')
-    
+
     def compress(self):
         """
         lvm.static compression routine
-    
+
         @return: bool
         """
         self.chgdir(self.lvm2_tmp)
 
         return os.system('bzip2 tools/lvm.static')
-    
+
     def cache(self):
         """
         lvm.static tarball cache routine

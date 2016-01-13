@@ -18,7 +18,7 @@ class luks:
     def build(self):
         """
         luks build sequence
-    
+
         @return: bool
         """
         zero = int('0')
@@ -30,29 +30,29 @@ class luks:
 
         if os.path.isfile('%s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver)) is not True:
             print(green(' * ') + '... luks.download')
-            if self.download() is not zero: 
+            if self.download() is not zero:
                 process('rm -v %s/cryptsetup-%s.tar.bz2' % (get_distdir(self.temp), self.luks_ver), self.verbose)
                 self.fail('download')
-    
+
         print(green(' * ') + '... luks.extract')
         self.extract()
         # grr, tar thing to not return 0 when success
-    
+
         print(green(' * ') + '... luks.configure')
         if self.configure()is not zero: self.fail('configure')
-    
+
         print(green(' * ') + '... luks.make')
         if self.make() is not zero: self.fail('make')
-    
+
         print(green(' * ') + '... luks.strip')
         if self.strip() is not zero: self.fail('strip')
-    
+
         print(green(' * ') + '... luks.compress')
         if self.compress() is not zero: self.fail('compress')
-    
+
         print(green(' * ') + '... luks.cache')
         if self.cache() is not zero: self.fail('cache')
-    
+
     def fail(self, step):
         """
         Exit
@@ -66,7 +66,7 @@ class luks:
     def chgdir(self, dir):
         """
         Change to directory
-    
+
         @arg: string
         @return: none
         """
@@ -79,69 +79,69 @@ class luks:
     def download(self):
         """
         luks tarball download routine
-    
+
         @return: bool
         """
         luks_url = self.url +'/cryptsetup-'+ self.luks_ver + '.tar.bz2'
 
         # FIXME wget sucks at print to stdout so no utils.shell.process here
         return os.system('/usr/bin/wget %s -v -O %s/cryptsetup-%s.tar.bz2 %s' % (luks_url, get_distdir(self.temp), str(self.luks_ver), self.verbose['std']))
-    
+
     def extract(self):
         """
         luks tarball extraction routine
-    
+
         @return: bool
         """
         os.system('tar xvfj %s/cryptsetup-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.luks_ver), self.temp['work'], self.verbose['std']))
-    
+
     def configure(self):
         """
         luks Makefile interface to configure
-    
+
         @return: bool
         """
         self.chgdir(self.lukstmp)
-   
+
         # use --disable-selinux?
         return os.system('./configure --enable-static-cryptsetup %s' % self.verbose['std'])
-    
+
     def make(self):
         """
         luks Makefile interface to make
-    
+
         @return: bool
         """
         self.chgdir(self.lukstmp)
-    
+
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
-    
+
     def strip(self):
         """
         blkid strip binary routine
-    
+
         @return: bool
         """
         self.chgdir(self.lukstmp)
-    
+
         return process('strip %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
-    
+
     def compress(self):
         """
         blkid compression routine
-    
+
         @return: bool
         """
         self.chgdir(self.lukstmp)
-    
+
         return process('bzip2 %s/src/cryptsetup.static' % self.lukstmp, self.verbose)
-    
+
     def cache(self):
         """
         blkid tarball cache routine
-    
+
         @return: bool
         """
         self.chgdir(self.lukstmp)
-    
+
         return process('mv %s/src/cryptsetup.static.bz2 %s/cryptsetup-%s.bz2' % (self.lukstmp, self.temp['cache'], self.luks_ver), self.verbose)

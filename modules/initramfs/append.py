@@ -85,7 +85,7 @@ class append:
     def cpio(self):
         """
         Builds command with correct path
-    
+
         @return: string
         """
         cmd = 'find . -print | cpio --quiet -o -H newc --append -F %s/initramfs-cpio' % self.temp['cache']
@@ -105,16 +105,16 @@ class append:
     def base(self):
         """
         Append baselayout to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.base')
         # create the baselayout
         for i in ['dev', 'bin', 'etc', 'home', 'usr', 'proc', 'tmp', 'sys', 'var/lock/dmraid', 'sbin', 'usr/bin', 'usr/sbin']:
             os.makedirs(self.temp['work']+'/initramfs-base-temp/%s' % i)
-    
+
         os.chdir(self.kernel_dir_opt) # WHY? # FIXME: change os.chdir by subprocess.popen(..., cwd=kernel_dir_opt
-    
+
         # init
         if self.linuxrc is '':
         # FIXME: copy linuxrc depending on arch
@@ -161,20 +161,20 @@ class append:
                     process('chmod +x %s/initramfs-base-temp/etc/%s' % (self.temp['work'], os.path.basename(i)), self.verbose)
                 else:
                     self.fail('%s does not exist.' % i)
-    
+
         # make init executable
         process('chmod 0755 %s/initramfs-base-temp/init' % self.temp['work'], self.verbose)
-    
+
         # link lib to lib64
         process('ln -s lib %s/initramfs-base-temp/lib64' % self.temp['work'], self.verbose)
-    
+
         # create fstab
         process_redir('echo /dev/ram0 / ext2 defaults 0 0\n > ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
         process_append('echo proc /proc proc defaults 0 0\n >> ' + self.temp['work']+'/initramfs-base-temp/etc/fstab', self.verbose)
         print(green(' * ')+'... /etc/fstab')
-    
+
         os.chdir(self.temp['work']+'/initramfs-base-temp/dev')
-    
+
         # create nodes
         process('mknod -m 660 console c 5 1', self.verbose)
         print(green(' * ')+'... /dev/console')
@@ -182,13 +182,13 @@ class append:
         print(green(' * ')+'... /dev/null')
         process('mknod -m 600 tty1    c 4 1', self.verbose)
         print(green(' * ')+'... /dev/tty1')
-    
+
         # timestamp the build
         from time import strftime
         build_date = open(self.temp['work']+'/initramfs-base-temp/etc/build_date', 'w')
         build_date.writelines(strftime("%Y-%m-%d %H:%M:%S")+ '\n')
         build_date.close()
-    
+
         os.chdir(self.temp['work']+'/initramfs-base-temp')
 
         # link linuxrc to /init
@@ -208,30 +208,30 @@ class append:
 
         os.chdir(self.temp['work']+'/initramfs-base-temp/')
         return os.system(self.cpio())
-   
+
     def modules(self):
         """
         Find system modules and config modules
         Append modules to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.modules')
         process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV, self.verbose)
-    
+
         # FIXME: ctrl c does not work during this function
         # FIXME: rewrite (later)
-        # FIXME: maybe |uniq the list? in case the user sets 
+        # FIXME: maybe |uniq the list? in case the user sets
         # multiple times the same module in different groups
         #
         # is it really a big deal? I don't think so
-    
+
         # identify and copy host kernel modules
         if not os.path.isdir('/lib/modules/'+self.KV):
             self.fail('/lib/modules/'+self.KV+" doesn't exist: have you run 'kigen kernel'?")
 
         modsyslist  = get_sys_modules_list(self.KV)
-        
+
         if not modsyslist:
             self.fail('Host modules list is empty: have you run "kigen kernel"?')
 
@@ -266,14 +266,14 @@ class append:
                         module_dirname = os.path.dirname(module)
                         process('mkdir -p %s' % self.temp['work'] + '/initramfs-modules-' + self.KV + '-temp' + module_dirname, self.verbose)
                         process('cp -ax %s %s/initramfs-modules-%s-temp/%s' % (module, self.temp['work'], self.KV, module_dirname), self.verbose)
-   
+
         # FIXME: make variable of /lib/modules in case of FAKEROOT export
 #        process_star('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
         process('cp /lib/modules/%s/modules.* %s' % (self.KV, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/lib/modules/'+self.KV ), self.verbose)
-    
+
         # create etc/modules/<group>
         process('mkdir -p %s' % self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules', self.verbose)
-    
+
         # Genkernel official boot module design
         # for each key value in the module config dictionary
         for k, v in modconfdict.items():
@@ -284,12 +284,12 @@ class append:
             f = open(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules/'+group, 'w')
             f.write(v.replace(" ", "\n"))
             f.close
-    
+
         # Funtoo bootupdate initramfs module file config
         if "load-modules" in self.bootupdateinitrd:
             for o in self.bootupdateinitrd['load-modules'].split():
                 process_append('echo %s >> %s' % (o, self.temp['work']+'/initramfs-modules-'+self.KV+'-temp/etc/modules/bootupdate'), self.verbose)
-    
+
         os.chdir(self.temp['work']+'/initramfs-modules-'+self.KV+'-temp')
         return os.system(self.cpio())
 
@@ -309,7 +309,7 @@ class append:
 
         os.chdir(self.temp['work']+'/initramfs-plugin-temp')
         return os.system(self.cpio())
- 
+
     def set_rootcredentials(self):
         """
         Set root password and ssh public key of the initramfs
@@ -359,14 +359,14 @@ class append:
     def splash(self):
         """
         Append splash framebuffer to initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.splash')
         splash_geninitramfs_bin = '/usr/sbin/splash_geninitramfs'
-   
+
         process('mkdir -p ' + self.temp['work']+'/initramfs-splash-temp/', self.verbose)
-    
+
         if os.path.isfile(splash_geninitramfs_bin):
 
             # if splashutils is merged
@@ -375,7 +375,7 @@ class append:
                     os.system('source /etc/conf.d/splash')
             if self.sres is not '':
                 self.sres = '-r %s' % self.sres
-    
+
             logging.debug('initramfs.append.splash ' + self.stheme + ' ' + self.sres)
             print(green(' * ') + turquoise('initramfs.append.splash ') + self.stheme + ' ' + self.sres)
 
@@ -399,12 +399,12 @@ class append:
         else:
             # if splashutils is not merged
             self.fail('media-gfx/splashutils must be merged')
-            
+
             # FIXME write the splash routine from scratch?
 #            from sources.splash import splash
 #            splashobj = splash(self.master_conf, self.version_conf, self.url, self.theme, self.sres, self.sinitrd, self.temp, self.verbose)
 #            splashobj.build()
-    
+
         os.chdir(self.temp['work']+'/initramfs-splash-temp')
         return os.system(self.cpio())
 
@@ -575,13 +575,13 @@ class append:
         return os.system(self.cpio())
 
 ########################
-# source based features 
+# source based features
 ########################
 
     def source_lvm2(self):
         """
         Append lvm2 compiled binary to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_lvm2')
@@ -617,37 +617,37 @@ class append:
 #    def firmware(self):
 #        """
 #        Append firmware to the initramfs
-#    
+#
 #        @return: bool
 #        """
 #        logging.debug('initramfs.append_firmware ' + self.firmware + ' from host')
 #        print green(' * ') + turquoise('initramfs.append_firmware ') + white(self.firmware) + ' from host'
-#    
+#
 #        process('mkdir -p ' + temp['work']+'/initramfs-firmware-temp/lib/firmware', self.verbose)
 #        process('cp -a %s %s/initramfs-firmware-temp/lib/' % (self.firmware, self.temp['work']), self.verbose)
-#    
+#
 #        os.chdir(temp['work']+'/initramfs-firmware-temp')
 #        return os.system(self.cpio())
-#    
+#
 #    def mdadm(self):
 #        """
 #        Append mdadm to initramfs
-#    
+#
 #        @return: bool
 #        """
 #        logging.debug('initramfs.append.mdadm')
 #        print green(' * ') + turquoise('initramfs.append.mdadm')
-#    
+#
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-dmadm-temp/etc', self.verbose)
 #        process('cp -a /etc/mdadm.conf %s/initramfs-mdadm-temp/etc' % self.temp['work'], self.verbose)
-#    
+#
 #        os.chdir(self.temp['work']+'/initramfs-mdadm-temp')
 #        return os.system(self.cpio())
 
     def source_dmraid(self):
         """
         Append dmraid to initramfs from sources
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_dmraid')
@@ -667,7 +667,7 @@ class append:
             dmraidobj.build()
 
         # extract cache
-        # FIXME careful with the > 
+        # FIXME careful with the >
         logging.debug('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-source-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
         os.system('/bin/bzip2 -dc %s/dmraid.static-%s.bz2 > %s/initramfs-source-dmraid-temp/bin/dmraid.static' % (self.temp['cache'], self.version_conf['dmraid-version'], self.temp['work']))
         # FIXME make symlink rather than cp
@@ -684,14 +684,14 @@ class append:
 #    def iscsi(self):
 #        """
 #        Append iscsi to initramfs
-#    
+#
 #        @return: bool
 #        """
 #        logging.debug('initramfs.append.iscsi ' + self.master_conf['iscsi_ver'])
 #        print green(' * ') + turquoise('initramfs.append.iscsi ') + self.master_conf['iscsi_ver'],
-#    
+#
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-iscsi-temp/bin', self.verbose)
-#    
+#
 #        if os.path.isfile(self.temp['cache']+'/iscsistart-'+self.master_conf['iscsi_ver']+'.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
@@ -700,24 +700,24 @@ class append:
 #            print
 #            import iscsi
 #            iscsi.build_sequence(self.master_conf, self.temp, self.verbose['std'])
-#    
+#
 #        os.system('/bin/bzip2 -dc %s/iscsistart-%s.bz2 > %s/initramfs-iscsi-temp/bin/iscsistart' % (self.temp['cache'], self.master_conf['iscsi_ver'], self.temp['work']))
 #        process('chmod +x %s/initramfs-iscsi-temp/bin/iscsistart' % self.temp['work'], self.verbose)
-#    
+#
 #        os.chdir(self.temp['work']+'/initramfs-iscsi-temp')
 #        return os.system(self.cpio())
-#    
+#
 #    def unionfs_fuse(self):
 #        """
 #        Append unionfs-fuse to initramfs
-#        
+#
 #        @return: bool
 #        """
 #        self.build_fuse()
-#    
+#
 #        logging.debug('initramfs.append.unionfs_fuse ' + self.master_conf['unionfs_fuse_ver'])
 #        print green(' * ') + turquoise('initramfs.append.unionfs_fuse ') + self.master_conf['unionfs_fuse_ver'],
-#    
+#
 #        if os.path.isfile(self.temp['cache']+'/unionfs-fuse.static-'+self.master_conf['unionfs_fuse_ver']+'.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
@@ -730,25 +730,25 @@ class append:
 #                unionfs_fuse.build_sequence(self.master_conf, self.temp, self.verbose)
 #            else:
 #                self.fail('we need libfuse: sys-fs/fuse must be merged')
-#    
+#
 #        process('mkdir -p ' + self.temp['work']+'/initramfs-unionfs-fuse-temp/sbin', self.verbose)
 #        # FIXME careful with the > passed to process()
 #        os.system('/bin/bzip2 -dc %s/unionfs-fuse.static-%s.bz2 > %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % (self.temp['cache'], self.master_conf['unionfs_fuse_ver'], self.temp['work']))
 #        os.system('chmod +x %s/initramfs-unionfs-fuse-temp/sbin/unionfs' % self.temp['work'])
-#    
+#
 #        os.chdir(self.temp['work']+'/initramfs-unionfs-fuse-temp')
 #        return os.system(self.cpio())
-#     
+#
 #    def build_fuse(self):
 #        """
 #        Build fuse and cache it for later use
 #        Only to be called for --unionfs!
-#    
+#
 #        @return: bool
 #        """
 #        logging.debug('initramfs.build_fuse ' + self.master_conf['fuse_ver'])
 #        print green(' * ') + turquoise('initramfs.build_fuse ') +self.master_conf['fuse_ver'],
-#    
+#
 #        if os.path.isfile(self.temp['cache']+'/fuse-dircache-'+self.master_conf['fuse_ver']+'.tar.bz2') and self.nocache is False:
 #            # use cache
 #            print 'from ' + white('cache')
@@ -757,26 +757,26 @@ class append:
 #            print
 #            import fuse
 #            fuse.build_sequence(self.master_conf, self.temp, self.verbose)
-#    
+#
 #        # extract
 #        os.system('tar xfj %s -C %s' % (self.temp['cache']+'/fuse-dircache-'+self.master_conf['fuse_ver']+'.tar.bz2', self.temp['work']))
-#    
+#
 #        return
-#    
+#
 #    def aufs(self):
 #        """
 #        Append aufs to initramfs
 #        """
 #        logging.debug('initramfs.append_aufs')
 #        print green(' * ') + turquoise('initramfs.append_aufs ')
-#    
+#
 #        os.mkdir(temp['work']+'/initramfs-aufs-temp')
-#    
+#
 #    # FIXME aufs is tricky: gotta patch the kernel sources
-#    # then build aufs 
+#    # then build aufs
 #    # then pack initrd
 #    # then rebuild kernel not just bzImage
-#    
+#
 #        os.chdir(self.temp['work']+'/initramfs-aufs-temp')
 #        return os.system(self.cpio())
 
@@ -804,7 +804,7 @@ class append:
         """
         Append strace from sources to the initramfs
         for debugging purposes
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_strace')
@@ -834,7 +834,7 @@ class append:
     def source_screen(self):
         """
         Append screen binary to the initramfs
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_screen')
@@ -869,7 +869,7 @@ class append:
     def source_busybox(self):
         """
         Append the busybox compiled objects to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_busybox')
@@ -913,7 +913,7 @@ class append:
     def source_luks(self):
         """
         Append the LUKS static binary to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_luks')
@@ -952,7 +952,7 @@ class append:
     def source_dropbear(self):
         """
         Append dropbear support to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source.dropbear')
@@ -1009,7 +1009,7 @@ class append:
         """
         Append blkid binary to the initramfs
         after compiling e2fsprogs
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.source_disklabel')

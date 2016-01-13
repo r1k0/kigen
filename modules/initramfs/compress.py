@@ -22,7 +22,7 @@ def initramfs(temproot, compress, into, verbose):
     process_pipe('echo -n | cpio --quiet -o -H newc -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
 #    os.system('echo | cpio --quiet -o -H newc -F %s/initramfs_data.cpio 2>/dev/null' % os.path.dirname(into))
     os.chdir(compress)
-    process_pipe('find . -print | cpio --quiet -o -H newc --append -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose) 
+    process_pipe('find . -print | cpio --quiet -o -H newc --append -F %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
     process('gzip %s/initramfs_data.cpio' % os.path.dirname(into), verbose)
 #    process('mv %s/initramfs_data.cpio.gz %s' % (os.path.dirname(into), into), verbose)
     os.system('mv %s/initramfs_data.cpio.gz %s 2>/dev/null' % (os.path.dirname(into), into))

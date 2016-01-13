@@ -19,7 +19,7 @@ class busybox:
     def build(self):
         """
         Append busybox binary from the host
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin.busybox')

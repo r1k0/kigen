@@ -93,7 +93,7 @@ def cli_parser():
             target = 'k'
             cliopts.remove('k')
 
-        # parse 
+        # parse
         kernel_conf = etcparser.etc_parser_kernel()
 
         try:
@@ -205,7 +205,7 @@ def cli_parser():
         if kernel_conf['nomodules'] == 'True':
             cli['nomodules'] = True
             # No module support implies not installing modules
-            cli['nomodinstall'] = True 
+            cli['nomodinstall'] = True
 
         cli['fakeroot']     = '/'
         if kernel_conf['fakeroot'] != '':
@@ -238,7 +238,7 @@ def cli_parser():
         cli['fixdotconfig'] = ''
         if kernel_conf['fixdotconfig'] != '':
             cli['fixdotconfig'] = kernel_conf['fixdotconfig']
-            
+
         cli['module-rebuild'] = False
         if kernel_conf['module-rebuild'] == 'True':
             cli['module-rebuild'] = True
@@ -329,7 +329,7 @@ def cli_parser():
             target = 'i'
             cliopts.remove('i')
 
-        # parse /etc/kigen/initramfs/modules.conf and 
+        # parse /etc/kigen/initramfs/modules.conf and
         # /etc/kigen/initramfs/initramfs.conf
         initramfs_conf, modules_conf, version_conf, url_conf = etcparser.etc_parser_initramfs()
 
@@ -414,7 +414,7 @@ def cli_parser():
             print(str(err)) # "option -a not recognized"
             usage.print_usage()
             sys.exit(2)
-    
+
         # this has to be taken care before quiet is initialized
         # hence the extra loop, catch --logfile before all
         cli['logfile'] = '/var/log/kigen.log'

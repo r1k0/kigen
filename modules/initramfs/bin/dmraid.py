@@ -9,7 +9,7 @@ from utils.isstatic import *
 class dmraid:
 
     def __init__(self, cli, temp, verbose):
-        
+
         self.cli = cli
         self.temp = temp
         self.verbose = verbose
@@ -17,7 +17,7 @@ class dmraid:
     def build(self):
         """
         Append dmraid to initramfs from the host
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin.dmraid')

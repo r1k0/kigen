@@ -18,7 +18,7 @@ class dropbear:
     def build(self):
         """
         Append dropbear support to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.host.dropbear')

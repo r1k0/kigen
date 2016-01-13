@@ -11,7 +11,7 @@ def print_credits():
     print('Copyright 2010-2012 r1k0')
     print('Portions copyright 2003-2005 Gentoo Foundation (default linuxrc)')
     print('Distributed under the terms of the GNU General Public License v2')
-    print() 
+    print()
     print('Alphabetical list of authors:')
     print()
     for i in credits.author:
@@ -143,7 +143,7 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print('Features:')
     print('+ from source code')
     print('| --source-luks             ', end='')
-    print(initramfs_conf['source-luks'], end='') # bool 
+    print(initramfs_conf['source-luks'], end='') # bool
     print('\t\tInclude LUKS support from sources')
     print('| --source-lvm2             ', end='')
     print(initramfs_conf['source-lvm2'], end='') # bool
@@ -175,10 +175,10 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
 
     print('+ from host binaries')
     print('| --host-busybox            ', end='')
-    print(initramfs_conf['bin-busybox'], end='') # bool 
+    print(initramfs_conf['bin-busybox'], end='') # bool
     print('\t\tInclude busybox support from host')
     print('| --host-luks               ', end='')
-    print(initramfs_conf['bin-luks'], end='') # bool 
+    print(initramfs_conf['bin-luks'], end='') # bool
     print('\t\tInclude LUKS support from host')
     print('| --host-lvm2               ', end='')
     print(initramfs_conf['bin-lvm2'], end='') # bool
@@ -281,12 +281,12 @@ def print_usage_initramfs(cli, master_conf, initramfs_conf, modules_conf):
     print(initramfs_conf['keymaps'], end='"') # bool
     print(tab+'Include all keymaps')
     # fix \t display depending on length of cli['plugin']
-    if cli['plugin'] != '': 
+    if cli['plugin'] != '':
         if len(cli['plugin']) <= 4:
             tab = '\t\t\t'
         elif len(cli['plugin']) > 4:
             tab = '\t'
-    else: 
+    else:
         tab = '\t\t\t'
     print('  --plugin=/dir[,/dir]      "'+cli['plugin']+'"', end='')
     print(tab+'Include list of user generated custom roots')

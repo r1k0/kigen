@@ -19,7 +19,7 @@ def etc_parser_master():
     if not os.path.isdir(etc['kigen']):
         print('error: missing directory ' + red(etc['kigen']))
         sys.exit(2)
-    
+
     if not os.path.isfile(etc['master_conf']):
         print('error: missing file ' + red(etc['master_conf']))
         sys.exit(2)

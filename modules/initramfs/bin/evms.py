@@ -14,7 +14,7 @@ class evms:
     def build(self):
         """
         Append evms libraries to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin.evms')

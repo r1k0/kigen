@@ -70,14 +70,14 @@ class initramfs:
     def build(self):
         """
         Initramfs build sequence
-    
+
         @return: bool
         """
         zero = int('0')
         import shutil
         cpv = ''
         if self.verboseset is True: cpv = '-v'
-    
+
         # for the sake of knowing where we are
         os.chdir(self.temproot)
 
@@ -143,7 +143,7 @@ class initramfs:
                 if not isstatic('/bin/busybox', self.verbose) and self.cli['dynlibs'] is False:
                     self.fail_msg('/bin/busybox is not statically linked. Merge sys-app/busybox with USE=static or use --dynlibs')
             else:
-                self.fail_msg('sys-app/busybox must be merged')            
+                self.fail_msg('sys-app/busybox must be merged')
         else:
             print(green(' * ') + turquoise('initramfs.append.source.busybox ') + self.version_conf['busybox-version'])
             os.chdir(self.temp['work'])
@@ -245,7 +245,7 @@ class initramfs:
             print(green(' * ') + turquoise('initramfs.append.source.disklabel ') + self.version_conf['e2fsprogs-version'])
             os.chdir(self.temp['work'])
             if aobj.source_disklabel() is not zero: self.fail('source.disklabel')
- 
+
         # 13) append dropbear
         if self.cli['bin-dropbear'] is True:
             print(green(' * ') + turquoise('initramfs.append.host.dropbear'))
@@ -373,7 +373,7 @@ class initramfs:
         print(green(' * ') + turquoise('initramfs.compress'))
         logging.debug('>>> compressing final initramfs-cpio')
         if process('gzip -f -9 %s/initramfs-cpio' % self.temp['cache'], self.verbose) is not zero: self.fail('compress')
-    
+
     def fail(self, step):
         """
         @arg step   string
@@ -382,7 +382,7 @@ class initramfs:
         """
         print(red('error')+': initramfs.append.'+step+'() failed')
         sys.exit(2)
- 
+
     def fail_msg(self, msg):
         """
         @arg step   string

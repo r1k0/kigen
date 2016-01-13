@@ -18,7 +18,7 @@ class strace:
         """
         Append strace host binary to the initramfs
         for debugging purposes
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin.strace')

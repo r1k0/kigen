@@ -17,7 +17,7 @@ class disklabel:
     def build(self):
         """
         Append blkid binary from the host
-        
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin_disklabel')

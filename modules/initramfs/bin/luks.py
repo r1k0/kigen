@@ -17,7 +17,7 @@ class luks:
     def build(self):
         """
         Append the LUKS static binary to the initramfs
-    
+
         @return: bool
         """
         logging.debug('>>> entering initramfs.append.bin_luks')

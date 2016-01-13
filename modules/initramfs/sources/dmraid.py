@@ -15,7 +15,7 @@ class dmraid:
         self.url            = url_conf['dmraid']
         self.dmraidtmp      = temp['work'] + '/dmraid/' + self.dmraid_ver + '/dmraid'
         self.selinux        = selinux
-        
+
     def build(self):
         """
         dmraid build sequence
@@ -23,7 +23,7 @@ class dmraid:
         @return     bool
         """
         zero = int('0')
-    
+
         if os.path.isfile('%s/dmraid-%s.tar.bz2' % (get_distdir(self.temp), self.dmraid_ver)) is not True:
             print(green(' * ') + '... dmraid.download')
             if self.download() is not zero:
@@ -73,7 +73,7 @@ class dmraid:
     def chgdir(self, dir):
         """
         Change to directory
-    
+
         @arg: string
         @return: none
         """
@@ -86,74 +86,74 @@ class dmraid:
     def download(self):
         """
         dmraid tarball download routine
-    
+
         @return: bool
         """
         dmraid_url = self.url + '/dmraid-' + str(self.dmraid_ver) + '.tar.bz2'
 
         # FIXME utils.shell.process does not remove the output
         return os.system('/usr/bin/wget %s -O %s/dmraid-%s.tar.bz2 %s' % (dmraid_url, get_distdir(self.temp), str(self.dmraid_ver), self.verbose['std']))
-    
+
     def extract(self):
         """
         dmraid tarball extraction routine
-    
+
         @return: bool
         """
         os.system('tar xvfj %s/dmraid-%s.tar.bz2 -C %s %s' % (get_distdir(self.temp), str(self.dmraid_ver), self.temp['work'], self.verbose['std']))
-    
+
     def configure(self):
         """
         dmraid Makefile interface to configure
-    
+
         @return: bool
         """
         self.chgdir(self.dmraidtmp)
-    
+
         return os.system('LIBS=-ldevmapper ./configure --enable-static_link %s' % self.verbose['std'])
 
     def make(self):
         """
         dmraid Makefile interface to make
-    
+
         @return: bool
         """
         self.chgdir(self.dmraidtmp)
-    
+
         return os.system('%s %s %s' % (self.master_config['DEFAULT_UTILS_MAKE'], self.master_config['DEFAULT_MAKEOPTS'], self.verbose['std']))
-    
+
     def strip(self):
         """
         dmraid strip binary routine
-    
+
         @arg dmraidtmp          string
         @arg master_config  dict
-    
+
         @return: bool
         """
         self.chgdir(self.dmraidtmp)
-    
+
         return os.system('strip %s/tools/dmraid' % self.dmraidtmp)
 
     def compress(self):
         """
         dmraid compression routine
-    
+
         @arg dmraidtmp          string
         @arg master_config  dict
-    
+
         @return: bool
         """
         self.chgdir(self.dmraidtmp)
-    
+
         return os.system('bzip2 %s/tools/dmraid' % self.dmraidtmp)
-    
+
     def cache(self):
         """
         dmraid tarball cache routine
-    
+
         @return: bool
         """
         self.chgdir(self.dmraidtmp)
-    
+
         return process('mv %s/tools/dmraid.bz2 %s/dmraid.static-%s.bz2' % (self.dmraidtmp, self.temp['cache'], self.dmraid_ver), self.verbose)

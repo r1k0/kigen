@@ -66,7 +66,7 @@ verbose = cli_parser()
 # FIXME because we get verbose['logfile'] from cli_parser()
 # we can only start logging after here, that sucks ass big time
 # NOFIX but then if fixed, means we can log the parsers
-# useful? we already log the content of 
+# useful? we already log the content of
 # master_conf, kernel_conf, modules_conf, initramfs_conf, version_conf, url_conf target, cli, verbose
 
 # remove previous logfile
@@ -158,7 +158,7 @@ except Exception:
 boot_mounted = False
 # run the kernel target
 if (target == 'kernel' or target == 'k') and ('--execute' in sys.argv or '-x' in sys.argv):
-    
+
     from kernel.kernel import kernel
     kobj = kernel(cli['kerneldir'],   \
                 master_conf,          \
@@ -168,7 +168,7 @@ if (target == 'kernel' or target == 'k') and ('--execute' in sys.argv or '-x' in
                 cli,                  \
                 temp,                 \
                 verbose)
-    try: 
+    try:
         kobj.build()
 
     except KeyboardInterrupt:
@@ -178,10 +178,10 @@ if (target == 'kernel' or target == 'k') and ('--execute' in sys.argv or '-x' in
     if (cli['noboot'] is False) or (cli['noboot'] == 'False'):
         if check_boot_mount() is True:
             logging.debug('>>> copying System.map')
-    
+
             process('cp %s %s' % (cli['kerneldir'] + '/System.map', '/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV']), verbose)
             print(green(' * success ')+white(str(round(os.path.getsize('/boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])/1024/1024, 1)))+'Mb'+' /boot/System.map-kigen-'+cli['arch']+'-'+cli['KV'])
-    
+
             logging.debug('>>> copying kernel')
             process('cp %s %s' % (cli['kerneldir']+'/arch/x86/boot/bzImage', cli['rename']), verbose)
             print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb '+cli['rename'], end="")
@@ -221,12 +221,12 @@ if (target == 'kernel' or target == 'k') and ('--execute' in sys.argv or '-x' in
                 except:
                     print(red('!!!') + 'cannot umount /boot')
                     sys.exit(1)
- 
+
     # leave /boot alone but tell the user where to find his kernel/system.map
     elif (cli['noboot'] is True) or (cli['noboot'] == 'True'):
         logging.debug(cli['kerneldir']+'/System.map')
         print(green(' * success ') + cli['kerneldir']+'/System.map')
-    
+
         logging.debug(cli['kerneldir']+'/arch/x86/boot/bzImage')
         print(green(' * success ') + cli['kerneldir']+'/arch/x86/boot/bzImage', end='')
         if cli['initramfs'] is not '':
@@ -283,7 +283,7 @@ if (target == 'initramfs' or target == 'i') and ('--execute' in sys.argv or '-x'
                    print(red('!!!') + 'cannot mount /boot')
                    # FIXME: fallback to cli['noboot'] is True and don't fail
                    sys.exit(1)
-           
+
            logging.debug('>>> copying initramfs')
            process('cp %s/initramfs-cpio.gz %s' % (temp['cache'], cli['rename']), verbose)
            print(green(' * success ')+white(str(round(os.path.getsize(cli['rename'])/1024/1024, 1)))+'Mb'+' '+cli['rename'])
